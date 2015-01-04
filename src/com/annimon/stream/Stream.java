@@ -273,6 +273,17 @@ public class Stream<T> {
         return match(predicate, MATCH_NONE);
     }
     
+    public Optional<T> findFirst() {
+        if (iterator.hasNext()) {
+            final T value = (T) iterator.next();
+            if (peekAction != null) {
+                peekAction.accept(value);
+            }
+            return Optional.of(value);
+        }
+        return Optional.empty();
+    }
+    
     private static final int MATCH_ANY = 0;
     private static final int MATCH_ALL = 1;
     private static final int MATCH_NONE = 2;

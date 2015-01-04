@@ -231,6 +231,28 @@ public class StreamTest {
         assertEquals(119, (int) optional.orElse(119));
     }
     
+    @Test
+    public void findFirst() {
+        Optional<Integer> optional;
+        
+        optional = Stream.of(array10).findFirst();
+        assertTrue(optional.isPresent());
+        assertNotNull(optional.get());
+        assertEquals(0, (int) optional.get());
+        
+        optional = Stream.of(1, 3, 5, 7, 9).filter(pc1.getFilter(2)).findFirst();
+        assertFalse(optional.isPresent());
+        
+        optional = Stream.ofRange(1, 1000000)
+                .filter(pc1.getFilter(6))
+                .peek(pc1.getConsumer())
+                .findFirst();
+        assertTrue(optional.isPresent());
+        assertNotNull(optional.get());
+        assertEquals(6, (int) optional.get());
+        assertEquals("6", pc1.out());
+    }
+    
     private class PrintConsumer {
         
         private final StringBuilder out = new StringBuilder();
