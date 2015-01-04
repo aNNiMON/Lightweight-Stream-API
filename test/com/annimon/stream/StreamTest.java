@@ -160,6 +160,23 @@ public class StreamTest {
     }
     
     @Test
+    public void distinct() {
+        long count = Stream.of(1, 1, 2, 3, 5, 3, 2, 1, 1, -1)
+                .distinct().filter(new Predicate<Integer>() {
+
+            @Override
+            public boolean test(Integer value) {
+                return value == 1;
+            }
+        }).count();
+        assertEquals(1, count);
+        
+        Stream.of(1, 1, 2, 3, 5, 3, 2, 1, 1, -1)
+                .distinct().sorted().forEach(pc1.getConsumer());
+        assertEquals("-11235", pc1.out());
+    }
+    
+    @Test
     public void sorted() {
         Stream.of(6, 3, 9, 0, -7, 19).sorted().forEach(pc1.getConsumer());
         assertEquals("-7036919", pc1.out());

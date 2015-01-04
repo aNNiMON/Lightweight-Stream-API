@@ -4,8 +4,10 @@ import com.annimon.stream.function.*;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * A sequence of elements supporting aggregate operations.
@@ -152,6 +154,14 @@ public class Stream<T> {
                 return next;
             }
         });
+    }
+    
+    public Stream<T> distinct() {
+        final Set<T> set = new LinkedHashSet<T>();
+        while (iterator.hasNext()) {
+            set.add((T) iterator.next());
+        }
+        return new Stream<T>(set);
     }
     
     public Stream<T> sorted() {
