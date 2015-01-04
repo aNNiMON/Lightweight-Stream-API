@@ -188,6 +188,7 @@ public class Stream {
             }
             if (i >= listSize) {
                 list.addElement(s);
+                listSize++;
             }
         }
         return new Stream(list.elements());
