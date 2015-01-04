@@ -8,9 +8,10 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -18,20 +19,25 @@ import static org.junit.Assert.*;
  */
 public class StreamTest {
     
-    private final Integer[] array10 = new Integer[10];
-    private final List<Integer> list10 = new LinkedList<Integer>();
-    private final List<Integer> listRandom10 = new LinkedList<Integer>();
-    private final PrintConsumer pc1 = new PrintConsumer();
-    private final PrintConsumer pc2 = new PrintConsumer();
+    private static final Integer[] array10 = new Integer[10];
+    private static final List<Integer> list10 = new LinkedList<Integer>();
+    private static final List<Integer> listRandom10 = new LinkedList<Integer>();
+    private PrintConsumer pc1, pc2;
     
-    @Before
-    public void setUp() {
+    @BeforeClass
+    public static void setUpData() {
         final Random rnd = new Random();
         for (int i = 0; i < 10; i++) {
             array10[i] = i;
             list10.add(i);
             listRandom10.add(rnd.nextInt(10));
         }
+    }
+    
+    @Before
+    public void setUp() {
+         pc1 = new PrintConsumer();
+         pc2 = new PrintConsumer();
     }
     
     @Test
