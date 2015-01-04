@@ -11,8 +11,27 @@ import java.util.Vector;
  */
 public class Stream {
     
-    public static Stream of(Enumeration iterator) {
-        return new Stream(iterator);
+    public static Stream of(Enumeration enumeration) {
+        return new Stream(enumeration);
+    }
+    
+    public static Stream of(Vector vector) {
+        return new Stream(vector.elements());
+    }
+    
+    public static Stream of(final int[] array) {
+        return new Stream(new Enumeration() {
+            
+            private int index = 0;
+            
+            public boolean hasMoreElements() {
+                return index < array.length;
+            }
+            
+            public Object nextElement() {
+                return new Integer(array[index++]);
+            }
+        });
     }
     
     public static Stream of(final Object[] array) {
