@@ -247,10 +247,35 @@ public class Stream<T> {
         return foundAny ? Optional.of(result) : (Optional<T>) Optional.empty();
     }
     
+    public <R> R collect(Supplier<R> supplier, BiConsumer<R, ? super T> accumulator) {
+        R result = supplier.get();
+        while (iterator.hasNext()) {
+            final T value = (T) iterator.next();
+            if (peekAction != null) {
+                peekAction.accept(value);
+            }
+            accumulator.accept(result, value);
+        }
+        return result;
+    }
+    
+    public <R, A> R collect(Collector<? super T, A, R> collector) {
+        A container = collector.supplier().get();
+        while (iterator.hasNext()) {
+            final T value = (T) iterator.next();
+            if (peekAction != null) {
+                peekAction.accept(value);
+            }
+            collector.accumulator().accept(container, value);
+        }
+        if (collector.finisher() != null)
+            return collector.finisher().apply(container);
+        return (R) container;
+    }
+    
     public Optional<T> min(Comparator<? super T> comparator) {
         return reduce(BiFunction.Util.minBy(comparator));
     }
-
     
     public Optional<T> max(Comparator<? super T> comparator) {
         return reduce(BiFunction.Util.maxBy(comparator));

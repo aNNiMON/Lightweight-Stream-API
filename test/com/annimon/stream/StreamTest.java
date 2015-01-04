@@ -1,9 +1,11 @@
 package com.annimon.stream;
 
+import com.annimon.stream.function.BiConsumer;
 import com.annimon.stream.function.BiFunction;
 import com.annimon.stream.function.Consumer;
 import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Predicate;
+import com.annimon.stream.function.Supplier;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -171,6 +173,63 @@ public class StreamTest {
         Collections.sort(list);
         Stream.of(list).forEach(pc2.getConsumer());
         assertEquals(pc1.out(), pc2.out());
+    }
+    
+    @Test
+    public void collect() {
+        final Supplier<StringBuilder> joinSupplier = new Supplier<StringBuilder>() {
+
+            @Override
+            public StringBuilder get() {
+                return new StringBuilder();
+            }
+        };
+        final BiConsumer<StringBuilder, CharSequence> joinAccumulator =
+                new BiConsumer<StringBuilder, CharSequence>() {
+
+            @Override
+            public void accept(StringBuilder t, CharSequence u) {
+                t.append(u);
+            }
+        };
+        final Collector<CharSequence, ?, String> join = new Collector<CharSequence, StringBuilder, String>() {
+
+            @Override
+            public Supplier<StringBuilder> supplier() {
+                return joinSupplier;
+            }
+
+            @Override
+            public BiConsumer<StringBuilder, CharSequence> accumulator() {
+                return joinAccumulator;
+            }
+
+            @Override
+            public Function<StringBuilder, String> finisher() {
+                return new Function<StringBuilder, String>() {
+
+                    @Override
+                    public String apply(StringBuilder value) {
+                        return value.toString();
+                    }
+                };
+            }
+        };
+        
+        String text = Stream.ofRange(0, 10)
+                .map(new Function<Integer, String>() {
+
+                    @Override
+                    public String apply(Integer value) {
+                        return Integer.toString(value);
+                    }
+                })
+                .collect(join);
+        assertEquals("0123456789", text);
+        
+        text = Stream.of("a", "b", "c", "def", "", "g")
+                .collect(joinSupplier, joinAccumulator).toString();
+        assertEquals("abcdefg", text);
     }
     
     @Test
