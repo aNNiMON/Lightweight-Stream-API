@@ -231,5 +231,56 @@ public class Stream<T> {
         return count;
     }
     
+    public boolean anyMatch(Predicate<? super T> predicate) {
+        return match(predicate, MATCH_ANY);
+    }
+    
+    public boolean allMatch(Predicate<? super T> predicate) {
+        return match(predicate, MATCH_ALL);
+    }
+    
+    public boolean noneMatch(Predicate<? super T> predicate) {
+        return match(predicate, MATCH_NONE);
+    }
+    
+    private static final int MATCH_ANY = 0;
+    private static final int MATCH_ALL = 1;
+    private static final int MATCH_NONE = 2;
+    
+    private boolean match(Predicate<? super T> predicate, int matchKind) {
+        final boolean kindAny = (matchKind == MATCH_ANY);
+        final boolean kindAll = (matchKind == MATCH_ALL);
+        
+        while (iterator.hasNext()) {
+            final T value = (T) iterator.next();
+            if (peekAction != null) {
+                peekAction.accept(value);
+            }
+            
+            /*if (predicate.test(value)) {
+                // anyMatch -> true
+                // noneMatch -> false
+                if (!kindAll) {
+                    return matchAny;
+                }
+            } else {
+                // allMatch -> false
+                if (kindAll) {
+                    return false;
+                }
+            }*/
+            // match && !kindAll -> kindAny
+            // !match && kindAll -> false
+            final boolean match = predicate.test(value);
+            if (match ^ kindAll) {
+                return kindAny && match; // (match ? kindAny : false);
+            }
+        }
+        // anyMatch -> false
+        // allMatch -> true
+        // noneMatch -> true
+        return !kindAny;
+    }
+    
 //</editor-fold>
 }

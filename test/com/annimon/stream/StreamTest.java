@@ -182,6 +182,26 @@ public class StreamTest {
         assertEquals(pc1.out(), pc2.out());
     }
     
+    @Test
+    public void match() {
+        boolean match;
+        
+        match = Stream.of(array10).anyMatch(pc1.getFilter(2));
+        assertEquals(true, match);
+        match = Stream.of(2, 3, 5, 8, 13).anyMatch(pc1.getFilter(10));
+        assertEquals(false, match);
+        
+        match = Stream.of(array10).allMatch(pc1.getFilter(2));
+        assertEquals(false, match);
+        match = Stream.of(2, 4, 6, 8, 10).allMatch(pc1.getFilter(2));
+        assertEquals(true, match);
+        
+        match = Stream.of(array10).noneMatch(pc1.getFilter(2));
+        assertEquals(false, match);
+        match = Stream.of(2, 3, 5, 8, 13).noneMatch(pc1.getFilter(10));
+        assertEquals(true, match);
+    }
+    
     private class PrintConsumer {
         
         private final StringBuilder out = new StringBuilder();
