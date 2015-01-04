@@ -171,6 +171,17 @@ public class StreamTest {
         assertEquals(pc1.out(), pc2.out());
     }
     
+    @Test
+    public void count() {
+        long count = Stream.ofRange(10000000000L, 10000010000L).count();
+        assertEquals(10000, count);
+        
+        long count1 = Stream.of(array10).peek(pc1.getConsumer()).count();
+        long count2 = Stream.of(list10).peek(pc2.getConsumer()).count();
+        assertEquals(count1, count2);
+        assertEquals(pc1.out(), pc2.out());
+    }
+    
     private class PrintConsumer {
         
         private final StringBuilder out = new StringBuilder();

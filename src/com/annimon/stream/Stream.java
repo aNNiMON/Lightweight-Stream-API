@@ -216,5 +216,20 @@ public class Stream<T> {
             action.accept(value);
         }
     }
+    
+    public long count() {
+        long count = 0;
+        while (iterator.hasNext()) {
+            if (peekAction != null) {
+                final T value = (T) iterator.next();
+                peekAction.accept(value);
+            } else {
+                iterator.next();
+            }
+            count++;
+        }
+        return count;
+    }
+    
 //</editor-fold>
 }
