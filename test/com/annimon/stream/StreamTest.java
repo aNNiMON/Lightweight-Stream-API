@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -219,6 +219,16 @@ public class StreamTest {
         assertEquals(45, result);
         result = Stream.of(array10).reduce(-45, add);
         assertEquals(0, result);
+        
+        Optional<Integer> optional;
+        optional = Stream.of(array10).reduce(add);
+        assertTrue(optional.isPresent());
+        assertNotNull(optional.get());
+        assertEquals(45, (int) optional.get());
+        
+        optional = Stream.of(1, 3, 5, 7, 9).filter(pc1.getFilter(2)).reduce(add);
+        assertFalse(optional.isPresent());
+        assertEquals(119, (int) optional.orElse(119));
     }
     
     private class PrintConsumer {

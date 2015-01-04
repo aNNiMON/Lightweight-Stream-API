@@ -229,6 +229,24 @@ public class Stream<T> {
         return result;
     }
     
+    public Optional<T> reduce(BiFunction<T, T, T> accumulator) {
+        boolean foundAny = false;
+        T result = null;
+        while (iterator.hasNext()) {
+            final T value = (T) iterator.next();
+            if (peekAction != null) {
+                peekAction.accept(value);
+            }
+            if (!foundAny) {
+                foundAny = true;
+                result = value;
+            } else {
+                result = accumulator.apply(result, value);
+            }
+        }
+        return foundAny ? Optional.of(result) : (Optional<T>) Optional.empty();
+    }
+    
     public long count() {
         long count = 0;
         while (iterator.hasNext()) {
