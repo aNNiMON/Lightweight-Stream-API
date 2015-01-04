@@ -77,8 +77,6 @@ public class Stream<T> {
 //<editor-fold defaultstate="collapsed" desc="Implementation">
     private final Iterator<? super T> iterator;
     
-    private Consumer<? super T> peekAction;
-    
     private Stream(Iterator<? super T> iterator) {
         this.iterator = iterator;
     }
@@ -177,9 +175,21 @@ public class Stream<T> {
         return new Stream<T>(list);
     }
     
-    public Stream<T> peek(Consumer<? super T> action) {
-        this.peekAction = action;
-        return this;
+    public Stream<T> peek(final Consumer<? super T> action) {
+        return new Stream<T>(new Iterator<T>() {
+            
+            @Override
+            public boolean hasNext() {
+                return iterator.hasNext();
+            }
+            
+            @Override
+            public T next() {
+                final T value = (T) iterator.next();
+                action.accept(value);
+                return value;
+            }
+        });
     }
     
     public Stream<T> limit(final long maxSize) {
@@ -209,11 +219,7 @@ public class Stream<T> {
     
     public void forEach(final Consumer<? super T> action) {
         while (iterator.hasNext()) {
-            final T value = (T) iterator.next();
-            if (peekAction != null) {
-                peekAction.accept(value);
-            }
-            action.accept(value);
+            action.accept((T) iterator.next());
         }
     }
     
@@ -221,9 +227,6 @@ public class Stream<T> {
         T result = identity;
         while (iterator.hasNext()) {
             final T value = (T) iterator.next();
-            if (peekAction != null) {
-                peekAction.accept(value);
-            }
             result = accumulator.apply(result, value);
         }
         return result;
@@ -234,9 +237,6 @@ public class Stream<T> {
         T result = null;
         while (iterator.hasNext()) {
             final T value = (T) iterator.next();
-            if (peekAction != null) {
-                peekAction.accept(value);
-            }
             if (!foundAny) {
                 foundAny = true;
                 result = value;
@@ -251,9 +251,6 @@ public class Stream<T> {
         R result = supplier.get();
         while (iterator.hasNext()) {
             final T value = (T) iterator.next();
-            if (peekAction != null) {
-                peekAction.accept(value);
-            }
             accumulator.accept(result, value);
         }
         return result;
@@ -263,9 +260,6 @@ public class Stream<T> {
         A container = collector.supplier().get();
         while (iterator.hasNext()) {
             final T value = (T) iterator.next();
-            if (peekAction != null) {
-                peekAction.accept(value);
-            }
             collector.accumulator().accept(container, value);
         }
         if (collector.finisher() != null)
@@ -284,12 +278,7 @@ public class Stream<T> {
     public long count() {
         long count = 0;
         while (iterator.hasNext()) {
-            if (peekAction != null) {
-                final T value = (T) iterator.next();
-                peekAction.accept(value);
-            } else {
-                iterator.next();
-            }
+            iterator.next();
             count++;
         }
         return count;
@@ -309,11 +298,7 @@ public class Stream<T> {
     
     public Optional<T> findFirst() {
         if (iterator.hasNext()) {
-            final T value = (T) iterator.next();
-            if (peekAction != null) {
-                peekAction.accept(value);
-            }
-            return Optional.of(value);
+            return Optional.of((T) iterator.next());
         }
         return Optional.empty();
     }
@@ -328,9 +313,6 @@ public class Stream<T> {
         
         while (iterator.hasNext()) {
             final T value = (T) iterator.next();
-            if (peekAction != null) {
-                peekAction.accept(value);
-            }
             
             /*if (predicate.test(value)) {
                 // anyMatch -> true
