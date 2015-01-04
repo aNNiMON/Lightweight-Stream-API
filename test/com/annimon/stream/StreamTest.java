@@ -6,6 +6,7 @@ import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Predicate;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -170,6 +171,28 @@ public class StreamTest {
         Collections.sort(list);
         Stream.of(list).forEach(pc2.getConsumer());
         assertEquals(pc1.out(), pc2.out());
+    }
+    
+    @Test
+    public void minAndMax() {
+        final Comparator<Integer> comparator = new Comparator<Integer>() {
+
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return Integer.compare(o1, o2);
+            }
+        };
+        Optional<Integer> min, max;
+        
+        min = Stream.of(list10).min(comparator);
+        max = Stream.of(list10).max(comparator);
+        assertEquals(0, (int) min.get());
+        assertEquals(9, (int) max.get());
+        
+        min = Stream.of(list10).filter(pc1.getFilter(2)).min(comparator);
+        max = Stream.of(list10).filter(pc1.getFilter(2)).max(comparator);
+        assertEquals(0, (int) min.get());
+        assertEquals(8, (int) max.get());
     }
     
     @Test

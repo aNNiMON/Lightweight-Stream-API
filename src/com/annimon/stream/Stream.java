@@ -247,6 +247,15 @@ public class Stream<T> {
         return foundAny ? Optional.of(result) : (Optional<T>) Optional.empty();
     }
     
+    public Optional<T> min(Comparator<? super T> comparator) {
+        return reduce(BiFunction.Util.minBy(comparator));
+    }
+
+    
+    public Optional<T> max(Comparator<? super T> comparator) {
+        return reduce(BiFunction.Util.maxBy(comparator));
+    }
+    
     public long count() {
         long count = 0;
         while (iterator.hasNext()) {
