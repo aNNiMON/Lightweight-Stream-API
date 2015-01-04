@@ -1,5 +1,6 @@
 package com.annimon.stream;
 
+import com.annimon.stream.function.BiFunction;
 import com.annimon.stream.function.Consumer;
 import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Predicate;
@@ -200,6 +201,24 @@ public class StreamTest {
         assertEquals(false, match);
         match = Stream.of(2, 3, 5, 8, 13).noneMatch(pc1.getFilter(10));
         assertEquals(true, match);
+    }
+    
+    @Test
+    public void reduce() {
+        final BiFunction<Integer, Integer, Integer> add = new BiFunction<Integer, Integer, Integer>() {
+
+            @Override
+            public Integer apply(Integer value1, Integer value2) {
+                return value1 + value2;
+            }
+        };
+        
+        int result;
+        
+        result = Stream.of(array10).reduce(0, add);
+        assertEquals(45, result);
+        result = Stream.of(array10).reduce(-45, add);
+        assertEquals(0, result);
     }
     
     private class PrintConsumer {

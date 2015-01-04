@@ -217,6 +217,18 @@ public class Stream<T> {
         }
     }
     
+    public T reduce(final T identity, BiFunction<T, T, T> accumulator) {
+        T result = identity;
+        while (iterator.hasNext()) {
+            final T value = (T) iterator.next();
+            if (peekAction != null) {
+                peekAction.accept(value);
+            }
+            result = accumulator.apply(result, value);
+        }
+        return result;
+    }
+    
     public long count() {
         long count = 0;
         while (iterator.hasNext()) {
