@@ -160,16 +160,6 @@ public class Stream {
         return new Stream(list.elements());
     }
     
-    public Stream sorted() {
-        return sorted(new Comparator() {
-            public int compare(Object o1, Object o2) {
-                Comparable c1 = (Comparable) o1;
-                Comparable c2 = (Comparable) o2;
-                return c1.compareTo(c2);
-            }
-        });
-    }
-    
     public Stream sorted(Comparator comparator) {
         final Vector list = new Vector();
         int listSize = 0;
