@@ -13,7 +13,7 @@ public interface BiConsumer {
         /**
          * Compose Consumer calls.
          */
-        public BiConsumer andThen(final BiConsumer c1, final BiConsumer c2) {
+        public static BiConsumer andThen(final BiConsumer c1, final BiConsumer c2) {
             return new BiConsumer() {
                 public void accept(Object t, Object u) {
                     c1.accept(t, u);

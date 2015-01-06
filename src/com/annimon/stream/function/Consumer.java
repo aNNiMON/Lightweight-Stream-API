@@ -13,7 +13,7 @@ public interface Consumer {
         /**
          * Compose Consumer calls.
          */
-        public Consumer andThen(final Consumer c1, final Consumer c2) {
+        public static Consumer andThen(final Consumer c1, final Consumer c2) {
             return new Consumer() {
                 public void accept(Object value) {
                     c1.accept(value);
