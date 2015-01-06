@@ -16,7 +16,7 @@ public interface BiConsumer<T, U> {
         /**
          * Compose Consumer calls.
          */
-        public <T, U> BiConsumer<T, U> andThen(
+        public static <T, U> BiConsumer<T, U> andThen(
                 final BiConsumer<? super T, ? super U> c1,
                 final BiConsumer<? super T, ? super U> c2) {
             return new BiConsumer<T, U>() {

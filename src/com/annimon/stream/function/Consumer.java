@@ -15,7 +15,7 @@ public interface Consumer<T> {
         /**
          * Compose Consumer calls.
          */
-        public <T> Consumer<T> andThen(final Consumer<? super T> c1, final Consumer<? super T> c2) {
+        public static <T> Consumer<T> andThen(final Consumer<? super T> c1, final Consumer<? super T> c2) {
             return new Consumer<T>() {
                 @Override
                 public void accept(T value) {
