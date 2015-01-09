@@ -16,6 +16,15 @@ public final class Objects {
         return o != null ? o.hashCode() : 0;
     }
     
+    public static int hash(Object... values) {
+        if (values == null) return 0;
+        
+        int result = 1;
+        for (Object element : values)
+            result = 31 * result + hashCode(element);
+        return result;
+    }
+    
     public static String toString(Object o, String nullDefault) {
         return (o != null) ? o.toString() : nullDefault;
     }
