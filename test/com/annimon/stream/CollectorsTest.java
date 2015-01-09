@@ -14,7 +14,7 @@ public class CollectorsTest {
     
     @Test
     public void toList() {
-        List<Integer> list = Stream.ofRange(0, 10).collect(Collectors.toList(new Integer[0]));
+        List<Integer> list = Stream.ofRange(0, 10).collect(Collectors.<Integer>toList());
         assertEquals(10, list.size());
         int index = 0;
         for (int v : list) {
@@ -24,7 +24,7 @@ public class CollectorsTest {
 
     @Test
     public void toSet() {
-        Set<Integer> set = Stream.of(1, 2, 2, 3, 3, 3).collect(Collectors.toSet(new Integer[0]));
+        Set<Integer> set = Stream.of(1, 2, 2, 3, 3, 3).collect(Collectors.<Integer>toSet());
         assertEquals(3, set.size());
         int index = 1;
         for (int v : set) {

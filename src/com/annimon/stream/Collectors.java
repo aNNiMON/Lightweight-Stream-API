@@ -15,7 +15,7 @@ import java.util.Set;
  */
 public final class Collectors {
     
-    public static <T> Collector<T, ?, List<T>> toList(T[] typeResolver) {
+    public static <T> Collector<T, ?, List<T>> toList() {
         return new Collector<T, List<T>, List<T>>() {
 
             @Override
@@ -47,7 +47,7 @@ public final class Collectors {
         };
     }
     
-    public static <T> Collector<T, ?, Set<T>> toSet(T[] typeResolver) {
+    public static <T> Collector<T, ?, Set<T>> toSet() {
         return new Collector<T, Set<T>, Set<T>>() {
 
             @Override
