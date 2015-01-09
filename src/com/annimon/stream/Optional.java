@@ -3,6 +3,7 @@ package com.annimon.stream;
 import com.annimon.stream.function.Consumer;
 import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Predicate;
+import com.annimon.stream.function.Supplier;
 import java.util.NoSuchElementException;
 
 /**
@@ -69,6 +70,15 @@ public class Optional {
     
     public Object orElse(Object other) {
         return value != null ? value : other;
+    }
+    
+    public Object orElseGet(Supplier other) {
+        return value != null ? value : other.get();
+    }
+    
+    public Object orElseThrow(Supplier exc) throws Throwable {
+        if (value != null) return value;
+        else throw (Throwable) exc.get();
     }
     
     public boolean equals(Object obj) {
