@@ -146,7 +146,9 @@ public class StreamTest {
 
                     @Override
                     public Stream<String> apply(final Integer i) {
-                        return Stream.ofRange(2, 4).map(new Function<Integer, String>() {
+                        return Stream.ofRange(2, 5)
+                                .filter(pc1.getFilter(2))
+                                .map(new Function<Integer, String>() {
 
                             @Override
                             public String apply(Integer p) {
@@ -156,7 +158,7 @@ public class StreamTest {
                     }
                 })
                 .forEach(pc1.getConsumer());
-        assertEquals("2*2=4\n2*3=6\n3*2=6\n3*3=9\n", pc1.out());
+        assertEquals("2*2=4\n2*4=8\n3*2=6\n3*4=12\n", pc1.out());
     }
     
     @Test

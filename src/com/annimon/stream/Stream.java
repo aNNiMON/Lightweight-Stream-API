@@ -133,7 +133,11 @@ public class Stream<T> {
             
             @Override
             public boolean hasNext() {
-                if (iterator.hasNext()) {
+                if ((inner != null) && inner.hasNext()) {
+                    next = inner.next();
+                    return true;
+                }
+                while (iterator.hasNext()) {
                     if (inner == null || !inner.hasNext()) {
                         final T arg = iterator.next();
                         final Stream <? extends R> result = mapper.apply(arg);
@@ -141,10 +145,10 @@ public class Stream<T> {
                             inner = result.iterator;
                         }
                     }
-                }
-                if ((inner != null) && inner.hasNext()) {
-                    next = inner.next();
-                    return true;
+                    if ((inner != null) && inner.hasNext()) {
+                        next = inner.next();
+                        return true;
+                    }
                 }
                 return false;
             }
