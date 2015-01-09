@@ -160,7 +160,9 @@ public class StreamTest extends TestCase {
                 .flatMap(new Function() {
 
                     public Object apply(final Object i) {
-                        return Stream.ofRange(2, 4).map(new Function() {
+                        return Stream.ofRange(2, 5)
+                                .filter(pc1.getFilter(2))
+                                .map(new Function() {
 
                             public Object apply(Object p) {
                                 final int v1 = ((Integer) i).intValue();
@@ -171,7 +173,7 @@ public class StreamTest extends TestCase {
                     }
                 })
                 .forEach(pc1.getConsumer());
-        assertEquals("2*2=4\n2*3=6\n3*2=6\n3*3=9\n", pc1.out());
+        assertEquals("2*2=4\n2*4=8\n3*2=6\n3*4=12\n", pc1.out());
     }
     
     public void distinct() {

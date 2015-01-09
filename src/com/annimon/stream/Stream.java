@@ -127,18 +127,22 @@ public class Stream {
             private Enumeration inner;
             
             public boolean hasMoreElements() {
-                if (iterator.hasMoreElements()) {
+                if ((inner != null) && inner.hasMoreElements()) {
+                    next = inner.nextElement();
+                    return true;
+                }
+                while (iterator.hasMoreElements()) {
                     if (inner == null || !inner.hasMoreElements()) {
                         final Object arg = iterator.nextElement();
                         final Stream result = (Stream) mapper.apply(arg);
                         if (result != null) {
-                            inner = (Enumeration) result.iterator;
+                            inner = result.iterator;
                         }
                     }
-                }
-                if ((inner != null) && inner.hasMoreElements()) {
-                    next = inner.nextElement();
-                    return true;
+                    if ((inner != null) && inner.hasMoreElements()) {
+                        next = inner.nextElement();
+                        return true;
+                    }
                 }
                 return false;
             }
