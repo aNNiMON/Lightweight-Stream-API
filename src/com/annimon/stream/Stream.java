@@ -17,11 +17,11 @@ import java.util.Set;
  */
 public class Stream<T> {
     
-    public static <T> Stream<T> of(Iterator<? super T> iterator) {
+    public static <T> Stream<T> of(Iterator<? extends T> iterator) {
         return new Stream<T>(iterator);
     }
     
-    public static <T> Stream<T> of(Iterable<? super T> iterable) {
+    public static <T> Stream<T> of(Iterable<? extends T> iterable) {
         return new Stream<T>(iterable);
     }
     
@@ -77,13 +77,13 @@ public class Stream<T> {
     
     
 //<editor-fold defaultstate="collapsed" desc="Implementation">
-    private final Iterator<? super T> iterator;
+    private final Iterator<? extends T> iterator;
     
-    private Stream(Iterator<? super T> iterator) {
+    private Stream(Iterator<? extends T> iterator) {
         this.iterator = iterator;
     }
     
-    private Stream(Iterable<? super T> iterable) {
+    private Stream(Iterable<? extends T> iterable) {
         this(iterable.iterator());
     }
     
@@ -95,7 +95,7 @@ public class Stream<T> {
             @Override
             public boolean hasNext() {
                 while (iterator.hasNext()) {
-                    next = (T) iterator.next();
+                    next = iterator.next();
                     if (predicate.test(next)) {
                         return true;
                     }
@@ -120,7 +120,7 @@ public class Stream<T> {
             
             @Override
             public R next() {
-                return mapper.apply((T) iterator.next());
+                return mapper.apply(iterator.next());
             }
         });
     }
@@ -129,16 +129,16 @@ public class Stream<T> {
         return new Stream<R>(new Iterator<R>() {
             
             private R next;
-            private Iterator<R> inner;
+            private Iterator<? extends R> inner;
             
             @Override
             public boolean hasNext() {
                 if (iterator.hasNext()) {
                     if (inner == null || !inner.hasNext()) {
-                        final T arg = (T) iterator.next();
+                        final T arg = iterator.next();
                         final Stream <? extends R> result = mapper.apply(arg);
                         if (result != null) {
-                            inner = (Iterator<R>) result.iterator;
+                            inner = result.iterator;
                         }
                     }
                 }
@@ -159,7 +159,7 @@ public class Stream<T> {
     public Stream<T> distinct() {
         final Set<T> set = new LinkedHashSet<T>();
         while (iterator.hasNext()) {
-            set.add((T) iterator.next());
+            set.add(iterator.next());
         }
         return new Stream<T>(set);
     }
@@ -179,7 +179,7 @@ public class Stream<T> {
     public Stream<T> sorted(Comparator<? super T> comparator) {
         final List<T> list = new LinkedList<T>();
         while (iterator.hasNext()) {
-            list.add((T) iterator.next());
+            list.add(iterator.next());
         }
         Collections.sort(list, comparator);
         return new Stream<T>(list);
@@ -195,7 +195,7 @@ public class Stream<T> {
             
             @Override
             public T next() {
-                final T value = (T) iterator.next();
+                final T value = iterator.next();
                 action.accept(value);
                 return value;
             }
@@ -215,7 +215,7 @@ public class Stream<T> {
             @Override
             public T next() {
                 index++;
-                return (T) iterator.next();
+                return iterator.next();
             }
         });
     }
@@ -229,14 +229,14 @@ public class Stream<T> {
     
     public void forEach(final Consumer<? super T> action) {
         while (iterator.hasNext()) {
-            action.accept((T) iterator.next());
+            action.accept(iterator.next());
         }
     }
     
     public T reduce(final T identity, BiFunction<T, T, T> accumulator) {
         T result = identity;
         while (iterator.hasNext()) {
-            final T value = (T) iterator.next();
+            final T value = iterator.next();
             result = accumulator.apply(result, value);
         }
         return result;
@@ -246,7 +246,7 @@ public class Stream<T> {
         boolean foundAny = false;
         T result = null;
         while (iterator.hasNext()) {
-            final T value = (T) iterator.next();
+            final T value = iterator.next();
             if (!foundAny) {
                 foundAny = true;
                 result = value;
@@ -260,7 +260,7 @@ public class Stream<T> {
     public <R> R collect(Supplier<R> supplier, BiConsumer<R, ? super T> accumulator) {
         R result = supplier.get();
         while (iterator.hasNext()) {
-            final T value = (T) iterator.next();
+            final T value = iterator.next();
             accumulator.accept(result, value);
         }
         return result;
@@ -269,7 +269,7 @@ public class Stream<T> {
     public <R, A> R collect(Collector<? super T, A, R> collector) {
         A container = collector.supplier().get();
         while (iterator.hasNext()) {
-            final T value = (T) iterator.next();
+            final T value = iterator.next();
             collector.accumulator().accept(container, value);
         }
         if (collector.finisher() != null)
@@ -308,7 +308,7 @@ public class Stream<T> {
     
     public Optional<T> findFirst() {
         if (iterator.hasNext()) {
-            return Optional.of((T) iterator.next());
+            return Optional.of(iterator.next());
         }
         return Optional.empty();
     }
@@ -322,7 +322,7 @@ public class Stream<T> {
         final boolean kindAll = (matchKind == MATCH_ALL);
         
         while (iterator.hasNext()) {
-            final T value = (T) iterator.next();
+            final T value = iterator.next();
             
             /*if (predicate.test(value)) {
                 // anyMatch -> true
