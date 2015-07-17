@@ -19,6 +19,15 @@ Download [latest release](https://github.com/aNNiMON/Lightweight-Stream-API/rele
   <version>1.0.1</version>
 </dependency>`
 ```
+or Gradle:
+```groovy
+dependencies {
+  ...
+  compile 'com.annimon:stream:1.0.1'
+  ...
+}
+```
+
 
 Also included version for **Java ME**. Checkout [javame branch](https://github.com/aNNiMON/Lightweight-Stream-API/tree/javame).
 
