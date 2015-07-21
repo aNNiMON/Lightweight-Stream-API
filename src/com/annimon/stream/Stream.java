@@ -17,6 +17,23 @@ import java.util.Set;
  */
 public class Stream<T> {
     
+    public static <T> Stream<T> of(final List<? extends T> list) {
+        return new Stream<T>(new Iterator<T>() {
+            
+            private int index = 0;
+
+            @Override
+            public boolean hasNext() {
+                return index < list.size();
+            }
+
+            @Override
+            public T next() {
+                return list.get(index++);
+            }
+        });
+    }
+    
     public static <T> Stream<T> of(Iterator<? extends T> iterator) {
         return new Stream<T>(iterator);
     }
