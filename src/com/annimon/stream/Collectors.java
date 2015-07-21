@@ -3,8 +3,8 @@ package com.annimon.stream;
 import com.annimon.stream.function.BiConsumer;
 import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Supplier;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -24,7 +24,7 @@ public final class Collectors {
 
                     @Override
                     public List<T> get() {
-                        return new LinkedList<T>();
+                        return new ArrayList<T>();
                     }
                 };
             }
@@ -56,7 +56,7 @@ public final class Collectors {
 
                     @Override
                     public Set<T> get() {
-                        return new LinkedHashSet<T>();
+                        return new HashSet<T>();
                     }
                 };
             }

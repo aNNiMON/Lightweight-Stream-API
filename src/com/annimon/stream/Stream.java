@@ -1,11 +1,11 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.*;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -161,7 +161,7 @@ public class Stream<T> {
     }
     
     public Stream<T> distinct() {
-        final Set<T> set = new LinkedHashSet<T>();
+        final Set<T> set = new HashSet<T>();
         while (iterator.hasNext()) {
             set.add(iterator.next());
         }
@@ -181,7 +181,7 @@ public class Stream<T> {
     }
     
     public Stream<T> sorted(Comparator<? super T> comparator) {
-        final List<T> list = new LinkedList<T>();
+        final List<T> list = new ArrayList<T>();
         while (iterator.hasNext()) {
             list.add(iterator.next());
         }
