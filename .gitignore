@@ -3,3 +3,5 @@
 /proguard/
 /nbproject/private/
 /nbproject/cfg_hints.xml
+/.nb-gradle/
+/.gradle/
