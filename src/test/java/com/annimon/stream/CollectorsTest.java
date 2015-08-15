@@ -43,6 +43,13 @@ public class CollectorsTest {
     }
 
     @Test
+    public void joiningWithDelimiter() {
+        String text = Stream.of("a", "b", "c", "def", "", "g")
+                .collect(Collectors.joining(", "));
+        assertEquals("a, b, c, def, , g", text);
+    }
+
+    @Test
     public void averaging() {
         double avg = Stream.of(10, 20, 30, 40)
                 .collect(Collectors.averaging(new Function<Integer, Double>() {

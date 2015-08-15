@@ -118,7 +118,48 @@ public final class Collectors {
             }
         };
     }
-    
+
+    public static Collector<CharSequence, ?, String> joining(final CharSequence delimiter) {
+        return new Collector<CharSequence, StringBuilder, String>() {
+
+            @Override
+            public Supplier<StringBuilder> supplier() {
+                return new Supplier<StringBuilder>() {
+
+                    @Override
+                    public StringBuilder get() {
+                        return new StringBuilder();
+                    }
+                };
+            }
+
+            @Override
+            public BiConsumer<StringBuilder, CharSequence> accumulator() {
+                return new BiConsumer<StringBuilder, CharSequence>() {
+
+                    @Override
+                    public void accept(StringBuilder t, CharSequence u) {
+                        if (t.length() > 0) {
+                            t.append(delimiter);
+                        }
+                        t.append(u);
+                    }
+                };
+            }
+
+            @Override
+            public Function<StringBuilder, String> finisher() {
+                return new Function<StringBuilder, String>() {
+
+                    @Override
+                    public String apply(StringBuilder value) {
+                        return value.toString();
+                    }
+                };
+            }
+        };
+    }
+
     public static <T> Collector<T, ?, Double> averaging(final Function<? super T, Double> mapper) {
         return new Collector<T, Double[], Double>() {
 
