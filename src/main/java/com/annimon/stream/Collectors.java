@@ -4,8 +4,10 @@ import com.annimon.stream.function.BiConsumer;
 import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Supplier;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -150,6 +152,75 @@ public final class Collectors {
                     @Override
                     public Double apply(Double[] t) {
                         return t[1] / t[0];
+                    }
+                };
+            }
+        };
+    }
+    
+    public static <T, K> Collector<T, ?, Map<K, List<T>>> groupingBy(
+            Function<? super T, ? extends K> classifier) {
+        return groupingBy(classifier, Collectors.<T>toList());
+    }
+    
+    public static <T, K, A, D> Collector<T, ?, Map<K, D>> groupingBy(
+            Function<? super T, ? extends K> classifier,
+            Collector<? super T, A, D> downstream) {
+        return groupingBy(classifier, new Supplier<Map<K, D>>() {
+
+            @Override
+            public Map<K, D> get() {
+                return new HashMap<K, D>();
+            }
+        }, downstream);
+    }
+    
+    public static <T, K, D, A, M extends Map<K, D>> Collector<T, ?, M> groupingBy(
+            final Function<? super T, ? extends K> classifier,
+            final Supplier<M> mapFactory,
+            final Collector<? super T, A, D> downstream) {
+        return new Collector<T, Map<K, A>, M>() {
+
+            @Override
+            public Supplier<Map<K, A>> supplier() {
+                return (Supplier<Map<K, A>>) mapFactory;
+            }
+
+            @Override
+            public BiConsumer<Map<K, A>, T> accumulator() {
+                return new BiConsumer<Map<K, A>, T>() {
+                    
+                    @Override
+                    public void accept(Map<K, A> map, T t) {
+                        K key = Objects.requireNonNull(classifier.apply(t), "element cannot be mapped to a null key");
+                        // Get container with currently grouped elements
+                        A container = map.get(key);
+                        if (container == null) {
+                            // Put new container (list, map, set, etc)
+                            container = downstream.supplier().get();
+                            map.put(key, container);
+                        }
+                        // Add element to container
+                        downstream.accumulator().accept(container, t);
+                    }
+                };
+            }
+
+            @Override
+            public Function<Map<K, A>, M> finisher() {
+                if (downstream.finisher() == null) return null;
+                return new Function<Map<K, A>, M>() {
+
+                    @Override
+                    public M apply(Map<K, A> map) {
+                        final Function<A, A> finisher = (Function<A, A>) downstream.finisher();
+                        // Update values of a map by a finisher function
+                        for (Map.Entry<K, A> entry : map.entrySet()) {
+                            A value = entry.getValue();
+                            value = finisher.apply(value);
+                            entry.setValue(value);
+                        }
+                        return (M) map;
                     }
                 };
             }
