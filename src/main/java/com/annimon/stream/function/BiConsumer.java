@@ -12,7 +12,7 @@ public interface BiConsumer<T, U> {
     
     void accept(T t, U u);
     
-    public static class Util {
+    class Util {
         /**
          * Compose Consumer calls.
          */

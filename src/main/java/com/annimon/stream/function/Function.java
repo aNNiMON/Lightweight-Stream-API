@@ -12,7 +12,7 @@ public interface Function<T, R> {
     
     R apply(T value);
     
-    public static class Util {
+    class Util {
         /**
          * Compose Function calls.
          */

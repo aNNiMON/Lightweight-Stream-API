@@ -16,7 +16,7 @@ public interface UnaryOperator<T> extends Function<T, T> {
          * @param <T> the type of the input and output of the operator
          * @return a unary operator that always returns its input argument
          */
-        static <T> UnaryOperator<T> identity() {
+        public static <T> UnaryOperator<T> identity() {
             return new UnaryOperator<T>() {
                 @Override
                 public T apply(T t) {
