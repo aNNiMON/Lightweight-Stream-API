@@ -158,6 +158,44 @@ public final class Collectors {
         };
     }
     
+    public static <T> Collector<T, ?, Long> counting() {
+        return new Collector<T, Long[], Long>() {
+
+            @Override
+            public Supplier<Long[]> supplier() {
+                return new Supplier<Long[]>() {
+
+                    @Override
+                    public Long[] get() {
+                        return new Long[] { 0L };
+                    }
+                };
+            }
+
+            @Override
+            public BiConsumer<Long[], T> accumulator() {
+                return new BiConsumer<Long[], T>() {
+
+                    @Override
+                    public void accept(Long[] t, T u) {
+                        t[0]++;
+                    }
+                };
+            }
+
+            @Override
+            public Function<Long[], Long> finisher() {
+                return new Function<Long[], Long>() {
+
+                    @Override
+                    public Long apply(Long[] value) {
+                        return value[0];
+                    }
+                };
+            }
+        };
+    }
+    
     public static <T, K> Collector<T, ?, Map<K, List<T>>> groupingBy(
             Function<? super T, ? extends K> classifier) {
         return groupingBy(classifier, Collectors.<T>toList());
