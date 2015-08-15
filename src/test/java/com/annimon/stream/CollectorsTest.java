@@ -1,7 +1,9 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.Function;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -49,5 +51,83 @@ public class CollectorsTest {
                     }
                 }));
         assertEquals(2.5, avg, 0.001);
+    }
+    
+    @Test
+    public void groupingBy() {
+        final Integer partitionItem = 1;
+        List<Integer> items = Arrays.asList(1, 2, 3, 1, 2, 3, 1, 2, 3);
+
+        Map<Boolean, List<Integer>> groupedBy = Stream.of(items)
+                .collect(Collectors.groupingBy(new Function<Integer, Boolean>() {
+
+            @Override
+            public Boolean apply(Integer value) {
+                return value.equals(partitionItem);
+            }
+        }));
+        
+        assertArrayEquals(new Integer[] {1, 1, 1}, groupedBy.get(true).toArray());
+        assertArrayEquals(new Integer[] {2, 3, 2, 3, 2, 3}, groupedBy.get(false).toArray());
+    }
+    
+    @Test
+    public void groupingByStudent() {
+        final Student STEVE_CS_4 = new Student("Steve", "CS", 4);
+        final Student MARIA_ECONOMICS_1 = new Student("Maria", "Economics", 1);
+        final Student VICTORIA_CS_3 = new Student("Victoria", "CS", 3);
+        final Student JOHN_CS_2 = new Student("John", "CS", 2);
+        final Student SERGEY_ECONOMICS_2 = new Student("Sergey", "Economics", 2);
+        final Student GEORGE_LAW_3 = new Student("George", "Law", 3);
+        final Student SERGEY_LAW_1 = new Student("Sergey", "Law", 1);
+        final Student SOPHIA_ECONOMICS_2 = new Student("Sophia", "Economics", 2);
+        final Student MARIA_CS_1 = new Student("Maria", "CS", 1);
+        final List<Student> students = Arrays.asList(
+                STEVE_CS_4, MARIA_ECONOMICS_1, VICTORIA_CS_3, JOHN_CS_2, SERGEY_ECONOMICS_2,
+                GEORGE_LAW_3, SERGEY_LAW_1, SOPHIA_ECONOMICS_2, MARIA_CS_1
+        );
+        
+        Map<String, List<Student>> bySpeciality = Stream.of(students)
+                .collect(Collectors.groupingBy(new Function<Student, String>() {
+            @Override
+            public String apply(Student student) {
+                return student.getSpeciality();
+            }
+        }));
+        assertArrayEquals(
+                new Student[] {STEVE_CS_4, VICTORIA_CS_3, JOHN_CS_2, MARIA_CS_1},
+                bySpeciality.get("CS").toArray());
+        
+        assertArrayEquals(
+                new Student[] {MARIA_ECONOMICS_1, SERGEY_ECONOMICS_2, SOPHIA_ECONOMICS_2},
+                bySpeciality.get("Economics").toArray());
+        
+        assertArrayEquals(
+                new Student[] {GEORGE_LAW_3, SERGEY_LAW_1},
+                bySpeciality.get("Law").toArray());
+        
+        
+        Map<Integer, List<Student>> byCourse = Stream.of(students)
+                .collect(Collectors.groupingBy(new Function<Student, Integer>() {
+            @Override
+            public Integer apply(Student student) {
+                return student.getCourse();
+            }
+        }));
+        assertArrayEquals(
+                new Student[] {MARIA_ECONOMICS_1, SERGEY_LAW_1, MARIA_CS_1},
+                byCourse.get(1).toArray());
+        
+        assertArrayEquals(
+                new Student[] {JOHN_CS_2, SERGEY_ECONOMICS_2, SOPHIA_ECONOMICS_2},
+                byCourse.get(2).toArray());
+        
+        assertArrayEquals(
+                new Student[] {VICTORIA_CS_3, GEORGE_LAW_3},
+                byCourse.get(3).toArray());
+        
+        assertArrayEquals(
+                new Student[] {STEVE_CS_4},
+                byCourse.get(4).toArray());
     }
 }
