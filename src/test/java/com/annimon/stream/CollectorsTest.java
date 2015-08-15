@@ -1,6 +1,7 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.Function;
+import com.annimon.stream.function.UnaryOperator;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +55,12 @@ public class CollectorsTest {
     }
     
     @Test
+    public void counting() {
+        long count = Stream.ofRange(0, 20).collect(Collectors.counting());
+        assertEquals(20, count);
+    }
+    
+    @Test
     public void groupingBy() {
         final Integer partitionItem = 1;
         List<Integer> items = Arrays.asList(1, 2, 3, 1, 2, 3, 1, 2, 3);
@@ -72,6 +79,15 @@ public class CollectorsTest {
     }
     
     @Test
+    public void groupingByCounting() {
+        Map<Integer, Long> byCounting = Stream.of(1, 2, 2, 3, 3, 3, 4, 4, 4, 4)
+                .collect(Collectors.groupingBy(UnaryOperator.Util.<Integer>identity(), Collectors.counting()));
+        for (int i = 1; i <= 4; i++) {
+            assertEquals(i, byCounting.get(i).longValue());
+        }
+    }
+    
+    @Test
     public void groupingByStudent() {
         final Student STEVE_CS_4 = new Student("Steve", "CS", 4);
         final Student MARIA_ECONOMICS_1 = new Student("Maria", "Economics", 1);
@@ -87,13 +103,21 @@ public class CollectorsTest {
                 GEORGE_LAW_3, SERGEY_LAW_1, SOPHIA_ECONOMICS_2, MARIA_CS_1
         );
         
-        Map<String, List<Student>> bySpeciality = Stream.of(students)
-                .collect(Collectors.groupingBy(new Function<Student, String>() {
+        final Function<Student, String> speciality = new Function<Student, String>() {
             @Override
             public String apply(Student student) {
                 return student.getSpeciality();
             }
-        }));
+        };
+        final Function<Student, Integer> course = new Function<Student, Integer>() {
+            @Override
+            public Integer apply(Student student) {
+                return student.getCourse();
+            }
+        };
+        
+        Map<String, List<Student>> bySpeciality = Stream.of(students)
+                .collect(Collectors.groupingBy(speciality));
         assertArrayEquals(
                 new Student[] {STEVE_CS_4, VICTORIA_CS_3, JOHN_CS_2, MARIA_CS_1},
                 bySpeciality.get("CS").toArray());
@@ -108,12 +132,7 @@ public class CollectorsTest {
         
         
         Map<Integer, List<Student>> byCourse = Stream.of(students)
-                .collect(Collectors.groupingBy(new Function<Student, Integer>() {
-            @Override
-            public Integer apply(Student student) {
-                return student.getCourse();
-            }
-        }));
+                .collect(Collectors.groupingBy(course));
         assertArrayEquals(
                 new Student[] {MARIA_ECONOMICS_1, SERGEY_LAW_1, MARIA_CS_1},
                 byCourse.get(1).toArray());
@@ -129,5 +148,20 @@ public class CollectorsTest {
         assertArrayEquals(
                 new Student[] {STEVE_CS_4},
                 byCourse.get(4).toArray());
+        
+        
+        Map<String, Map<Integer, List<Student>>> bySpecialityAndCourse = Stream.of(students)
+                .collect(Collectors.groupingBy(speciality, Collectors.groupingBy(course)));
+        assertArrayEquals(
+                new Student[] {SERGEY_ECONOMICS_2, SOPHIA_ECONOMICS_2},
+                bySpecialityAndCourse.get("Economics").get(2).toArray());
+        
+        
+        Map<Integer, Long> byCourseCounting = Stream.of(students)
+                .collect(Collectors.groupingBy(course, Collectors.counting()));
+        assertEquals(3, byCourseCounting.get(1).longValue());
+        assertEquals(3, byCourseCounting.get(2).longValue());
+        assertEquals(2, byCourseCounting.get(3).longValue());
+        assertEquals(1, byCourseCounting.get(4).longValue());
     }
 }
