@@ -82,41 +82,7 @@ public final class Collectors {
     }
     
     public static Collector<CharSequence, ?, String> joining() {
-        return new Collector<CharSequence, StringBuilder, String>() {
-
-            @Override
-            public Supplier<StringBuilder> supplier() {
-                return new Supplier<StringBuilder>() {
-
-                    @Override
-                    public StringBuilder get() {
-                        return new StringBuilder();
-                    }
-                };
-            }
-
-            @Override
-            public BiConsumer<StringBuilder, CharSequence> accumulator() {
-                return new BiConsumer<StringBuilder, CharSequence>() {
-
-                    @Override
-                    public void accept(StringBuilder t, CharSequence u) {
-                        t.append(u);
-                    }
-                };
-            }
-
-            @Override
-            public Function<StringBuilder, String> finisher() {
-                return new Function<StringBuilder, String>() {
-
-                    @Override
-                    public String apply(StringBuilder value) {
-                        return value.toString();
-                    }
-                };
-            }
-        };
+        return joining("");
     }
 
     public static Collector<CharSequence, ?, String> joining(CharSequence delimiter) {
@@ -127,7 +93,11 @@ public final class Collectors {
         return joining(delimiter, prefix, suffix, prefix.toString() + suffix.toString());
     }
 
-    public static Collector<CharSequence, ?, String> joining(final CharSequence delimiter, final CharSequence prefix, final CharSequence suffix, final String emptyValue) {
+    public static Collector<CharSequence, ?, String> joining(
+            final CharSequence delimiter,
+            final CharSequence prefix,
+            final CharSequence suffix,
+            final String emptyValue) {
         return new Collector<CharSequence, StringBuilder, String>() {
 
             @Override
