@@ -119,7 +119,15 @@ public final class Collectors {
         };
     }
 
-    public static Collector<CharSequence, ?, String> joining(final CharSequence delimiter) {
+    public static Collector<CharSequence, ?, String> joining(CharSequence delimiter) {
+        return joining(delimiter, "", "");
+    }
+
+    public static Collector<CharSequence, ?, String> joining(CharSequence delimiter, CharSequence prefix, CharSequence suffix) {
+        return joining(delimiter, prefix, suffix, prefix.toString() + suffix.toString());
+    }
+
+    public static Collector<CharSequence, ?, String> joining(final CharSequence delimiter, final CharSequence prefix, final CharSequence suffix, final String emptyValue) {
         return new Collector<CharSequence, StringBuilder, String>() {
 
             @Override
@@ -141,6 +149,8 @@ public final class Collectors {
                     public void accept(StringBuilder t, CharSequence u) {
                         if (t.length() > 0) {
                             t.append(delimiter);
+                        } else {
+                            t.append(prefix);
                         }
                         t.append(u);
                     }
@@ -153,7 +163,11 @@ public final class Collectors {
 
                     @Override
                     public String apply(StringBuilder value) {
-                        return value.toString();
+                        if (value.length() == 0) {
+                            return emptyValue;
+                        } else {
+                            return value.toString() + suffix;
+                        }
                     }
                 };
             }
