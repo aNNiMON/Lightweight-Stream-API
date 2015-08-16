@@ -118,7 +118,62 @@ public final class Collectors {
             }
         };
     }
-    
+
+    public static Collector<CharSequence, ?, String> joining(CharSequence delimiter) {
+        return joining(delimiter, "", "");
+    }
+
+    public static Collector<CharSequence, ?, String> joining(CharSequence delimiter, CharSequence prefix, CharSequence suffix) {
+        return joining(delimiter, prefix, suffix, prefix.toString() + suffix.toString());
+    }
+
+    public static Collector<CharSequence, ?, String> joining(final CharSequence delimiter, final CharSequence prefix, final CharSequence suffix, final String emptyValue) {
+        return new Collector<CharSequence, StringBuilder, String>() {
+
+            @Override
+            public Supplier<StringBuilder> supplier() {
+                return new Supplier<StringBuilder>() {
+
+                    @Override
+                    public StringBuilder get() {
+                        return new StringBuilder();
+                    }
+                };
+            }
+
+            @Override
+            public BiConsumer<StringBuilder, CharSequence> accumulator() {
+                return new BiConsumer<StringBuilder, CharSequence>() {
+
+                    @Override
+                    public void accept(StringBuilder t, CharSequence u) {
+                        if (t.length() > 0) {
+                            t.append(delimiter);
+                        } else {
+                            t.append(prefix);
+                        }
+                        t.append(u);
+                    }
+                };
+            }
+
+            @Override
+            public Function<StringBuilder, String> finisher() {
+                return new Function<StringBuilder, String>() {
+
+                    @Override
+                    public String apply(StringBuilder value) {
+                        if (value.length() == 0) {
+                            return emptyValue;
+                        } else {
+                            return value.toString() + suffix;
+                        }
+                    }
+                };
+            }
+        };
+    }
+
     public static <T> Collector<T, ?, Double> averaging(final Function<? super T, Double> mapper) {
         return new Collector<T, Double[], Double>() {
 

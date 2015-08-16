@@ -3,6 +3,7 @@ package com.annimon.stream;
 import com.annimon.stream.function.Function;
 import com.annimon.stream.function.UnaryOperator;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -40,6 +41,34 @@ public class CollectorsTest {
         String text = Stream.of("a", "b", "c", "def", "", "g")
                 .collect(Collectors.joining());
         assertEquals("abcdefg", text);
+    }
+
+    @Test
+    public void joiningWithDelimiter() {
+        String text = Stream.of("a", "b", "c", "def", "", "g")
+                .collect(Collectors.joining(", "));
+        assertEquals("a, b, c, def, , g", text);
+    }
+
+    @Test
+    public void joiningWithDelimiterPrefixAndSuffixEmpty() {
+        String text = Stream.of(Collections.<String>emptyList())
+                .collect(Collectors.joining(", ", "prefix|", "|suffix", "empty"));
+        assertEquals("empty", text);
+    }
+
+    @Test
+    public void joiningWithDelimiterPrefixAndSuffixEmptyStream() {
+        String text = Stream.of(Collections.<String>emptyList())
+                .collect(Collectors.joining(", ", "prefix|", "|suffix"));
+        assertEquals("prefix||suffix", text);
+    }
+
+    @Test
+    public void joiningWithDelimiterPrefixAndSuffix() {
+        String text = Stream.of("a", "b", "c", "def", "", "g")
+                .collect(Collectors.joining(", ", "prefix|", "|suffix"));
+        assertEquals("prefix|a, b, c, def, , g|suffix", text);
     }
 
     @Test
