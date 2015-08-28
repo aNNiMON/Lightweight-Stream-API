@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -192,6 +193,30 @@ public class StreamTest {
         Collections.sort(list);
         Stream.of(list).forEach(pc2.getConsumer());
         assertEquals(pc1.out(), pc2.out());
+    }
+    
+    @Test
+    public void groupBy() {
+        final Integer partitionItem = 1;
+        Stream.of(1, 2, 3, 1, 2, 3, 1, 2, 3)
+                .groupBy(new Function<Integer, Boolean>() {
+                    
+                    @Override
+                    public Boolean apply(Integer value) {
+                        return value.equals(partitionItem);
+                    }
+                })
+                .forEach(new Consumer<Map.Entry<Boolean, List<Integer>>>() {
+
+                    @Override
+                    public void accept(Map.Entry<Boolean, List<Integer>> entry) {
+                        (entry.getKey() ? pc1.getConsumer() : pc2.getConsumer())
+                                .accept(entry.getValue());
+                    }
+                });
+        
+        assertEquals("[1, 1, 1]", pc1.out());
+        assertEquals("[2, 3, 2, 3, 2, 3]", pc2.out());
     }
     
     @Test

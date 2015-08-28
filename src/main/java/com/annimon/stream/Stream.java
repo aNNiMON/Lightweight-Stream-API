@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -32,6 +33,10 @@ public class Stream<T> {
                 return list.get(index++);
             }
         });
+    }
+    
+    public static <K, V> Stream<Map.Entry<K, V>> of(Map<K, V> map) {
+        return new Stream<Map.Entry<K, V>>(map.entrySet());
     }
     
     public static <T> Stream<T> of(Iterator<? extends T> iterator) {
@@ -204,6 +209,10 @@ public class Stream<T> {
         }
         Collections.sort(list, comparator);
         return new Stream<T>(list);
+    }
+    
+    public <K> Stream<Map.Entry<K, List<T>>> groupBy(final Function<? super T, ? extends K> classifier) {
+        return Stream.of( collect(Collectors.groupingBy(classifier)) );
     }
     
     public Stream<T> peek(final Consumer<? super T> action) {
