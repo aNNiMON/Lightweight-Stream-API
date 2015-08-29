@@ -7,6 +7,7 @@ import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Predicate;
 import com.annimon.stream.function.Supplier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -193,6 +194,41 @@ public class StreamTest {
         Collections.sort(list);
         Stream.of(list).forEach(pc2.getConsumer());
         assertEquals(pc1.out(), pc2.out());
+    }
+    
+    @Test
+    public void sortBy() {
+        final Student STEVE_CS_4 = new Student("Steve", "CS", 4);
+        final Student MARIA_ECONOMICS_1 = new Student("Maria", "Economics", 1);
+        final Student VICTORIA_CS_3 = new Student("Victoria", "CS", 3);
+        final Student JOHN_CS_2 = new Student("John", "Law", 2);
+        final List<Student> students = Arrays.asList(
+                STEVE_CS_4, MARIA_ECONOMICS_1, VICTORIA_CS_3, JOHN_CS_2
+        );
+        
+        List<Student> byName = Stream.of(students)
+                .sortBy(new Function<Student, String>() {
+                    @Override
+                    public String apply(Student student) {
+                        return student.getName();
+                    }
+                })
+                .collect(Collectors.<Student>toList());
+        assertArrayEquals(
+                new Student[] {JOHN_CS_2, MARIA_ECONOMICS_1, STEVE_CS_4, VICTORIA_CS_3},
+                byName.toArray());
+        
+        List<Student> byCourseDesc = Stream.of(students)
+                .sortBy(new Function<Student, Integer>() {
+                    @Override
+                    public Integer apply(Student student) {
+                        return -student.getCourse();
+                    }
+                })
+                .collect(Collectors.<Student>toList());
+        assertArrayEquals(
+                new Student[] {STEVE_CS_4, VICTORIA_CS_3, JOHN_CS_2, MARIA_ECONOMICS_1},
+                byCourseDesc.toArray());
     }
     
     @Test

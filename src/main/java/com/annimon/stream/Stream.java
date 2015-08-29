@@ -211,6 +211,15 @@ public class Stream<T> {
         return new Stream<T>(list);
     }
     
+    public <R extends Comparable> Stream<T> sortBy(final Function<? super T, ? extends R> f) {
+        return sorted(new Comparator<T>() {
+            @Override
+            public int compare(T o1, T o2) {
+                return f.apply(o1).compareTo(f.apply(o2));
+            }
+        });
+    }
+    
     public <K> Stream<Map.Entry<K, List<T>>> groupBy(final Function<? super T, ? extends K> classifier) {
         return Stream.of( collect(Collectors.groupingBy(classifier)) );
     }
