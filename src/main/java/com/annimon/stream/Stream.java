@@ -97,6 +97,45 @@ public class Stream<T> {
         });
     }
     
+    public static <T> Stream<T> generate(final Supplier<T> supplier) {
+        return new Stream<T>(new Iterator<T>() {
+
+            @Override
+            public boolean hasNext() {
+                return true;
+            }
+
+            @Override
+            public T next() {
+                return supplier.get();
+            }
+        });
+    }
+    
+    public static <T> Stream<T> iterate(final T seed, final UnaryOperator<T> op) {
+        return new Stream<T>(new Iterator<T>() {
+            
+            private boolean firstRun = true;
+            private T t;
+
+            @Override
+            public boolean hasNext() {
+                return true;
+            }
+
+            @Override
+            public T next() {
+                if (firstRun) {
+                    firstRun = false;
+                    t = seed;
+                } else {
+                    t = op.apply(t);
+                }
+                return t;
+            }
+        });
+    }
+    
     
 //<editor-fold defaultstate="collapsed" desc="Implementation">
     private final Iterator<? extends T> iterator;

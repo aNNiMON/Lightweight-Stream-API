@@ -2,10 +2,13 @@ package com.annimon.stream;
 
 import com.annimon.stream.function.BiConsumer;
 import com.annimon.stream.function.BiFunction;
+import com.annimon.stream.function.BinaryOperator;
 import com.annimon.stream.function.Consumer;
 import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Predicate;
 import com.annimon.stream.function.Supplier;
+import com.annimon.stream.function.UnaryOperator;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -18,6 +21,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import static org.hamcrest.CoreMatchers.*;
 
 /**
  *
@@ -413,6 +417,42 @@ public class StreamTest {
         assertNotNull(optional.get());
         assertEquals(6, (int) optional.get());
         assertEquals("6", pc1.out());
+    }
+    
+    @Test
+    public void generateFibonacci() {
+        List<Long> expected = Arrays.asList(0L, 1L, 1L, 2L, 3L, 5L, 8L, 13L, 21L, 34L);
+        List<Long> data = Stream.generate(new Supplier<Long>() {
+            private long beforePrevious = 0;
+            private long previous = 0;
+
+            @Override
+            public Long get() {
+                final long result = beforePrevious + previous;
+                if (result == 0) previous = 1;
+                beforePrevious = previous;
+                previous = result;
+                return result;
+            }
+        }).limit(10).collect(Collectors.<Long>toList());
+        assertThat(data, is(expected));
+    }
+    
+    @Test
+    public void iterate() {
+        final BigInteger two = BigInteger.valueOf(2);
+        BigInteger sum = Stream.iterate(BigInteger.ONE, new UnaryOperator<BigInteger>() {
+            @Override
+            public BigInteger apply(BigInteger value) {
+                return value.multiply(two);
+            }
+        }).limit(100).reduce(BigInteger.ZERO, new BinaryOperator<BigInteger>() {
+            @Override
+            public BigInteger apply(BigInteger value1, BigInteger value2) {
+                return value1.add(value2);
+            }
+        });
+        assertEquals(new BigInteger("1267650600228229401496703205375"), sum);
     }
     
     private class PrintConsumer {
