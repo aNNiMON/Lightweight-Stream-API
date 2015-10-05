@@ -35,6 +35,29 @@ public class CollectorsTest {
             assertEquals(index++, v);
         }
     }
+    
+    @Test
+    public void toMap() {
+        Map<Character, String> chars = Stream.of("a", "b", "c", "d")
+                .collect(Collectors.toMap(new Function<String, Character>() {
+
+            @Override
+            public Character apply(String value) {
+                return value.charAt(0);
+            }
+        }, new Function<String, String>() {
+
+            @Override
+            public String apply(String value) {
+                return value;
+            }
+        }));
+        assertEquals(4, chars.size());
+        assertEquals("a", chars.get('a'));
+        assertEquals("b", chars.get('b'));
+        assertEquals("c", chars.get('c'));
+        assertEquals("d", chars.get('d'));
+    }
 
     @Test
     public void joining() {

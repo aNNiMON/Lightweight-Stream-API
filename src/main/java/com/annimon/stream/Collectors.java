@@ -81,6 +81,56 @@ public final class Collectors {
         };
     }
     
+    public static <T, K, V> Collector<T, ?, Map<K, V>> toMap(
+            final Function<? super T, ? extends K> keyMapper,
+            final Function<? super T, ? extends V> valueMapper) {
+        return toMap(keyMapper, valueMapper, new Supplier<Map<K, V>>() {
+
+            @Override
+            public Map<K, V> get() {
+                return new HashMap<K, V>();
+            }
+        });
+    }
+    
+    public static <T, K, V, M extends Map<K, V>> Collector<T, ?, M> toMap(
+            final Function<? super T, ? extends K> keyMapper,
+            final Function<? super T, ? extends V> valueMapper,
+            final Supplier<M> mapFactory) {
+        
+        return new Collector<T, Map<K, V>, M>() {
+
+            @Override
+            public Supplier<Map<K, V>> supplier() {
+                return (Supplier<Map<K, V>>) mapFactory;
+            }
+
+            @Override
+            public BiConsumer<Map<K, V>, T> accumulator() {
+                return new BiConsumer<Map<K, V>, T>() {
+
+                    @Override
+                    public void accept(Map<K, V> map, T t) {
+                        final K key = keyMapper.apply(t);
+                        final V value = valueMapper.apply(t);
+                        final V oldValue = map.get(key);
+                        final V newValue = (oldValue == null) ? value : oldValue;
+                        if (newValue == null) {
+                            map.remove(key);
+                        } else {
+                            map.put(key, newValue);
+                        }
+                    }
+                };
+            }
+
+            @Override
+            public Function<Map<K, V>, M> finisher() {
+                return null;
+            }
+        };
+    }
+    
     public static Collector<CharSequence, ?, String> joining() {
         return joining("");
     }
