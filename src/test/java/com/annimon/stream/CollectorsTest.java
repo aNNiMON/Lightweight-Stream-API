@@ -45,13 +45,7 @@ public class CollectorsTest {
             public Character apply(String value) {
                 return value.charAt(0);
             }
-        }, new Function<String, String>() {
-
-            @Override
-            public String apply(String value) {
-                return value;
-            }
-        }));
+        }, UnaryOperator.Util.<String>identity()));
         assertEquals(4, chars.size());
         assertEquals("a", chars.get('a'));
         assertEquals("b", chars.get('b'));

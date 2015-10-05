@@ -84,13 +84,7 @@ public final class Collectors {
     public static <T, K, V> Collector<T, ?, Map<K, V>> toMap(
             final Function<? super T, ? extends K> keyMapper,
             final Function<? super T, ? extends V> valueMapper) {
-        return toMap(keyMapper, valueMapper, new Supplier<Map<K, V>>() {
-
-            @Override
-            public Map<K, V> get() {
-                return new HashMap<K, V>();
-            }
-        });
+        return toMap(keyMapper, valueMapper, Collectors.<K, V>hashMapSupplier());
     }
     
     public static <T, K, V, M extends Map<K, V>> Collector<T, ?, M> toMap(
@@ -279,13 +273,7 @@ public final class Collectors {
     public static <T, K, A, D> Collector<T, ?, Map<K, D>> groupingBy(
             Function<? super T, ? extends K> classifier,
             Collector<? super T, A, D> downstream) {
-        return groupingBy(classifier, new Supplier<Map<K, D>>() {
-
-            @Override
-            public Map<K, D> get() {
-                return new HashMap<K, D>();
-            }
-        }, downstream);
+        return groupingBy(classifier, Collectors.<K, D>hashMapSupplier(), downstream);
     }
     
     public static <T, K, D, A, M extends Map<K, D>> Collector<T, ?, M> groupingBy(
@@ -336,6 +324,16 @@ public final class Collectors {
                         return (M) map;
                     }
                 };
+            }
+        };
+    }
+    
+    private static <K, V>  Supplier<Map<K, V>> hashMapSupplier() {
+        return new Supplier<Map<K, V>>() {
+
+            @Override
+            public Map<K, V> get() {
+                return new HashMap<K, V>();
             }
         };
     }
