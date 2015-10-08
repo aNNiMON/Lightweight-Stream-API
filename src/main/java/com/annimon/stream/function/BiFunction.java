@@ -1,8 +1,5 @@
 package com.annimon.stream.function;
 
-import com.annimon.stream.Objects;
-import java.util.Comparator;
-
 /**
  * Operation to convert data to type R by two arguments.
  * 
@@ -28,28 +25,6 @@ public interface BiFunction<T, U, R> {
                 @Override
                 public V apply(T t, U u) {
                     return f2.apply(f1.apply(t, u));
-                }
-            };
-        }
-        
-        public static <T> BiFunction<T,T,T> minBy(final Comparator<? super T> comparator) {
-            Objects.requireNonNull(comparator);
-            return new BiFunction<T, T, T>() {
-
-                @Override
-                public T apply(T a, T b) {
-                    return comparator.compare(a, b) <= 0 ? a : b;
-                }
-            };
-        }
-        
-        public static <T> BiFunction<T,T,T> maxBy(final Comparator<? super T> comparator) {
-            Objects.requireNonNull(comparator);
-            return new BiFunction<T, T, T>() {
-
-                @Override
-                public T apply(T a, T b) {
-                    return comparator.compare(a, b) >= 0 ? a : b;
                 }
             };
         }

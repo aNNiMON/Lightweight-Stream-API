@@ -356,11 +356,11 @@ public class Stream<T> {
     }
     
     public Optional<T> min(Comparator<? super T> comparator) {
-        return reduce(BiFunction.Util.minBy(comparator));
+        return reduce(BinaryOperator.Util.minBy(comparator));
     }
     
     public Optional<T> max(Comparator<? super T> comparator) {
-        return reduce(BiFunction.Util.maxBy(comparator));
+        return reduce(BinaryOperator.Util.maxBy(comparator));
     }
     
     public long count() {
