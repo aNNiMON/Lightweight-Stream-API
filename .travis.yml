@@ -1,0 +1,24 @@
+language: java
+
+jdk:
+  - openjdk7
+  - oraclejdk7
+  - oraclejdk8
+
+cache:
+  directories:
+    - $HOME/.m2
+    - $HOME/.gradle
+
+sudo: false
+
+branches:
+  except:
+    - javame
+    
+before_install:
+ - chmod +x gradlew
+
+after_success:
+  - ./gradlew cobertura coveralls
+#  - mvn cobertura:cobertura coveralls:report
