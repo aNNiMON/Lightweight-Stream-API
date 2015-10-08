@@ -38,19 +38,34 @@ public class CollectorsTest {
     
     @Test
     public void toMap() {
-        Map<Character, String> chars = Stream.of("a", "b", "c", "d")
-                .collect(Collectors.toMap(new Function<String, Character>() {
+        final Function<String, Character> keyMapper = new Function<String, Character>() {
 
             @Override
             public Character apply(String value) {
                 return value.charAt(0);
             }
-        }, UnaryOperator.Util.<String>identity()));
+        };
+        Map<Character, String> chars = Stream.of("a", "b", "c", "d")
+                .collect(Collectors.toMap(keyMapper, UnaryOperator.Util.<String>identity()));
         assertEquals(4, chars.size());
         assertEquals("a", chars.get('a'));
         assertEquals("b", chars.get('b'));
         assertEquals("c", chars.get('c'));
         assertEquals("d", chars.get('d'));
+        
+        chars = Stream.of("a0", "b0", "c0", "d0")
+                .collect(Collectors.toMap(keyMapper, new UnaryOperator<String>() {
+
+            @Override
+            public String apply(String value) {
+                if ("c0".equals(value)) return null;
+                return String.valueOf(Character.toUpperCase(value.charAt(0)));
+            }
+        }));
+        assertEquals(3, chars.size());
+        assertEquals("A", chars.get('a'));
+        assertEquals("B", chars.get('b'));
+        assertEquals("D", chars.get('d'));
     }
 
     @Test
@@ -110,7 +125,7 @@ public class CollectorsTest {
     public void groupingBy() {
         final Integer partitionItem = 1;
         List<Integer> items = Arrays.asList(1, 2, 3, 1, 2, 3, 1, 2, 3);
-
+        
         Map<Boolean, List<Integer>> groupedBy = Stream.of(items)
                 .collect(Collectors.groupingBy(new Function<Integer, Boolean>() {
 

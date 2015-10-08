@@ -7,62 +7,80 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import static org.junit.Assert.*;
 import org.junit.Test;
+import static org.hamcrest.CoreMatchers.*;
 
 /**
  * 
  * @author aNNiMON
  */
 public class ExceptionalTest {
-
+    
     @Test
     public void get() {
         int value = Exceptional
-                .of(new ThrowableSupplier<Integer, Throwable>() {
-                    @Override
-                    public Integer get() throws Throwable {
-                        return 10;
-                    }
-                })
+                .of(tenSupplier)
                 .get();
         assertEquals(10, value);
     }
     
+    @Test
+    public void getOrElse() {
+        int value = Exceptional
+                .of(ioExceptionSupplier)
+                .getOrElse(20);
+        assertEquals(20, value);
+    }
+    
+    @Test
+    public void getOptional() {
+        Optional<Integer> value = Exceptional
+                .of(ioExceptionSupplier)
+                .getOptional();
+        assertFalse(value.isPresent());
+    }
+    
+    @Test
+    public void getException() {
+        Throwable throwable = Exceptional
+                .of(ioExceptionSupplier)
+                .getException();
+        assertThat(throwable, instanceOf(IOException.class));
+    }
+    
+    
     @Test(expected = IOException.class)
     public void getOrThrow() throws Throwable {
         int value = Exceptional
-                .of(new ThrowableSupplier<Integer, Throwable>() {
-                    @Override
-                    public Integer get() throws IOException {
-                        throwIO();
-                        return 10;
-                    }
-                })
+                .of(tenSupplier)
+                .getOrThrow();
+        assertEquals(10, value);
+        
+        Exceptional
+                .of(ioExceptionSupplier)
                 .getOrThrow();
     }
     
     @Test(expected = RuntimeException.class)
     public void getOrThrowRuntimeException() throws Throwable {
         int value = Exceptional
-                .of(new ThrowableSupplier<Integer, Throwable>() {
-                    @Override
-                    public Integer get() throws IOException {
-                        throwIO();
-                        return 10;
-                    }
-                })
+                .of(tenSupplier)
+                .getOrThrowRuntimeException();
+        assertEquals(10, value);
+        
+        Exceptional
+                .of(ioExceptionSupplier)
                 .getOrThrowRuntimeException();
     }
     
     @Test(expected = ArithmeticException.class)
     public void getOrThrowNewException() throws Throwable {
         int value = Exceptional
-                .of(new ThrowableSupplier<Integer, Throwable>() {
-                    @Override
-                    public Integer get() throws IOException {
-                        throwIO();
-                        return 10;
-                    }
-                })
+                .of(tenSupplier)
+                .getOrThrow(new ArithmeticException());
+        assertEquals(10, value);
+        
+        Exceptional
+                .of(ioExceptionSupplier)
                 .getOrThrow(new ArithmeticException());
     }
     
@@ -70,16 +88,10 @@ public class ExceptionalTest {
     public void getOrThrowNewExceptionTestCause() {
         try {
             Exceptional
-                    .of(new ThrowableSupplier<Integer, Throwable>() {
-                        @Override
-                        public Integer get() throws IOException {
-                            throwIO();
-                            return 10;
-                        }
-                    })
+                    .of(ioExceptionSupplier)
                     .getOrThrow(new ArithmeticException());
         } catch (ArithmeticException ae) {
-            assertTrue(ae.getCause() instanceof IOException);
+            assertThat(ae.getCause(), instanceOf(IOException.class));
         }
     }
     
@@ -140,6 +152,76 @@ public class ExceptionalTest {
         assertArrayEquals(new boolean[] { true, true, false }, data);
     }
     
+    @Test
+    public void equals() {
+        final Exceptional<Integer> ten1 = Exceptional.of(tenSupplier);
+        final Exceptional<Integer> ten2 = Exceptional.of(tenSupplier);
+        final Exceptional<Integer> ten3 = Exceptional.of(tenSupplier);
+        final Exceptional<Byte> tenByte = Exceptional.of(new ThrowableSupplier<Byte, Throwable>() {
+            @Override
+            public Byte get() throws Throwable {
+                return (byte) 10;
+            }
+        });
+        final Exceptional<Integer> io = Exceptional.of(ioExceptionSupplier);
+        
+        assertTrue(ten1.equals(ten1));
+        
+        assertFalse(ten1.equals(10));
+        
+        assertTrue(ten1.equals(ten2));
+        assertTrue(ten2.equals(ten1));
+        assertTrue(ten2.equals(ten3));
+        assertTrue(ten1.equals(ten3));
+        
+        assertFalse(ten1.equals(tenByte));
+        
+        assertFalse(ten2.equals(io));
+    }
+    
+    @Test
+    public void testHashCode() {
+        final Exceptional<Integer> ten1 = Exceptional.of(tenSupplier);
+        final Exceptional<Integer> ten2 = Exceptional.of(tenSupplier);
+        final Exceptional<Byte> tenByte = Exceptional.of(new ThrowableSupplier<Byte, Throwable>() {
+            @Override
+            public Byte get() throws Throwable {
+                return (byte) 10;
+            }
+        });
+        final Exceptional<Integer> io = Exceptional.of(ioExceptionSupplier);
+        
+        int initial = ten1.hashCode();
+        assertEquals(initial, ten1.hashCode());
+        assertEquals(initial, ten1.hashCode());
+        assertEquals(initial, ten2.hashCode());
+        
+        assertNotEquals(io.hashCode(), tenByte.hashCode());
+    }
+    
+    @Test
+    public void testToString() {
+        assertEquals("Exceptional value 10", Exceptional.of(tenSupplier).toString());
+        assertEquals("Exceptional throwable java.io.IOException", Exceptional.of(ioExceptionSupplier).toString());
+    }
+    
+    
+    private static final ThrowableSupplier<Integer, Throwable> tenSupplier
+            = new ThrowableSupplier<Integer, Throwable>() {
+        @Override
+        public Integer get() throws IOException {
+            return 10;
+        }
+    };
+    
+    private static final ThrowableSupplier<Integer, Throwable> ioExceptionSupplier
+            = new ThrowableSupplier<Integer, Throwable>() {
+        @Override
+        public Integer get() throws Throwable {
+            throwIO();
+            return 10;
+        }
+    };
     
     private static void throwException(ExceptionType type) throws Exception {
         throw type.getException();
