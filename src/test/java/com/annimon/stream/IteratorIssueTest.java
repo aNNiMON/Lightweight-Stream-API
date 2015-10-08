@@ -98,5 +98,10 @@ public class IteratorIssueTest {
         public T next() {
             return list.get(index++);
         }
+        
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException("remove not supported");
+        }
     }
 }

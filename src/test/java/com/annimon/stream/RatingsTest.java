@@ -39,7 +39,7 @@ public class RatingsTest {
                 "Units2D        0 1 0 1 0\n" +
                 "SpaceCatcher   0 1 0 1 1\n" +
                 "Galaxy         0 1 0 0 0\n" +
-                "SonicTime3D    0 2 0 1 1\n" +
+                "SonicTime3D    0 3 0 1 1\n" +
                 "aPlatformer    1 1 0 1 1");
         fileContents.put("holdfast.txt", 
                 "LongFlight     1 2 4 2 2\n" +
@@ -149,7 +149,7 @@ public class RatingsTest {
         
         Assert.assertEquals(
                 "  LongFlight: 38\n" +
-                " SonicTime3D: 28\n" +
+                " SonicTime3D: 29\n" +
                 "SpaceCatcher: 28\n" +
                 "     Units2D: 21\n" +
                 " aPlatformer: 17\n" +

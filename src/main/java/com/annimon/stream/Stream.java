@@ -19,7 +19,7 @@ import java.util.Set;
 public class Stream<T> {
     
     public static <T> Stream<T> of(final List<? extends T> list) {
-        return new Stream<T>(new Iterator<T>() {
+        return new Stream<T>(new LsaIterator<T>() {
             
             private int index = 0;
 
@@ -48,7 +48,7 @@ public class Stream<T> {
     }
     
     public static <T> Stream<T> of(final T... array) {
-        return new Stream<T>(new Iterator<T>() {
+        return new Stream<T>(new LsaIterator<T>() {
             
             private int index = 0;
 
@@ -65,7 +65,7 @@ public class Stream<T> {
     }
     
     public static Stream<Integer> ofRange(final int from, final int to) {
-        return new Stream<Integer>(new Iterator<Integer>() {
+        return new Stream<Integer>(new LsaIterator<Integer>() {
             
             private int index = from;
 
@@ -81,7 +81,7 @@ public class Stream<T> {
         });
     }
     public static Stream<Long> ofRange(final long from, final long to) {
-        return new Stream<Long>(new Iterator<Long>() {
+        return new Stream<Long>(new LsaIterator<Long>() {
             
             private long index = from;
 
@@ -98,7 +98,7 @@ public class Stream<T> {
     }
     
     public static <T> Stream<T> generate(final Supplier<T> supplier) {
-        return new Stream<T>(new Iterator<T>() {
+        return new Stream<T>(new LsaIterator<T>() {
 
             @Override
             public boolean hasNext() {
@@ -113,7 +113,7 @@ public class Stream<T> {
     }
     
     public static <T> Stream<T> iterate(final T seed, final UnaryOperator<T> op) {
-        return new Stream<T>(new Iterator<T>() {
+        return new Stream<T>(new LsaIterator<T>() {
             
             private boolean firstRun = true;
             private T t;
@@ -149,7 +149,7 @@ public class Stream<T> {
     }
     
     public Stream<T> filter(final Predicate<? super T> predicate) {
-        return new Stream<T>(new Iterator<T>() {
+        return new Stream<T>(new LsaIterator<T>() {
             
             private T next;
             
@@ -172,7 +172,7 @@ public class Stream<T> {
     }
     
     public <R> Stream<R> map(final Function<? super T, ? extends R> mapper) {
-        return new Stream<R>(new Iterator<R>() {
+        return new Stream<R>(new LsaIterator<R>() {
             
             @Override
             public boolean hasNext() {
@@ -187,7 +187,7 @@ public class Stream<T> {
     }
     
     public <R> Stream<R> flatMap(final Function<? super T, ? extends Stream<? extends R>> mapper) {
-        return new Stream<R>(new Iterator<R>() {
+        return new Stream<R>(new LsaIterator<R>() {
             
             private R next;
             private Iterator<? extends R> inner;
@@ -264,7 +264,7 @@ public class Stream<T> {
     }
     
     public Stream<T> peek(final Consumer<? super T> action) {
-        return new Stream<T>(new Iterator<T>() {
+        return new Stream<T>(new LsaIterator<T>() {
             
             @Override
             public boolean hasNext() {
@@ -281,7 +281,7 @@ public class Stream<T> {
     }
     
     public Stream<T> limit(final long maxSize) {
-        return new Stream<T>(new Iterator<T>() {
+        return new Stream<T>(new LsaIterator<T>() {
             
             private long index = 0;
             
