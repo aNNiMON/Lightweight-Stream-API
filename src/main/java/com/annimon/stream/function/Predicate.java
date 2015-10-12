@@ -11,7 +11,7 @@ public interface Predicate<T> {
     
     boolean test(T value);
     
-    class Util {
+    public static class Util {
         /**
          * Apply logical AND to predicates.
          */

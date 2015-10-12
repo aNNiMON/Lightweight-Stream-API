@@ -11,7 +11,7 @@ public interface Consumer<T> {
     
     void accept(T value);
     
-    class Util {
+    public static class Util {
         /**
          * Compose Consumer calls.
          */

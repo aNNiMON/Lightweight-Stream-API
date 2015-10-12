@@ -11,7 +11,7 @@ import java.util.Comparator;
  */
 @FunctionalInterface
 public interface BinaryOperator<T> extends BiFunction<T, T, T> {
-    class Util {
+    public static class Util {
         /**
          * Returns a {@link BinaryOperator} which returns the lesser of two elements
          * according to the specified {@code Comparator}.

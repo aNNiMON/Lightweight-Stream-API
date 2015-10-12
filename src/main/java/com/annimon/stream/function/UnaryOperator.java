@@ -9,7 +9,7 @@ package com.annimon.stream.function;
 
 @FunctionalInterface
 public interface UnaryOperator<T> extends Function<T, T> {
-    class Util {
+    public static class Util {
         /**
          * Returns a unary operator that always returns its input argument.
          *
