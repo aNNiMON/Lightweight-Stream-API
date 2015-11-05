@@ -1,20 +1,42 @@
 package com.annimon.stream;
 
+import com.annimon.stream.function.BinaryOperator;
 import com.annimon.stream.function.Function;
+import com.annimon.stream.function.Supplier;
 import com.annimon.stream.function.UnaryOperator;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
 
 /**
  *
  * @author aNNiMON
  */
 public class CollectorsTest {
+    
+    @Test
+    public void toCollection() {
+        Collection<Integer> collection = Stream.ofRange(0, 10).collect(
+                Collectors.toCollection(new Supplier<Collection<Integer>>() {
+            @Override
+            public Collection<Integer> get() {
+                return new LinkedList<Integer>();
+            }
+        }));
+        assertEquals(10, collection.size());
+        int index = 0;
+        for (int v : collection) {
+            assertEquals(index++, v);
+        }
+        assertThat(collection, instanceOf(LinkedList.class));
+    }
     
     @Test
     public void toList() {
@@ -122,6 +144,37 @@ public class CollectorsTest {
     }
     
     @Test
+    public void reducing() {
+        long production = Stream.of(1, 2, 3, 4, 5).collect(
+                Collectors.reducing(1, new BinaryOperator<Integer>() {
+                    @Override
+                    public Integer apply(Integer value1, Integer value2) {
+                        return value1 * value2;
+                    }
+                })
+        );
+        assertEquals(120, production);
+        
+        
+        double sumDiv = Stream.of(1, 2, 3, 4, 5).collect(
+                Collectors.reducing(0d,
+                        new Function<Integer, Double>() {
+                            @Override
+                            public Double apply(Integer value) {
+                                return 1d / value;
+                            }
+                        },
+                        new BinaryOperator<Double>() {
+                            @Override
+                            public Double apply(Double value1, Double value2) {
+                                return value1 + value2;
+                            }
+                        })
+        );
+        assertEquals(2.28, sumDiv, 0.01);
+    }
+    
+    @Test
     public void groupingBy() {
         final Integer partitionItem = 1;
         List<Integer> items = Arrays.asList(1, 2, 3, 1, 2, 3, 1, 2, 3);
@@ -225,6 +278,20 @@ public class CollectorsTest {
         assertArrayEqualsInAnyOrder(
                 new String[] {GEORGE_LAW_3.getName(), SERGEY_LAW_1.getName()},
                 namesBySpeciality.get("Law").toArray());
+    }
+    
+    @Test
+    public void collectingAndThen() {
+        List<Integer> result = Stream.of(1, 2, 3, 4).collect(
+                Collectors.collectingAndThen(Collectors.<Integer>toList(),
+                        new UnaryOperator<List<Integer>>() {
+                            @Override
+                            public List<Integer> apply(List<Integer> list) {
+                                return new LinkedList<Integer>(list);
+                            }
+                        })
+        );
+        assertThat(result, instanceOf(LinkedList.class));
     }
     
     private static void assertArrayEqualsInAnyOrder(Object[] expecteds, Object[] actuals) {

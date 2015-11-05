@@ -1,9 +1,11 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.BiConsumer;
+import com.annimon.stream.function.BinaryOperator;
 import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Supplier;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -16,6 +18,20 @@ import java.util.Set;
  * @author aNNiMON
  */
 public final class Collectors {
+    
+    public static <T, R extends Collection<T>> Collector<T, ?, R> toCollection(Supplier<R> collectionSupplier) {
+        return new CollectorsImpl<T, R, R>(
+                
+                collectionSupplier,
+                
+                new BiConsumer<R, T>() {
+                    @Override
+                    public void accept(R t, T u) {
+                        t.add(u);
+                    }
+                }
+        );
+    }
     
     public static <T> Collector<T, ?, List<T>> toList() {
         return new CollectorsImpl<T, List<T>, List<T>>(
@@ -190,6 +206,61 @@ public final class Collectors {
         );
     }
     
+    public static <T> Collector<T, ?, T> reducing(final T identity, final BinaryOperator<T> op) {
+        return new CollectorsImpl<T, Tuple1<T>, T>(
+                
+                new Supplier<Tuple1<T>>() {
+                    @Override
+                    public Tuple1<T> get() {
+                        return new Tuple1<T>(identity);
+                    }
+                },
+                
+                new BiConsumer<Tuple1<T>, T>() {
+                    @Override
+                    public void accept(Tuple1<T> tuple, T value) {
+                        tuple.a = op.apply(tuple.a, value);
+                    }
+                },
+                
+                new Function<Tuple1<T>, T>() {
+                    @Override
+                    public T apply(Tuple1<T> tuple) {
+                        return tuple.a;
+                    }
+                }
+        );
+    }
+    
+    public static <T, R> Collector<T, ?, R> reducing(
+            final R identity,
+            final Function<? super T, ? extends R> mapper,
+            final BinaryOperator<R> op) {
+        return new CollectorsImpl<T, Tuple1<R>, R>(
+                
+                new Supplier<Tuple1<R>>() {
+                    @Override
+                    public Tuple1<R> get() {
+                        return new Tuple1<R>(identity);
+                    }
+                },
+                
+                new BiConsumer<Tuple1<R>, T>() {
+                    @Override
+                    public void accept(Tuple1<R> tuple, T value) {
+                        tuple.a = op.apply(tuple.a, mapper.apply(value));
+                    }
+                },
+                
+                new Function<Tuple1<R>, R>() {
+                    @Override
+                    public R apply(Tuple1<R> tuple) {
+                        return tuple.a;
+                    }
+                }
+        );
+    }
+    
     public static <T, U, A, R> Collector<T, ?, R> mapping(
             final Function<? super T, ? extends U> mapper,
             final Collector<? super U, A, R> downstream) {
@@ -210,6 +281,16 @@ public final class Collectors {
         );
     }
     
+    public static <T, A, IR, OR> Collector<T, A, OR> collectingAndThen(
+            Collector<T, A, IR> c, Function<IR, OR> finisher) {
+        Function<A, IR> downstreamFinisher = c.finisher();
+        if (downstreamFinisher == null) {
+            downstreamFinisher = castIdentity();
+        }
+        return new CollectorsImpl<T, A, OR>(c.supplier(), c.accumulator(),
+                Function.Util.andThen(downstreamFinisher, finisher));
+    }
+
     public static <T, K> Collector<T, ?, Map<K, List<T>>> groupingBy(
             Function<? super T, ? extends K> classifier) {
         return groupingBy(classifier, Collectors.<T>toList());
@@ -274,6 +355,25 @@ public final class Collectors {
                 return new HashMap<K, V>();
             }
         };
+    }
+    
+    @SuppressWarnings("unchecked")
+    private static <A, R> Function<A, R> castIdentity() {
+        return new Function<A, R>() {
+            
+            @Override
+            public R apply(A value) {
+                return (R) value;
+            }
+        };
+    }
+    
+    private static final class Tuple1<A> {
+        A a;
+        
+        Tuple1(A a) {
+            this.a = a;
+        }
     }
     
     private static final class CollectorsImpl<T, A, R> implements Collector<T, A, R> {
