@@ -276,7 +276,7 @@ public final class Collectors {
         };
     }
     
-    private static class CollectorsImpl<T, A, R> implements Collector<T, A, R> {
+    private static final class CollectorsImpl<T, A, R> implements Collector<T, A, R> {
         
         private final Supplier<A> suppiler;
         private final BiConsumer<A, T> accumulator;
