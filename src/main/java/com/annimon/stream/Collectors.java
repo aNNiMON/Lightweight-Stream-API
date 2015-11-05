@@ -18,67 +18,41 @@ import java.util.Set;
 public final class Collectors {
     
     public static <T> Collector<T, ?, List<T>> toList() {
-        return new Collector<T, List<T>, List<T>>() {
-
-            @Override
-            public Supplier<List<T>> supplier() {
-                return new Supplier<List<T>>() {
-
+        return new CollectorsImpl<T, List<T>, List<T>>(
+                
+                new Supplier<List<T>>() {
                     @Override
                     public List<T> get() {
                         return new ArrayList<T>();
                     }
-                };
-            }
-
-            @Override
-            public BiConsumer<List<T>, T> accumulator() {
-                return new BiConsumer<List<T>, T>() {
-
+                },
+                
+                new BiConsumer<List<T>, T>() {
                     @Override
                     public void accept(List<T> t, T u) {
                         t.add(u);
                     }
-                };
-            }
-
-            @Override
-            public Function<List<T>, List<T>> finisher() {
-                return null;
-            }
-        };
+                }
+        );
     }
     
     public static <T> Collector<T, ?, Set<T>> toSet() {
-        return new Collector<T, Set<T>, Set<T>>() {
-
-            @Override
-            public Supplier<Set<T>> supplier() {
-                return new Supplier<Set<T>>() {
-
+        return new CollectorsImpl<T, Set<T>, Set<T>>(
+                
+                new Supplier<Set<T>>() {
                     @Override
                     public Set<T> get() {
                         return new HashSet<T>();
                     }
-                };
-            }
-
-            @Override
-            public BiConsumer<Set<T>, T> accumulator() {
-                return new BiConsumer<Set<T>, T>() {
-
+                },
+                
+                new BiConsumer<Set<T>, T>() {
                     @Override
                     public void accept(Set<T> t, T u) {
                         t.add(u);
                     }
-                };
-            }
-
-            @Override
-            public Function<Set<T>, Set<T>> finisher() {
-                return null;
-            }
-        };
+                }
+        );
     }
     
     public static <T, K, V> Collector<T, ?, Map<K, V>> toMap(
@@ -91,18 +65,11 @@ public final class Collectors {
             final Function<? super T, ? extends K> keyMapper,
             final Function<? super T, ? extends V> valueMapper,
             final Supplier<M> mapFactory) {
-        
-        return new Collector<T, Map<K, V>, M>() {
-
-            @Override
-            public Supplier<Map<K, V>> supplier() {
-                return (Supplier<Map<K, V>>) mapFactory;
-            }
-
-            @Override
-            public BiConsumer<Map<K, V>, T> accumulator() {
-                return new BiConsumer<Map<K, V>, T>() {
-
+        return new CollectorsImpl<T, Map<K, V>, M>(
+                
+                (Supplier<Map<K, V>>) mapFactory,
+                
+                new BiConsumer<Map<K, V>, T>() {
                     @Override
                     public void accept(Map<K, V> map, T t) {
                         final K key = keyMapper.apply(t);
@@ -115,14 +82,8 @@ public final class Collectors {
                             map.put(key, newValue);
                         }
                     }
-                };
-            }
-
-            @Override
-            public Function<Map<K, V>, M> finisher() {
-                return null;
-            }
-        };
+                }
+        );
     }
     
     public static Collector<CharSequence, ?, String> joining() {
@@ -142,23 +103,16 @@ public final class Collectors {
             final CharSequence prefix,
             final CharSequence suffix,
             final String emptyValue) {
-        return new Collector<CharSequence, StringBuilder, String>() {
-
-            @Override
-            public Supplier<StringBuilder> supplier() {
-                return new Supplier<StringBuilder>() {
-
+        return new CollectorsImpl<CharSequence, StringBuilder, String>(
+                
+                new Supplier<StringBuilder>() {
                     @Override
                     public StringBuilder get() {
                         return new StringBuilder();
                     }
-                };
-            }
-
-            @Override
-            public BiConsumer<StringBuilder, CharSequence> accumulator() {
-                return new BiConsumer<StringBuilder, CharSequence>() {
-
+                },
+                
+                new BiConsumer<StringBuilder, CharSequence>() {
                     @Override
                     public void accept(StringBuilder t, CharSequence u) {
                         if (t.length() > 0) {
@@ -168,13 +122,9 @@ public final class Collectors {
                         }
                         t.append(u);
                     }
-                };
-            }
-
-            @Override
-            public Function<StringBuilder, String> finisher() {
-                return new Function<StringBuilder, String>() {
-
+                },
+                
+                new Function<StringBuilder, String>() {
                     @Override
                     public String apply(StringBuilder value) {
                         if (value.length() == 0) {
@@ -183,114 +133,81 @@ public final class Collectors {
                             return value.toString() + suffix;
                         }
                     }
-                };
-            }
-        };
+                }
+        );
     }
 
     public static <T> Collector<T, ?, Double> averaging(final Function<? super T, Double> mapper) {
-        return new Collector<T, Double[], Double>() {
-
-            @Override
-            public Supplier<Double[]> supplier() {
-                return new Supplier<Double[]>() {
-
+        return new CollectorsImpl<T, Double[], Double>(
+                
+                new Supplier<Double[]>() {
                     @Override
                     public Double[] get() {
                         return new Double[] { 0d, 0d };
                     }
-                };
-            }
-
-            @Override
-            public BiConsumer<Double[], T> accumulator() {
-                return new BiConsumer<Double[], T>() {
-
+                },
+                
+                new BiConsumer<Double[], T>() {
                     @Override
                     public void accept(Double[] t, T u) {
                         t[0]++; // count
                         t[1] += mapper.apply(u); // sum
                     }
-                };
-            }
-
-            @Override
-            public Function<Double[], Double> finisher() {
-                return new Function<Double[], Double>() {
-
+                },
+                
+                new Function<Double[], Double>() {
                     @Override
                     public Double apply(Double[] t) {
                         return t[1] / t[0];
                     }
-                };
-            }
-        };
+                }
+        );
     }
     
     public static <T> Collector<T, ?, Long> counting() {
-        return new Collector<T, Long[], Long>() {
-
-            @Override
-            public Supplier<Long[]> supplier() {
-                return new Supplier<Long[]>() {
-
+        return new CollectorsImpl<T, Long[], Long>(
+                
+                new Supplier<Long[]>() {
                     @Override
                     public Long[] get() {
                         return new Long[] { 0L };
                     }
-                };
-            }
-
-            @Override
-            public BiConsumer<Long[], T> accumulator() {
-                return new BiConsumer<Long[], T>() {
-
+                },
+                
+                new BiConsumer<Long[], T>() {
                     @Override
                     public void accept(Long[] t, T u) {
                         t[0]++;
                     }
-                };
-            }
-
-            @Override
-            public Function<Long[], Long> finisher() {
-                return new Function<Long[], Long>() {
-
+                },
+                
+                new Function<Long[], Long>() {
                     @Override
                     public Long apply(Long[] value) {
                         return value[0];
                     }
-                };
-            }
-        };
+                }
+        );
     }
     
     public static <T, U, A, R> Collector<T, ?, R> mapping(
             final Function<? super T, ? extends U> mapper,
             final Collector<? super U, A, R> downstream) {
+        
         final BiConsumer<A, ? super U> accumulator = downstream.accumulator();
-        return new Collector<T, A, R>() {
-
-            @Override
-            public Supplier<A> supplier() {
-                return downstream.supplier();
-            }
-
-            @Override
-            public BiConsumer<A, T> accumulator() {
-                return new BiConsumer<A, T>() {
+        return new CollectorsImpl<T, A, R>(
+                
+                downstream.supplier(),
+                
+                new BiConsumer<A, T>() {
                     @Override
                     public void accept(A a, T t) {
                         accumulator.accept(a, mapper.apply(t));
                     }
-                };
-            }
-
-            @Override
-            public Function<A, R> finisher() {
-                return downstream.finisher();
-            }
-        };
+                },
+                
+                downstream.finisher()
+        );
     }
     
     public static <T, K> Collector<T, ?, Map<K, List<T>>> groupingBy(
@@ -308,17 +225,28 @@ public final class Collectors {
             final Function<? super T, ? extends K> classifier,
             final Supplier<M> mapFactory,
             final Collector<? super T, A, D> downstream) {
-        return new Collector<T, Map<K, A>, M>() {
-
-            @Override
-            public Supplier<Map<K, A>> supplier() {
-                return (Supplier<Map<K, A>>) mapFactory;
-            }
-
-            @Override
-            public BiConsumer<Map<K, A>, T> accumulator() {
-                return new BiConsumer<Map<K, A>, T>() {
-                    
+        
+        final Function<A, A> doownstreamFinisher = (Function<A, A>) downstream.finisher();
+        Function<Map<K, A>, M> finisher = null;
+        if (doownstreamFinisher != null) {
+            finisher = new Function<Map<K, A>, M>() {
+                @Override
+                public M apply(Map<K, A> map) {
+                    // Update values of a map by a finisher function
+                    for (Map.Entry<K, A> entry : map.entrySet()) {
+                        A value = entry.getValue();
+                        value = doownstreamFinisher.apply(value);
+                        entry.setValue(value);
+                    }
+                    return (M) map;
+                }
+            };
+        }
+        
+        return new CollectorsImpl<T, Map<K, A>, M>(
+                (Supplier<Map<K, A>>) mapFactory,
+                
+                new BiConsumer<Map<K, A>, T>() {
                     @Override
                     public void accept(Map<K, A> map, T t) {
                         K key = Objects.requireNonNull(classifier.apply(t), "element cannot be mapped to a null key");
@@ -332,28 +260,10 @@ public final class Collectors {
                         // Add element to container
                         downstream.accumulator().accept(container, t);
                     }
-                };
-            }
-
-            @Override
-            public Function<Map<K, A>, M> finisher() {
-                if (downstream.finisher() == null) return null;
-                return new Function<Map<K, A>, M>() {
-
-                    @Override
-                    public M apply(Map<K, A> map) {
-                        final Function<A, A> finisher = (Function<A, A>) downstream.finisher();
-                        // Update values of a map by a finisher function
-                        for (Map.Entry<K, A> entry : map.entrySet()) {
-                            A value = entry.getValue();
-                            value = finisher.apply(value);
-                            entry.setValue(value);
-                        }
-                        return (M) map;
-                    }
-                };
-            }
-        };
+                },
+                
+                finisher
+        );
     }
     
     private static <K, V>  Supplier<Map<K, V>> hashMapSupplier() {
@@ -364,5 +274,38 @@ public final class Collectors {
                 return new HashMap<K, V>();
             }
         };
+    }
+    
+    private static class CollectorsImpl<T, A, R> implements Collector<T, A, R> {
+        
+        private final Supplier<A> suppiler;
+        private final BiConsumer<A, T> accumulator;
+        private final Function<A, R> finisher;
+
+        public CollectorsImpl(Supplier<A> suppiler, BiConsumer<A, T> accumulator) {
+            this(suppiler, accumulator, null);
+        }
+        
+        public CollectorsImpl(Supplier<A> suppiler, BiConsumer<A, T> accumulator, Function<A, R> finisher) {
+            this.suppiler = suppiler;
+            this.accumulator = accumulator;
+            this.finisher = finisher;
+        }
+        
+        @Override
+        public Supplier<A> supplier() {
+            return suppiler;
+        }
+
+        @Override
+        public BiConsumer<A, T> accumulator() {
+            return accumulator;
+        }
+
+        @Override
+        public Function<A, R> finisher() {
+            return finisher;
+        }
+        
     }
 }
