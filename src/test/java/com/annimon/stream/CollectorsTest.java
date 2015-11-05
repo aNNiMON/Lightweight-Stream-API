@@ -150,33 +150,6 @@ public class CollectorsTest {
     
     @Test
     public void groupingByStudent() {
-        final Student STEVE_CS_4 = new Student("Steve", "CS", 4);
-        final Student MARIA_ECONOMICS_1 = new Student("Maria", "Economics", 1);
-        final Student VICTORIA_CS_3 = new Student("Victoria", "CS", 3);
-        final Student JOHN_CS_2 = new Student("John", "CS", 2);
-        final Student SERGEY_ECONOMICS_2 = new Student("Sergey", "Economics", 2);
-        final Student GEORGE_LAW_3 = new Student("George", "Law", 3);
-        final Student SERGEY_LAW_1 = new Student("Sergey", "Law", 1);
-        final Student SOPHIA_ECONOMICS_2 = new Student("Sophia", "Economics", 2);
-        final Student MARIA_CS_1 = new Student("Maria", "CS", 1);
-        final List<Student> students = Arrays.asList(
-                STEVE_CS_4, MARIA_ECONOMICS_1, VICTORIA_CS_3, JOHN_CS_2, SERGEY_ECONOMICS_2,
-                GEORGE_LAW_3, SERGEY_LAW_1, SOPHIA_ECONOMICS_2, MARIA_CS_1
-        );
-        
-        final Function<Student, String> speciality = new Function<Student, String>() {
-            @Override
-            public String apply(Student student) {
-                return student.getSpeciality();
-            }
-        };
-        final Function<Student, Integer> course = new Function<Student, Integer>() {
-            @Override
-            public Integer apply(Student student) {
-                return student.getCourse();
-            }
-        };
-        
         Map<String, List<Student>> bySpeciality = Stream.of(students)
                 .collect(Collectors.groupingBy(speciality));
         assertArrayEquals(
@@ -225,4 +198,55 @@ public class CollectorsTest {
         assertEquals(2, byCourseCounting.get(3).longValue());
         assertEquals(1, byCourseCounting.get(4).longValue());
     }
+    
+    @Test
+    public void mapping() {
+        Map<String, Set<String>> namesBySpeciality = Stream.of(students)
+                .collect(Collectors.groupingBy(speciality,
+                        Collectors.mapping(studentName, Collectors.<String>toSet())));
+        
+        assertArrayEquals(
+                new String[] {MARIA_ECONOMICS_1.getName(), SERGEY_ECONOMICS_2.getName(), SOPHIA_ECONOMICS_2.getName()},
+                namesBySpeciality.get("Economics").toArray());
+        assertArrayEquals(
+                new String[] {STEVE_CS_4.getName(), VICTORIA_CS_3.getName(), JOHN_CS_2.getName(), MARIA_CS_1.getName()},
+                namesBySpeciality.get("CS").toArray());
+        assertArrayEquals(
+                new String[] {GEORGE_LAW_3.getName(), SERGEY_LAW_1.getName()},
+                namesBySpeciality.get("Law").toArray());
+    }
+    
+    
+    private static final Student STEVE_CS_4 = new Student("Steve", "CS", 4);
+    private static final Student MARIA_ECONOMICS_1 = new Student("Maria", "Economics", 1);
+    private static final Student VICTORIA_CS_3 = new Student("Victoria", "CS", 3);
+    private static final Student JOHN_CS_2 = new Student("John", "CS", 2);
+    private static final Student SERGEY_ECONOMICS_2 = new Student("Sergey", "Economics", 2);
+    private static final Student GEORGE_LAW_3 = new Student("George", "Law", 3);
+    private static final Student SERGEY_LAW_1 = new Student("Sergey", "Law", 1);
+    private static final Student SOPHIA_ECONOMICS_2 = new Student("Sophia", "Economics", 2);
+    private static final Student MARIA_CS_1 = new Student("Maria", "CS", 1);
+    private static final List<Student> students = Arrays.asList(
+            STEVE_CS_4, MARIA_ECONOMICS_1, VICTORIA_CS_3, JOHN_CS_2, SERGEY_ECONOMICS_2,
+            GEORGE_LAW_3, SERGEY_LAW_1, SOPHIA_ECONOMICS_2, MARIA_CS_1
+    );
+    
+    private static final Function<Student, String> speciality = new Function<Student, String>() {
+        @Override
+        public String apply(Student student) {
+            return student.getSpeciality();
+        }
+    };
+    private static final Function<Student, Integer> course = new Function<Student, Integer>() {
+        @Override
+        public Integer apply(Student student) {
+            return student.getCourse();
+        }
+    };
+    private static final Function<Student, String> studentName = new Function<Student, String>() {
+        @Override
+        public String apply(Student student) {
+            return student.getName();
+        }
+    };
 }

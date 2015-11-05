@@ -265,6 +265,34 @@ public final class Collectors {
         };
     }
     
+    public static <T, U, A, R> Collector<T, ?, R> mapping(
+            final Function<? super T, ? extends U> mapper,
+            final Collector<? super U, A, R> downstream) {
+        final BiConsumer<A, ? super U> accumulator = downstream.accumulator();
+        return new Collector<T, A, R>() {
+
+            @Override
+            public Supplier<A> supplier() {
+                return downstream.supplier();
+            }
+
+            @Override
+            public BiConsumer<A, T> accumulator() {
+                return new BiConsumer<A, T>() {
+                    @Override
+                    public void accept(A a, T t) {
+                        accumulator.accept(a, mapper.apply(t));
+                    }
+                };
+            }
+
+            @Override
+            public Function<A, R> finisher() {
+                return downstream.finisher();
+            }
+        };
+    }
+    
     public static <T, K> Collector<T, ?, Map<K, List<T>>> groupingBy(
             Function<? super T, ? extends K> classifier) {
         return groupingBy(classifier, Collectors.<T>toList());
