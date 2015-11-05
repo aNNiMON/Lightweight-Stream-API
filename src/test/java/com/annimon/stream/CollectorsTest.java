@@ -205,15 +205,21 @@ public class CollectorsTest {
                 .collect(Collectors.groupingBy(speciality,
                         Collectors.mapping(studentName, Collectors.<String>toSet())));
         
-        assertArrayEquals(
+        assertArrayEqualsInAnyOrder(
                 new String[] {MARIA_ECONOMICS_1.getName(), SERGEY_ECONOMICS_2.getName(), SOPHIA_ECONOMICS_2.getName()},
                 namesBySpeciality.get("Economics").toArray());
-        assertArrayEquals(
+        assertArrayEqualsInAnyOrder(
                 new String[] {STEVE_CS_4.getName(), VICTORIA_CS_3.getName(), JOHN_CS_2.getName(), MARIA_CS_1.getName()},
                 namesBySpeciality.get("CS").toArray());
-        assertArrayEquals(
+        assertArrayEqualsInAnyOrder(
                 new String[] {GEORGE_LAW_3.getName(), SERGEY_LAW_1.getName()},
                 namesBySpeciality.get("Law").toArray());
+    }
+    
+    private static void assertArrayEqualsInAnyOrder(Object[] expecteds, Object[] actuals) {
+        Arrays.sort(expecteds);
+        Arrays.sort(actuals);
+        assertArrayEquals(expecteds, actuals);
     }
     
     
