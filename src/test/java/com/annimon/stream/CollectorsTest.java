@@ -201,6 +201,17 @@ public class CollectorsTest {
     
     @Test
     public void mapping() {
+        Function<Integer, String> squareToStrimg = new Function<Integer, String>() {
+            @Override
+            public String apply(Integer value) {
+                return Integer.toString(value * value);
+            }
+        };
+        String result = Stream.of(1, 2, 3, 4)
+                .collect( Collectors.mapping(squareToStrimg, Collectors.joining(", ")) );
+        assertEquals("1, 4, 9, 16", result);
+        
+        
         Map<String, Set<String>> namesBySpeciality = Stream.of(students)
                 .collect(Collectors.groupingBy(speciality,
                         Collectors.mapping(studentName, Collectors.<String>toSet())));
