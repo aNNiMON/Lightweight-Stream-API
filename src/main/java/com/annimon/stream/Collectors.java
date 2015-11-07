@@ -18,6 +18,8 @@ import java.util.Set;
  * @see Collector
  */
 public final class Collectors {
+
+    private Collectors() { }
     
     /**
      * Returns a {@code Collector} that fills new {@code Collection}, provided by {@code collectionSupplier}, with input elements.

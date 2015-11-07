@@ -6,6 +6,8 @@ import java.util.Comparator;
  * Common operations with Object.
  */
 public final class Objects {
+
+    private Objects() { }
     
     /**
      * Checks equality of two objects.

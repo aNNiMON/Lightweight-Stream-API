@@ -18,6 +18,9 @@ public interface Function<T, R> {
     R apply(T value);
     
     class Util {
+        
+        private Util() { }
+        
         /**
          * /**
          * Compose {@code Function} calls.

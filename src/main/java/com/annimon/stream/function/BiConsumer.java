@@ -19,6 +19,9 @@ public interface BiConsumer<T, U> {
     void accept(T value1, U value2);
     
     class Util {
+        
+        private Util() { }
+        
         /**
          * Compose {@code BiConsumer} calls.
          * 

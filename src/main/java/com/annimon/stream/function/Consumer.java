@@ -17,6 +17,9 @@ public interface Consumer<T> {
     void accept(T value);
     
     class Util {
+        
+        private Util() { }
+        
         /**
          * Compose {@code Consumer} calls.
          * 
