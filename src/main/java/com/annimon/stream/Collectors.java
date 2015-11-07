@@ -15,10 +15,18 @@ import java.util.Set;
 /**
  * Common implementations of {@link Collector}.
  * 
- * @author aNNiMON
+ * @see Collector
  */
 public final class Collectors {
     
+    /**
+     * Returns a {@code Collector} that fills new {@code Collection}, provided by {@code collectionSupplier}, with input elements.
+     * 
+     * @param <T> the type of the input elements
+     * @param <R> the type of the resulting collection
+     * @param collectionSupplier  a supplier function that provides new collection
+     * @return a {@code Collector}
+     */
     public static <T, R extends Collection<T>> Collector<T, ?, R> toCollection(Supplier<R> collectionSupplier) {
         return new CollectorsImpl<T, R, R>(
                 
@@ -33,6 +41,12 @@ public final class Collectors {
         );
     }
     
+    /**
+     * Returns a {@code Collector} that fills new {@code List} with input elements.
+     * 
+     * @param <T> the type of the input elements
+     * @return a {@code Collector}
+     */
     public static <T> Collector<T, ?, List<T>> toList() {
         return new CollectorsImpl<T, List<T>, List<T>>(
                 
@@ -52,6 +66,12 @@ public final class Collectors {
         );
     }
     
+    /**
+     * Returns a {@code Collector} that fills new {@code Set} with input elements.
+     * 
+     * @param <T> the type of the input elements
+     * @return a {@code Collector}
+     */
     public static <T> Collector<T, ?, Set<T>> toSet() {
         return new CollectorsImpl<T, Set<T>, Set<T>>(
                 
@@ -71,12 +91,34 @@ public final class Collectors {
         );
     }
     
+    /**
+     * Returns a {@code Collector} that fills new {@code Map} with input elements.
+     * 
+     * @param <T> the type of the input elements
+     * @param <K> the result type of key mapping function
+     * @param <V> the result type of value mapping function
+     * @param keyMapper  a mapping function to produce keys
+     * @param valueMapper  a mapping function to produce values
+     * @return a {@code Collector}
+     */
     public static <T, K, V> Collector<T, ?, Map<K, V>> toMap(
             final Function<? super T, ? extends K> keyMapper,
             final Function<? super T, ? extends V> valueMapper) {
         return toMap(keyMapper, valueMapper, Collectors.<K, V>hashMapSupplier());
     }
     
+    /**
+     * Returns a {@code Collector} that fills new {@code List} with input elements.
+     * 
+     * @param <T> the type of the input elements
+     * @param <K> the result type of key mapping function
+     * @param <V> the result type of value mapping function
+     * @param <M> the type of the resulting {@code Map}
+     * @param keyMapper  a mapping function to produce keys
+     * @param valueMapper  a mapping function to produce values
+     * @param mapFactory  a supplier function that provides new {@code Map}
+     * @return a {@code Collector}
+     */
     public static <T, K, V, M extends Map<K, V>> Collector<T, ?, M> toMap(
             final Function<? super T, ? extends K> keyMapper,
             final Function<? super T, ? extends V> valueMapper,
@@ -102,18 +144,46 @@ public final class Collectors {
         );
     }
     
+    /**
+     * Returns a {@code Collector} that concatenates input elements into new string.
+     * 
+     * @return a {@code Collector}
+     */
     public static Collector<CharSequence, ?, String> joining() {
         return joining("");
     }
 
+    /**
+     * Returns a {@code Collector} that concatenates input elements into new string.
+     * 
+     * @param delimiter  the delimeter between each element
+     * @return a {@code Collector}
+     */
     public static Collector<CharSequence, ?, String> joining(CharSequence delimiter) {
         return joining(delimiter, "", "");
     }
 
+    /**
+     * Returns a {@code Collector} that concatenates input elements into new string.
+     * 
+     * @param delimiter  the delimeter between each element
+     * @param prefix  the prefix of result
+     * @param suffix  the suffix of result
+     * @return a {@code Collector}
+     */
     public static Collector<CharSequence, ?, String> joining(CharSequence delimiter, CharSequence prefix, CharSequence suffix) {
         return joining(delimiter, prefix, suffix, prefix.toString() + suffix.toString());
     }
 
+    /**
+     * Returns a {@code Collector} that concatenates input elements into new string.
+     * 
+     * @param delimiter  the delimeter between each element
+     * @param prefix  the prefix of result
+     * @param suffix  the suffix of result
+     * @param emptyValue  the string which replaces empty element if exists
+     * @return a {@code Collector}
+     */
     public static Collector<CharSequence, ?, String> joining(
             final CharSequence delimiter,
             final CharSequence prefix,
@@ -153,6 +223,13 @@ public final class Collectors {
         );
     }
 
+    /**
+     * Returns a {@code Collector} that calculates average of input elements.
+     * 
+     * @param <T> the type of the input elements
+     * @param mapper  the mapping function which extracts value from element to calculate result
+     * @return a {@code Collector}
+     */
     public static <T> Collector<T, ?, Double> averaging(final Function<? super T, Double> mapper) {
         return new CollectorsImpl<T, Double[], Double>(
                 
@@ -180,6 +257,12 @@ public final class Collectors {
         );
     }
     
+    /**
+     * Returns a {@code Collector} that counts the number of input elements.
+     * 
+     * @param <T> the type of the input elements
+     * @return a {@code Collector}
+     */
     public static <T> Collector<T, ?, Long> counting() {
         return new CollectorsImpl<T, Long[], Long>(
                 
@@ -206,6 +289,15 @@ public final class Collectors {
         );
     }
     
+    /**
+     * Returns a {@code Collector} that reduces the input elements.
+     * 
+     * @param <T> the type of the input elements
+     * @param identity  the initial value
+     * @param op  the operator to reduce elements
+     * @return a {@code Collector}
+     * @see #reducing(java.lang.Object, com.annimon.stream.function.Function, com.annimon.stream.function.BinaryOperator) 
+     */
     public static <T> Collector<T, ?, T> reducing(final T identity, final BinaryOperator<T> op) {
         return new CollectorsImpl<T, Tuple1<T>, T>(
                 
@@ -232,6 +324,17 @@ public final class Collectors {
         );
     }
     
+    /**
+     * Returns a {@code Collector} that reduces the input elements.
+     * 
+     * @param <T> the type of the input elements
+     * @param <R> the type of the output elements
+     * @param identity  the initial value
+     * @param mapper  the mapping function
+     * @param op  the operator to reduce elements
+     * @return a {@code Collector}
+     * @see #reducing(java.lang.Object, com.annimon.stream.function.BinaryOperator) 
+     */
     public static <T, R> Collector<T, ?, R> reducing(
             final R identity,
             final Function<? super T, ? extends R> mapper,
@@ -261,6 +364,17 @@ public final class Collectors {
         );
     }
     
+    /**
+     * Returns a {@code Collector} that performs mapping function before accumulation.
+     * 
+     * @param <T> the type of the input elements
+     * @param <U> the result type of mapping function
+     * @param <A> the accumulation type
+     * @param <R> the result type of collector
+     * @param mapper  function that performs mapping to input elements
+     * @param downstream  collector of mapped elements
+     * @return a {@code Collector}
+     */
     public static <T, U, A, R> Collector<T, ?, R> mapping(
             final Function<? super T, ? extends U> mapper,
             final Collector<? super U, A, R> downstream) {
@@ -281,6 +395,17 @@ public final class Collectors {
         );
     }
     
+    /**
+     * Returns a {@code Collector} that performs additional transformation.
+     * 
+     * @param <T> the type of the input elements
+     * @param <A> the accumulation type
+     * @param <IR> the input type of transformation function
+     * @param <OR> the output type of transformation function
+     * @param c  input {@code Collector}
+     * @param finisher  the final transformation function
+     * @return a {@code Collector}
+     */
     public static <T, A, IR, OR> Collector<T, A, OR> collectingAndThen(
             Collector<T, A, IR> c, Function<IR, OR> finisher) {
         Function<A, IR> downstreamFinisher = c.finisher();
@@ -291,17 +416,55 @@ public final class Collectors {
                 Function.Util.andThen(downstreamFinisher, finisher));
     }
 
+    /**
+     * Returns a {@code Collector} that performs grouping operation by given classifier.
+     * 
+     * @param <T> the type of the input elements
+     * @param <K> the type of the keys
+     * @param classifier  the classifier function 
+     * @return a {@code Collector}
+     * @see #groupingBy(com.annimon.stream.function.Function, com.annimon.stream.Collector) 
+     * @see #groupingBy(com.annimon.stream.function.Function, com.annimon.stream.function.Supplier, com.annimon.stream.Collector) 
+     */
     public static <T, K> Collector<T, ?, Map<K, List<T>>> groupingBy(
             Function<? super T, ? extends K> classifier) {
         return groupingBy(classifier, Collectors.<T>toList());
     }
     
+    /**
+     * Returns a {@code Collector} that performs grouping operation by given classifier.
+     * 
+     * @param <T> the type of the input elements
+     * @param <K> the type of the keys
+     * @param <A> the accumulation type
+     * @param <D> the result type of downstream reduction
+     * @param classifier  the classifier function 
+     * @param downstream  collector of mapped elements
+     * @return a {@code Collector}
+     * @see #groupingBy(com.annimon.stream.function.Function) 
+     * @see #groupingBy(com.annimon.stream.function.Function, com.annimon.stream.function.Supplier, com.annimon.stream.Collector) 
+     */
     public static <T, K, A, D> Collector<T, ?, Map<K, D>> groupingBy(
             Function<? super T, ? extends K> classifier,
             Collector<? super T, A, D> downstream) {
         return groupingBy(classifier, Collectors.<K, D>hashMapSupplier(), downstream);
     }
     
+    /**
+     * Returns a {@code Collector} that performs grouping operation by given classifier.
+     * 
+     * @param <T> the type of the input elements
+     * @param <K> the type of the keys
+     * @param <A> the accumulation type
+     * @param <D> the result type of downstream reduction
+     * @param <M> the type of the resulting {@code Map}
+     * @param classifier  the classifier function 
+     * @param mapFactory  a supplier function that provides new {@code Map}
+     * @param downstream  collector of mapped elements
+     * @return a {@code Collector}
+     * @see #groupingBy(com.annimon.stream.function.Function) 
+     * @see #groupingBy(com.annimon.stream.function.Function, com.annimon.stream.Collector) 
+     */
     public static <T, K, D, A, M extends Map<K, D>> Collector<T, ?, M> groupingBy(
             final Function<? super T, ? extends K> classifier,
             final Supplier<M> mapFactory,

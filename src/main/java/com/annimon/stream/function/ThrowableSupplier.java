@@ -1,14 +1,19 @@
 package com.annimon.stream.function;
 
 /**
- * Supply result which can thrown an exception.
+ * Represents a function for supplying result which can throw an exception.
  * 
- * @author aNNiMON
  * @param <T> the type of the result
  * @param <E> the type of the exception
  */
 @FunctionalInterface
 public interface ThrowableSupplier<T, E extends Throwable> {
     
+    /**
+     * Gets a result.
+     * 
+     * @return a result
+     * @throws E an exception
+     */
     T get() throws E;
 }

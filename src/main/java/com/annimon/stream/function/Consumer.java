@@ -1,19 +1,32 @@
 package com.annimon.stream.function;
 
 /**
- * Operation with input arguments without return result.
+ * Represents an operation on input argument.
  * 
- * @author aNNiMON
  * @param <T> the type of the input to the operation
+ * @see BiConsumer
  */
 @FunctionalInterface
 public interface Consumer<T> {
     
+    /**
+     * Performs operation on argument.
+     * 
+     * @param value  the input argument
+     */
     void accept(T value);
     
     class Util {
         /**
-         * Compose Consumer calls.
+         * Compose {@code Consumer} calls.
+         * 
+         * <p>{@code c1.accept(value); c2.accept(value); }
+         * 
+         * @param <T> the type of the input to the operation
+         * @param c1  first {@code Consumer}
+         * @param c2  second {@code Consumer}
+         * @return a composed {@code Consumer}
+         * @throws NullPointerException if {@code c1} or {@code c2} is null
          */
         public static <T> Consumer<T> andThen(final Consumer<? super T> c1, final Consumer<? super T> c2) {
             return new Consumer<T>() {
