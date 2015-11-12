@@ -420,6 +420,45 @@ public class StreamTest {
     }
     
     @Test
+    public void customIntermediateOperator() {
+        Stream.ofRange(0, 10)
+                .custom(new CustomOperators.Reverse<Integer>())
+                .forEach(pc1.getConsumer());
+        assertEquals("9876543210", pc1.out());
+        
+        Stream.ofRange(0, 10)
+                .custom(new CustomOperators.SkipAndLimit<Integer>(5, 2))
+                .forEach(pc1.getConsumer());
+        assertEquals("56", pc1.out());
+        
+        List<List> lists = new ArrayList<List>();
+        for (char ch = 'a'; ch <= 'f'; ch++) {
+            lists.add( new ArrayList<Character>(Arrays.asList(ch)) );
+        }
+        List<Character> chars = Stream.of(lists)
+                .custom(new CustomOperators.FlatMap<List, Object>(new Function<List, Stream<Object>>() {
+                    @Override
+                    public Stream<Object> apply(List value) {
+                        return Stream.of(value);
+                    }
+                }))
+                .custom(new CustomOperators.Cast<Object, Character>(Character.class))
+                .collect(Collectors.<Character>toList());
+        assertArrayEquals(new Character[] {'a', 'b', 'c', 'd', 'e', 'f'}, chars.toArray());
+    }
+    
+    @Test
+    public void customTerminalOperator() {
+        int sum = Stream.of(1, 2, 3, 4, 5)
+                .custom(new CustomOperators.Sum());
+        assertEquals(15, sum);
+        
+        Stream.ofRange(0, 10)
+                .custom(new CustomOperators.ForEach<Integer>(pc1.getConsumer()));
+        assertEquals("0123456789", pc1.out());
+    }
+    
+    @Test
     public void generateFibonacci() {
         List<Long> expected = Arrays.asList(0L, 1L, 1L, 2L, 3L, 5L, 8L, 13L, 21L, 34L);
         List<Long> data = Stream.generate(new Supplier<Long>() {
