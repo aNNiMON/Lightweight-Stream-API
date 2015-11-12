@@ -215,6 +215,74 @@ public class Stream<T> {
     }
     
     /**
+     * Returns internal stream iterator.
+     * 
+     * @return internal stream iterator
+     */
+    public Iterator<? extends T> getIterator() {
+        return iterator;
+    }
+    
+    /**
+     * Applies custom operator on stream.
+     * 
+     * Transforming function can return {@code Stream} for intermediate operations, 
+     * or any value for terminal operation.
+     * 
+     * <p>Operator examples:
+     * <pre><code>
+     *     // Intermediate operator
+     *     public static class Reverse&lt;T&gt; implements Function&lt;Stream&lt;T&gt;, Stream&lt;T&gt;&gt; {
+     *         &#64;Override
+     *         public Stream&lt;T&gt; apply(Stream&lt;T&gt; stream) {
+     *             final Iterator&lt;? extends T&gt; iterator = stream.getIterator();
+     *             final ArrayDeque&lt;T&gt; deque = new ArrayDeque&lt;T&gt;();
+     *             while (iterator.hasNext()) {
+     *                 deque.addFirst(iterator.next());
+     *             }
+     *             return Stream.of(deque.iterator());
+     *         }
+     *     }
+     *     
+     *     // Intermediate operator based on existing stream operators
+     *     public static class SkipAndLimit&lt;T&gt; implements UnaryOperator&lt;Stream&lt;T&gt;&gt; {
+     *         
+     *         private final int skip, limit;
+     *     
+     *         public SkipAndLimit(int skip, int limit) {
+     *             this.skip = skip;
+     *             this.limit = limit;
+     *         }
+     *         
+     *         &#64;Override
+     *         public Stream&lt;T&gt; apply(Stream&lt;T&gt; stream) {
+     *             return stream.skip(skip).limit(limit);
+     *         }
+     *     }
+     *     
+     *     // Terminal operator
+     *     public static class Sum implements Function&lt;Stream&lt;Integer&gt;, Integer&gt; {
+     *         &#64;Override
+     *         public Integer apply(Stream&lt;Integer&gt; stream) {
+     *             return stream.reduce(0, new BinaryOperator&lt;Integer&gt;() {
+     *                 &#64;Override
+     *                 public Integer apply(Integer value1, Integer value2) {
+     *                     return value1 + value2;
+     *                 }
+     *             });
+     *         }
+     *     }
+     * </code></pre>
+     * 
+     * @param <R> the type result
+     * @param function  transforming function
+     * @return result of the transforming function
+     */
+    public <R> R custom(Function<Stream<T>, R> function) {
+        return function.apply(this);
+    }
+    
+    /**
      * Returns {@code Stream} with elements that satisfy the given predicate.
      * 
      * <p>This is an intermediate operation.
