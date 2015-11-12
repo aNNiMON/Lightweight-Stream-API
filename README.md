@@ -9,11 +9,15 @@ Lightweight-Stream-API
 
 Stream API from Java 8 rewrited on iterators for Java 7 and below.
 
-Includes:
- + Functional interfaces;
- + `Stream` (without parallel processing);
+
+### Includes
+
+ + Functional interfaces (Supplier, Function, Consumer etc);
+ + `Stream` (without parallel processing but with custom operators);
  + `Optional` class;
+ + `Exceptional` class - functional way to deal with exceptions;
  + `Objects` from Java 7.
+
 
 ### Usage
 
@@ -29,6 +33,33 @@ Stream.ofRange(0, 10)...
 ```
 Example project: https://github.com/aNNiMON/Android-Java-8-Stream-Example
 
+
+### Custom operators
+
+Unlike Java 8 streams, Lightweight-Stream-API provides an ability to apply custom operators.
+
+```java
+Stream.of(...)
+    .custom(new Reverse<>())
+    .forEach(...);
+
+public final class Reverse<T> implements UnaryOperator<Stream<T>> {
+
+    @Override
+    public Stream<T> apply(Stream<T> stream) {
+        final Iterator<? extends T> iterator = stream.getIterator();
+        final ArrayDeque<T> deque = new ArrayDeque<T>();
+        while (iterator.hasNext()) {
+            deque.addFirst(iterator.next());
+        }
+        return Stream.of(deque.iterator());
+    }
+}
+```
+
+More examples you can find [here](https://github.com/aNNiMON/Lightweight-Stream-API/blob/master/src/test/java/com/annimon/stream/CustomOperators.java).
+
+
 ### Download
 
 Download [latest release](https://github.com/aNNiMON/Lightweight-Stream-API/releases) or grab via Maven:
@@ -37,7 +68,7 @@ Download [latest release](https://github.com/aNNiMON/Lightweight-Stream-API/rele
   <groupId>com.annimon</groupId>
   <artifactId>stream</artifactId>
   <version>1.0.4</version>
-</dependency>`
+</dependency>
 ```
 or Gradle:
 ```groovy
