@@ -202,6 +202,34 @@ public class Stream<T> {
         });
     }
     
+    /**
+     * Concatenates two streams.
+     * 
+     * @param <T> The type of stream elements
+     * @param stream1  first stream
+     * @param stream2  second stream
+     * @return the new concatenated stream
+     */
+    public static <T> Stream<T> concat(Stream<? extends T> stream1, Stream<? extends T> stream2) {
+        final Iterator<? extends T> it1 = stream1.iterator;
+        final Iterator<? extends T> it2 = stream2.iterator;
+        return new Stream<T>(new LsaIterator<T>() {
+
+            @Override
+            public boolean hasNext() {
+                return it1.hasNext() || it2.hasNext();
+            }
+
+            @Override
+            public T next() {
+                if (it1.hasNext()) {
+                    return it1.next();
+                }
+                return it2.next();
+            }
+        });
+    } 
+    
     
 //<editor-fold defaultstate="collapsed" desc="Implementation">
     private final Iterator<? extends T> iterator;

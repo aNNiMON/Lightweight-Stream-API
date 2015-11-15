@@ -494,6 +494,15 @@ public class StreamTest {
         assertEquals(new BigInteger("1267650600228229401496703205375"), sum);
     }
     
+    @Test
+    public void concat() {
+        Stream<String> stream1 = Stream.of("a", "b", "c", "d");
+        Stream<String> stream2 = Stream.of("e", "f", "g", "h");
+        Stream<String> stream = Stream.concat(stream1, stream2);
+        stream.forEach(pc1.getConsumer());
+        assertEquals("abcdefgh", pc1.toString());
+    }
+    
     private class PrintConsumer {
         
         private final StringBuilder out = new StringBuilder();
