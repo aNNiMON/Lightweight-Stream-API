@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Common implementations of {@link Collector}.
+ * Common implementations of {@code Collector} interface.
  * 
  * @see Collector
  */

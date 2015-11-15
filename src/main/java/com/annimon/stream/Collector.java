@@ -10,6 +10,7 @@ import com.annimon.stream.function.Supplier;
  * @param <T> the type of input elements to the reduction operation
  * @param <A> the mutable accumulation type of the reduction operation
  * @param <R> the result type of the reduction operation
+ * @see Stream#collect(com.annimon.stream.Collector)
  */
 public interface Collector<T, A, R> {
     
