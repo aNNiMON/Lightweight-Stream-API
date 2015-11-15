@@ -503,6 +503,26 @@ public class StreamTest {
         assertEquals("abcdefgh", pc1.toString());
     }
     
+    @Test
+    public void ofRange() {
+        Stream.ofRange(0, 10).forEach(pc1.getConsumer());
+        assertEquals("0123456789", pc1.out());
+        Stream.ofRangeClosed(0, 10).forEach(pc1.getConsumer());
+        assertEquals("012345678910", pc1.out());
+        
+        long rangeCount = Stream.ofRange(Integer.MAX_VALUE - 10, Integer.MAX_VALUE).count();
+        assertEquals(10L, rangeCount);
+        
+        long rangeCountClosed = Stream.ofRangeClosed(Integer.MAX_VALUE - 10, Integer.MAX_VALUE).count();
+        assertEquals(11L, rangeCountClosed);
+        
+        rangeCount = Stream.ofRange(Long.MAX_VALUE - 10, Long.MAX_VALUE).count();
+        assertEquals(10L, rangeCount);
+        
+        rangeCountClosed = Stream.ofRangeClosed(Long.MAX_VALUE - 10, Long.MAX_VALUE).count();
+        assertEquals(11L, rangeCountClosed);
+    }
+    
     private class PrintConsumer {
         
         private final StringBuilder out = new StringBuilder();
