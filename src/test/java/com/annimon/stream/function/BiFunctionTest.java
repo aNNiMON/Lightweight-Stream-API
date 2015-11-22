@@ -1,6 +1,7 @@
 package com.annimon.stream.function;
 
 import com.annimon.stream.Functions;
+import com.annimon.stream.TestUtils;
 import java.util.Locale;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -41,6 +42,11 @@ public class BiFunctionTest {
                 toString, Functions.stringToInteger());
         assertEquals(0, (int) function.apply('0', IDENTITY));
         assertEquals(1, (int) function.apply('0', INCREMENT));
+    }
+    
+    @Test
+    public void testPrivateConstructor() throws Exception {
+        TestUtils.testPrivateConstructor(BiFunction.Util.class);
     }
     
     private static final BiFunction<Character, Boolean, String> toString = new BiFunction<Character, Boolean, String>() {

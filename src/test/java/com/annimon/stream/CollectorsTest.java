@@ -329,4 +329,9 @@ public class CollectorsTest {
         );
         assertThat(result, instanceOf(LinkedList.class));
     }
+    
+    @Test
+    public void testPrivateConstructor() throws Exception {
+        TestUtils.testPrivateConstructor(Collectors.class);
+    }
 }
