@@ -1,16 +1,18 @@
 package com.annimon.stream.function;
 
+import com.annimon.stream.TestUtils;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- *
- * @author aNNiMON
+ * Tests {@code BiConsumer}.
+ * 
+ * @see com.annimon.stream.function.BiConsumer
  */
 public class BiConsumerTest {
     
     @Test
-    public void accept() {
+    public void testAccept() {
         IntHolder holder1 = new IntHolder(10);
         IntHolder holder2 = new IntHolder(20);
         
@@ -28,7 +30,7 @@ public class BiConsumerTest {
     }
     
     @Test
-    public void andThen() {
+    public void testAndThen() {
         BiConsumer<IntHolder, IntHolder> consumer = BiConsumer.Util.andThen(increment, mulBy2);
         IntHolder holder1 = new IntHolder(10);
         IntHolder holder2 = new IntHolder(20);
@@ -40,6 +42,11 @@ public class BiConsumerTest {
         consumer.accept(holder1, holder2);
         assertEquals(46, holder1.value);
         assertEquals(86, holder2.value);
+    }
+    
+    @Test
+    public void testPrivateConstructor() throws Exception {
+        TestUtils.testPrivateConstructor(BiConsumer.Util.class);
     }
     
     private static final BiConsumer<IntHolder, IntHolder> increment = new BiConsumer<IntHolder, IntHolder>() {

@@ -5,13 +5,14 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- *
- * @author aNNiMON
+ * Tests {@code ThrowableSupplier}.
+ * 
+ * @see com.annimon.stream.function.ThrowableSupplier
  */
 public class ThrowableSupplierTest {
     
     @Test
-    public void get() {
+    public void testGetWithIOException() {
         assertEquals("fantastic", (new ThrowableSupplier<String, IOException>() {
 
             @Override
@@ -19,5 +20,29 @@ public class ThrowableSupplierTest {
                 return "fantastic";
             }
         }).get());
+    }
+    
+    @Test
+    public void testGetDoubleWithRuntimeException() {
+        ThrowableSupplier<Double, RuntimeException> supplier = new ThrowableSupplier<Double, RuntimeException>() {
+
+            @Override
+            public Double get() {
+                return Double.parseDouble("5");
+            }
+        };
+        assertEquals(5, supplier.get(), 0.1);
+    }
+    
+    @Test(expected = NumberFormatException.class)
+    public void testGetDoubleWithRuntimeExceptionAndWrongValue() {
+        ThrowableSupplier<Double, RuntimeException> supplier = new ThrowableSupplier<Double, RuntimeException>() {
+
+            @Override
+            public Double get() {
+                return Double.parseDouble("abc");
+            }
+        };
+        supplier.get();
     }
 }

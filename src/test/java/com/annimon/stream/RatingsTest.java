@@ -1,6 +1,5 @@
 package com.annimon.stream;
 
-import com.annimon.stream.function.BinaryOperator;
 import com.annimon.stream.function.Function;
 import java.util.AbstractMap;
 import java.util.HashMap;
@@ -11,17 +10,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- * Real example of calculate ratings
- * @author aNNiMON
+ * Real example of calculate ratings.
  */
 public class RatingsTest {
     
-    private static final BinaryOperator<Integer> sumOperator = new BinaryOperator<Integer>() {
-        @Override
-        public Integer apply(Integer value1, Integer value2) {
-            return value1 + value2;
-        }
-    };
     private static Map<String, String> fileContents;
     
     @BeforeClass
@@ -58,7 +50,7 @@ public class RatingsTest {
     }
 
     @Test
-    public void ratings() {
+    public void testRatings() {
         String ratings = Stream.of(fileContents.keySet()) // list files
                 // read content of files
                 .flatMap(new Function<String, Stream<String>>() {
@@ -82,36 +74,21 @@ public class RatingsTest {
                         return new AbstractMap.SimpleEntry<String, Integer>(
                                 arr[0], Stream.of(arr)
                                         .skip(1)
-                                        .map(new Function<String, Integer>() {
-                                            @Override
-                                            public Integer apply(String value) {
-                                                return Integer.parseInt(value);
-                                            }
-                                        })
-                                        .reduce(0, sumOperator)
+                                        .map(Functions.stringToInteger())
+                                        .custom(new CustomOperators.Sum())
                         );
                     }
                 })
                 // Group by name
-                .groupBy(new Function<Map.Entry<String, Integer>, String>() {
-                    @Override
-                    public String apply(Map.Entry<String, Integer> entry) {
-                        return entry.getKey();
-                    }
-                })
+                .groupBy(Functions.<String, Integer>entryKey())
                 // Calculate summary ratings
                 .map(new Function<Map.Entry<String, List<Map.Entry<String, Integer>>>, Map.Entry<String, Integer>>() {
                     @Override
                     public Map.Entry<String, Integer> apply(Map.Entry<String, List<Map.Entry<String, Integer>>> entry) {
                         final String name = entry.getKey();
                         final int ratings = Stream.of(entry.getValue())
-                                .map(new Function<Map.Entry<String, Integer>, Integer>() {
-                                    @Override
-                                    public Integer apply(Map.Entry<String, Integer> entry) {
-                                        return entry.getValue();
-                                    }
-                                })
-                                .reduce(0, sumOperator);
+                                .map(Functions.<String, Integer>entryValue())
+                                .custom(new CustomOperators.Sum());
                         return new AbstractMap.SimpleEntry<String, Integer>(name, ratings);
                     }
                 })

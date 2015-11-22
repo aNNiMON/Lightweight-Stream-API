@@ -1,8 +1,7 @@
 package com.annimon.stream;
 
 /**
- *
- * @author aNNiMON
+ * Sample data class for testing.
  */
 public final class Student {
 

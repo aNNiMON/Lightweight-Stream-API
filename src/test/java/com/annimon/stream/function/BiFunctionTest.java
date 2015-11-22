@@ -1,36 +1,46 @@
 package com.annimon.stream.function;
 
+import com.annimon.stream.Functions;
 import java.util.Locale;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- *
- * @author aNNiMON
+ * Tests {@code BiFunction}.
+ * 
+ * @see com.annimon.stream.function.BiFunction
  */
 public class BiFunctionTest {
     
+    private static final boolean TO_UPPER = true;
+    private static final boolean TO_LOWER = false;
+    private static final boolean INCREMENT = true;
+    private static final boolean IDENTITY = false;
+    
     @Test
-    public void apply() {
-        assertEquals("w", toString.apply('w', false));
-        assertEquals("x", toString.apply('w', true));
-        assertEquals("0", toString.apply((char)48, false));
-        assertEquals("1", toString.apply((char)48, true));
-        assertEquals("JAVA", changeCase.apply("JAva", true));
-        assertEquals("java", changeCase.apply("JAva", false));
+    public void testApplyCharacterToString() {
+        assertEquals("w", toString.apply('w', TO_LOWER));
+        assertEquals("x", toString.apply('w', TO_UPPER));
     }
     
     @Test
-    public void andThen() {
-        BiFunction<Character, Boolean, Integer> function = BiFunction.Util.andThen(toString, new Function<String, Integer>() {
-
-            @Override
-            public Integer apply(String value) {
-                return Integer.parseInt(value);
-            }
-        });
-        assertEquals(0, (int) function.apply('0', false));
-        assertEquals(1, (int) function.apply('0', true));
+    public void testApplyAsciiToString() {
+        assertEquals("0", toString.apply((char)48, TO_LOWER));
+        assertEquals("1", toString.apply((char)48, TO_UPPER));
+    }
+    
+    @Test
+    public void testApplyChangeCase() {
+        assertEquals("JAVA", changeCase.apply("JAva", TO_UPPER));
+        assertEquals("java", changeCase.apply("JAva", TO_LOWER));
+    }
+    
+    @Test
+    public void testAndThen() {
+        BiFunction<Character, Boolean, Integer> function = BiFunction.Util.andThen(
+                toString, Functions.stringToInteger());
+        assertEquals(0, (int) function.apply('0', IDENTITY));
+        assertEquals(1, (int) function.apply('0', INCREMENT));
     }
     
     private static final BiFunction<Character, Boolean, String> toString = new BiFunction<Character, Boolean, String>() {
