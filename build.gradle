@@ -31,4 +31,8 @@ buildscript {
     }
 }
 
-cobertura.coverageFormats = ['html', 'xml']
+cobertura {
+    coverageFormats = ['html', 'xml']
+    coverageExcludes = ['.*com.annimon.stream.LsaIterator']
+}
+ 
