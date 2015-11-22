@@ -5,18 +5,19 @@ import com.annimon.stream.function.ThrowableSupplier;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 import org.junit.Test;
-import static org.hamcrest.CoreMatchers.*;
 
 /**
+ * Tests {@code Exceptional}.
  * 
- * @author aNNiMON
+ * @see com.annimon.stream.Exceptional
  */
 public class ExceptionalTest {
     
     @Test
-    public void get() {
+    public void testGet() {
         int value = Exceptional
                 .of(tenSupplier)
                 .get();
@@ -24,7 +25,7 @@ public class ExceptionalTest {
     }
     
     @Test
-    public void getOrElse() {
+    public void testGetOrElse() {
         int value = Exceptional
                 .of(ioExceptionSupplier)
                 .getOrElse(20);
@@ -32,7 +33,7 @@ public class ExceptionalTest {
     }
     
     @Test
-    public void getOptional() {
+    public void testGetOptional() {
         Optional<Integer> value = Exceptional
                 .of(ioExceptionSupplier)
                 .getOptional();
@@ -40,7 +41,7 @@ public class ExceptionalTest {
     }
     
     @Test
-    public void getException() {
+    public void testGetException() {
         Throwable throwable = Exceptional
                 .of(ioExceptionSupplier)
                 .getException();
@@ -48,44 +49,53 @@ public class ExceptionalTest {
     }
     
     
-    @Test(expected = IOException.class)
-    public void getOrThrow() throws Throwable {
+    @Test
+    public void testGetOrThrowWithoutException() throws Throwable {
         int value = Exceptional
                 .of(tenSupplier)
                 .getOrThrow();
         assertEquals(10, value);
-        
+    }
+    
+    @Test(expected = IOException.class)
+    public void testGetOrThrowWithException() throws Throwable {
         Exceptional
                 .of(ioExceptionSupplier)
                 .getOrThrow();
+    }
+    
+    @Test
+    public void testGetOrThrowRuntimeExceptionWithoutException() throws Throwable {
+        int value = Exceptional
+                .of(tenSupplier)
+                .getOrThrowRuntimeException();
+        assertEquals(10, value);
     }
     
     @Test(expected = RuntimeException.class)
-    public void getOrThrowRuntimeException() throws Throwable {
-        int value = Exceptional
-                .of(tenSupplier)
-                .getOrThrowRuntimeException();
-        assertEquals(10, value);
-        
+    public void testGetOrThrowRuntimeExceptionWithException() throws Throwable {
         Exceptional
                 .of(ioExceptionSupplier)
                 .getOrThrowRuntimeException();
     }
     
-    @Test(expected = ArithmeticException.class)
-    public void getOrThrowNewException() throws Throwable {
+    @Test
+    public void testGetOrThrowNewExceptionWithoutException() throws Throwable {
         int value = Exceptional
                 .of(tenSupplier)
                 .getOrThrow(new ArithmeticException());
         assertEquals(10, value);
-        
+    }
+    
+    @Test(expected = ArithmeticException.class)
+    public void testGetOrThrowNewExceptionWithException() throws Throwable {
         Exceptional
                 .of(ioExceptionSupplier)
                 .getOrThrow(new ArithmeticException());
     }
     
     @Test
-    public void getOrThrowNewExceptionTestCause() {
+    public void testGetOrThrowNewExceptionTestCause() {
         try {
             Exceptional
                     .of(ioExceptionSupplier)
@@ -96,7 +106,7 @@ public class ExceptionalTest {
     }
     
     @Test
-    public void ifException() {
+    public void testIfException() {
         for (final ExceptionType type : ExceptionType.values()) {
             Exceptional
                     .of(new ThrowableSupplier<Integer, Throwable>() {
@@ -116,7 +126,7 @@ public class ExceptionalTest {
     }
     
     @Test
-    public void ifExceptionIs() {
+    public void testIfExceptionIs() {
         final int INTERRUPTED = 0;
         final int EXCEPTION = 1;
         final int FILE_NOT_FOUND = 2;
@@ -149,59 +159,95 @@ public class ExceptionalTest {
                     }
                 });
         
-        assertArrayEquals(new boolean[] { true, true, false }, data);
+        assertTrue(data[INTERRUPTED]);
+        assertTrue(data[EXCEPTION]);
+        assertFalse(data[FILE_NOT_FOUND]);
     }
     
     @Test
-    public void equals() {
+    public void testEqualsReflexive() {
+        final Exceptional<Integer> ten1 = Exceptional.of(tenSupplier);
+        assertTrue(ten1.equals(ten1));
+    }
+    
+    @Test
+    public void testEqualsSymmetric() {
         final Exceptional<Integer> ten1 = Exceptional.of(tenSupplier);
         final Exceptional<Integer> ten2 = Exceptional.of(tenSupplier);
-        final Exceptional<Integer> ten3 = Exceptional.of(tenSupplier);
-        final Exceptional<Byte> tenByte = Exceptional.of(new ThrowableSupplier<Byte, Throwable>() {
-            @Override
-            public Byte get() throws Throwable {
-                return (byte) 10;
-            }
-        });
-        final Exceptional<Integer> io = Exceptional.of(ioExceptionSupplier);
-        
-        assertTrue(ten1.equals(ten1));
-        
-        assertFalse(ten1.equals(10));
         
         assertTrue(ten1.equals(ten2));
         assertTrue(ten2.equals(ten1));
-        assertTrue(ten2.equals(ten3));
-        assertTrue(ten1.equals(ten3));
-        
-        assertFalse(ten1.equals(tenByte));
-        
-        assertFalse(ten2.equals(io));
     }
     
     @Test
-    public void testHashCode() {
+    public void testEqualsTransitive() {
         final Exceptional<Integer> ten1 = Exceptional.of(tenSupplier);
         final Exceptional<Integer> ten2 = Exceptional.of(tenSupplier);
+        final Exceptional<Integer> ten3 = Exceptional.of(tenSupplier);
+        
+        assertTrue(ten1.equals(ten2));
+        assertTrue(ten2.equals(ten3));
+        assertTrue(ten1.equals(ten3));
+    }
+    
+    @Test
+    public void testEqualsWithDifferentTypes() {
+        final Exceptional<Integer> ten1 = Exceptional.of(tenSupplier);
+        assertFalse(ten1.equals(10));
+    }
+    
+    @Test
+    public void testEqualsWithDifferentNumberTypes() {
+        final Exceptional<Integer> ten1 = Exceptional.of(tenSupplier);
         final Exceptional<Byte> tenByte = Exceptional.of(new ThrowableSupplier<Byte, Throwable>() {
             @Override
             public Byte get() throws Throwable {
                 return (byte) 10;
             }
         });
+        
+        assertFalse(ten1.equals(tenByte));
+    }
+    
+    @Test
+    public void testEqualsWithDifferentGenericTypes() {
+        final Exceptional<Integer> ten = Exceptional.of(tenSupplier);
         final Exceptional<Integer> io = Exceptional.of(ioExceptionSupplier);
+        
+        assertFalse(ten.equals(io));
+    }
+    
+    
+    @Test
+    public void testHashCodeWithSameObject() {
+        final Exceptional<Integer> ten1 = Exceptional.of(tenSupplier);
+        final Exceptional<Integer> ten2 = Exceptional.of(tenSupplier);
         
         int initial = ten1.hashCode();
         assertEquals(initial, ten1.hashCode());
         assertEquals(initial, ten1.hashCode());
         assertEquals(initial, ten2.hashCode());
-        
+    }
+    
+    @Test
+    public void testHashCodeWithDifferentGenericType() {
+        final Exceptional<Byte> tenByte = Exceptional.of(new ThrowableSupplier<Byte, Throwable>() {
+            @Override
+            public Byte get() throws Throwable {
+                return (byte) 10;
+            }
+        });
+        final Exceptional<Integer> io = Exceptional.of(ioExceptionSupplier);
         assertNotEquals(io.hashCode(), tenByte.hashCode());
     }
     
     @Test
-    public void testToString() {
+    public void testToStringWithoutException() {
         assertEquals("Exceptional value 10", Exceptional.of(tenSupplier).toString());
+    }
+    
+    @Test
+    public void testToStringWithException() {
         assertEquals("Exceptional throwable java.io.IOException", Exceptional.of(ioExceptionSupplier).toString());
     }
     

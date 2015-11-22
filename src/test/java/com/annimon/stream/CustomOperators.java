@@ -9,7 +9,7 @@ import java.util.Iterator;
 /**
  * Custom operator examples for {@code Stream.custom) method.
  * 
- * @author aNNiMON
+ * @see com.annimon.stream.Stream#custom(com.annimon.stream.function.Function) 
  */
 public final class CustomOperators {
     

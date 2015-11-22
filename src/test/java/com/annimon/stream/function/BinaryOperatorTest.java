@@ -1,26 +1,21 @@
 package com.annimon.stream.function;
 
+import com.annimon.stream.Functions;
+import com.annimon.stream.TestUtils;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- *
- * @author aNNiMON
+ * Tests {@code BinaryOperator}.
+ * 
+ * @see com.annimon.stream.function.BinaryOperator
  */
 public class BinaryOperatorTest {
     
     private static final List<Integer> data = new ArrayList<Integer>();
-    private static final Comparator<Integer> integerComparator = new Comparator<Integer>() {
-
-        @Override
-        public int compare(Integer value1, Integer value2) {
-            return Integer.compare(value1, value2);
-        }
-    };
     
     @BeforeClass
     public static void setUpData() {
@@ -30,7 +25,7 @@ public class BinaryOperatorTest {
     }
     
     @Test
-    public void square() {
+    public void testSquare() {
         final BinaryOperator<Integer> op = new BinaryOperator<Integer>() {
 
             @Override
@@ -45,8 +40,8 @@ public class BinaryOperatorTest {
     }
     
     @Test
-    public void minBy() {
-        final BinaryOperator<Integer> op = BinaryOperator.Util.minBy(integerComparator);
+    public void testMinBy() {
+        final BinaryOperator<Integer> op = BinaryOperator.Util.minBy(Functions.naturalOrder());
         final int size = data.size();
         for (int i = 0; i < size; i++) {
             final Integer value1 = data.get(i);
@@ -57,8 +52,8 @@ public class BinaryOperatorTest {
     }
     
     @Test
-    public void maxBy() {
-        final BinaryOperator<Integer> op = BinaryOperator.Util.maxBy(integerComparator);
+    public void testMaxBy() {
+        final BinaryOperator<Integer> op = BinaryOperator.Util.maxBy(Functions.naturalOrder());
         final int size = data.size();
         for (int i = 0; i < size; i++) {
             final Integer value1 = data.get(i);
@@ -66,5 +61,10 @@ public class BinaryOperatorTest {
             final Integer expected = Math.max(value1, value2);
             assertEquals(expected, op.apply(value1, value2));
         }
+    }
+    
+    @Test
+    public void testPrivateConstructor() throws Exception {
+        TestUtils.testPrivateConstructor(BinaryOperator.Util.class);
     }
 }

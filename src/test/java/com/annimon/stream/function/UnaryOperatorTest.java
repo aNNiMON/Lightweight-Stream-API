@@ -1,28 +1,31 @@
 package com.annimon.stream.function;
 
-import java.util.LinkedList;
+import com.annimon.stream.TestUtils;
+import java.util.ArrayList;
 import java.util.List;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- *
- * @author aNNiMON
+ * Tests {@code UnaryOperator}.
+ * 
+ * @see com.annimon.stream.function.UnaryOperator
  */
 public class UnaryOperatorTest {
     
-    private static final List<Integer> data = new LinkedList<Integer>();
+    private static List<Integer> data;
     
     @BeforeClass
     public static void setUpData() {
+        data = new ArrayList<Integer>(10);
         for (int i = 0; i < 10; i++) {
             data.add(i);
         }
     }
     
     @Test
-    public void identity() {
+    public void testIdentity() {
         final UnaryOperator<Integer> op = UnaryOperator.Util.identity();
         for (Integer value : data) {
             assertEquals(value, op.apply(value));
@@ -30,7 +33,7 @@ public class UnaryOperatorTest {
     }
     
     @Test
-    public void square() {
+    public void testSquare() {
         final UnaryOperator<Integer> op = new UnaryOperator<Integer>() {
 
             @Override
@@ -42,5 +45,10 @@ public class UnaryOperatorTest {
             final Integer expected = value * value;
             assertEquals(expected, op.apply(value));
         }
+    }
+    
+    @Test
+    public void testPrivateConstructor() throws Exception {
+        TestUtils.testPrivateConstructor(UnaryOperator.Util.class);
     }
 }

@@ -16,41 +16,45 @@ import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
 /**
- *
- * @author aNNiMON
+ * Tests {@code Collectors}.
+ * 
+ * @see com.annimon.stream.Collectors
  */
 public class CollectorsTest {
     
     @Test
-    public void toCollection() {
-        Collection<Integer> collection = Stream.ofRange(0, 10).collect(
-                Collectors.toCollection(new Supplier<Collection<Integer>>() {
-            @Override
-            public Collection<Integer> get() {
-                return new LinkedList<Integer>();
-            }
-        }));
-        assertEquals(10, collection.size());
+    public void testToCollection() {
+        Collection<Integer> result = Stream.ofRange(0, 10)
+                .collect(Collectors.toCollection(new Supplier<Collection<Integer>>() {
+                    @Override
+                        public Collection<Integer> get() {
+                            return new LinkedList<Integer>();
+                        }
+                    }));
+        
+        assertEquals(10, result.size());
         int index = 0;
-        for (int v : collection) {
+        for (int v : result) {
             assertEquals(index++, v);
         }
-        assertThat(collection, instanceOf(LinkedList.class));
+        assertThat(result, instanceOf(LinkedList.class));
     }
     
     @Test
-    public void toList() {
-        List<Integer> list = Stream.ofRange(0, 10).collect(Collectors.<Integer>toList());
+    public void testToList() {
+        List<Integer> expected = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+        List<Integer> list = Stream.ofRange(0, 10)
+                .collect(Collectors.<Integer>toList());
+        
         assertEquals(10, list.size());
-        int index = 0;
-        for (int v : list) {
-            assertEquals(index++, v);
-        }
+        assertThat(list, is(expected));
     }
 
     @Test
-    public void toSet() {
-        Set<Integer> set = Stream.of(1, 2, 2, 3, 3, 3).collect(Collectors.<Integer>toSet());
+    public void testToSet() {
+        Set<Integer> set = Stream.of(1, 2, 2, 3, 3, 3)
+                .collect(Collectors.<Integer>toSet());
+        
         assertEquals(3, set.size());
         int index = 1;
         for (int v : set) {
@@ -59,23 +63,22 @@ public class CollectorsTest {
     }
     
     @Test
-    public void toMap() {
-        final Function<String, Character> keyMapper = new Function<String, Character>() {
-
-            @Override
-            public Character apply(String value) {
-                return value.charAt(0);
-            }
-        };
+    public void testToMapWithIdentityValueMapper() {
+        final Function<String, Character> keyMapper = Functions.firstCharacterExtractor();
         Map<Character, String> chars = Stream.of("a", "b", "c", "d")
                 .collect(Collectors.toMap(keyMapper, UnaryOperator.Util.<String>identity()));
+        
         assertEquals(4, chars.size());
         assertEquals("a", chars.get('a'));
         assertEquals("b", chars.get('b'));
         assertEquals("c", chars.get('c'));
         assertEquals("d", chars.get('d'));
-        
-        chars = Stream.of("a0", "b0", "c0", "d0")
+    }
+    
+    @Test
+    public void testToMapWithCustomValueMapper() {
+        final Function<String, Character> keyMapper = Functions.firstCharacterExtractor();
+        Map<Character, String> chars = Stream.of("a0", "b0", "c0", "d0")
                 .collect(Collectors.toMap(keyMapper, new UnaryOperator<String>() {
 
             @Override
@@ -84,6 +87,7 @@ public class CollectorsTest {
                 return String.valueOf(Character.toUpperCase(value.charAt(0)));
             }
         }));
+        
         assertEquals(3, chars.size());
         assertEquals("A", chars.get('a'));
         assertEquals("B", chars.get('b'));
@@ -91,42 +95,42 @@ public class CollectorsTest {
     }
 
     @Test
-    public void joining() {
+    public void testJoining() {
         String text = Stream.of("a", "b", "c", "def", "", "g")
                 .collect(Collectors.joining());
         assertEquals("abcdefg", text);
     }
-
+    
     @Test
-    public void joiningWithDelimiter() {
+    public void testJoiningWithDelimiter() {
         String text = Stream.of("a", "b", "c", "def", "", "g")
                 .collect(Collectors.joining(", "));
         assertEquals("a, b, c, def, , g", text);
     }
-
+    
     @Test
-    public void joiningWithDelimiterPrefixAndSuffixEmpty() {
+    public void testJoiningWithDelimiterPrefixAndSuffixEmpty() {
         String text = Stream.of(Collections.<String>emptyList())
                 .collect(Collectors.joining(", ", "prefix|", "|suffix", "empty"));
         assertEquals("empty", text);
     }
-
+    
     @Test
-    public void joiningWithDelimiterPrefixAndSuffixEmptyStream() {
+    public void testJoiningWithDelimiterPrefixAndSuffixEmptyStream() {
         String text = Stream.of(Collections.<String>emptyList())
                 .collect(Collectors.joining(", ", "prefix|", "|suffix"));
         assertEquals("prefix||suffix", text);
     }
-
+    
     @Test
-    public void joiningWithDelimiterPrefixAndSuffix() {
+    public void testJoiningWithDelimiterPrefixAndSuffix() {
         String text = Stream.of("a", "b", "c", "def", "", "g")
                 .collect(Collectors.joining(", ", "prefix|", "|suffix"));
         assertEquals("prefix|a, b, c, def, , g|suffix", text);
     }
 
     @Test
-    public void averaging() {
+    public void testAveraging() {
         double avg = Stream.of(10, 20, 30, 40)
                 .collect(Collectors.averaging(new Function<Integer, Double>() {
                     @Override
@@ -138,13 +142,14 @@ public class CollectorsTest {
     }
     
     @Test
-    public void counting() {
-        long count = Stream.ofRange(0, 20).collect(Collectors.counting());
+    public void testCounting() {
+        long count = Stream.ofRange(0, 20)
+                .collect(Collectors.counting());
         assertEquals(20, count);
     }
     
     @Test
-    public void reducing() {
+    public void testReducingMultiply() {
         long production = Stream.of(1, 2, 3, 4, 5).collect(
                 Collectors.reducing(1, new BinaryOperator<Integer>() {
                     @Override
@@ -154,8 +159,10 @@ public class CollectorsTest {
                 })
         );
         assertEquals(120, production);
-        
-        
+    }
+
+    @Test
+    public void testReducingSumDivision() {
         double sumDiv = Stream.of(1, 2, 3, 4, 5).collect(
                 Collectors.reducing(0d,
                         new Function<Integer, Double>() {
@@ -175,77 +182,90 @@ public class CollectorsTest {
     }
     
     @Test
-    public void groupingBy() {
+    public void testGroupingBy() {
         final Integer partitionItem = 1;
         List<Integer> items = Arrays.asList(1, 2, 3, 1, 2, 3, 1, 2, 3);
         
         Map<Boolean, List<Integer>> groupedBy = Stream.of(items)
-                .collect(Collectors.groupingBy(new Function<Integer, Boolean>() {
-
-            @Override
-            public Boolean apply(Integer value) {
-                return value.equals(partitionItem);
-            }
-        }));
+                .collect(Collectors.groupingBy(Functions.equalityPartitionItem(partitionItem)));
         
-        assertArrayEquals(new Integer[] {1, 1, 1}, groupedBy.get(true).toArray());
-        assertArrayEquals(new Integer[] {2, 3, 2, 3, 2, 3}, groupedBy.get(false).toArray());
+        assertThat(groupedBy.get(true), is(Arrays.asList(1, 1, 1)));
+        assertThat(groupedBy.get(false), is(Arrays.asList(2, 3, 2, 3, 2, 3)));
     }
     
     @Test
-    public void groupingByCounting() {
+    public void testGroupingByCounting() {
         Map<Integer, Long> byCounting = Stream.of(1, 2, 2, 3, 3, 3, 4, 4, 4, 4)
-                .collect(Collectors.groupingBy(UnaryOperator.Util.<Integer>identity(), Collectors.counting()));
+                .collect(Collectors.groupingBy(
+                        UnaryOperator.Util.<Integer>identity(),
+                        Collectors.counting()));
         for (int i = 1; i <= 4; i++) {
             assertEquals(i, byCounting.get(i).longValue());
         }
     }
     
     @Test
-    public void groupingByStudent() {
-        Map<String, List<Student>> bySpeciality = Stream.of(students)
-                .collect(Collectors.groupingBy(speciality));
-        assertArrayEquals(
-                new Student[] {STEVE_CS_4, VICTORIA_CS_3, JOHN_CS_2, MARIA_CS_1},
-                bySpeciality.get("CS").toArray());
+    public void testGroupingByStudentSpeciality() {
+        Map<String, List<Student>> bySpeciality = Stream.of(Students.ALL)
+                .collect(Collectors.groupingBy(Students.speciality));
         
-        assertArrayEquals(
-                new Student[] {MARIA_ECONOMICS_1, SERGEY_ECONOMICS_2, SOPHIA_ECONOMICS_2},
-                bySpeciality.get("Economics").toArray());
+        assertThat(bySpeciality.get("CS"), is(Arrays.asList(
+                Students.STEVE_CS_4,
+                Students.VICTORIA_CS_3,
+                Students.JOHN_CS_2,
+                Students.MARIA_CS_1
+        )));
+        assertThat(bySpeciality.get("Economics"), is(Arrays.asList(
+                Students.MARIA_ECONOMICS_1,
+                Students.SERGEY_ECONOMICS_2,
+                Students.SOPHIA_ECONOMICS_2
+        )));
+        assertThat(bySpeciality.get("Law"), is(Arrays.asList(
+                Students.GEORGE_LAW_3,
+                Students.SERGEY_LAW_1
+        )));
+    }
+    
+    @Test
+    public void testGroupingByStudentCourse() {
+        Map<Integer, List<Student>> byCourse = Stream.of(Students.ALL)
+                .collect(Collectors.groupingBy(Students.course));
         
-        assertArrayEquals(
-                new Student[] {GEORGE_LAW_3, SERGEY_LAW_1},
-                bySpeciality.get("Law").toArray());
+        assertThat(byCourse.get(1), is(Arrays.asList(
+                Students.MARIA_ECONOMICS_1,
+                Students.SERGEY_LAW_1,
+                Students.MARIA_CS_1
+        )));
+        assertThat(byCourse.get(2), is(Arrays.asList(
+                Students.JOHN_CS_2,
+                Students.SERGEY_ECONOMICS_2,
+                Students.SOPHIA_ECONOMICS_2
+        )));
+        assertThat(byCourse.get(3), is(Arrays.asList(
+                Students.VICTORIA_CS_3,
+                Students.GEORGE_LAW_3
+        )));
+        assertThat(byCourse.get(4), is(Arrays.asList(
+                Students.STEVE_CS_4
+        )));
+    }
+    
+    @Test
+    public void testGroupingByStudentSpecialityAndCourse() {
+        Map<String, Map<Integer, List<Student>>> bySpecialityAndCourse = Stream.of(Students.ALL)
+                .collect(Collectors.groupingBy(Students.speciality, Collectors.groupingBy(Students.course)));
         
+        assertThat(bySpecialityAndCourse.get("Economics").get(2), is(Arrays.asList(
+                Students.SERGEY_ECONOMICS_2,
+                Students.SOPHIA_ECONOMICS_2
+        )));
+    }
+    
+    @Test
+    public void testGroupingByStudentCourseCounting() {
+        Map<Integer, Long> byCourseCounting = Stream.of(Students.ALL)
+                .collect(Collectors.groupingBy(Students.course, Collectors.counting()));
         
-        Map<Integer, List<Student>> byCourse = Stream.of(students)
-                .collect(Collectors.groupingBy(course));
-        assertArrayEquals(
-                new Student[] {MARIA_ECONOMICS_1, SERGEY_LAW_1, MARIA_CS_1},
-                byCourse.get(1).toArray());
-        
-        assertArrayEquals(
-                new Student[] {JOHN_CS_2, SERGEY_ECONOMICS_2, SOPHIA_ECONOMICS_2},
-                byCourse.get(2).toArray());
-        
-        assertArrayEquals(
-                new Student[] {VICTORIA_CS_3, GEORGE_LAW_3},
-                byCourse.get(3).toArray());
-        
-        assertArrayEquals(
-                new Student[] {STEVE_CS_4},
-                byCourse.get(4).toArray());
-        
-        
-        Map<String, Map<Integer, List<Student>>> bySpecialityAndCourse = Stream.of(students)
-                .collect(Collectors.groupingBy(speciality, Collectors.groupingBy(course)));
-        assertArrayEquals(
-                new Student[] {SERGEY_ECONOMICS_2, SOPHIA_ECONOMICS_2},
-                bySpecialityAndCourse.get("Economics").get(2).toArray());
-        
-        
-        Map<Integer, Long> byCourseCounting = Stream.of(students)
-                .collect(Collectors.groupingBy(course, Collectors.counting()));
         assertEquals(3, byCourseCounting.get(1).longValue());
         assertEquals(3, byCourseCounting.get(2).longValue());
         assertEquals(2, byCourseCounting.get(3).longValue());
@@ -253,35 +273,51 @@ public class CollectorsTest {
     }
     
     @Test
-    public void mapping() {
-        Function<Integer, String> squareToStrimg = new Function<Integer, String>() {
+    public void testMappingSquareIntToString() {
+        Function<Integer, String> squareToString = new Function<Integer, String>() {
             @Override
             public String apply(Integer value) {
                 return Integer.toString(value * value);
             }
         };
         String result = Stream.of(1, 2, 3, 4)
-                .collect( Collectors.mapping(squareToStrimg, Collectors.joining(", ")) );
+                .collect( Collectors.mapping(squareToString, Collectors.joining(", ")) );
         assertEquals("1, 4, 9, 16", result);
+    }
+    
+    @Test
+    public void testMappingStudentNamesBySpeciality() {
+        Map<String, Set<String>> namesBySpeciality = Stream.of(Students.ALL)
+                .collect(Collectors.groupingBy(Students.speciality,
+                        Collectors.mapping(Students.studentName, Collectors.<String>toSet())));
         
-        
-        Map<String, Set<String>> namesBySpeciality = Stream.of(students)
-                .collect(Collectors.groupingBy(speciality,
-                        Collectors.mapping(studentName, Collectors.<String>toSet())));
-        
-        assertArrayEqualsInAnyOrder(
-                new String[] {MARIA_ECONOMICS_1.getName(), SERGEY_ECONOMICS_2.getName(), SOPHIA_ECONOMICS_2.getName()},
+        TestUtils.assertArrayEqualsInAnyOrder(
+                new String[] {
+                    Students.MARIA_ECONOMICS_1.getName(),
+                    Students.SERGEY_ECONOMICS_2.getName(),
+                    Students.SOPHIA_ECONOMICS_2.getName()
+                },
                 namesBySpeciality.get("Economics").toArray());
-        assertArrayEqualsInAnyOrder(
-                new String[] {STEVE_CS_4.getName(), VICTORIA_CS_3.getName(), JOHN_CS_2.getName(), MARIA_CS_1.getName()},
+        
+        TestUtils.assertArrayEqualsInAnyOrder(
+                new String[] {
+                    Students.STEVE_CS_4.getName(),
+                    Students.VICTORIA_CS_3.getName(),
+                    Students.JOHN_CS_2.getName(),
+                    Students.MARIA_CS_1.getName()
+                },
                 namesBySpeciality.get("CS").toArray());
-        assertArrayEqualsInAnyOrder(
-                new String[] {GEORGE_LAW_3.getName(), SERGEY_LAW_1.getName()},
+        
+        TestUtils.assertArrayEqualsInAnyOrder(
+                new String[] {
+                    Students.GEORGE_LAW_3.getName(),
+                    Students.SERGEY_LAW_1.getName()
+                },
                 namesBySpeciality.get("Law").toArray());
     }
     
     @Test
-    public void collectingAndThen() {
+    public void testCollectingAndThen() {
         List<Integer> result = Stream.of(1, 2, 3, 4).collect(
                 Collectors.collectingAndThen(Collectors.<Integer>toList(),
                         new UnaryOperator<List<Integer>>() {
@@ -294,43 +330,8 @@ public class CollectorsTest {
         assertThat(result, instanceOf(LinkedList.class));
     }
     
-    private static void assertArrayEqualsInAnyOrder(Object[] expecteds, Object[] actuals) {
-        Arrays.sort(expecteds);
-        Arrays.sort(actuals);
-        assertArrayEquals(expecteds, actuals);
+    @Test
+    public void testPrivateConstructor() throws Exception {
+        TestUtils.testPrivateConstructor(Collectors.class);
     }
-    
-    
-    private static final Student STEVE_CS_4 = new Student("Steve", "CS", 4);
-    private static final Student MARIA_ECONOMICS_1 = new Student("Maria", "Economics", 1);
-    private static final Student VICTORIA_CS_3 = new Student("Victoria", "CS", 3);
-    private static final Student JOHN_CS_2 = new Student("John", "CS", 2);
-    private static final Student SERGEY_ECONOMICS_2 = new Student("Sergey", "Economics", 2);
-    private static final Student GEORGE_LAW_3 = new Student("George", "Law", 3);
-    private static final Student SERGEY_LAW_1 = new Student("Sergey", "Law", 1);
-    private static final Student SOPHIA_ECONOMICS_2 = new Student("Sophia", "Economics", 2);
-    private static final Student MARIA_CS_1 = new Student("Maria", "CS", 1);
-    private static final List<Student> students = Arrays.asList(
-            STEVE_CS_4, MARIA_ECONOMICS_1, VICTORIA_CS_3, JOHN_CS_2, SERGEY_ECONOMICS_2,
-            GEORGE_LAW_3, SERGEY_LAW_1, SOPHIA_ECONOMICS_2, MARIA_CS_1
-    );
-    
-    private static final Function<Student, String> speciality = new Function<Student, String>() {
-        @Override
-        public String apply(Student student) {
-            return student.getSpeciality();
-        }
-    };
-    private static final Function<Student, Integer> course = new Function<Student, Integer>() {
-        @Override
-        public Integer apply(Student student) {
-            return student.getCourse();
-        }
-    };
-    private static final Function<Student, String> studentName = new Function<Student, String>() {
-        @Override
-        public String apply(Student student) {
-            return student.getName();
-        }
-    };
 }
