@@ -265,8 +265,8 @@ public class Stream<T> {
      * Concatenates two streams.
      * 
      * @param <T> The type of stream elements
-     * @param stream1  first stream
-     * @param stream2  second stream
+     * @param stream1  the first stream
+     * @param stream2  the second stream
      * @return the new concatenated stream
      */
     public static <T> Stream<T> concat(Stream<? extends T> stream1, Stream<? extends T> stream2) {
@@ -362,8 +362,8 @@ public class Stream<T> {
      * </code></pre>
      * 
      * @param <R> the type result
-     * @param function  transforming function
-     * @return result of the transforming function
+     * @param function  a transforming function
+     * @return a result of the transforming function
      */
     public <R> R custom(Function<Stream<T>, R> function) {
         return function.apply(this);

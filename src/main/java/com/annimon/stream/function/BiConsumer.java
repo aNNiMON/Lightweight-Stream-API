@@ -13,8 +13,8 @@ public interface BiConsumer<T, U> {
     /**
      * Performs operation on two arguments.
      * 
-     * @param value1  first argument
-     * @param value2  second argument
+     * @param value1  the first argument
+     * @param value2  the second argument
      */
     void accept(T value1, U value2);
     
@@ -29,8 +29,8 @@ public interface BiConsumer<T, U> {
          * 
          * @param <T> the type of the first argument
          * @param <U> the type of the second argument
-         * @param c1  first {@code BiConsumer}
-         * @param c2  second {@code BiConsumer}
+         * @param c1  the first {@code BiConsumer}
+         * @param c2  the second {@code BiConsumer}
          * @return composed {@code BiConsumer}
          * @throws NullPointerException if {@code c1} or {@code c2} is null
          */

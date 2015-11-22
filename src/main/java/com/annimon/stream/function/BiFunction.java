@@ -13,8 +13,8 @@ public interface BiFunction<T, U, R> {
     /**
      * Applies this function to the given arguments.
      * 
-     * @param value1  first argument
-     * @param value2  second argument
+     * @param value1  the first argument
+     * @param value2  the second argument
      * @return the function result
      */
     R apply(T value1, U value2);

@@ -16,7 +16,7 @@ public interface BinaryOperator<T> extends BiFunction<T, T, T> {
         private Util() { }
         
         /**
-         * Returns a {@code BinaryOperator} which returns the lesser of two elements
+         * Returns a {@code BinaryOperator} which returns lesser of two elements
          * according to the specified {@code Comparator}.
          *
          * @param <T> the type of the input arguments of the comparator
@@ -36,7 +36,7 @@ public interface BinaryOperator<T> extends BiFunction<T, T, T> {
         }
 
         /**
-         * Returns a {@code BinaryOperator} which returns the greater of two elements
+         * Returns a {@code BinaryOperator} which returns greater of two elements
          * according to the specified {@code Comparator}.
          *
          * @param <T> the type of the input arguments of the comparator

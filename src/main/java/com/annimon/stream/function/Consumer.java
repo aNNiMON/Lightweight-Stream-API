@@ -26,8 +26,8 @@ public interface Consumer<T> {
          * <p>{@code c1.accept(value); c2.accept(value); }
          * 
          * @param <T> the type of the input to the operation
-         * @param c1  first {@code Consumer}
-         * @param c2  second {@code Consumer}
+         * @param c1  the first {@code Consumer}
+         * @param c2  the second {@code Consumer}
          * @return a composed {@code Consumer}
          * @throws NullPointerException if {@code c1} or {@code c2} is null
          */

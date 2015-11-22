@@ -373,8 +373,8 @@ public final class Collectors {
      * @param <U> the result type of mapping function
      * @param <A> the accumulation type
      * @param <R> the result type of collector
-     * @param mapper  function that performs mapping to input elements
-     * @param downstream  collector of mapped elements
+     * @param mapper  a function that performs mapping to input elements
+     * @param downstream  the collector of mapped elements
      * @return a {@code Collector}
      */
     public static <T, U, A, R> Collector<T, ?, R> mapping(
@@ -404,7 +404,7 @@ public final class Collectors {
      * @param <A> the accumulation type
      * @param <IR> the input type of transformation function
      * @param <OR> the output type of transformation function
-     * @param c  input {@code Collector}
+     * @param c  the input {@code Collector}
      * @param finisher  the final transformation function
      * @return a {@code Collector}
      */
@@ -441,7 +441,7 @@ public final class Collectors {
      * @param <A> the accumulation type
      * @param <D> the result type of downstream reduction
      * @param classifier  the classifier function 
-     * @param downstream  collector of mapped elements
+     * @param downstream  the collector of mapped elements
      * @return a {@code Collector}
      * @see #groupingBy(com.annimon.stream.function.Function) 
      * @see #groupingBy(com.annimon.stream.function.Function, com.annimon.stream.function.Supplier, com.annimon.stream.Collector) 
@@ -462,7 +462,7 @@ public final class Collectors {
      * @param <M> the type of the resulting {@code Map}
      * @param classifier  the classifier function 
      * @param mapFactory  a supplier function that provides new {@code Map}
-     * @param downstream  collector of mapped elements
+     * @param downstream  the collector of mapped elements
      * @return a {@code Collector}
      * @see #groupingBy(com.annimon.stream.function.Function) 
      * @see #groupingBy(com.annimon.stream.function.Function, com.annimon.stream.Collector) 

@@ -49,8 +49,8 @@ public final class Objects {
      * Returns result of calling {@code toString} on object or {@code nullDefault} if object is null.
      * 
      * @param o  an object
-     * @param nullDefault  string to return if object is null
-     * @return result of calling {@code toString} on object or {@code nullDefault} if object is null.
+     * @param nullDefault  a string to return if object is null
+     * @return a result of calling {@code toString} on object or {@code nullDefault} if object is null.
      */
     public static String toString(Object o, String nullDefault) {
         return (o != null) ? o.toString() : nullDefault;
@@ -62,7 +62,7 @@ public final class Objects {
      * @param <T> the type of the arguments
      * @param a  an object
      * @param b  an object
-     * @param c  comparator
+     * @param c  the comparator
      * @return comparing result
      */
     public static <T> int compare(T a, T b, Comparator<? super T> c) {
@@ -74,7 +74,7 @@ public final class Objects {
      * 
      * @param <T> the type of the object
      * @param obj  an object
-     * @return source object if it is not null
+     * @return a source object if it is not null
      * @throws NullPointerException if object is null
      * @see #requireNonNull(java.lang.Object, java.lang.String) 
      */
@@ -90,7 +90,7 @@ public final class Objects {
      * @param <T> the type of the object
      * @param obj  an object
      * @param message  a message to be used as exception details
-     * @return source object if it is not null
+     * @return a source object if it is not null
      * @throws NullPointerException if object is null
      * @see #requireNonNull(java.lang.Object) 
      */

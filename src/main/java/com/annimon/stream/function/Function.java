@@ -22,7 +22,6 @@ public interface Function<T, R> {
         private Util() { }
         
         /**
-         * /**
          * Compose {@code Function} calls.
          * 
          * <p>{@code f2.apply(f1.apply(t)) }

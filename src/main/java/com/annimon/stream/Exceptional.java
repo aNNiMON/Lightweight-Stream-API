@@ -61,9 +61,9 @@ public class Exceptional<T> {
     }
     
     /**
-     * Returns inner value if there were no exceptions, otherwise return {@code other}.
+     * Returns inner value if there were no exceptions, otherwise returns {@code other}.
      * 
-     * @param other  the value to be returned if there were any exceptions 
+     * @param other  the value to be returned if there were any exception 
      * @return inner value if there were no exceptions, otherwise {@code other}
      */
     public T getOrElse(T other) {
@@ -131,9 +131,9 @@ public class Exceptional<T> {
     }
     
     /**
-     * Invokes consumer function if there were any exceptions.
+     * Invokes consumer function if there were any exception.
      * 
-     * @param consumer  consumer function
+     * @param consumer  a consumer function
      * @return an {@code Exceptional}
      */
     public Exceptional<T> ifException(Consumer<Throwable> consumer) {
@@ -148,7 +148,7 @@ public class Exceptional<T> {
      * 
      * @param <E> the type of exception
      * @param throwableClass  the class of an exception to be compared
-     * @param consumer  consumer function
+     * @param consumer  a consumer function
      * @return an {@code Exceptional}
      */
     public <E extends Throwable> Exceptional<T> ifExceptionIs(Class<E> throwableClass, Consumer<E> consumer) {
