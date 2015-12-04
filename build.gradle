@@ -1,4 +1,10 @@
 apply plugin: 'java'
+apply plugin: 'maven'
+
+archivesBaseName = 'stream'
+version = '1.0.5-SNAPSHOT'
+group = 'com.annimon'
+ext.isReleaseVersion = !version.contains("SNAPSHOT")
 
 sourceCompatibility = '1.6'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
@@ -35,4 +41,8 @@ cobertura {
     coverageFormats = ['html', 'xml']
     coverageExcludes = ['.*com.annimon.stream.LsaIterator']
 }
- 
+
+// maven signing
+if (ext.isReleaseVersion) {
+    apply from: 'signing.gradle'
+}
