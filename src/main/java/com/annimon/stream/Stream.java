@@ -655,6 +655,7 @@ public class Stream<T> {
      * 
      * <p>This is a terminal operation.
      * 
+     * @param <R> the type of the result
      * @param identity  the initial value
      * @param accumulator  the accumulation function
      * @return the result of the reduction
@@ -696,7 +697,7 @@ public class Stream<T> {
      * 
      * <p>This is a terminal operation.
      * 
-     * @param <R> the type of result
+     * @param <R> the type of the result
      * @param supplier  the supplier function that provides container
      * @param accumulator  the accumulation function
      * @return the result of collect elements
