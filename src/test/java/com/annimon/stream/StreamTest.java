@@ -503,6 +503,18 @@ public class StreamTest {
     }
     
     @Test
+    public void testReduceWithAnotherType() {
+        int result = Stream.of("a", "bb", "ccc", "dddd")
+                .reduce(0, new BiFunction<Integer, String, Integer>() {
+                    @Override
+                    public Integer apply(Integer length, String s) {
+                        return length + s.length();
+                    }
+                });
+        assertEquals(10, result);
+    }
+    
+    @Test
     public void testReduceOptional() {
         Optional<Integer> result = Stream.ofRange(0, 10)
                 .reduce(Functions.addition());
@@ -536,6 +548,25 @@ public class StreamTest {
                 .collect(Functions.stringBuilderSupplier(), Functions.joiningAccumulator())
                 .toString();
         assertEquals("abcdefg", text);
+    }
+    
+    @Test
+    public void testCollect123() {
+        String string123 = Stream.of("1", "2", "3")
+                .collect(new Supplier<StringBuilder>() {
+                    @Override
+                    public StringBuilder get() {
+                        return new StringBuilder();
+                    }
+                }, new BiConsumer<StringBuilder, String>() {
+
+                    @Override
+                    public void accept(StringBuilder value1, String value2) {
+                        value1.append(value2);
+                    }
+                })
+                .toString();
+        assertEquals("123", string123);
     }
     
     @Test
