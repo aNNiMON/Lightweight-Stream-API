@@ -154,6 +154,30 @@ public class StreamTest {
         assertEquals("abcdefgh", consumer.toString());
     }
     
+    @Test
+    public void testConcatOfFilter() {
+        final PrintConsumer consumer = new PrintConsumer();
+        Stream<Integer> stream1 = Stream.ofRange(0, 5).filter(Functions.remainder(1));
+        Stream<Integer> stream2 = Stream.ofRange(5, 10).filter(Functions.remainder(1));
+        Stream.concat(stream1, stream2).forEach(consumer);
+        assertEquals("0123456789", consumer.toString());
+    }
+    
+    @Test
+    public void testConcatOfFlatMap() {
+        final PrintConsumer consumer = new PrintConsumer();
+        final Function<Integer, Stream<Integer>> flatmapFunc = new Function<Integer, Stream<Integer>>() {
+            @Override
+            public Stream<Integer> apply(Integer value) {
+                return Stream.of(value, value);
+            }
+        };
+        Stream<Integer> stream1 = Stream.ofRange(1, 3).flatMap(flatmapFunc); // 1122
+        Stream<Integer> stream2 = Stream.ofRange(3, 5).flatMap(flatmapFunc); // 3344
+        Stream.concat(stream1, stream2).forEach(consumer);
+        assertEquals("11223344", consumer.toString());
+    }
+    
     
     @Test
     public void testFilter() {
