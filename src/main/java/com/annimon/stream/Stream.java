@@ -381,21 +381,33 @@ public class Stream<T> {
         return new Stream<T>(new LsaIterator<T>() {
             
             private T next;
+            private boolean hasNext, isInit;
             
             @Override
             public boolean hasNext() {
-                while (iterator.hasNext()) {
-                    next = iterator.next();
-                    if (predicate.test(next)) {
-                        return true;
-                    }
+                if (!isInit) {
+                    nextIteration();
+                    isInit = true;
                 }
-                return false;
+                return hasNext;
             }
             
             @Override
             public T next() {
-                return next;
+                final T result = next;
+                nextIteration();
+                return result;
+            }
+            
+            private void nextIteration() {
+                while (iterator.hasNext()) {
+                    next = iterator.next();
+                    if (predicate.test(next)) {
+                        hasNext = true;
+                        return;
+                    }
+                }
+                hasNext = false;
             }
         });
     }
@@ -438,12 +450,29 @@ public class Stream<T> {
             
             private R next;
             private Iterator<? extends R> inner;
+            private boolean hasNext, isInit;
             
             @Override
             public boolean hasNext() {
+                if (!isInit) {
+                    nextIteration();
+                    isInit = true;
+                }
+                return hasNext;
+            }
+            
+            @Override
+            public R next() {
+                final R result = next;
+                nextIteration();
+                return result;
+            }
+            
+            private void nextIteration() {
                 if ((inner != null) && inner.hasNext()) {
                     next = inner.next();
-                    return true;
+                    hasNext = true;
+                    return;
                 }
                 while (iterator.hasNext()) {
                     if (inner == null || !inner.hasNext()) {
@@ -455,15 +484,11 @@ public class Stream<T> {
                     }
                     if ((inner != null) && inner.hasNext()) {
                         next = inner.next();
-                        return true;
+                        hasNext = true;
+                        return;
                     }
                 }
-                return false;
-            }
-            
-            @Override
-            public R next() {
-                return next;
+                hasNext = false;
             }
         });
     }
