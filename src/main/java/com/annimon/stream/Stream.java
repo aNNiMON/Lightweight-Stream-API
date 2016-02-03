@@ -273,18 +273,38 @@ public class Stream<T> {
         final Iterator<? extends T> it1 = stream1.iterator;
         final Iterator<? extends T> it2 = stream2.iterator;
         return new Stream<T>(new LsaIterator<T>() {
-
+            
+            private T next;
+            private boolean hasNext, isInit;
+            
             @Override
             public boolean hasNext() {
-                return it1.hasNext() || it2.hasNext();
+                if (!isInit) {
+                    nextIteration();
+                    isInit = true;
+                }
+                return hasNext;
             }
-
+            
             @Override
             public T next() {
+                final T result = next;
+                nextIteration();
+                return result;
+            }
+            
+            private void nextIteration() {
                 if (it1.hasNext()) {
-                    return it1.next();
+                    next = it1.next();
+                    hasNext = true;
+                    return;
                 }
-                return it2.next();
+                if (it2.hasNext()) {
+                    next = it2.next();
+                    hasNext = true;
+                    return;
+                }
+                hasNext = false;
             }
         });
     } 
