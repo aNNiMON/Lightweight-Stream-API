@@ -682,24 +682,6 @@ public class Stream<T> {
      * 
      * <p>This is a terminal operation.
      * 
-     * @param identity  the initial value
-     * @param accumulator  the accumulation function
-     * @return the result of the reduction
-     */
-    /*public T reduce(final T identity, BiFunction<T, T, T> accumulator) {
-        T result = identity;
-        while (iterator.hasNext()) {
-            final T value = iterator.next();
-            result = accumulator.apply(result, value);
-        }
-        return result;
-    }*/
-    
-    /**
-     * Reduces the elements using provided identity value and the associative accumulation function.
-     * 
-     * <p>This is a terminal operation.
-     * 
      * @param <R> the type of the result
      * @param identity  the initial value
      * @param accumulator  the accumulation function
