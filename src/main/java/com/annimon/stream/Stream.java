@@ -2,6 +2,8 @@ package com.annimon.stream;
 
 import com.annimon.stream.function.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -311,12 +313,15 @@ public class Stream<T> {
     
     
 //<editor-fold defaultstate="collapsed" desc="Implementation">
+    static final long MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
+    static final String BAD_SIZE = "Stream size exceeds max array size";
+
     private final Iterator<? extends T> iterator;
     
     private Stream(Iterator<? extends T> iterator) {
         this.iterator = iterator;
     }
-    
+
     private Stream(Iterable<? extends T> iterable) {
         this(iterable.iterator());
     }
@@ -718,6 +723,35 @@ public class Stream<T> {
         }
         return foundAny ? Optional.of(result) : (Optional<T>) Optional.empty();
     }
+
+    /**
+     * Collects elements to an array, the {@code generator} constructor of provided.
+     *
+     * <p>This is a terminal operation.
+     *
+     * @param <R> the type of the result
+     * @param generator  the array constructor reference that accommodates future array of assigned size
+     * @return the result of collect elements
+     * @see #collect(com.annimon.stream.Collector)
+     * @see #collect(com.annimon.stream.function.Supplier, com.annimon.stream.function.BiConsumer)
+     */
+    public <R> R[] collect(IntFunction<R[]> generator) {
+        Collection<T> container = new ArrayList<T>();
+        while (iterator.hasNext()) {
+            container.add(iterator.next());
+        }
+        final int size = container.size();
+
+        if (size >= MAX_ARRAY_SIZE) throw new IllegalArgumentException(BAD_SIZE);
+
+        //noinspection unchecked
+        T[] source = container.toArray(Stream.<T>newArray(size));
+        R[] boxed = generator.apply(size);
+
+        //noinspection SuspiciousSystemArraycopy
+        System.arraycopy(source, 0, boxed, 0, size);
+        return boxed;
+    }
     
     /**
      * Collects elements to {@code supplier} provided container by applying the given accumulation function.
@@ -886,6 +920,11 @@ public class Stream<T> {
         // allMatch -> true
         // noneMatch -> true
         return !kindAny;
+    }
+
+    @SafeVarargs
+    static <E> E[] newArray(int length, E... array) {
+        return Arrays.copyOf(array, length);
     }
     
 //</editor-fold>

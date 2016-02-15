@@ -738,6 +738,16 @@ public class StreamTest {
         assertNotNull(result.get());
         assertEquals(6, (int) result.get());
     }
+
+    @Test
+    public void testCollectToArrayTerminationOperation() {
+        Integer[] numbers = Stream.ofRange(1, 1000)
+               .filter(Functions.remainder(2))
+               .collect(Functions.arrayGenerator(Integer[].class));
+
+        assertTrue(numbers.length > 0);
+        assertNotNull(numbers[100]);
+    }
     
     @Test
     public void testCustomIntermediateOperator_Reverse() {
