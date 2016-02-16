@@ -563,10 +563,7 @@ public class Stream<T> {
      * @return the new stream
      */
     public Stream<T> sorted(Comparator<? super T> comparator) {
-        final List<T> list = new ArrayList<T>();
-        while (iterator.hasNext()) {
-            list.add(iterator.next());
-        }
+        final List<T> list = collectToList();
         Collections.sort(list, comparator);
         return new Stream<T>(list);
     }
@@ -723,6 +720,24 @@ public class Stream<T> {
         }
         return foundAny ? Optional.of(result) : (Optional<T>) Optional.empty();
     }
+    
+    /**
+     * Collects elements to an array.
+     * 
+     * <p>This is a terminal operation.
+     * 
+     * @return the result of collect elements
+     * @see #toArray(com.annimon.stream.function.IntFunction) 
+     */
+    public Object[] toArray() {
+        return toArray(new IntFunction<Object[]>() {
+            
+            @Override
+            public Object[] apply(int value) {
+                return new Object[value];
+            }
+        });
+    }
 
     /**
      * Collects elements to an array, the {@code generator} constructor of provided.
@@ -732,14 +747,9 @@ public class Stream<T> {
      * @param <R> the type of the result
      * @param generator  the array constructor reference that accommodates future array of assigned size
      * @return the result of collect elements
-     * @see #collect(com.annimon.stream.Collector)
-     * @see #collect(com.annimon.stream.function.Supplier, com.annimon.stream.function.BiConsumer)
      */
-    public <R> R[] collect(IntFunction<R[]> generator) {
-        Collection<T> container = new ArrayList<T>();
-        while (iterator.hasNext()) {
-            container.add(iterator.next());
-        }
+    public <R> R[] toArray(IntFunction<R[]> generator) {
+        final List<T> container = collectToList();
         final int size = container.size();
 
         if (size >= MAX_ARRAY_SIZE) throw new IllegalArgumentException(BAD_SIZE);
@@ -925,6 +935,14 @@ public class Stream<T> {
     @SafeVarargs
     static <E> E[] newArray(int length, E... array) {
         return Arrays.copyOf(array, length);
+    }
+    
+    private List<T> collectToList() {
+        final List<T> container = new ArrayList<T>();
+        while (iterator.hasNext()) {
+            container.add(iterator.next());
+        }
+        return container;
     }
     
 //</editor-fold>
