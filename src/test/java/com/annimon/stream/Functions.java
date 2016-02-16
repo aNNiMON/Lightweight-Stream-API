@@ -3,8 +3,11 @@ package com.annimon.stream;
 import com.annimon.stream.function.BiConsumer;
 import com.annimon.stream.function.BiFunction;
 import com.annimon.stream.function.Function;
+import com.annimon.stream.function.IntFunction;
 import com.annimon.stream.function.Predicate;
 import com.annimon.stream.function.Supplier;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
@@ -13,6 +16,17 @@ import java.util.Map;
  * Functions that used in tests.
  */
 public final class Functions {
+
+    public static <T> IntFunction<T[]> arrayGenerator(final Class<T[]> clazz) {
+        return new IntFunction<T[]>() {
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public T[] apply(int value) {
+                return (T[]) Array.newInstance(clazz.getComponentType(), value);
+            }
+        };
+    }
     
     public static <T> Function<T, String> convertToString() {
         return new Function<T, String>() {
