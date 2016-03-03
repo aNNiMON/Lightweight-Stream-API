@@ -716,11 +716,29 @@ public class Stream<T> {
      * @param n  the number of elements to skip
      * @return the new stream
      */
-    public Stream<T> skip(long n) {
-        for (long i = 0; i < n && iterator.hasNext(); i++) {
-            iterator.next();
-        }
-        return this;
+    public Stream<T> skip(final long n) {
+        return new Stream<T>(new LsaIterator<T>() {
+            
+            private long skippedCount;
+            
+            @Override
+            public boolean hasNext() {
+                if (skippedCount < n) {
+                    while (skippedCount < n) {
+                        if (!iterator.hasNext()) return false;
+                        iterator.next();
+                        skippedCount++;
+                    }
+                    return true;
+                }
+                return iterator.hasNext();
+            }
+            
+            @Override
+            public T next() {
+                return iterator.next();
+            }
+        });
     }
     
     /**

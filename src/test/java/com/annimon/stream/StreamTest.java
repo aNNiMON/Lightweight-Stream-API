@@ -462,6 +462,20 @@ public class StreamTest {
     }
     
     @Test
+    public void testSkipLazy() {
+        final List<Integer> data = new ArrayList<Integer>(10);
+        data.add(0);
+        
+        final PrintConsumer consumer = new PrintConsumer();
+        Stream stream = Stream.of(data).skip(3);
+        data.addAll(Arrays.asList(1, 2, 3, 4, 5));
+        stream = stream.peek(consumer);
+        
+        assertEquals(3, stream.count());
+        assertEquals("345", consumer.toString());
+    }
+    
+    @Test
     public void testSkipAndLimit() {
         final PrintConsumer consumer = new PrintConsumer();
         Stream.range(0, 10)
