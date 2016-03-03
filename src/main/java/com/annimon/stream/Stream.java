@@ -3,7 +3,6 @@ package com.annimon.stream;
 import com.annimon.stream.function.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -109,7 +108,7 @@ public class Stream<T> {
      * @param to  the upper bound (exclusive)
      * @return the new stream
      */
-    public static Stream<Integer> ofRange(final int from, final int to) {
+    public static Stream<Integer> range(final int from, final int to) {
         return new Stream<Integer>(new LsaIterator<Integer>() {
             
             private int index = from;
@@ -125,6 +124,21 @@ public class Stream<T> {
             }
         });
     }
+    
+    /**
+     * Creates a {@code Stream<Integer>} from not closed range 
+     * (from {@code from} inclusive to {@code to} exclusive and incremental step {@code 1}).
+     * 
+     * @param from  the initial value (inclusive)
+     * @param to  the upper bound (exclusive)
+     * @deprecated  As of release 1.0.7, replaced by {@link #range(int, int)}
+     * @return the new stream
+     */
+    @Deprecated
+    public static Stream<Integer> ofRange(final int from, final int to) {
+        return range(from, to);
+    }
+    
     /**
      * Creates a {@code Stream<Long>} from not closed range 
      * (from {@code from} inclusive to {@code to} exclusive and incremental step {@code 1}).
@@ -133,7 +147,7 @@ public class Stream<T> {
      * @param to  the upper bound (exclusive)
      * @return the new stream
      */
-    public static Stream<Long> ofRange(final long from, final long to) {
+    public static Stream<Long> range(final long from, final long to) {
         return new Stream<Long>(new LsaIterator<Long>() {
             
             private long index = from;
@@ -151,6 +165,20 @@ public class Stream<T> {
     }
     
     /**
+     * Creates a {@code Stream<Long>} from not closed range 
+     * (from {@code from} inclusive to {@code to} exclusive and incremental step {@code 1}).
+     * 
+     * @param from  the initial value (inclusive)
+     * @param to  the upper bound (exclusive)
+     * @deprecated  As of release 1.0.7, replaced by {@link #range(long, long)}
+     * @return the new stream
+     */
+    @Deprecated
+    public static Stream<Long> ofRange(final long from, final long to) {
+        return range(from, to);
+    }
+    
+    /**
      * Creates a {@code Stream<Integer>} from closed range 
      * (from {@code from} inclusive to {@code to} inclusive and incremental step {@code 1}).
      * 
@@ -158,7 +186,7 @@ public class Stream<T> {
      * @param to  the upper bound (inclusive)
      * @return the new stream
      */
-    public static Stream<Integer> ofRangeClosed(final int from, final int to) {
+    public static Stream<Integer> rangeClosed(final int from, final int to) {
         return new Stream<Integer>(new LsaIterator<Integer>() {
             
             private int index = from;
@@ -179,6 +207,21 @@ public class Stream<T> {
             }
         });
     }
+    
+    /**
+     * Creates a {@code Stream<Integer>} from closed range 
+     * (from {@code from} inclusive to {@code to} inclusive and incremental step {@code 1}).
+     * 
+     * @param from  the initial value (inclusive)
+     * @param to  the upper bound (inclusive)
+     * @deprecated  As of release 1.0.7, replaced by {@link #rangeClosed(int, int)}
+     * @return the new stream
+     */
+    @Deprecated
+    public static Stream<Integer> ofRangeClosed(final int from, final int to) {
+        return rangeClosed(from, to);
+    }
+    
     /**
      * Creates a {@code Stream<Long>} from closed range 
      * (from {@code from} inclusive to {@code to} inclusive and incremental step {@code 1}).
@@ -187,7 +230,7 @@ public class Stream<T> {
      * @param to  the upper bound (inclusive)
      * @return the new stream
      */
-    public static Stream<Long> ofRangeClosed(final long from, final long to) {
+    public static Stream<Long> rangeClosed(final long from, final long to) {
         return new Stream<Long>(new LsaIterator<Long>() {
             
             private long index = from;
@@ -207,6 +250,20 @@ public class Stream<T> {
                 return index++;
             }
         });
+    }
+    
+    /**
+     * Creates a {@code Stream<Long>} from closed range 
+     * (from {@code from} inclusive to {@code to} inclusive and incremental step {@code 1}).
+     * 
+     * @param from  the initial value (inclusive)
+     * @param to  the upper bound (inclusive)
+     * @deprecated  As of release 1.0.7, replaced by {@link #rangeClosed(long, long)}
+     * @return the new stream
+     */
+    @Deprecated
+    public static Stream<Long> ofRangeClosed(final long from, final long to) {
+        return rangeClosed(from, to);
     }
     
     /**

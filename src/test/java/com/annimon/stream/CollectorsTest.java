@@ -24,7 +24,7 @@ public class CollectorsTest {
     
     @Test
     public void testToCollection() {
-        Collection<Integer> result = Stream.ofRange(0, 10)
+        Collection<Integer> result = Stream.range(0, 10)
                 .collect(Collectors.toCollection(new Supplier<Collection<Integer>>() {
                     @Override
                         public Collection<Integer> get() {
@@ -43,7 +43,7 @@ public class CollectorsTest {
     @Test
     public void testToList() {
         List<Integer> expected = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
-        List<Integer> list = Stream.ofRange(0, 10)
+        List<Integer> list = Stream.range(0, 10)
                 .collect(Collectors.<Integer>toList());
         
         assertEquals(10, list.size());
@@ -143,7 +143,7 @@ public class CollectorsTest {
     
     @Test
     public void testCounting() {
-        long count = Stream.ofRange(0, 20)
+        long count = Stream.range(0, 20)
                 .collect(Collectors.counting());
         assertEquals(20, count);
     }
