@@ -67,14 +67,14 @@ Download [latest release](https://github.com/aNNiMON/Lightweight-Stream-API/rele
 <dependency>
   <groupId>com.annimon</groupId>
   <artifactId>stream</artifactId>
-  <version>1.0.6</version>
+  <version>1.0.7</version>
 </dependency>
 ```
 or Gradle:
 ```groovy
 dependencies {
   ...
-  compile 'com.annimon:stream:1.0.6'
+  compile 'com.annimon:stream:1.0.7'
   ...
 }
 ```
