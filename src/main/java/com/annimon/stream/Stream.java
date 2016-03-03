@@ -729,7 +729,6 @@ public class Stream<T> {
                         iterator.next();
                         skippedCount++;
                     }
-                    return true;
                 }
                 return iterator.hasNext();
             }
