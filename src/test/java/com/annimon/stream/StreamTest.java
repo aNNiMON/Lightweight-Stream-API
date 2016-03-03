@@ -116,6 +116,30 @@ public class StreamTest {
     }
     
     @Test
+    public void testStreamOfRange() {
+        long count = Stream.ofRange(0, 5).count();
+        assertEquals(5, count);
+    }
+    
+    @Test
+    public void testStreamOfRangeLong() {
+        long count = Stream.ofRange(Long.MAX_VALUE - 10, Long.MAX_VALUE).count();
+        assertEquals(10L, count);
+    }
+    
+    @Test
+    public void testStreamOfRangeClosed() {
+        long count = Stream.ofRangeClosed(0, 5).count();
+        assertEquals(6, count);
+    }
+    
+    @Test
+    public void testStreamOfRangeClosedLong() {
+        long count = Stream.ofRangeClosed(Long.MAX_VALUE - 10, Long.MAX_VALUE).count();
+        assertEquals(11L, count);
+    }
+    
+    @Test
     public void testGenerate() {
         List<Long> expected = Arrays.asList(0L, 1L, 1L, 2L, 3L, 5L, 8L, 13L, 21L, 34L);
         List<Long> data = Stream.generate(Functions.fibonacci())
