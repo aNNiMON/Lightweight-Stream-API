@@ -1,19 +1,31 @@
 package com.annimon.stream;
 
-import com.annimon.stream.function.*;
+import com.annimon.stream.function.BiConsumer;
+import com.annimon.stream.function.BiFunction;
+import com.annimon.stream.function.BinaryOperator;
+import com.annimon.stream.function.Consumer;
+import com.annimon.stream.function.Function;
+import com.annimon.stream.function.Predicate;
+import com.annimon.stream.function.Supplier;
+import com.annimon.stream.function.UnaryOperator;
 import java.math.BigInteger;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
  * Tests {@code Stream}.
- * 
+ *
  * @see com.annimon.stream.Stream
  */
 public class StreamTest {
-    
+
     @Test
     public void testStreamOfList() {
         final PrintConsumer consumer = new PrintConsumer();
@@ -22,12 +34,12 @@ public class StreamTest {
         list.add(" is ");
         list.add("a");
         list.add(" test");
-        
+
         Stream.of(list)
                 .forEach(consumer);
         assertEquals("This is a test", consumer.toString());
     }
-    
+
     @Test
     public void testStreamOfMap() {
         final PrintConsumer consumer = new PrintConsumer();
@@ -36,7 +48,7 @@ public class StreamTest {
         map.put(" is ", 2);
         map.put("a", 3);
         map.put(" test", 4);
-        
+
         long count = Stream.of(map)
                 .sortBy(Functions.<String, Integer>entryValue())
                 .map(Functions.<String, Integer>entryKey())
@@ -45,7 +57,7 @@ public class StreamTest {
         assertEquals(4, count);
         assertEquals("This is a test", consumer.toString());
     }
-    
+
     @Test
     public void testStreamOfIterator() {
         final PrintConsumer consumer = new PrintConsumer();
@@ -56,7 +68,7 @@ public class StreamTest {
         assertEquals(5, count);
         assertEquals("01234", consumer.toString());
     }
-    
+
     @Test
     public void testStreamOfIterable() {
         final PrintConsumer consumer = new PrintConsumer();
@@ -66,7 +78,7 @@ public class StreamTest {
                 return Functions.counterIterator();
             }
         };
-        
+
         long count = Stream.of(iterable)
                 .limit(5)
                 .peek(consumer)
@@ -74,7 +86,7 @@ public class StreamTest {
         assertEquals(5, count);
         assertEquals("01234", consumer.toString());
     }
-    
+
     @Test
     public void testStreamRange() {
         final PrintConsumer consumer = new PrintConsumer();
@@ -82,19 +94,19 @@ public class StreamTest {
                 .forEach(consumer);
         assertEquals("01234", consumer.toString());
     }
-    
+
     @Test
     public void testStreamRangeOnMaxValues() {
         long count = Stream.range(Integer.MAX_VALUE - 10, Integer.MAX_VALUE).count();
         assertEquals(10L, count);
     }
-    
+
     @Test
     public void testStreamRangeOnMaxLongValues() {
         long count = Stream.range(Long.MAX_VALUE - 10, Long.MAX_VALUE).count();
         assertEquals(10L, count);
     }
-    
+
     @Test
     public void testStreamRangeClosed() {
         final PrintConsumer consumer = new PrintConsumer();
@@ -102,43 +114,43 @@ public class StreamTest {
                 .forEach(consumer);
         assertEquals("012345", consumer.toString());
     }
-    
+
     @Test
     public void testStreamRangeClosedOnMaxValues() {
         long count = Stream.rangeClosed(Integer.MAX_VALUE - 10, Integer.MAX_VALUE).count();
         assertEquals(11L, count);
     }
-    
+
     @Test
     public void testStreamRangeClosedOnMaxLongValues() {
         long count = Stream.rangeClosed(Long.MAX_VALUE - 10, Long.MAX_VALUE).count();
         assertEquals(11L, count);
     }
-    
+
     @Test
     public void testStreamOfRange() {
         long count = Stream.ofRange(0, 5).count();
         assertEquals(5, count);
     }
-    
+
     @Test
     public void testStreamOfRangeLong() {
         long count = Stream.ofRange(Long.MAX_VALUE - 10, Long.MAX_VALUE).count();
         assertEquals(10L, count);
     }
-    
+
     @Test
     public void testStreamOfRangeClosed() {
         long count = Stream.ofRangeClosed(0, 5).count();
         assertEquals(6, count);
     }
-    
+
     @Test
     public void testStreamOfRangeClosedLong() {
         long count = Stream.ofRangeClosed(Long.MAX_VALUE - 10, Long.MAX_VALUE).count();
         assertEquals(11L, count);
     }
-    
+
     @Test
     public void testGenerate() {
         List<Long> expected = Arrays.asList(0L, 1L, 1L, 2L, 3L, 5L, 8L, 13L, 21L, 34L);
@@ -147,7 +159,7 @@ public class StreamTest {
                 .collect(Collectors.<Long>toList());
         assertThat(data, is(expected));
     }
-    
+
     @Test
     public void testIterate() {
         final BigInteger two = BigInteger.valueOf(2);
@@ -167,7 +179,7 @@ public class StreamTest {
                 });
         assertEquals(new BigInteger("1267650600228229401496703205375"), sum);
     }
-    
+
     @Test
     public void testConcat() {
         final PrintConsumer consumer = new PrintConsumer();
@@ -177,7 +189,7 @@ public class StreamTest {
         stream.forEach(consumer);
         assertEquals("abcdefgh", consumer.toString());
     }
-    
+
     @Test
     public void testConcatOfFilter() {
         final PrintConsumer consumer = new PrintConsumer();
@@ -186,7 +198,7 @@ public class StreamTest {
         Stream.concat(stream1, stream2).forEach(consumer);
         assertEquals("0123456789", consumer.toString());
     }
-    
+
     @Test
     public void testConcatOfFlatMap() {
         final PrintConsumer consumer = new PrintConsumer();
@@ -201,8 +213,8 @@ public class StreamTest {
         Stream.concat(stream1, stream2).forEach(consumer);
         assertEquals("11223344", consumer.toString());
     }
-    
-    
+
+
     @Test
     public void testFilter() {
         final PrintConsumer consumer = new PrintConsumer();
@@ -211,7 +223,7 @@ public class StreamTest {
                 .forEach(consumer);
         assertEquals("02468", consumer.toString());
     }
-    
+
     @Test
     public void testFilterWithOrPredicate() {
         final PrintConsumer consumer = new PrintConsumer();
@@ -221,7 +233,7 @@ public class StreamTest {
                 .forEach(consumer);
         assertEquals("0234689", consumer.toString());
     }
-    
+
     @Test
     public void testFilterWithAndPredicate() {
         final PrintConsumer consumer = new PrintConsumer();
@@ -231,7 +243,7 @@ public class StreamTest {
                 .forEach(consumer);
         assertEquals("06", consumer.toString());
     }
-    
+
     @Test
     public void testFilterWithXorPredicate() {
         final PrintConsumer consumer = new PrintConsumer();
@@ -241,7 +253,7 @@ public class StreamTest {
                 .forEach(consumer);
         assertEquals("23489", consumer.toString());
     }
-    
+
     @Test
     public void testMapIntToSqrtString() {
         Function<Number, String> intToSqrtString = new Function<Number, String>() {
@@ -256,7 +268,7 @@ public class StreamTest {
                 .collect(Collectors.<String>toList());
         assertThat(data, is(expected));
     }
-    
+
     @Test
     public void testMapStringToSquareInt() {
         final Function<String, Integer> stringToSquareInt = new Function<String, Integer>() {
@@ -273,7 +285,7 @@ public class StreamTest {
                 .collect(Collectors.<Integer>toList());
         assertThat(data, is(expected));
     }
-    
+
     @Test
     public void testMapWithComposedFunction() {
         final PrintConsumer consumer = new PrintConsumer();
@@ -293,19 +305,19 @@ public class StreamTest {
                 .forEach(consumer);
         assertEquals("0123456789", consumer.toString());
     }
-    
+
     @Test
     public void testFlatMap() {
         final PrintConsumer consumer = new PrintConsumer();
         Stream.rangeClosed(2, 4)
                 .flatMap(new Function<Integer, Stream<String>>() {
-                    
+
                     @Override
                     public Stream<String> apply(final Integer i) {
                         return Stream.rangeClosed(2, 4)
                                 .filter(Functions.remainder(2))
                                 .map(new Function<Integer, String>() {
-                                    
+
                                     @Override
                                     public String apply(Integer p) {
                                         return String.format("%d * %d = %d\n", i, p, (i*p));
@@ -314,7 +326,7 @@ public class StreamTest {
                     }
                 })
                 .forEach(consumer);
-        
+
         assertEquals(
                 "2 * 2 = 4\n" +
                 "2 * 4 = 8\n" +
@@ -323,7 +335,7 @@ public class StreamTest {
                 "4 * 2 = 8\n" +
                 "4 * 4 = 16\n", consumer.toString());
     }
-    
+
     @Test
     public void testDistinct() {
         List<Integer> expected = Arrays.asList(-1, 1, 2, 3, 5);
@@ -333,7 +345,7 @@ public class StreamTest {
                 .collect(Collectors.<Integer>toList());
         assertThat(data, is(expected));
     }
-    
+
     @Test
     public void testSorted() {
         List<Integer> expected = Arrays.asList(-7, 0, 3, 6, 9, 19);
@@ -342,7 +354,7 @@ public class StreamTest {
                 .collect(Collectors.<Integer>toList());
         assertThat(data, is(expected));
     }
-    
+
     @Test
     public void testSortedWithComparator() {
         List<Integer> expected = Arrays.asList(19, 9, -7, 6, 3, 0);
@@ -351,7 +363,7 @@ public class StreamTest {
                 .collect(Collectors.<Integer>toList());
         assertThat(data, is(expected));
     }
-    
+
     @Test
     public void testSortByStringLength() {
         List<String> expected = Arrays.asList("a", "is", "This", "test");
@@ -380,7 +392,7 @@ public class StreamTest {
                 Students.STEVE_CS_4,
                 Students.VICTORIA_CS_3
         );
-        
+
         List<Student> data = Stream.of(students)
                 .sortBy(new Function<Student, String>() {
                     @Override
@@ -391,7 +403,7 @@ public class StreamTest {
                 .collect(Collectors.<Student>toList());
         assertThat(data, is(expected));
     }
-    
+
     @Test
     public void testSortByStudentCourseDescending() {
         final List<Student> students = Arrays.asList(
@@ -416,13 +428,13 @@ public class StreamTest {
                 .collect(Collectors.<Student>toList());
         assertThat(byCourseDesc, is(expected));
     }
-    
+
     @Test
     public void testGroupBy() {
         final PrintConsumer pc1 = new PrintConsumer();
         final PrintConsumer pc2 = new PrintConsumer();
         final Integer partitionItem = 1;
-        
+
         Stream.of(1, 2, 3, 1, 2, 3, 1, 2, 3)
                 .groupBy(Functions.equalityPartitionItem(partitionItem))
                 .forEach(new Consumer<Map.Entry<Boolean, List<Integer>>>() {
@@ -433,11 +445,11 @@ public class StreamTest {
                                 .accept(entry.getValue());
                     }
                 });
-        
+
         assertEquals("[1, 1, 1]", pc1.toString());
         assertEquals("[2, 3, 2, 3, 2, 3]", pc2.toString());
     }
-    
+
     @Test
     public void testPeek() {
         final PrintConsumer consumer = new PrintConsumer();
@@ -447,7 +459,7 @@ public class StreamTest {
         assertEquals(5, count);
         assertEquals("01234", consumer.toString());
     }
-    
+
     @Test
     public void testLimit() {
         final PrintConsumer consumer = new PrintConsumer();
@@ -456,7 +468,7 @@ public class StreamTest {
                 .forEach(consumer);
         assertEquals("01", consumer.toString());
     }
-    
+
     @Test
     public void testLimitMoreThanCount() {
         final PrintConsumer consumer = new PrintConsumer();
@@ -467,7 +479,7 @@ public class StreamTest {
         assertEquals(5, count);
         assertEquals("01234", consumer.toString());
     }
-    
+
     @Test
     public void testSkip() {
         final PrintConsumer consumer = new PrintConsumer();
@@ -476,7 +488,7 @@ public class StreamTest {
                 .forEach(consumer);
         assertEquals("789", consumer.toString());
     }
-    
+
     @Test
     public void testSkipMoreThanCount() {
         long count = Stream.range(0, 10)
@@ -484,21 +496,21 @@ public class StreamTest {
                 .count();
         assertEquals(0, count);
     }
-    
+
     @Test
     public void testSkipLazy() {
         final List<Integer> data = new ArrayList<Integer>(10);
         data.add(0);
-        
+
         final PrintConsumer consumer = new PrintConsumer();
         Stream stream = Stream.of(data).skip(3);
         data.addAll(Arrays.asList(1, 2, 3, 4, 5));
         stream = stream.peek(consumer);
-        
+
         assertEquals(3, stream.count());
         assertEquals("345", consumer.toString());
     }
-    
+
     @Test
     public void testSkipAndLimit() {
         final PrintConsumer consumer = new PrintConsumer();
@@ -508,7 +520,7 @@ public class StreamTest {
                 .forEach(consumer);
         assertEquals("23456", consumer.toString());
     }
-    
+
     @Test
     public void testLimitAndSkip() {
         final PrintConsumer consumer = new PrintConsumer();
@@ -518,7 +530,7 @@ public class StreamTest {
                 .forEach(consumer);
         assertEquals("234", consumer.toString());
     }
-    
+
     @Test
     public void testSkipAndLimitMoreThanCount() {
         final PrintConsumer consumer = new PrintConsumer();
@@ -528,7 +540,7 @@ public class StreamTest {
                 .forEach(consumer);
         assertEquals("89", consumer.toString());
     }
-    
+
     @Test
     public void testSkipMoreThanCountAndLimit() {
         long count = Stream.range(0, 10)
@@ -537,7 +549,7 @@ public class StreamTest {
                 .count();
         assertEquals(0, count);
     }
-    
+
     @Test
     public void testSkipAndLimitTwice() {
         final PrintConsumer consumer = new PrintConsumer();
@@ -549,21 +561,21 @@ public class StreamTest {
                 .forEach(consumer);
         assertEquals("45", consumer.toString());
     }
-    
+
     @Test
     public void testReduceSumFromZero() {
         int result = Stream.range(0, 10)
                 .reduce(0, Functions.addition());
         assertEquals(45, result);
     }
-    
+
     @Test
     public void testReduceSumFromMinus45() {
         int result = Stream.range(0, 10)
                 .reduce(-45, Functions.addition());
         assertEquals(0, result);
     }
-    
+
     @Test
     public void testReduceWithAnotherType() {
         int result = Stream.of("a", "bb", "ccc", "dddd")
@@ -575,27 +587,27 @@ public class StreamTest {
                 });
         assertEquals(10, result);
     }
-    
+
     @Test
     public void testReduceOptional() {
         Optional<Integer> result = Stream.range(0, 10)
                 .reduce(Functions.addition());
-        
+
         assertTrue(result.isPresent());
         assertNotNull(result.get());
         assertEquals(45, (int) result.get());
     }
-    
+
     @Test
     public void testReduceOptionalOnEmptyStream() {
         Optional<Integer> result = Stream.of(1, 3, 5, 7, 9)
                 .filter(Functions.remainder(2))
                 .reduce(Functions.addition());
-        
+
         assertFalse(result.isPresent());
         assertEquals(119, (int) result.orElse(119));
     }
-    
+
     @Test
     public void testCollectWithCollector() {
         String text = Stream.range(0, 10)
@@ -603,7 +615,7 @@ public class StreamTest {
                 .collect(Functions.joiningCollector());
         assertEquals("0123456789", text);
     }
-    
+
     @Test
     public void testCollectWithSupplierAndAccumulator() {
         String text = Stream.of("a", "b", "c", "def", "", "g")
@@ -611,7 +623,7 @@ public class StreamTest {
                 .toString();
         assertEquals("abcdefg", text);
     }
-    
+
     @Test
     public void testCollect123() {
         String string123 = Stream.of("1", "2", "3")
@@ -630,125 +642,125 @@ public class StreamTest {
                 .toString();
         assertEquals("123", string123);
     }
-    
+
     @Test
     public void testMin() {
         Optional<Integer> min = Stream.of(6, 3, 9, 0, -7, 19)
                 .min(Functions.naturalOrder());
-        
+
         assertTrue(min.isPresent());
         assertNotNull(min.get());
         assertEquals(-7, (int) min.get());
     }
-    
+
     @Test
     public void testMinDescendingOrder() {
         Optional<Integer> min = Stream.of(6, 3, 9, 0, -7, 19)
                 .min(Functions.descendingAbsoluteOrder());
-        
+
         assertTrue(min.isPresent());
         assertNotNull(min.get());
         assertEquals(19, (int) min.get());
     }
-    
+
     @Test
     public void testMinEmpty() {
         Optional<Integer> min = Stream.of(1, 3, 5, 7, 9)
                 .filter(Functions.remainder(2))
                 .min(Functions.naturalOrder());
-        
+
         assertFalse(min.isPresent());
     }
-    
+
     @Test
     public void testMax() {
         Optional<Integer> max = Stream.of(6, 3, 9, 0, -7, 19)
                 .max(Functions.naturalOrder());
-        
+
         assertTrue(max.isPresent());
         assertNotNull(max.get());
         assertEquals(19, (int) max.get());
     }
-    
+
     @Test
     public void testMaxDescendingOrder() {
         Optional<Integer> max = Stream.of(6, 3, 9, 0, -7, 19)
                 .max(Functions.descendingAbsoluteOrder());
-        
+
         assertTrue(max.isPresent());
         assertNotNull(max.get());
         assertEquals(0, (int) max.get());
     }
-    
+
     @Test
     public void testMaxEmpty() {
         Optional<Integer> max = Stream.of(1, 3, 5, 7, 9)
                 .filter(Functions.remainder(2))
                 .max(Functions.naturalOrder());
-        
+
         assertFalse(max.isPresent());
     }
-    
+
     @Test
     public void testCount() {
         long count = Stream.range(10000000000L, 10000002000L).count();
         assertEquals(2000, count);
     }
-    
+
     @Test
     public void testCountMinValue() {
         long count = Stream.range(Integer.MIN_VALUE, Integer.MIN_VALUE + 100).count();
         assertEquals(100, count);
     }
-    
+
     @Test
     public void testCountMaxValue() {
         long count = Stream.range(Long.MAX_VALUE - 100, Long.MAX_VALUE).count();
         assertEquals(100, count);
     }
-    
+
     @Test
     public void testAnyMatchWithTrueResult() {
         boolean match = Stream.range(0, 10)
                 .anyMatch(Functions.remainder(2));
         assertTrue(match);
     }
-    
+
     @Test
     public void testAnyMatchWithFalseResult() {
         boolean match = Stream.of(2, 3, 5, 8, 13)
                 .allMatch(Functions.remainder(10));
         assertFalse(match);
     }
-    
+
     @Test
     public void testAllMatchWithFalseResult() {
         boolean match = Stream.range(0, 10)
                 .allMatch(Functions.remainder(2));
         assertFalse(match);
     }
-    
+
     @Test
     public void testAllMatchWithTrueResult() {
         boolean match = Stream.of(2, 4, 6, 8, 10)
                 .anyMatch(Functions.remainder(2));
         assertTrue(match);
     }
-    
+
     @Test
     public void testNoneMatchWithFalseResult() {
         boolean match = Stream.range(0, 10)
                 .noneMatch(Functions.remainder(2));
         assertFalse(match);
     }
-    
+
     @Test
     public void testNoneMatchWithTrueResult() {
         boolean match = Stream.of(2, 3, 5, 8, 13)
                 .noneMatch(Functions.remainder(10));
         assertTrue(match);
     }
-    
+
     @Test
     public void testFindFirst() {
         Optional<Integer> result = Stream.range(0, 10)
@@ -757,7 +769,7 @@ public class StreamTest {
         assertNotNull(result.get());
         assertEquals(0, (int) result.get());
     }
-    
+
     @Test
     public void testFindFirstOnEmptyStream() {
         Optional<Integer> result = Stream.of(1, 3, 5, 7)
@@ -765,13 +777,13 @@ public class StreamTest {
                 .findFirst();
         assertFalse(result.isPresent());
     }
-    
+
     @Test
     public void testFindFirstAfterFiltering() {
         Optional<Integer> result = Stream.range(1, 1000)
                 .filter(Functions.remainder(6))
                 .findFirst();
-        
+
         assertTrue(result.isPresent());
         assertNotNull(result.get());
         assertEquals(6, (int) result.get());
@@ -787,7 +799,7 @@ public class StreamTest {
         assertNotNull(objects[10]);
         assertThat(objects[0], instanceOf(Integer.class));
     }
-    
+
     @Test
     public void testToArrayWithGenerator() {
         Integer[] numbers = Stream.range(1, 1000)
@@ -797,7 +809,7 @@ public class StreamTest {
         assertTrue(numbers.length > 0);
         assertNotNull(numbers[100]);
     }
-    
+
     @Test
     public void testCustomIntermediateOperator_Reverse() {
         PrintConsumer consumer = new PrintConsumer();
@@ -806,7 +818,7 @@ public class StreamTest {
                 .forEach(consumer);
         assertEquals("9876543210", consumer.toString());
     }
-    
+
     @Test
     public void testCustomIntermediateOperator_SkipAndLimit() {
         PrintConsumer pc1 = new PrintConsumer();
@@ -815,11 +827,11 @@ public class StreamTest {
                 .forEach(pc1);
         assertEquals("56", pc1.toString());
     }
-    
+
     @Test
     public void testCustomIntermediateOperator_FlatMapAndCast() {
         List<Character> expected = Arrays.asList('a', 'b', 'c', 'd', 'e', 'f');
-        
+
         List<List> lists = new ArrayList<List>();
         for (char ch = 'a'; ch <= 'f'; ch++) {
             lists.add( new ArrayList<Character>(Arrays.asList(ch)) );
@@ -833,17 +845,17 @@ public class StreamTest {
                 }))
                 .custom(new CustomOperators.Cast<Object, Character>(Character.class))
                 .collect(Collectors.<Character>toList());
-        
+
         assertThat(chars, is(expected));
     }
-    
+
     @Test
     public void testCustomTerminalOperator_Sum() {
         int sum = Stream.of(1, 2, 3, 4, 5)
                 .custom(new CustomOperators.Sum());
         assertEquals(15, sum);
     }
-        
+
     @Test
     public void testCustomTerminalOperator_ForEach() {
         PrintConsumer consumer = new PrintConsumer();
@@ -851,12 +863,12 @@ public class StreamTest {
                 .custom(new CustomOperators.ForEach<Integer>(consumer));
         assertEquals("0123456789", consumer.toString());
     }
-    
-    
+
+
     private static class PrintConsumer<T> implements Consumer<T> {
-        
+
         private final StringBuilder out = new StringBuilder();
-        
+
         @Override
         public void accept(T value) {
             out.append(value);
