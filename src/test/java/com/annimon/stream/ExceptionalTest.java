@@ -152,13 +152,13 @@ public class ExceptionalTest {
                         data[EXCEPTION] = true;
                     }
                 })
-                .ifExceptionIs(FileNotFoundException.class, new Consumer<FileNotFoundException>() {
+                .ifExceptionIs(FileNotFoundException.class, new Consumer<Throwable>() {
                     @Override
-                    public void accept(FileNotFoundException value) {
+                    public void accept(Throwable value) {
                         data[FILE_NOT_FOUND] = true;
                     }
                 });
-        
+
         assertTrue(data[INTERRUPTED]);
         assertTrue(data[EXCEPTION]);
         assertFalse(data[FILE_NOT_FOUND]);

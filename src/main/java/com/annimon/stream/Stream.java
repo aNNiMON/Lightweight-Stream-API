@@ -610,7 +610,7 @@ public class Stream<T> {
      * @param f  the transformation function
      * @return the new stream
      */
-    public <R extends Comparable> Stream<T> sortBy(final Function<? super T, ? extends R> f) {
+    public <R extends Comparable<? super R>> Stream<T> sortBy(final Function<? super T, ? extends R> f) {
         return sorted(new Comparator<T>() {
             @Override
             public int compare(T o1, T o2) {
@@ -816,7 +816,7 @@ public class Stream<T> {
                 result = accumulator.apply(result, value);
             }
         }
-        return foundAny ? Optional.of(result) : (Optional<T>) Optional.empty();
+        return foundAny ? Optional.of(result) : Optional.<T>empty();
     }
 
     /**
@@ -900,7 +900,7 @@ public class Stream<T> {
         }
         if (collector.finisher() != null)
             return collector.finisher().apply(container);
-        return (R) container;
+        return Collectors.<A, R>castIdentity().apply(container);
     }
 
     /**
