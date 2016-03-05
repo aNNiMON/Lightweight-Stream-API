@@ -331,28 +331,10 @@ public class Stream<T> {
     public static <T> Stream<T> concat(Stream<? extends T> stream1, Stream<? extends T> stream2) {
         final Iterator<? extends T> it1 = stream1.iterator;
         final Iterator<? extends T> it2 = stream2.iterator;
-        return new Stream<T>(new LsaIterator<T>() {
-
-            private T next;
-            private boolean hasNext, isInit;
+        return new Stream<T>(new LsaExtIterator<T>() {
 
             @Override
-            public boolean hasNext() {
-                if (!isInit) {
-                    nextIteration();
-                    isInit = true;
-                }
-                return hasNext;
-            }
-
-            @Override
-            public T next() {
-                final T result = next;
-                nextIteration();
-                return result;
-            }
-
-            private void nextIteration() {
+            protected void nextIteration() {
                 if (it1.hasNext()) {
                     next = it1.next();
                     hasNext = true;
@@ -487,28 +469,10 @@ public class Stream<T> {
      * @return the new stream
      */
     public Stream<T> filter(final Predicate<? super T> predicate) {
-        return new Stream<T>(new LsaIterator<T>() {
-
-            private T next;
-            private boolean hasNext, isInit;
+        return new Stream<T>(new LsaExtIterator<T>() {
 
             @Override
-            public boolean hasNext() {
-                if (!isInit) {
-                    nextIteration();
-                    isInit = true;
-                }
-                return hasNext;
-            }
-
-            @Override
-            public T next() {
-                final T result = next;
-                nextIteration();
-                return result;
-            }
-
-            private void nextIteration() {
+            protected void nextIteration() {
                 while (iterator.hasNext()) {
                     next = iterator.next();
                     if (predicate.test(next)) {
@@ -555,29 +519,12 @@ public class Stream<T> {
      * @return the new stream
      */
     public <R> Stream<R> flatMap(final Function<? super T, ? extends Stream<? extends R>> mapper) {
-        return new Stream<R>(new LsaIterator<R>() {
+        return new Stream<R>(new LsaExtIterator<R>() {
 
-            private R next;
             private Iterator<? extends R> inner;
-            private boolean hasNext, isInit;
 
             @Override
-            public boolean hasNext() {
-                if (!isInit) {
-                    nextIteration();
-                    isInit = true;
-                }
-                return hasNext;
-            }
-
-            @Override
-            public R next() {
-                final R result = next;
-                nextIteration();
-                return result;
-            }
-
-            private void nextIteration() {
+            protected void nextIteration() {
                 if ((inner != null) && inner.hasNext()) {
                     next = inner.next();
                     hasNext = true;
@@ -706,6 +653,55 @@ public class Stream<T> {
                 final T value = iterator.next();
                 action.accept(value);
                 return value;
+            }
+        });
+    }
+
+    /**
+     * Takes elements while the predicate is true.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @param predicate  the predicate used to take elements
+     * @return the new stream
+     */
+    public Stream<T> takeWhile(final Predicate<? super T> predicate) {
+        return new Stream<T>(new LsaExtIterator<T>() {
+
+            @Override
+            protected void nextIteration() {
+                hasNext = iterator.hasNext() && predicate.test(next = iterator.next());
+            }
+        });
+    }
+
+    /**
+     * Drops elements while the predicate is true and returns the rest.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @param predicate  the predicate used to drop elements
+     * @return the new stream
+     */
+    public Stream<T> dropWhile(final Predicate<? super T> predicate) {
+        return new Stream<T>(new LsaExtIterator<T>() {
+
+            @Override
+            protected void nextIteration() {
+                if (!isInit) {
+                    // Skip first time
+                    while (hasNext = iterator.hasNext()) {
+                        next = iterator.next();
+                        if (!predicate.test(next)) {
+                            return;
+                        }
+                    }
+                }
+
+                hasNext = hasNext && iterator.hasNext();
+                if (!hasNext) return;
+
+                next = iterator.next();
             }
         });
     }
