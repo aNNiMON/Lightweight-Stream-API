@@ -28,7 +28,7 @@ public class StreamTest {
 
     @Test
     public void testStreamOfList() {
-        final PrintConsumer consumer = new PrintConsumer();
+        final PrintConsumer<String> consumer = new PrintConsumer<String>();
         final List<String> list = new ArrayList<String>(4);
         list.add("This");
         list.add(" is ");
@@ -42,7 +42,7 @@ public class StreamTest {
 
     @Test
     public void testStreamOfMap() {
-        final PrintConsumer consumer = new PrintConsumer();
+        final PrintConsumer<String> consumer = new PrintConsumer<String>();
         final Map<String, Integer> map = new HashMap<String, Integer>(4);
         map.put("This", 1);
         map.put(" is ", 2);
@@ -60,7 +60,7 @@ public class StreamTest {
 
     @Test
     public void testStreamOfIterator() {
-        final PrintConsumer consumer = new PrintConsumer();
+        final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
         long count = Stream.of(Functions.counterIterator())
                 .limit(5)
                 .peek(consumer)
@@ -71,7 +71,7 @@ public class StreamTest {
 
     @Test
     public void testStreamOfIterable() {
-        final PrintConsumer consumer = new PrintConsumer();
+        final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
         Iterable<Integer> iterable = new Iterable<Integer>() {
             @Override
             public Iterator<Integer> iterator() {
@@ -89,7 +89,7 @@ public class StreamTest {
 
     @Test
     public void testStreamRange() {
-        final PrintConsumer consumer = new PrintConsumer();
+        final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
         Stream.range(0, 5)
                 .forEach(consumer);
         assertEquals("01234", consumer.toString());
@@ -109,7 +109,7 @@ public class StreamTest {
 
     @Test
     public void testStreamRangeClosed() {
-        final PrintConsumer consumer = new PrintConsumer();
+        final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
         Stream.rangeClosed(0, 5)
                 .forEach(consumer);
         assertEquals("012345", consumer.toString());
@@ -182,7 +182,7 @@ public class StreamTest {
 
     @Test
     public void testConcat() {
-        final PrintConsumer consumer = new PrintConsumer();
+        final PrintConsumer<String> consumer = new PrintConsumer<String>();
         Stream<String> stream1 = Stream.of("a", "b", "c", "d");
         Stream<String> stream2 = Stream.of("e", "f", "g", "h");
         Stream<String> stream = Stream.concat(stream1, stream2);
@@ -192,7 +192,7 @@ public class StreamTest {
 
     @Test
     public void testConcatOfFilter() {
-        final PrintConsumer consumer = new PrintConsumer();
+        final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
         Stream<Integer> stream1 = Stream.range(0, 5).filter(Functions.remainder(1));
         Stream<Integer> stream2 = Stream.range(5, 10).filter(Functions.remainder(1));
         Stream.concat(stream1, stream2).forEach(consumer);
@@ -201,7 +201,7 @@ public class StreamTest {
 
     @Test
     public void testConcatOfFlatMap() {
-        final PrintConsumer consumer = new PrintConsumer();
+        final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
         final Function<Integer, Stream<Integer>> flatmapFunc = new Function<Integer, Stream<Integer>>() {
             @Override
             public Stream<Integer> apply(Integer value) {
@@ -217,7 +217,7 @@ public class StreamTest {
 
     @Test
     public void testFilter() {
-        final PrintConsumer consumer = new PrintConsumer();
+        final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
         Stream.range(0, 10)
                 .filter(Functions.remainder(2))
                 .forEach(consumer);
@@ -226,8 +226,8 @@ public class StreamTest {
 
     @Test
     public void testFilterWithOrPredicate() {
-        final PrintConsumer consumer = new PrintConsumer();
-        Predicate predicate = Predicate.Util.or(Functions.remainder(2), Functions.remainder(3));
+        final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
+        Predicate<Integer> predicate = Predicate.Util.or(Functions.remainder(2), Functions.remainder(3));
         Stream.range(0, 10)
                 .filter(predicate)
                 .forEach(consumer);
@@ -236,8 +236,8 @@ public class StreamTest {
 
     @Test
     public void testFilterWithAndPredicate() {
-        final PrintConsumer consumer = new PrintConsumer();
-        Predicate predicate = Predicate.Util.and(Functions.remainder(2), Functions.remainder(3));
+        final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
+        Predicate<Integer> predicate = Predicate.Util.and(Functions.remainder(2), Functions.remainder(3));
         Stream.range(0, 10)
                 .filter(predicate)
                 .forEach(consumer);
@@ -246,8 +246,8 @@ public class StreamTest {
 
     @Test
     public void testFilterWithXorPredicate() {
-        final PrintConsumer consumer = new PrintConsumer();
-        Predicate predicate = Predicate.Util.xor(Functions.remainder(2), Functions.remainder(3));
+        final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
+        Predicate<Integer> predicate = Predicate.Util.xor(Functions.remainder(2), Functions.remainder(3));
         Stream.range(0, 10)
                 .filter(predicate)
                 .forEach(consumer);
@@ -288,7 +288,7 @@ public class StreamTest {
 
     @Test
     public void testMapWithComposedFunction() {
-        final PrintConsumer consumer = new PrintConsumer();
+        final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
         final Function<Integer, Integer> mapPlus1 = new Function<Integer, Integer>() {
             @Override
             public Integer apply(Integer x) {
@@ -308,7 +308,7 @@ public class StreamTest {
 
     @Test
     public void testFlatMap() {
-        final PrintConsumer consumer = new PrintConsumer();
+        final PrintConsumer<String> consumer = new PrintConsumer<String>();
         Stream.rangeClosed(2, 4)
                 .flatMap(new Function<Integer, Stream<String>>() {
 
@@ -431,8 +431,8 @@ public class StreamTest {
 
     @Test
     public void testGroupBy() {
-        final PrintConsumer pc1 = new PrintConsumer();
-        final PrintConsumer pc2 = new PrintConsumer();
+        final PrintConsumer<List<Integer>> pc1 = new PrintConsumer<List<Integer>>();
+        final PrintConsumer<List<Integer>> pc2 = new PrintConsumer<List<Integer>>();
         final Integer partitionItem = 1;
 
         Stream.of(1, 2, 3, 1, 2, 3, 1, 2, 3)
@@ -452,7 +452,7 @@ public class StreamTest {
 
     @Test
     public void testPeek() {
-        final PrintConsumer consumer = new PrintConsumer();
+        final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
         long count = Stream.range(0, 5)
                 .peek(consumer)
                 .count();
@@ -462,7 +462,7 @@ public class StreamTest {
 
     @Test
     public void testLimit() {
-        final PrintConsumer consumer = new PrintConsumer();
+        final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
         Stream.range(0, 10)
                 .limit(2)
                 .forEach(consumer);
@@ -471,7 +471,7 @@ public class StreamTest {
 
     @Test
     public void testLimitMoreThanCount() {
-        final PrintConsumer consumer = new PrintConsumer();
+        final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
         long count = Stream.range(0, 5)
                 .limit(15)
                 .peek(consumer)
@@ -482,7 +482,7 @@ public class StreamTest {
 
     @Test
     public void testSkip() {
-        final PrintConsumer consumer = new PrintConsumer();
+        final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
         Stream.range(0, 10)
                 .skip(7)
                 .forEach(consumer);
@@ -502,8 +502,8 @@ public class StreamTest {
         final List<Integer> data = new ArrayList<Integer>(10);
         data.add(0);
 
-        final PrintConsumer consumer = new PrintConsumer();
-        Stream stream = Stream.of(data).skip(3);
+        final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
+        Stream<Integer> stream = Stream.of(data).skip(3);
         data.addAll(Arrays.asList(1, 2, 3, 4, 5));
         stream = stream.peek(consumer);
 
@@ -513,7 +513,7 @@ public class StreamTest {
 
     @Test
     public void testSkipAndLimit() {
-        final PrintConsumer consumer = new PrintConsumer();
+        final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
         Stream.range(0, 10)
                 .skip(2)  // 23456789
                 .limit(5) // 23456
@@ -523,7 +523,7 @@ public class StreamTest {
 
     @Test
     public void testLimitAndSkip() {
-        final PrintConsumer consumer = new PrintConsumer();
+        final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
         Stream.range(0, 10)
                 .limit(5) // 01234
                 .skip(2)  // 234
@@ -533,7 +533,7 @@ public class StreamTest {
 
     @Test
     public void testSkipAndLimitMoreThanCount() {
-        final PrintConsumer consumer = new PrintConsumer();
+        final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
         Stream.range(0, 10)
                 .skip(8)   // 89
                 .limit(15) // 89
@@ -552,7 +552,7 @@ public class StreamTest {
 
     @Test
     public void testSkipAndLimitTwice() {
-        final PrintConsumer consumer = new PrintConsumer();
+        final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
         Stream.range(0, 10)
                 .skip(2)  // 23456789
                 .limit(5) // 23456
@@ -812,7 +812,7 @@ public class StreamTest {
 
     @Test
     public void testCustomIntermediateOperator_Reverse() {
-        PrintConsumer consumer = new PrintConsumer();
+        PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
         Stream.range(0, 10)
                 .custom(new CustomOperators.Reverse<Integer>())
                 .forEach(consumer);
@@ -821,7 +821,7 @@ public class StreamTest {
 
     @Test
     public void testCustomIntermediateOperator_SkipAndLimit() {
-        PrintConsumer pc1 = new PrintConsumer();
+        PrintConsumer<Integer> pc1 = new PrintConsumer<Integer>();
         Stream.range(0, 10)
                 .custom(new CustomOperators.SkipAndLimit<Integer>(5, 2))
                 .forEach(pc1);
@@ -838,6 +838,7 @@ public class StreamTest {
         }
         List<Character> chars = Stream.of(lists)
                 .custom(new CustomOperators.FlatMap<List, Object>(new Function<List, Stream<Object>>() {
+                    @SuppressWarnings("unchecked")
                     @Override
                     public Stream<Object> apply(List value) {
                         return Stream.of(value);
@@ -858,7 +859,7 @@ public class StreamTest {
 
     @Test
     public void testCustomTerminalOperator_ForEach() {
-        PrintConsumer consumer = new PrintConsumer();
+        PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
         Stream.range(0, 10)
                 .custom(new CustomOperators.ForEach<Integer>(consumer));
         assertEquals("0123456789", consumer.toString());
