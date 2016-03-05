@@ -657,7 +657,7 @@ public class Stream<T> {
         return Stream.of( collect(Collectors.groupingBy(classifier)) );
     }
 	
-	/**
+    /**
      * Partitions {@code Stream} into {@code List}s according to the given classifier function. In contrast
      * to {@link #groupBy(Function)}, this method assumes that the elements of the stream are sorted.
      * Because of this assumption, it does not need to first collect all elements and then partition them.
