@@ -557,11 +557,25 @@ public class Stream<T> {
      * @return the new stream
      */
     public Stream<T> distinct() {
-        final Set<T> set = new HashSet<T>();
-        while (iterator.hasNext()) {
-            set.add(iterator.next());
-        }
-        return new Stream<T>(set);
+        return new Stream<T>(new LsaExtIterator<T>() {
+
+            private Iterator<T> distinctIterator;
+
+            @Override
+            protected void nextIteration() {
+                if (!isInit) {
+                    final Set<T> set = new HashSet<T>();
+                    while (iterator.hasNext()) {
+                        set.add(iterator.next());
+                    }
+                    distinctIterator = set.iterator();
+                }
+                hasNext = distinctIterator.hasNext();
+                if (hasNext) {
+                    next = distinctIterator.next();
+                }
+            }
+        });
     }
 
     /**
@@ -594,10 +608,24 @@ public class Stream<T> {
      * @param comparator  the {@code Comparator} to compare elements
      * @return the new stream
      */
-    public Stream<T> sorted(Comparator<? super T> comparator) {
-        final List<T> list = collectToList();
-        Collections.sort(list, comparator);
-        return new Stream<T>(list);
+    public Stream<T> sorted(final Comparator<? super T> comparator) {
+        return new Stream<T>(new LsaExtIterator<T>() {
+
+            private Iterator<T> sortedIterator;
+
+            @Override
+            protected void nextIteration() {
+                if (!isInit) {
+                    final List<T> list = collectToList();
+                    Collections.sort(list, comparator);
+                    sortedIterator = list.iterator();
+                }
+                hasNext = sortedIterator.hasNext();
+                if (hasNext) {
+                    next = sortedIterator.next();
+                }
+            }
+        });
     }
 
     /**

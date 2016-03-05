@@ -360,11 +360,37 @@ public class StreamTest {
     }
 
     @Test
+    public void testDistinctLazy() {
+        List<Integer> expected = Arrays.asList(-1, 1, 2, 3, 5);
+
+        List<Integer> input = new ArrayList<Integer>(10);
+        input.addAll(Arrays.asList(1, 1, 2, 3, 5));
+        Stream<Integer> stream = Stream.of(input).distinct().sorted();
+        input.addAll(Arrays.asList(3, 2, 1, 1, -1));
+
+        List<Integer> data = stream.collect(Collectors.<Integer>toList());
+        assertThat(data, is(expected));
+    }
+
+    @Test
     public void testSorted() {
         List<Integer> expected = Arrays.asList(-7, 0, 3, 6, 9, 19);
         List<Integer> data = Stream.of(6, 3, 9, 0, -7, 19)
                 .sorted()
                 .collect(Collectors.<Integer>toList());
+        assertThat(data, is(expected));
+    }
+
+    @Test
+    public void testSortedLazy() {
+        List<Integer> expected = Arrays.asList(-7, 0, 3, 6, 9, 19);
+
+        List<Integer> input = new ArrayList<Integer>(6);
+        input.addAll(Arrays.asList(6, 3, 9));
+        Stream<Integer> stream = Stream.of(input).sorted();
+        input.addAll(Arrays.asList(0, -7, 19));
+
+        List<Integer> data = stream.collect(Collectors.<Integer>toList());
         assertThat(data, is(expected));
     }
 
