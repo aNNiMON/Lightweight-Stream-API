@@ -438,7 +438,7 @@ public class StreamTest {
         assertEquals("[2, 3, 2, 3, 2, 3]", pc2.toString());
     }
     
-	@Test
+    @Test
     public void testChunkBy() {
         final PrintConsumer<String> printConsumer = new PrintConsumer<String>();
 
