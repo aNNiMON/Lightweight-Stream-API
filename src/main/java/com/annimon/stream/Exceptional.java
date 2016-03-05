@@ -151,7 +151,8 @@ public class Exceptional<T> {
      * @param consumer  a consumer function
      * @return an {@code Exceptional}
      */
-    public <E extends Throwable> Exceptional<T> ifExceptionIs(Class<E> throwableClass, Consumer<E> consumer) {
+    @SuppressWarnings("unchecked")
+    public <E extends Throwable> Exceptional<T> ifExceptionIs(Class<E> throwableClass, Consumer<? super E> consumer) {
         if ( (throwable != null) &&
                 (throwableClass.isAssignableFrom(throwable.getClass())) ) {
             consumer.accept((E) throwable);

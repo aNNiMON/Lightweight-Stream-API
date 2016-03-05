@@ -66,13 +66,13 @@ public class PredicateTest {
         TestUtils.testPrivateConstructor(Predicate.Util.class);
     }
     
-    private static final Predicate lessThan100 = new Predicate<Integer>() {
+    private static final Predicate<Integer> lessThan100 = new Predicate<Integer>() {
         @Override
         public boolean test(Integer value) {
             return value < 100;
         }
     };
     
-    private static final Predicate isEven = Functions.remainder(2);
+    private static final Predicate<Integer> isEven = Functions.remainder(2);
     
 }

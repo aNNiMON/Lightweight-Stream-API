@@ -125,13 +125,13 @@ public final class Collectors {
             final Function<? super T, ? extends K> keyMapper,
             final Function<? super T, ? extends V> valueMapper,
             final Supplier<M> mapFactory) {
-        return new CollectorsImpl<T, Map<K, V>, M>(
+        return new CollectorsImpl<T, M, M>(
                 
-                (Supplier<Map<K, V>>) mapFactory,
+                mapFactory,
                 
-                new BiConsumer<Map<K, V>, T>() {
+                new BiConsumer<M, T>() {
                     @Override
-                    public void accept(Map<K, V> map, T t) {
+                    public void accept(M map, T t) {
                         final K key = keyMapper.apply(t);
                         final V value = valueMapper.apply(t);
                         final V oldValue = map.get(key);
@@ -471,26 +471,31 @@ public final class Collectors {
             final Function<? super T, ? extends K> classifier,
             final Supplier<M> mapFactory,
             final Collector<? super T, A, D> downstream) {
-        
-        final Function<A, A> doownstreamFinisher = (Function<A, A>) downstream.finisher();
+
+        @SuppressWarnings("unchecked")
+        final Function<A, A> downstreamFinisher = (Function<A, A>) downstream.finisher();
         Function<Map<K, A>, M> finisher = null;
-        if (doownstreamFinisher != null) {
+        if (downstreamFinisher != null) {
             finisher = new Function<Map<K, A>, M>() {
                 @Override
                 public M apply(Map<K, A> map) {
                     // Update values of a map by a finisher function
                     for (Map.Entry<K, A> entry : map.entrySet()) {
                         A value = entry.getValue();
-                        value = doownstreamFinisher.apply(value);
+                        value = downstreamFinisher.apply(value);
                         entry.setValue(value);
                     }
-                    return (M) map;
+                    @SuppressWarnings("unchecked")
+                    M castedMap = (M) map;
+                    return castedMap;
                 }
             };
         }
-        
+
+        @SuppressWarnings("unchecked")
+        Supplier<Map<K, A>> castedMapFactory = (Supplier<Map<K, A>>) mapFactory;
         return new CollectorsImpl<T, Map<K, A>, M>(
-                (Supplier<Map<K, A>>) mapFactory,
+                castedMapFactory,
                 
                 new BiConsumer<Map<K, A>, T>() {
                     @Override
@@ -523,7 +528,7 @@ public final class Collectors {
     }
     
     @SuppressWarnings("unchecked")
-    private static <A, R> Function<A, R> castIdentity() {
+    static <A, R> Function<A, R> castIdentity() {
         return new Function<A, R>() {
             
             @Override
