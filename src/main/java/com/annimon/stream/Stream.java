@@ -656,6 +656,58 @@ public class Stream<T> {
     public <K> Stream<Map.Entry<K, List<T>>> groupBy(final Function<? super T, ? extends K> classifier) {
         return Stream.of( collect(Collectors.groupingBy(classifier)) );
     }
+	
+	/**
+     * Partitions {@code Stream} into {@code List}s according to the given classifier function. In contrast
+     * to {@link #groupBy(Function)}, this method assumes that the elements of the stream are sorted.
+     * Because of this assumption, it does not need to first collect all elements and then partition them.
+     * Instead, it can emit a {@code List} of elements when it reaches the first element that does not
+     * belong to the same chunk as the previous elements.
+     * <p>
+     * <p>This is an intermediate operation.
+     *
+     * @param <K> the type of the keys, which are the result of the classifier function
+     * @param classifier the classifier function
+     * @return the new stream
+     */
+    public <K> Stream<List<T>> chunkBy(final Function<? super T, ? extends K> classifier) {
+        return new Stream<List<T>>(new LsaIterator<List<T>>() {
+            private T next;
+            private boolean peekedNext;
+
+            @Override
+            public boolean hasNext() {
+                return peekedNext || iterator.hasNext();
+            }
+
+            @Override
+            public List<T> next() {
+                K key = classifier.apply(peek());
+
+                List<T> list = new ArrayList<T>();
+                do {
+                    list.add(takeNext());
+                }
+                while (iterator.hasNext() && key.equals(classifier.apply(peek())));
+
+                return list;
+            }
+
+            private T takeNext() {
+                T element = peek();
+                peekedNext = false;
+                return element;
+            }
+
+            private T peek() {
+                if (!peekedNext) {
+                    next = iterator.next();
+                    peekedNext = true;
+                }
+                return next;
+            }
+        });
+    }
     
     /**
      * Perform provided action to each elements.
