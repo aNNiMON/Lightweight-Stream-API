@@ -368,6 +368,33 @@ public class Stream<T> {
         });
     }
 
+    /**
+     * Combines two streams by applying specified combiner function to each element at same position.
+     *
+     * @param <F> the type of first stream elements
+     * @param <S> the type of second stream elements
+     * @param <R> the type of elements in resulting stream
+     * @param stream1  the first stream
+     * @param stream2  the second stream
+     * @param combiner the combiner function used to apply to each element
+     * @return the new stream
+     */
+    public static <F, S, R> Stream<R> zip(Stream<? extends F> stream1, Stream<? extends S> stream2, final BiFunction<? super F, ? super S, ? extends R> combiner) {
+        final Iterator<? extends F> it1 = stream1.iterator;
+        final Iterator<? extends S> it2 = stream2.iterator;
+        return new Stream<R>(new LsaIterator<R>() {
+            @Override
+            public boolean hasNext() {
+                return it1.hasNext() && it2.hasNext();
+            }
+
+            @Override
+            public R next() {
+                return combiner.apply(it1.next(), it2.next());
+            }
+        });
+    }
+
 
 //<editor-fold defaultstate="collapsed" desc="Implementation">
     static final long MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
@@ -602,6 +629,7 @@ public class Stream<T> {
     public Stream<T> sorted() {
         return sorted(new Comparator<T>() {
 
+            @SuppressWarnings("unchecked")
             @Override
             public int compare(T o1, T o2) {
                 Comparable c1 = (Comparable) o1;

@@ -214,6 +214,19 @@ public class StreamTest {
         assertEquals("11223344", consumer.toString());
     }
 
+    @Test
+    public void testZip() {
+        Stream<Integer> shorter = Stream.rangeClosed(1, 5);
+        Stream<Integer> longer = Stream.rangeClosed(1, 10);
+        List<Integer> zipped = Stream.zip(shorter, longer, new BiFunction<Integer, Integer, Integer>() {
+            @Override
+            public Integer apply(Integer value1, Integer value2) {
+                return value1 + value2;
+            }
+        }).collect(Collectors.<Integer>toList());
+        assertEquals(Arrays.asList(2, 4, 6, 8, 10), zipped);
+    }
+
 
     @Test
     public void testFilter() {
