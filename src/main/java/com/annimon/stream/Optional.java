@@ -37,7 +37,7 @@ public class Optional<T> {
      * @see #of(java.lang.Object) 
      */
     public static <T> Optional<T> ofNullable(T value) {
-        return value == null ? (Optional<T>) EMPTY : of(value);
+        return value == null ? Optional.<T>empty() : of(value);
     }
     
     /**
@@ -46,6 +46,7 @@ public class Optional<T> {
      * @param <T> the type of value
      * @return an {@code Optional}
      */
+    @SuppressWarnings("unchecked")
     public static <T> Optional<T> empty() {
         return (Optional<T>) EMPTY;
     }
@@ -100,7 +101,7 @@ public class Optional<T> {
      */
     public Optional<T> filter(Predicate<? super T> predicate) {
         if (!isPresent()) return this;
-        return predicate.test(value) ? this : (Optional<T>) EMPTY;
+        return predicate.test(value) ? this : Optional.<T>empty();
     }
     
     /**

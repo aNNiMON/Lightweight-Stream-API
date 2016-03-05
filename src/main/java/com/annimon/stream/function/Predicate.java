@@ -82,7 +82,7 @@ public interface Predicate<T> {
          * @return a composed {@code Predicate}
          * @throws NullPointerException if {@code p1} is null
          */
-        public static <T> Predicate<? super T> negate(final Predicate<? super T> p1) {
+        public static <T> Predicate<T> negate(final Predicate<? super T> p1) {
             return new Predicate<T>() {
                 @Override
                 public boolean test(T value) {
