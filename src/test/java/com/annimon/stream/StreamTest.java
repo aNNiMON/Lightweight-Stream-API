@@ -474,6 +474,60 @@ public class StreamTest {
     }
 
     @Test
+    public void testTakeWhile() {
+        final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
+        long count = Stream.of(2, 4, 6, 7, 8, 10, 11)
+                .takeWhile(Functions.remainder(2))
+                .peek(consumer)
+                .count();
+        assertEquals(3, count);
+        assertEquals("246", consumer.toString());
+    }
+
+    @Test
+    public void testTakeWhileNonFirstMatch() {
+        long count = Stream.of(2, 4, 6, 7, 8, 10, 11)
+                .takeWhile(Functions.remainder(3))
+                .count();
+        assertEquals(0, count);
+    }
+
+    @Test
+    public void testTakeWhileAllMatch() {
+        long count = Stream.of(2, 4, 6, 7, 8, 10, 11)
+                .takeWhile(Functions.remainder(1))
+                .count();
+        assertEquals(7, count);
+    }
+
+    @Test
+    public void testDropWhile() {
+        final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
+        long count = Stream.of(2, 4, 6, 7, 8, 10, 11)
+                .dropWhile(Functions.remainder(2))
+                .peek(consumer)
+                .count();
+        assertEquals(4, count);
+        assertEquals("781011", consumer.toString());
+    }
+
+    @Test
+    public void testDropNonFirstMatch() {
+        long count = Stream.of(2, 4, 6, 7, 8, 10, 11)
+                .dropWhile(Functions.remainder(3))
+                .count();
+        assertEquals(7, count);
+    }
+
+    @Test
+    public void testDropWhileAllMatch() {
+        long count = Stream.of(2, 4, 6, 7, 8, 10, 11)
+                .dropWhile(Functions.remainder(1))
+                .count();
+        assertEquals(0, count);
+    }
+
+    @Test
     public void testLimit() {
         final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
         Stream.range(0, 10)

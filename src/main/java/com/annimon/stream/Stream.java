@@ -711,6 +711,91 @@ public class Stream<T> {
     }
 
     /**
+     * Takes elements while the predicate is true.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @param predicate  the predicate used to take elements
+     * @return the new stream
+     */
+    public Stream<T> takeWhile(final Predicate<? super T> predicate) {
+        return new Stream<T>(new LsaIterator<T>() {
+
+            private T next;
+            private boolean hasNext, isInit;
+
+            @Override
+            public boolean hasNext() {
+                if (!isInit) {
+                    nextIteration();
+                    isInit = true;
+                }
+                return hasNext;
+            }
+
+            @Override
+            public T next() {
+                final T result = next;
+                nextIteration();
+                return result;
+            }
+
+            private void nextIteration() {
+                hasNext = iterator.hasNext() && predicate.test(next = iterator.next());
+            }
+        });
+    }
+
+    /**
+     * Drops elements while the predicate is true and returns the rest.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @param predicate  the predicate used to drop elements
+     * @return the new stream
+     */
+    public Stream<T> dropWhile(final Predicate<? super T> predicate) {
+        return new Stream<T>(new LsaIterator<T>() {
+
+            private T next;
+            private boolean hasNext, isInit;
+
+            @Override
+            public boolean hasNext() {
+                if (!isInit) {
+                    nextIteration();
+                    isInit = true;
+                }
+                return hasNext;
+            }
+
+            @Override
+            public T next() {
+                final T result = next;
+                nextIteration();
+                return result;
+            }
+
+            private void nextIteration() {
+                if (!isInit) {
+                    // Skip first time
+                    while (hasNext = iterator.hasNext()) {
+                        next = iterator.next();
+                        if (!predicate.test(next)) {
+                            return;
+                        }
+                    }
+                }
+
+                hasNext = hasNext && iterator.hasNext();
+                if (!hasNext) return;
+
+                next = iterator.next();
+            }
+        });
+    }
+
+    /**
      * Returns {@code Stream} with first {@code maxSize} elements.
      *
      * <p>This is a short-circuiting stateful intermediate operation.
