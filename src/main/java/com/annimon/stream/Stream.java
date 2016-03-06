@@ -7,8 +7,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 
 /**
@@ -659,7 +661,7 @@ public class Stream<T> {
     public <K> Stream<Map.Entry<K, List<T>>> groupBy(final Function<? super T, ? extends K> classifier) {
         return Stream.of( collect(Collectors.groupingBy(classifier)) );
     }
-	
+
     /**
      * Partitions {@code Stream} into {@code List}s according to the given classifier function. In contrast
      * to {@link #groupBy(Function)}, this method assumes that the elements of the stream are sorted.
@@ -711,7 +713,103 @@ public class Stream<T> {
             }
         });
     }
-    
+
+    /**
+     * Samples the {@code Stream} by emitting every n-th element.
+     * <p>
+     * <p>This is an intermediate operation.
+     *
+     * @param stepWidth step width
+     * @return the new stream
+     */
+    public Stream<T> sample(final int stepWidth) {
+        return slidingWindow(1, stepWidth).map(new Function<List<T>, T>() {
+            @Override
+            public T apply(List<T> list) {
+                return list.get(0);
+            }
+        });
+    }
+
+    /**
+     * Partitions {@code Stream} into {@code List}s of fixed size by sliding over the elements of the stream.
+     * It starts with the first element and in each iteration moves by 1. This method yields the same results
+     * as calling {@link #slidingWindow(int, int)} with a {@code stepWidth} of 1. <p> <p>This is an
+     * intermediate operation.
+     *
+     * @param windowSize number of elements that will be emitted together in a list
+     * @return the new stream
+     * @see #slidingWindow(int, int)
+     */
+    public Stream<List<T>> slidingWindow(final int windowSize) {
+        return slidingWindow(windowSize, 1);
+    }
+
+    /**
+     * Partitions {@code Stream} into {@code List}s of fixed size by sliding over the elements of the stream.
+     * It starts with the first element and in each iteration moves by the given step width. This method
+     * allows, for example, to partition the elements into batches of {@code windowSize} elements (by using a
+     * step width equal to the specified window size) or to sample every n-th element (by using a window size
+     * of 1 and a step width of n).
+     * <p>
+     * <p>This is an intermediate operation.
+     * <p>
+     * <p>Examples: <pre>
+     * elements: [1, 1, 1, 2, 2, 2, 3, 3, 3]    windowSize: 3   stepWidth: 3
+     *
+     * =&gt; [1, 1, 1], [2, 2, 2] [3, 3, 3]
+     *
+     *
+     * elements: [1, 2, 3, 1, 2, 3, 1, 2, 3]    windowSize: 2   stepWidth: 3
+     *
+     * =&gt; [1, 2], [1, 2], [1, 2]
+     *
+     *
+     * elements: [1, 2, 3, 4, 5, 6]             windowSize: 3   stepWidth: 1
+     *
+     * =&gt; [1, 2, 3], [2, 3, 4], [3, 4, 5], [4, 5, 6]
+     * </pre>
+     *
+     * @param windowSize number of elements that will be emitted together in a list
+     * @param stepWidth  step width
+     * @return the new stream
+     */
+    public Stream<List<T>> slidingWindow(final int windowSize, final int stepWidth) {
+        return new Stream<List<T>>(new LsaIterator<List<T>>() {
+            private final Queue<T> queue = new LinkedList<T>();
+
+            @Override
+            public boolean hasNext() {
+                return iterator.hasNext();
+            }
+
+            @Override
+            public List<T> next() {
+                int i = queue.size();
+                while (iterator.hasNext() && i < windowSize) {
+                    queue.offer(iterator.next());
+                    i++;
+                }
+
+                // the elements that are currently in the queue are the elements of our current window
+                List<T> list = new ArrayList<T>(queue);
+
+                // remove stepWidth elements from the queue
+                int queueSize = queue.size();
+                for (int j = 0; j < stepWidth && j < queueSize; j++) {
+                    queue.poll();
+                }
+
+                // if the stepWidth is greater than the windowSize, skip (stepWidth - windowSize) elements
+                for (int j = windowSize; iterator.hasNext() && j < stepWidth; j++) {
+                    iterator.next();
+                }
+
+                return list;
+            }
+        });
+    }
+
     /**
      * Perform provided action to each elements.
      *
