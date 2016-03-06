@@ -490,6 +490,20 @@ public class StreamTest {
     }
 
     @Test
+    public void testChunkBy() {
+        final PrintConsumer<List<Integer>> consumer = new PrintConsumer<List<Integer>>();
+
+        Stream.of(1, 1, 2, 2, 2, 3, 1).chunkBy(new Function<Integer, Integer>() {
+            @Override
+            public Integer apply(Integer value) {
+                return value;
+            }
+        }).forEach(consumer);
+
+        assertEquals("[1, 1][2, 2, 2][3][1]", consumer.toString());
+    }
+	
+    @Test
     public void testPeek() {
         final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
         long count = Stream.range(0, 5)
