@@ -488,6 +488,39 @@ public class StreamTest {
         assertEquals("[1, 1, 1]", pc1.toString());
         assertEquals("[2, 3, 2, 3, 2, 3]", pc2.toString());
     }
+	
+    @Test
+    public void testSample() {
+        final PrintConsumer<Integer> pc1 = new PrintConsumer<Integer>();
+        Stream.of(1, 2, 3, 1, 2, 3, 1, 2, 3).sample(3).forEach(pc1);
+        assertEquals("111", pc1.toString());
+    }
+
+    @Test
+    public void testSlidingWindow() {
+        long count = Stream.of(new ArrayList<Integer>()).slidingWindow(5, 6).count();
+        assertEquals(0, count);
+
+        final PrintConsumer<List<Integer>> pc1 = new PrintConsumer<List<Integer>>();
+        Stream.of(1, 1, 1, 2, 2, 2, 3, 3, 3).slidingWindow(3, 3).forEach(pc1);
+        assertEquals("[1, 1, 1][2, 2, 2][3, 3, 3]", pc1.toString());
+
+        final PrintConsumer<List<Integer>> pc2 = new PrintConsumer<List<Integer>>();
+        Stream.of(1, 2, 3, 1, 2, 3, 1, 2, 3).slidingWindow(2, 3).forEach(pc2);
+        assertEquals("[1, 2][1, 2][1, 2]", pc2.toString());
+
+        final PrintConsumer<List<Integer>> pc3 = new PrintConsumer<List<Integer>>();
+        Stream.of(1, 2, 3, 4, 5, 6).slidingWindow(3, 1).forEach(pc3);
+        assertEquals("[1, 2, 3][2, 3, 4][3, 4, 5][4, 5, 6]", pc3.toString());
+
+        final PrintConsumer<List<Integer>> pc4 = new PrintConsumer<List<Integer>>();
+        Stream.of(1, 2, 3, 4, 5, 6).slidingWindow(3).forEach(pc4);
+        assertEquals("[1, 2, 3][2, 3, 4][3, 4, 5][4, 5, 6]", pc4.toString());
+
+        final PrintConsumer<List<Integer>> pc5 = new PrintConsumer<List<Integer>>();
+        Stream.of(1, 2).slidingWindow(3, 1).forEach(pc5);
+        assertEquals("[1, 2]", pc5.toString());
+    }
 
     @Test
     public void testPeek() {
