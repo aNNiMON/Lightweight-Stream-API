@@ -110,14 +110,14 @@ public class CollectorsTest {
     
     @Test
     public void testJoiningWithDelimiterPrefixAndSuffixEmpty() {
-        String text = Stream.of(Collections.<String>emptyList())
+        String text = Stream.<String>empty()
                 .collect(Collectors.joining(", ", "prefix|", "|suffix", "empty"));
         assertEquals("empty", text);
     }
     
     @Test
     public void testJoiningWithDelimiterPrefixAndSuffixEmptyStream() {
-        String text = Stream.of(Collections.<String>emptyList())
+        String text = Stream.<String>empty()
                 .collect(Collectors.joining(", ", "prefix|", "|suffix"));
         assertEquals("prefix||suffix", text);
     }
