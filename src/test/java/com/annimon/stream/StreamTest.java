@@ -27,6 +27,11 @@ import org.junit.Test;
 public class StreamTest {
 
     @Test
+    public void testStreamEmpty() {
+        assertEquals(0, Stream.empty().count());
+    }
+    
+    @Test
     public void testStreamOfList() {
         final PrintConsumer<String> consumer = new PrintConsumer<String>();
         final List<String> list = new ArrayList<String>(4);
@@ -493,12 +498,9 @@ public class StreamTest {
     public void testChunkBy() {
         final PrintConsumer<List<Integer>> consumer = new PrintConsumer<List<Integer>>();
 
-        Stream.of(1, 1, 2, 2, 2, 3, 1).chunkBy(new Function<Integer, Integer>() {
-            @Override
-            public Integer apply(Integer value) {
-                return value;
-            }
-        }).forEach(consumer);
+        Stream.of(1, 1, 2, 2, 2, 3, 1)
+                .chunkBy(UnaryOperator.Util.<Integer>identity())
+                .forEach(consumer);
 
         assertEquals("[1, 1][2, 2, 2][3][1]", consumer.toString());
     }
@@ -512,7 +514,7 @@ public class StreamTest {
 
     @Test
     public void testSlidingWindow() {
-        long count = Stream.of(new ArrayList<Integer>()).slidingWindow(5, 6).count();
+        long count = Stream.<Integer>empty().slidingWindow(5, 6).count();
         assertEquals(0, count);
 
         final PrintConsumer<List<Integer>> pc1 = new PrintConsumer<List<Integer>>();
@@ -740,8 +742,7 @@ public class StreamTest {
 
     @Test
     public void testReduceOptionalOnEmptyStream() {
-        Optional<Integer> result = Stream.of(1, 3, 5, 7, 9)
-                .filter(Functions.remainder(2))
+        Optional<Integer> result = Stream.<Integer>empty()
                 .reduce(Functions.addition());
 
         assertFalse(result.isPresent());
@@ -805,8 +806,7 @@ public class StreamTest {
 
     @Test
     public void testMinEmpty() {
-        Optional<Integer> min = Stream.of(1, 3, 5, 7, 9)
-                .filter(Functions.remainder(2))
+        Optional<Integer> min = Stream.<Integer>empty()
                 .min(Functions.naturalOrder());
 
         assertFalse(min.isPresent());
@@ -834,8 +834,7 @@ public class StreamTest {
 
     @Test
     public void testMaxEmpty() {
-        Optional<Integer> max = Stream.of(1, 3, 5, 7, 9)
-                .filter(Functions.remainder(2))
+        Optional<Integer> max = Stream.<Integer>empty()
                 .max(Functions.naturalOrder());
 
         assertFalse(max.isPresent());
@@ -912,8 +911,7 @@ public class StreamTest {
 
     @Test
     public void testFindFirstOnEmptyStream() {
-        Optional<Integer> result = Stream.of(1, 3, 5, 7)
-                .filter(Functions.remainder(2))
+        Optional<Integer> result = Stream.<Integer>empty()
                 .findFirst();
         assertFalse(result.isPresent());
     }

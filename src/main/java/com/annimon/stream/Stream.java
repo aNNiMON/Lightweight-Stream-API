@@ -21,6 +21,16 @@ import java.util.Set;
 public class Stream<T> {
 
     /**
+     * Returns an empty stream.
+     *
+     * @param <T> the type of the stream elements
+     * @return the new empty stream
+     */
+    public static <T> Stream<T> empty() {
+        return of(Collections.EMPTY_LIST);
+    }
+
+    /**
      * Creates a {@code Stream} from {@code List}.
      *
      * @param <T> the type of the stream elements
