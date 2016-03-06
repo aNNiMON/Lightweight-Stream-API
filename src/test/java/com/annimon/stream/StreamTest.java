@@ -491,31 +491,16 @@ public class StreamTest {
 
     @Test
     public void testChunkBy() {
-        final PrintConsumer<String> printConsumer = new PrintConsumer<String>();
+        final PrintConsumer<List<Integer>> consumer = new PrintConsumer<List<Integer>>();
 
         Stream.of(1, 1, 2, 2, 2, 3, 1).chunkBy(new Function<Integer, Integer>() {
             @Override
             public Integer apply(Integer value) {
                 return value;
             }
-        }).map(new Function<List<Integer>, String>() {
-            @Override
-            public String apply(List<Integer> list) {
-                StringBuilder sb = new StringBuilder();
-                sb.append("[");
-                for (Integer i : list) {
-                    sb.append(i);
-                    sb.append(", ");
-                }
-                sb.deleteCharAt(sb.length() - 2); // remove trailing comma
-                sb.deleteCharAt(sb.length() - 1); // remove trailing white space
-                sb.append("]");
+        }).forEach(consumer);
 
-                return sb.toString();
-            }
-        }).forEach(printConsumer);
-
-        assertEquals("[1, 1][2, 2, 2][3][1]", printConsumer.toString());
+        assertEquals("[1, 1][2, 2, 2][3][1]", consumer.toString());
     }
 	
     @Test
