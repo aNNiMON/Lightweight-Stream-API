@@ -2,32 +2,32 @@ package com.annimon.stream.function;
 
 /**
  * Represents a function which produces result from two input arguments.
- * 
+ *
  * @param <T> the type of the first argument
  * @param <U> the type of the second argument
  * @param <R> the type of the result of the function
  */
 @FunctionalInterface
 public interface BiFunction<T, U, R> {
-    
+
     /**
      * Applies this function to the given arguments.
-     * 
+     *
      * @param value1  the first argument
      * @param value2  the second argument
      * @return the function result
      */
     R apply(T value1, U value2);
-    
+
     class Util {
-        
+
         private Util() { }
-        
+
         /**
-         * Compose {@code BiFunction} calls.
-         * 
+         * Composes {@code BiFunction} calls.
+         *
          * <p>{@code f2.apply(f1.apply(t, u)) }
-         * 
+         *
          * @param <T> the type of the first argument
          * @param <U> the type of the second argument
          * @param <R> the type of the result of the {@code BiFunction f1}

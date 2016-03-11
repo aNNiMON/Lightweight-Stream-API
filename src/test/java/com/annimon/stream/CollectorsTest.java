@@ -27,10 +27,10 @@ public class CollectorsTest {
         Collection<Integer> result = Stream.range(0, 10)
                 .collect(Collectors.toCollection(new Supplier<Collection<Integer>>() {
                     @Override
-                        public Collection<Integer> get() {
-                            return new LinkedList<Integer>();
-                        }
-                    }));
+                    public Collection<Integer> get() {
+                        return new LinkedList<Integer>();
+                    }
+                }));
         
         assertEquals(10, result.size());
         int index = 0;

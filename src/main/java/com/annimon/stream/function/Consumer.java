@@ -2,29 +2,29 @@ package com.annimon.stream.function;
 
 /**
  * Represents an operation on input argument.
- * 
+ *
  * @param <T> the type of the input to the operation
  * @see BiConsumer
  */
 @FunctionalInterface
 public interface Consumer<T> {
-    
+
     /**
      * Performs operation on argument.
-     * 
+     *
      * @param value  the input argument
      */
     void accept(T value);
-    
+
     class Util {
-        
+
         private Util() { }
-        
+
         /**
-         * Compose {@code Consumer} calls.
-         * 
+         * Composes {@code Consumer} calls.
+         *
          * <p>{@code c1.accept(value); c2.accept(value); }
-         * 
+         *
          * @param <T> the type of the input to the operation
          * @param c1  the first {@code Consumer}
          * @param c2  the second {@code Consumer}

@@ -370,7 +370,7 @@ public class Stream<T> {
      * @param <R> the type of elements in resulting stream
      * @param stream1  the first stream
      * @param stream2  the second stream
-     * @param combiner the combiner function used to apply to each element
+     * @param combiner  the combiner function used to apply to each element
      * @return the new stream
      */
     public static <F, S, R> Stream<R> zip(Stream<? extends F> stream1, Stream<? extends S> stream2, final BiFunction<? super F, ? super S, ? extends R> combiner) {
@@ -678,11 +678,11 @@ public class Stream<T> {
      * Because of this assumption, it does not need to first collect all elements and then partition them.
      * Instead, it can emit a {@code List} of elements when it reaches the first element that does not
      * belong to the same chunk as the previous elements.
-     * <p>
+     *
      * <p>This is an intermediate operation.
      *
      * @param <K> the type of the keys, which are the result of the classifier function
-     * @param classifier the classifier function
+     * @param classifier  the classifier function
      * @return the new stream
      */
     public <K> Stream<List<T>> chunkBy(final Function<? super T, ? extends K> classifier) {
@@ -726,10 +726,10 @@ public class Stream<T> {
 
     /**
      * Samples the {@code Stream} by emitting every n-th element.
-     * <p>
+     *
      * <p>This is an intermediate operation.
      *
-     * @param stepWidth step width
+     * @param stepWidth  step width
      * @return the new stream
      */
     public Stream<T> sample(final int stepWidth) {
@@ -744,10 +744,11 @@ public class Stream<T> {
     /**
      * Partitions {@code Stream} into {@code List}s of fixed size by sliding over the elements of the stream.
      * It starts with the first element and in each iteration moves by 1. This method yields the same results
-     * as calling {@link #slidingWindow(int, int)} with a {@code stepWidth} of 1. <p> <p>This is an
-     * intermediate operation.
+     * as calling {@link #slidingWindow(int, int)} with a {@code stepWidth} of 1.
      *
-     * @param windowSize number of elements that will be emitted together in a list
+     * <p>This is an intermediate operation.
+     *
+     * @param windowSize  number of elements that will be emitted together in a list
      * @return the new stream
      * @see #slidingWindow(int, int)
      */
@@ -761,9 +762,9 @@ public class Stream<T> {
      * allows, for example, to partition the elements into batches of {@code windowSize} elements (by using a
      * step width equal to the specified window size) or to sample every n-th element (by using a window size
      * of 1 and a step width of n).
-     * <p>
+     *
      * <p>This is an intermediate operation.
-     * <p>
+     *
      * <p>Examples: <pre>
      * elements: [1, 1, 1, 2, 2, 2, 3, 3, 3]    windowSize: 3   stepWidth: 3
      *
@@ -780,7 +781,7 @@ public class Stream<T> {
      * =&gt; [1, 2, 3], [2, 3, 4], [3, 4, 5], [4, 5, 6]
      * </pre>
      *
-     * @param windowSize number of elements that will be emitted together in a list
+     * @param windowSize  number of elements that will be emitted together in a list
      * @param stepWidth  step width
      * @return the new stream
      */
