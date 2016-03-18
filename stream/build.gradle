@@ -1,0 +1,48 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+archivesBaseName = 'stream'
+version = '1.0.8-SNAPSHOT'
+group = 'com.annimon'
+ext.isReleaseVersion = !version.contains("SNAPSHOT")
+
+sourceCompatibility = '1.6'
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+if (!hasProperty('mainClass')) {
+    ext.mainClass = ''
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+// coveralls
+
+apply plugin: 'cobertura'
+apply plugin: 'com.github.kt3k.coveralls'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'net.saliman:gradle-cobertura-plugin:2.0.0'
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.4.0'
+    }
+}
+
+cobertura {
+    coverageFormats = ['html', 'xml']
+    coverageExcludes = ['.*com.annimon.stream.LsaIterator', '.*com.annimon.stream.LsaExtIterator']
+}
+
+// maven signing
+if (ext.isReleaseVersion) {
+    apply from: 'signing.gradle'
+}
