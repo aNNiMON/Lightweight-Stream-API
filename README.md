@@ -57,7 +57,7 @@ public final class Reverse<T> implements UnaryOperator<Stream<T>> {
 }
 ```
 
-More examples you can find [here](https://github.com/aNNiMON/Lightweight-Stream-API/blob/master/src/test/java/com/annimon/stream/CustomOperators.java).
+More examples you can find [here](https://github.com/aNNiMON/Lightweight-Stream-API/blob/master/stream/src/test/java/com/annimon/stream/CustomOperators.java).
 
 
 ### Download
