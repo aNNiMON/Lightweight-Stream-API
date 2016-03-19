@@ -12,22 +12,22 @@ public class StreamMatcher {
 
     private StreamMatcher() { }
 
-    public static Matcher isEmpty() {
+    public static Matcher<Stream<?>> isEmpty() {
         return new IsEmptyMatcher();
     }
 
-    public static Matcher isNotEmpty() {
+    public static Matcher<Stream<?>> isNotEmpty() {
         return not(isEmpty());
     }
 
-    public static <T> Matcher elements(Matcher<T> matcher) {
+    public static <T> Matcher<Stream<T>> elements(Matcher<List<T>> matcher) {
         return new ElementsMatcher<T>(matcher);
     }
 
-    public static class IsEmptyMatcher extends TypeSafeDiagnosingMatcher<Stream> {
+    public static class IsEmptyMatcher extends TypeSafeDiagnosingMatcher<Stream<?>> {
 
         @Override
-        protected boolean matchesSafely(Stream stream, Description mismatchDescription) {
+        protected boolean matchesSafely(Stream<?> stream, Description mismatchDescription) {
             mismatchDescription.appendText("Stream was not empty");
             return stream.count() == 0;
         }
@@ -40,10 +40,10 @@ public class StreamMatcher {
 
     public static class ElementsMatcher<T> extends TypeSafeDiagnosingMatcher<Stream<T>> {
 
-        private final Matcher<? super T> matcher;
+        private final Matcher<List<T>> matcher;
         private List<T> streamElements;
 
-        public ElementsMatcher(Matcher<? super T> matcher) {
+        public ElementsMatcher(Matcher<List<T>> matcher) {
             this.matcher = matcher;
         }
 

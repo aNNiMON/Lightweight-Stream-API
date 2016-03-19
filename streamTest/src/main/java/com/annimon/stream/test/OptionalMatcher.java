@@ -10,18 +10,18 @@ public class OptionalMatcher {
 
     private OptionalMatcher() { }
 
-    public static Matcher isPresent() {
+    public static Matcher<Optional<?>> isPresent() {
         return new IsPresentMatcher();
     }
 
-    public static Matcher isEmpty() {
+    public static Matcher<Optional<?>> isEmpty() {
         return not(isPresent());
     }
 
-    public static class IsPresentMatcher extends TypeSafeDiagnosingMatcher<Optional> {
+    public static class IsPresentMatcher extends TypeSafeDiagnosingMatcher<Optional<?>> {
 
         @Override
-        protected boolean matchesSafely(Optional optional, Description mismatchDescription) {
+        protected boolean matchesSafely(Optional<?> optional, Description mismatchDescription) {
             mismatchDescription.appendText("Optional was empty");
             return optional.isPresent();
         }

@@ -1,11 +1,12 @@
 package com.annimon.stream.test;
 
 import com.annimon.stream.Optional;
+import static com.annimon.stream.test.CommonMatcher.description;
+import static com.annimon.stream.test.CommonMatcher.hasOnlyPrivateConstructors;
 import static com.annimon.stream.test.OptionalMatcher.isEmpty;
 import static com.annimon.stream.test.OptionalMatcher.isPresent;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.is;
-import org.hamcrest.StringDescription;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
@@ -13,7 +14,7 @@ public class OptionalMatcherTest {
 
     @Test
     public void testPrivateConstructor() throws Exception {
-        TestUtils.testPrivateConstructor(OptionalMatcher.class);
+        assertThat(OptionalMatcher.class, hasOnlyPrivateConstructors());
     }
 
     @Test
@@ -22,9 +23,7 @@ public class OptionalMatcherTest {
         assertThat(optional, isPresent());
         assertThat(optional, not(isEmpty()));
 
-        StringDescription description = new StringDescription();
-        isPresent().describeTo(description);
-        assertThat(description.toString(), is("Optional value should be present"));
+        assertThat(isPresent(), description(is("Optional value should be present")));
     }
 
     @Test

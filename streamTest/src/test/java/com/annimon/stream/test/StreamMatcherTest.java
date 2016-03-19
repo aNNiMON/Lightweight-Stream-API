@@ -1,6 +1,8 @@
 package com.annimon.stream.test;
 
 import com.annimon.stream.Stream;
+import static com.annimon.stream.test.CommonMatcher.description;
+import static com.annimon.stream.test.CommonMatcher.hasOnlyPrivateConstructors;
 import static com.annimon.stream.test.StreamMatcher.elements;
 import static com.annimon.stream.test.StreamMatcher.isEmpty;
 import static com.annimon.stream.test.StreamMatcher.isNotEmpty;
@@ -11,7 +13,6 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
-import org.hamcrest.core.IsNot;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
@@ -19,7 +20,7 @@ public class StreamMatcherTest {
 
     @Test
     public void testPrivateConstructor() throws Exception {
-        TestUtils.testPrivateConstructor(StreamMatcher.class);
+        assertThat(StreamMatcher.class, hasOnlyPrivateConstructors());
     }
 
     @Test
@@ -42,11 +43,9 @@ public class StreamMatcherTest {
 
         assertFalse(elements(is(expected)).matches(Stream.<Integer>empty()));
 
-        StringDescription description = new StringDescription();
-        matcher.describeTo(description);
-        assertThat(description.toString(), allOf(
-                containsString("Stream elements is"),
+        assertThat(matcher, description(allOf(
+                containsString("Stream elements is "),
                 containsString(expected.toString())
-        ));
+        )));
     }
 }
