@@ -38,6 +38,7 @@ public class StreamMatcherTest {
         final List<Integer> expected = Arrays.asList(0, 1, 2, 3, 4);
         final Matcher<Stream<Integer>> matcher = elements(is(expected));
         assertThat(stream, matcher);
+        assertTrue(matcher.matches(stream));
 
         assertFalse(elements(is(expected)).matches(Stream.<Integer>empty()));
 
