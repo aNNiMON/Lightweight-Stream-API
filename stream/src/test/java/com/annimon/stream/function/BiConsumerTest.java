@@ -1,8 +1,8 @@
 package com.annimon.stream.function;
 
-import com.annimon.stream.TestUtils;
-import org.junit.Test;
+import static com.annimon.stream.test.CommonMatcher.hasOnlyPrivateConstructors;
 import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  * Tests {@code BiConsumer}.
@@ -46,7 +46,7 @@ public class BiConsumerTest {
     
     @Test
     public void testPrivateConstructor() throws Exception {
-        TestUtils.testPrivateConstructor(BiConsumer.Util.class);
+        assertThat(BiConsumer.Util.class, hasOnlyPrivateConstructors());
     }
     
     private static final BiConsumer<IntHolder, IntHolder> increment = new BiConsumer<IntHolder, IntHolder>() {

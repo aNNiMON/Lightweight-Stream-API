@@ -5,7 +5,10 @@ import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Predicate;
 import com.annimon.stream.function.Supplier;
 import com.annimon.stream.function.UnaryOperator;
+import static com.annimon.stream.test.OptionalMatcher.isEmpty;
+import static com.annimon.stream.test.OptionalMatcher.isPresent;
 import java.util.NoSuchElementException;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -42,12 +45,12 @@ public final class OptionalTest {
     
     @Test
     public void testIsPresent() {
-        assertTrue(Optional.of(10).isPresent());
+        assertThat(Optional.of(10), isPresent());
     }
     
     @Test
     public void testIsPresentOnEmptyOptional() {
-        assertFalse(Optional.ofNullable(null).isPresent());
+        assertThat(Optional.ofNullable(null), isEmpty());
     }
     
     @Test
@@ -64,8 +67,8 @@ public final class OptionalTest {
     public void testFilter() {
         Optional<Integer> result = Optional.of(10)
                 .filter(Predicate.Util.negate(Functions.remainder(2)));
-        
-        assertFalse(result.isPresent());
+
+        assertThat(result, isEmpty());
     }
     
     @Test
@@ -75,6 +78,7 @@ public final class OptionalTest {
                         .map(UnaryOperator.Util.<Integer>identity())
                         .isPresent());
     }
+
     @Test
     public void testMapAsciiToString() {
         Optional<String> result = Optional.of(65)
@@ -84,8 +88,8 @@ public final class OptionalTest {
                         return String.valueOf((char) value.intValue());
                     }
                 });
-        
-        assertEquals("A", result.get());
+
+        assertThat(result.get(), is("A"));
     }
     
     @Test
@@ -98,7 +102,7 @@ public final class OptionalTest {
                     }
                 });
         
-        assertEquals("A", result.get());
+        assertThat(result.get(), is("A"));
     }
     
     @Test
@@ -110,8 +114,8 @@ public final class OptionalTest {
                         return Optional.ofNullable(String.valueOf((char) value.intValue()));
                     }
                 });
-        
-        assertFalse(result.isPresent());
+
+        assertThat(result, isEmpty());
     }
     
     @Test(expected = NullPointerException.class)

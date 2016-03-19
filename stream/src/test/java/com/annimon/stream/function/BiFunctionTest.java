@@ -1,10 +1,10 @@
 package com.annimon.stream.function;
 
 import com.annimon.stream.Functions;
-import com.annimon.stream.TestUtils;
+import static com.annimon.stream.test.CommonMatcher.hasOnlyPrivateConstructors;
 import java.util.Locale;
-import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  * Tests {@code BiFunction}.
@@ -46,7 +46,7 @@ public class BiFunctionTest {
     
     @Test
     public void testPrivateConstructor() throws Exception {
-        TestUtils.testPrivateConstructor(BiFunction.Util.class);
+        assertThat(BiFunction.Util.class, hasOnlyPrivateConstructors());
     }
     
     private static final BiFunction<Character, Boolean, String> toString = new BiFunction<Character, Boolean, String>() {

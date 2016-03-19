@@ -1,10 +1,10 @@
 package com.annimon.stream.function;
 
 import com.annimon.stream.Functions;
-import com.annimon.stream.TestUtils;
+import static com.annimon.stream.test.CommonMatcher.hasOnlyPrivateConstructors;
 import java.util.Locale;
-import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  * Tests {@code Function}.
@@ -43,7 +43,7 @@ public class FunctionTest {
 
     @Test
     public void testPrivateConstructor() throws Exception {
-        TestUtils.testPrivateConstructor(Function.Util.class);
+        assertThat(Function.Util.class, hasOnlyPrivateConstructors());
     }
 
     private static final Function<Character, String> toString = Functions.<Character>convertToString();

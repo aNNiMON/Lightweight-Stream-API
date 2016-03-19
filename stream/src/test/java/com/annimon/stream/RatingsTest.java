@@ -109,7 +109,7 @@ public class RatingsTest {
                 // lines to string
                 .collect(Collectors.joining("\n"));
         
-        /* Scala analog
+        /* Scala analogue
         .flatMap(filename => Source.fromFile(filename, "UTF-8").getLines)
   	.map(s => s.split("\\s+"))
   	.map { arr => (arr(0), arr

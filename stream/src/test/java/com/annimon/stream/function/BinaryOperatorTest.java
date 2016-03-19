@@ -1,7 +1,7 @@
 package com.annimon.stream.function;
 
 import com.annimon.stream.Functions;
-import com.annimon.stream.TestUtils;
+import static com.annimon.stream.test.CommonMatcher.hasOnlyPrivateConstructors;
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.Assert.*;
@@ -65,6 +65,6 @@ public class BinaryOperatorTest {
     
     @Test
     public void testPrivateConstructor() throws Exception {
-        TestUtils.testPrivateConstructor(BinaryOperator.Util.class);
+        assertThat(BinaryOperator.Util.class, hasOnlyPrivateConstructors());
     }
 }
