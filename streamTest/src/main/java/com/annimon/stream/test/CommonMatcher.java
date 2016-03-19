@@ -1,6 +1,7 @@
 package com.annimon.stream.test;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
@@ -25,9 +26,24 @@ public class CommonMatcher {
         @Override
         public boolean matches(Object item) {
             final Class<?> clazz = (Class<?>) item;
-            for (Constructor<?> constructor : clazz.getConstructors()) {
+            for (Constructor<?> constructor : clazz.getDeclaredConstructors()) {
                 if (!Modifier.isPrivate(constructor.getModifiers())) {
                     return false;
+                }
+
+                boolean isAccessible = constructor.isAccessible();
+                try {
+                    constructor.setAccessible(true);
+                    Object object = constructor.newInstance();
+                    if (object == null) {
+                        return false;
+                    }
+                } catch (InstantiationException ex) {
+                } catch (IllegalAccessException ex) {
+                } catch (IllegalArgumentException ex) {
+                } catch (InvocationTargetException ex) {
+                } finally {
+                    constructor.setAccessible(isAccessible);
                 }
             }
             return true;
