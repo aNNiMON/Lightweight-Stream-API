@@ -41,7 +41,7 @@ buildscript {
 
 cobertura {
     coverageFormats = ['html', 'xml']
-    coverageExcludes = ['.*PrivateConstructorsMatcher']
+    coverageExcludes = ['.*com.annimon.stream.test.CommonMatcher$PrivateConstructorsMatcher']
 }
 
 // maven signing
