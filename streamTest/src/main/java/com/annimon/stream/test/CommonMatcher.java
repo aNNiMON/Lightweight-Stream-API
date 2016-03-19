@@ -34,10 +34,7 @@ public class CommonMatcher {
                 boolean isAccessible = constructor.isAccessible();
                 try {
                     constructor.setAccessible(true);
-                    Object object = constructor.newInstance();
-                    if (object == null) {
-                        return false;
-                    }
+                    constructor.newInstance();
                 } catch (InstantiationException ex) {
                 } catch (IllegalAccessException ex) {
                 } catch (IllegalArgumentException ex) {

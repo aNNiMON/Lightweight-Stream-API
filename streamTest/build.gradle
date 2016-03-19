@@ -34,13 +34,14 @@ buildscript {
     }
 
     dependencies {
-        classpath 'net.saliman:gradle-cobertura-plugin:2.0.0'
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.4.0'
+        classpath 'net.saliman:gradle-cobertura-plugin:2.3.1'
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.6.3'
     }
 }
 
 cobertura {
     coverageFormats = ['html', 'xml']
+    coverageExcludes = ['.*PrivateConstructorsMatcher']
 }
 
 // maven signing
