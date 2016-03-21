@@ -31,30 +31,6 @@ public class Stream<T> {
     }
 
     /**
-     * Creates a {@code Stream} from {@code List}.
-     *
-     * @param <T> the type of the stream elements
-     * @param list  the list with elements to be passed to stream
-     * @return the new stream
-     */
-    public static <T> Stream<T> of(final List<? extends T> list) {
-        return new Stream<T>(new LsaIterator<T>() {
-
-            private int index = 0;
-
-            @Override
-            public boolean hasNext() {
-                return index < list.size();
-            }
-
-            @Override
-            public T next() {
-                return list.get(index++);
-            }
-        });
-    }
-
-    /**
      * Creates a {@code Stream} from {@code Map} entries.
      *
      * @param <K> the type of map keys
