@@ -117,7 +117,7 @@ public final class CustomOperators {
                 }
 
                 @Override
-                public R next() {
+                public R nextIteration() {
                     return clazz.cast(iterator.next());
                 }
             });
@@ -142,35 +142,36 @@ public final class CustomOperators {
             final Iterator<? extends T> iterator = stream.getIterator();
             return Stream.of(new LsaIterator<R>() {
 
-                private R next;
                 private Iterator<? extends R> inner;
 
                 @Override
                 public boolean hasNext() {
-                    if ((inner != null) && inner.hasNext()) {
-                        next = inner.next();
-                        return true;
-                    }
-                    while (iterator.hasNext()) {
-                        if (inner == null || !inner.hasNext()) {
-                            final T arg = iterator.next();
-                            final Stream<? extends R> result = mapper.apply(arg);
-                            if (result != null) {
-                                inner = result.getIterator();
-                            }
-                        }
-                        if ((inner != null) && inner.hasNext()) {
-                            next = inner.next();
-                            return true;
-                        }
-                    }
-                    return false;
+                    fillInnerIterator();
+                    return inner != null && inner.hasNext();
                 }
 
                 @Override
-                public R next() {
-                    return next;
+                public R nextIteration() {
+                    fillInnerIterator();
+                    return inner.next();
                 }
+
+                private void fillInnerIterator() {
+                    if ((inner != null) && inner.hasNext()) {
+                        return;
+                    }
+                    while (iterator.hasNext()) {
+                        final T arg = iterator.next();
+                        final Stream<? extends R> result = mapper.apply(arg);
+                        if (result != null) {
+                            inner = result.getIterator();
+                            if (inner.hasNext()) {
+                                return;
+                            }
+                        }
+                    }
+                }
+
             });
         }
     }

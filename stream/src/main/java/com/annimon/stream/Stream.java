@@ -82,7 +82,7 @@ public class Stream<T> {
             }
 
             @Override
-            public T next() {
+            public T nextIteration() {
                 return elements[index++];
             }
         });
@@ -107,7 +107,7 @@ public class Stream<T> {
             }
 
             @Override
-            public Integer next() {
+            public Integer nextIteration() {
                 return index++;
             }
         });
@@ -146,7 +146,7 @@ public class Stream<T> {
             }
 
             @Override
-            public Long next() {
+            public Long nextIteration() {
                 return index++;
             }
         });
@@ -186,7 +186,7 @@ public class Stream<T> {
             }
 
             @Override
-            public Integer next() {
+            public Integer nextIteration() {
                 if (index >= to) {
                     hasNext = false;
                     return to;
@@ -230,7 +230,7 @@ public class Stream<T> {
             }
 
             @Override
-            public Long next() {
+            public Long nextIteration() {
                 if (index >= to) {
                     hasNext = false;
                     return to;
@@ -270,7 +270,7 @@ public class Stream<T> {
             }
 
             @Override
-            public T next() {
+            public T nextIteration() {
                 return supplier.get();
             }
         });
@@ -296,7 +296,7 @@ public class Stream<T> {
             }
 
             @Override
-            public T next() {
+            public T nextIteration() {
                 if (firstRun) {
                     firstRun = false;
                     t = seed;
@@ -359,7 +359,7 @@ public class Stream<T> {
             }
 
             @Override
-            public R next() {
+            public R nextIteration() {
                 return combiner.apply(it1.next(), it2.next());
             }
         });
@@ -491,7 +491,7 @@ public class Stream<T> {
             }
 
             @Override
-            public R next() {
+            public R nextIteration() {
                 return mapper.apply(iterator.next());
             }
         });
@@ -672,7 +672,7 @@ public class Stream<T> {
             }
 
             @Override
-            public List<T> next() {
+            public List<T> nextIteration() {
                 K key = classifier.apply(peek());
 
                 List<T> list = new ArrayList<T>();
@@ -771,7 +771,7 @@ public class Stream<T> {
             }
 
             @Override
-            public List<T> next() {
+            public List<T> nextIteration() {
                 int i = queue.size();
                 while (iterator.hasNext() && i < windowSize) {
                     queue.offer(iterator.next());
@@ -814,7 +814,7 @@ public class Stream<T> {
             }
 
             @Override
-            public T next() {
+            public T nextIteration() {
                 final T value = iterator.next();
                 action.accept(value);
                 return value;
@@ -890,7 +890,7 @@ public class Stream<T> {
             }
 
             @Override
-            public T next() {
+            public T nextIteration() {
                 index++;
                 return iterator.next();
             }
@@ -923,7 +923,7 @@ public class Stream<T> {
             }
 
             @Override
-            public T next() {
+            public T nextIteration() {
                 return iterator.next();
             }
         });

@@ -1,6 +1,7 @@
 package com.annimon.stream;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  *
@@ -12,4 +13,14 @@ abstract class LsaIterator<T> implements Iterator<T> {
     public void remove() {
         throw new UnsupportedOperationException("remove not supported");
     }
+
+    @Override
+    public final T next() {
+        if (!hasNext()) {
+            throw new NoSuchElementException();
+        }
+        return nextIteration();
+    }
+
+    public abstract T nextIteration();
 }

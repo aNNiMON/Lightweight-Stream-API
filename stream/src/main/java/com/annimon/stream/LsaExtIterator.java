@@ -1,6 +1,7 @@
 package com.annimon.stream;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public abstract class LsaExtIterator<T> implements Iterator<T> {
 
@@ -18,6 +19,9 @@ public abstract class LsaExtIterator<T> implements Iterator<T> {
 
     @Override
     public T next() {
+        if (!hasNext) {
+            throw new NoSuchElementException();
+        }
         final T result = next;
         nextIteration();
         return result;
