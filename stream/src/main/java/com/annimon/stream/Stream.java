@@ -377,7 +377,7 @@ public class Stream<T> {
     }
 
     private Stream(Iterable<? extends T> iterable) {
-        this(iterable.iterator());
+        this(new LazyIterator<T>(iterable));
     }
 
     /**

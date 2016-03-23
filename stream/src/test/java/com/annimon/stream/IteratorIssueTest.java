@@ -45,7 +45,7 @@ public class IteratorIssueTest {
         assertEquals(count, stream.count());
     }
     
-    @Test(expected = ConcurrentModificationException.class)
+    @Test
     public void testHashSetIterator() {
         final int count = 5;
         final Set<Integer> data = new HashSet<Integer>();
