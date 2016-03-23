@@ -8,6 +8,10 @@ import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Predicate;
 import com.annimon.stream.function.Supplier;
 import com.annimon.stream.function.UnaryOperator;
+import com.annimon.stream.test.OptionalMatcher;
+import static com.annimon.stream.test.OptionalMatcher.isPresent;
+import static com.annimon.stream.test.StreamMatcher.elements;
+import static com.annimon.stream.test.StreamMatcher.isEmpty;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +19,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
@@ -28,7 +32,7 @@ public class StreamTest {
 
     @Test
     public void testStreamEmpty() {
-        assertEquals(0, Stream.empty().count());
+        assertThat(Stream.empty(), isEmpty());
     }
     
     @Test
@@ -133,24 +137,28 @@ public class StreamTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     public void testStreamOfRange() {
         long count = Stream.ofRange(0, 5).count();
         assertEquals(5, count);
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     public void testStreamOfRangeLong() {
         long count = Stream.ofRange(Long.MAX_VALUE - 10, Long.MAX_VALUE).count();
         assertEquals(10L, count);
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     public void testStreamOfRangeClosed() {
         long count = Stream.ofRangeClosed(0, 5).count();
         assertEquals(6, count);
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     public void testStreamOfRangeClosedLong() {
         long count = Stream.ofRangeClosed(Long.MAX_VALUE - 10, Long.MAX_VALUE).count();
         assertEquals(11L, count);
@@ -159,10 +167,8 @@ public class StreamTest {
     @Test
     public void testGenerate() {
         List<Long> expected = Arrays.asList(0L, 1L, 1L, 2L, 3L, 5L, 8L, 13L, 21L, 34L);
-        List<Long> data = Stream.generate(Functions.fibonacci())
-                .limit(10)
-                .collect(Collectors.<Long>toList());
-        assertThat(data, is(expected));
+        Stream<Long> stream = Stream.generate(Functions.fibonacci()).limit(10);
+        assertThat(stream, elements(is(expected)));
     }
 
     @Test
@@ -223,15 +229,14 @@ public class StreamTest {
     public void testZip() {
         Stream<Integer> shorter = Stream.rangeClosed(1, 5);
         Stream<Integer> longer = Stream.rangeClosed(1, 10);
-        List<Integer> zipped = Stream.zip(shorter, longer, new BiFunction<Integer, Integer, Integer>() {
+        Stream<Integer> zipped = Stream.zip(shorter, longer, new BiFunction<Integer, Integer, Integer>() {
             @Override
             public Integer apply(Integer value1, Integer value2) {
                 return value1 + value2;
             }
-        }).collect(Collectors.<Integer>toList());
-        assertEquals(Arrays.asList(2, 4, 6, 8, 10), zipped);
+        });
+        assertThat(zipped, elements(is(Arrays.asList(2, 4, 6, 8, 10))));
     }
-
 
     @Test
     public void testFilter() {
@@ -281,10 +286,9 @@ public class StreamTest {
             }
         };
         List<String> expected = Arrays.asList("[2]", "[3]", "[4]", "[8]", "[25]");
-        List<String> data = Stream.of(4, 9, 16, 64, 625)
-                .map(intToSqrtString)
-                .collect(Collectors.<String>toList());
-        assertThat(data, is(expected));
+        Stream<String> stream = Stream.of(4, 9, 16, 64, 625)
+                .map(intToSqrtString);
+        assertThat(stream, elements(is(expected)));
     }
 
     @Test
@@ -298,10 +302,9 @@ public class StreamTest {
             }
         };
         List<Integer> expected = Arrays.asList(4, 9, 16, 64, 625);
-        List<Integer> data = Stream.of("[2]", "[3]", "[4]", "[8]", "[25]")
-                .map(stringToSquareInt)
-                .collect(Collectors.<Integer>toList());
-        assertThat(data, is(expected));
+        Stream<Integer> stream = Stream.of("[2]", "[3]", "[4]", "[8]", "[25]")
+                .map(stringToSquareInt);
+        assertThat(stream, elements(is(expected)));
     }
 
     @Test
@@ -313,7 +316,7 @@ public class StreamTest {
                 return x + 1;
             }
         };
-        final Function<Integer, Integer> mapPlus2 = Function.Util.andThen(mapPlus1, mapPlus1);
+        final Function<Integer, Integer> mapPlus2 = Function.Util.compose(mapPlus1, mapPlus1);
         Stream.range(-10, 0)
                 .map(mapPlus2)
                 .map(mapPlus2)
@@ -357,11 +360,10 @@ public class StreamTest {
     @Test
     public void testDistinct() {
         List<Integer> expected = Arrays.asList(-1, 1, 2, 3, 5);
-        List<Integer> data = Stream.of(1, 1, 2, 3, 5, 3, 2, 1, 1, -1)
+        Stream<Integer> stream = Stream.of(1, 1, 2, 3, 5, 3, 2, 1, 1, -1)
                 .distinct()
-                .sorted()
-                .collect(Collectors.<Integer>toList());
-        assertThat(data, is(expected));
+                .sorted();
+        assertThat(stream, elements(is(expected)));
     }
 
     @Test
@@ -373,17 +375,14 @@ public class StreamTest {
         Stream<Integer> stream = Stream.of(input).distinct().sorted();
         input.addAll(Arrays.asList(3, 2, 1, 1, -1));
 
-        List<Integer> data = stream.collect(Collectors.<Integer>toList());
-        assertThat(data, is(expected));
+        assertThat(stream, elements(is(expected)));
     }
 
     @Test
     public void testSorted() {
         List<Integer> expected = Arrays.asList(-7, 0, 3, 6, 9, 19);
-        List<Integer> data = Stream.of(6, 3, 9, 0, -7, 19)
-                .sorted()
-                .collect(Collectors.<Integer>toList());
-        assertThat(data, is(expected));
+        Stream<Integer> stream = Stream.of(6, 3, 9, 0, -7, 19).sorted();
+        assertThat(stream, elements(is(expected)));
     }
 
     @Test
@@ -395,33 +394,31 @@ public class StreamTest {
         Stream<Integer> stream = Stream.of(input).sorted();
         input.addAll(Arrays.asList(0, -7, 19));
 
-        List<Integer> data = stream.collect(Collectors.<Integer>toList());
-        assertThat(data, is(expected));
+        assertThat(stream, elements(is(expected)));
     }
 
     @Test
     public void testSortedWithComparator() {
         List<Integer> expected = Arrays.asList(19, 9, -7, 6, 3, 0);
-        List<Integer> data = Stream.of(6, 3, 9, 0, -7, 19)
-                .sorted(Functions.descendingAbsoluteOrder())
-                .collect(Collectors.<Integer>toList());
-        assertThat(data, is(expected));
+        Stream<Integer> stream = Stream.of(6, 3, 9, 0, -7, 19)
+                .sorted(Functions.descendingAbsoluteOrder());
+        assertThat(stream, elements(is(expected)));
     }
 
     @Test
     public void testSortByStringLength() {
         List<String> expected = Arrays.asList("a", "is", "This", "test");
-        List<String> data = Stream.of("This", "is", "a", "test")
+        Stream<String> stream = Stream.of("This", "is", "a", "test")
                 .sortBy(new Function<String, Integer>() {
 
                     @Override
                     public Integer apply(String value) {
                         return value.length();
                     }
-                })
-                .collect(Collectors.<String>toList());
-        assertThat(data, is(expected));
+                });
+        assertThat(stream, elements(is(expected)));
     }
+    
     @Test
     public void testSortByStudentName() {
         final List<Student> students = Arrays.asList(
@@ -437,15 +434,14 @@ public class StreamTest {
                 Students.VICTORIA_CS_3
         );
 
-        List<Student> data = Stream.of(students)
+        Stream<Student> stream = Stream.of(students)
                 .sortBy(new Function<Student, String>() {
                     @Override
                     public String apply(Student student) {
                         return student.getName();
                     }
-                })
-                .collect(Collectors.<Student>toList());
-        assertThat(data, is(expected));
+                });
+        assertThat(stream, elements(is(expected)));
     }
 
     @Test
@@ -462,15 +458,14 @@ public class StreamTest {
                 Students.JOHN_CS_2,
                 Students.MARIA_ECONOMICS_1
         );
-        List<Student> byCourseDesc = Stream.of(students)
+        Stream<Student> byCourseDesc = Stream.of(students)
                 .sortBy(new Function<Student, Integer>() {
                     @Override
                     public Integer apply(Student student) {
                         return -student.getCourse();
                     }
-                })
-                .collect(Collectors.<Student>toList());
-        assertThat(byCourseDesc, is(expected));
+                });
+        assertThat(byCourseDesc, elements(is(expected)));
     }
 
     @Test
@@ -561,10 +556,10 @@ public class StreamTest {
 
     @Test
     public void testTakeWhileNonFirstMatch() {
-        long count = Stream.of(2, 4, 6, 7, 8, 10, 11)
-                .takeWhile(Functions.remainder(3))
-                .count();
-        assertEquals(0, count);
+        assertThat(
+                Stream.of(2, 4, 6, 7, 8, 10, 11)
+                        .takeWhile(Functions.remainder(3)),
+                isEmpty());
     }
 
     @Test
@@ -596,10 +591,10 @@ public class StreamTest {
 
     @Test
     public void testDropWhileAllMatch() {
-        long count = Stream.of(2, 4, 6, 7, 8, 10, 11)
-                .dropWhile(Functions.remainder(1))
-                .count();
-        assertEquals(0, count);
+        assertThat(
+                Stream.of(2, 4, 6, 7, 8, 10, 11)
+                        .dropWhile(Functions.remainder(1)),
+                isEmpty());
     }
 
     @Test
@@ -633,10 +628,9 @@ public class StreamTest {
 
     @Test
     public void testSkipMoreThanCount() {
-        long count = Stream.range(0, 10)
-                .skip(15)
-                .count();
-        assertEquals(0, count);
+        assertThat(
+                Stream.range(0, 10).skip(15),
+                isEmpty());
     }
 
     @Test
@@ -735,7 +729,7 @@ public class StreamTest {
         Optional<Integer> result = Stream.range(0, 10)
                 .reduce(Functions.addition());
 
-        assertTrue(result.isPresent());
+        assertThat(result, isPresent());
         assertNotNull(result.get());
         assertEquals(45, (int) result.get());
     }
@@ -745,7 +739,7 @@ public class StreamTest {
         Optional<Integer> result = Stream.<Integer>empty()
                 .reduce(Functions.addition());
 
-        assertFalse(result.isPresent());
+        assertThat(result, OptionalMatcher.isEmpty());
         assertEquals(119, (int) result.orElse(119));
     }
 
@@ -789,7 +783,7 @@ public class StreamTest {
         Optional<Integer> min = Stream.of(6, 3, 9, 0, -7, 19)
                 .min(Functions.naturalOrder());
 
-        assertTrue(min.isPresent());
+        assertThat(min, isPresent());
         assertNotNull(min.get());
         assertEquals(-7, (int) min.get());
     }
@@ -799,7 +793,7 @@ public class StreamTest {
         Optional<Integer> min = Stream.of(6, 3, 9, 0, -7, 19)
                 .min(Functions.descendingAbsoluteOrder());
 
-        assertTrue(min.isPresent());
+        assertThat(min, isPresent());
         assertNotNull(min.get());
         assertEquals(19, (int) min.get());
     }
@@ -808,8 +802,7 @@ public class StreamTest {
     public void testMinEmpty() {
         Optional<Integer> min = Stream.<Integer>empty()
                 .min(Functions.naturalOrder());
-
-        assertFalse(min.isPresent());
+        assertThat(min, OptionalMatcher.isEmpty());
     }
 
     @Test
@@ -817,7 +810,7 @@ public class StreamTest {
         Optional<Integer> max = Stream.of(6, 3, 9, 0, -7, 19)
                 .max(Functions.naturalOrder());
 
-        assertTrue(max.isPresent());
+        assertThat(max, isPresent());
         assertNotNull(max.get());
         assertEquals(19, (int) max.get());
     }
@@ -827,7 +820,7 @@ public class StreamTest {
         Optional<Integer> max = Stream.of(6, 3, 9, 0, -7, 19)
                 .max(Functions.descendingAbsoluteOrder());
 
-        assertTrue(max.isPresent());
+        assertThat(max, isPresent());
         assertNotNull(max.get());
         assertEquals(0, (int) max.get());
     }
@@ -837,7 +830,7 @@ public class StreamTest {
         Optional<Integer> max = Stream.<Integer>empty()
                 .max(Functions.naturalOrder());
 
-        assertFalse(max.isPresent());
+        assertThat(max, OptionalMatcher.isEmpty());
     }
 
     @Test
@@ -904,16 +897,14 @@ public class StreamTest {
     public void testFindFirst() {
         Optional<Integer> result = Stream.range(0, 10)
                 .findFirst();
-        assertTrue(result.isPresent());
+        assertThat(result, isPresent());
         assertNotNull(result.get());
         assertEquals(0, (int) result.get());
     }
 
     @Test
     public void testFindFirstOnEmptyStream() {
-        Optional<Integer> result = Stream.<Integer>empty()
-                .findFirst();
-        assertFalse(result.isPresent());
+        assertThat(Stream.empty().findFirst(), OptionalMatcher.isEmpty());
     }
 
     @Test
@@ -922,7 +913,7 @@ public class StreamTest {
                 .filter(Functions.remainder(6))
                 .findFirst();
 
-        assertTrue(result.isPresent());
+        assertThat(result, isPresent());
         assertNotNull(result.get());
         assertEquals(6, (int) result.get());
     }
@@ -974,7 +965,7 @@ public class StreamTest {
         for (char ch = 'a'; ch <= 'f'; ch++) {
             lists.add( new ArrayList<Character>(Arrays.asList(ch)) );
         }
-        List<Character> chars = Stream.of(lists)
+        Stream<Character> chars = Stream.of(lists)
                 .custom(new CustomOperators.FlatMap<List, Object>(new Function<List, Stream<Object>>() {
                     @SuppressWarnings("unchecked")
                     @Override
@@ -982,10 +973,8 @@ public class StreamTest {
                         return Stream.of(value);
                     }
                 }))
-                .custom(new CustomOperators.Cast<Object, Character>(Character.class))
-                .collect(Collectors.<Character>toList());
-
-        assertThat(chars, is(expected));
+                .custom(new CustomOperators.Cast<Object, Character>(Character.class));
+        assertThat(chars, elements(is(expected)));
     }
 
     @Test

@@ -1,5 +1,6 @@
 package com.annimon.stream;
 
+import static com.annimon.stream.test.CommonMatcher.hasOnlyPrivateConstructors;
 import java.util.Random;
 import static org.junit.Assert.*;
 import org.junit.Rule;
@@ -89,6 +90,6 @@ public class ObjectsTest {
     
     @Test
     public void testPrivateConstructor() throws Exception {
-        TestUtils.testPrivateConstructor(Objects.class);
+        assertThat(Objects.class, hasOnlyPrivateConstructors());
     }
 }

@@ -1,9 +1,9 @@
 package com.annimon.stream.function;
 
 import com.annimon.stream.Functions;
-import com.annimon.stream.TestUtils;
-import org.junit.Test;
+import static com.annimon.stream.test.CommonMatcher.hasOnlyPrivateConstructors;
 import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  * Tests {@code Predicate}.
@@ -63,7 +63,7 @@ public class PredicateTest {
     
     @Test
     public void testPrivateConstructor() throws Exception {
-        TestUtils.testPrivateConstructor(Predicate.Util.class);
+        assertThat(Predicate.Util.class, hasOnlyPrivateConstructors());
     }
     
     private static final Predicate<Integer> lessThan100 = new Predicate<Integer>() {
