@@ -43,6 +43,18 @@ public class Stream<T> {
     }
 
     /**
+     * Creates a {@code Stream} from {@code List}.		
+     *		
+     * @param <T> the type of the stream elements		
+     * @param list  the list with elements to be passed to stream		
+     * @return the new stream		
+     */		
+    // TODO: Only for binary level compatibility. Remove this method on next breaking-change version.
+    public static <T> Stream<T> of(final List<? extends T> list) {
+        return of((Iterable) list);
+    }
+
+    /**
      * Creates a {@code Stream} from any class that implements {@code Iterator} interface.
      *
      * @param <T> the type of the stream elements
