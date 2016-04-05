@@ -9,9 +9,9 @@ import com.annimon.stream.function.Predicate;
 import com.annimon.stream.function.Supplier;
 import com.annimon.stream.function.UnaryOperator;
 import com.annimon.stream.test.OptionalMatcher;
-import static com.annimon.stream.test.OptionalMatcher.isPresent;
-import static com.annimon.stream.test.StreamMatcher.elements;
-import static com.annimon.stream.test.StreamMatcher.isEmpty;
+
+import org.junit.Test;
+
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,9 +19,17 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-import org.junit.Test;
+
+import static com.annimon.stream.test.OptionalMatcher.isPresent;
+import static com.annimon.stream.test.StreamMatcher.elements;
+import static com.annimon.stream.test.StreamMatcher.isEmpty;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests {@code Stream}.
@@ -245,6 +253,22 @@ public class StreamTest {
                 .filter(Functions.remainder(2))
                 .forEach(consumer);
         assertEquals("02468", consumer.toString());
+    }
+
+    @Test
+    public void testSelect() {
+
+        final PrintConsumer<String> consumer = new PrintConsumer<String>();
+
+        Stream.of(1, "a", 2, "b", 3, "cc").select(String.class)
+                .filter(new Predicate<String>() {
+                    @Override
+                    public boolean test(String value) {
+                        return value.length() == 1;
+                    }
+                }).forEach(consumer);
+
+        assertEquals("ab", consumer.toString());
     }
 
     @Test
