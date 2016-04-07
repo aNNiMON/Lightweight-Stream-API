@@ -486,6 +486,18 @@ public class Stream<T> {
     }
 
     /**
+     * Returns {@code Stream} with elements that does not satisfy the given predicate.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @param predicate  the predicate used to filter elements
+     * @return the new stream
+     */
+    public Stream<T> filterNot(final Predicate<? super T> predicate) {
+        return filter(Predicate.Util.negate(predicate));
+    }
+
+    /**
      * Returns a stream consisting of the elements of this stream which are
      * instances of given class.
      *
