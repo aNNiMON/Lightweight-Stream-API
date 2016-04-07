@@ -256,6 +256,15 @@ public class StreamTest {
     }
 
     @Test
+    public void testFilterNot() {
+        final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
+        Stream.range(0, 10)
+                .filterNot(Functions.remainder(2))
+                .forEach(consumer);
+        assertEquals("13579", consumer.toString());
+    }
+
+    @Test
     public void testSelect() {
 
         final PrintConsumer<String> consumer = new PrintConsumer<String>();
