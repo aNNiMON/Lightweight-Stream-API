@@ -7,7 +7,7 @@ Lightweight-Stream-API
 [![Build Status](https://travis-ci.org/aNNiMON/Lightweight-Stream-API.svg?branch=master)](https://travis-ci.org/aNNiMON/Lightweight-Stream-API)
 [![Coverage Status](https://coveralls.io/repos/aNNiMON/Lightweight-Stream-API/badge.svg?branch=master&service=github)](https://coveralls.io/github/aNNiMON/Lightweight-Stream-API?branch=master)
 
-Stream API from Java 8 rewrited on iterators for Java 7 and below.
+Stream API from Java 8 rewritten on iterators for Java 7 and below.
 
 
 ### Includes
@@ -36,7 +36,7 @@ Example project: https://github.com/aNNiMON/Android-Java-8-Stream-Example
 
 ### Custom operators
 
-Unlike Java 8 streams, Lightweight-Stream-API provides an ability to apply custom operators.
+Unlike Java 8 streams, Lightweight-Stream-API provides the ability to apply custom operators.
 
 ```java
 Stream.of(...)
@@ -57,7 +57,7 @@ public final class Reverse<T> implements UnaryOperator<Stream<T>> {
 }
 ```
 
-More examples you can find [here](https://github.com/aNNiMON/Lightweight-Stream-API/blob/master/stream/src/test/java/com/annimon/stream/CustomOperators.java).
+You can find more examples [here](https://github.com/aNNiMON/Lightweight-Stream-API/blob/master/stream/src/test/java/com/annimon/stream/CustomOperators.java).
 
 
 ### Download
@@ -82,4 +82,4 @@ dependencies {
 
 Also included version for **Java ME**. Checkout [javame branch](https://github.com/aNNiMON/Lightweight-Stream-API/tree/javame).
 
-For use lambda expressions in Java 6, Java 7 or Android, take look at [Retrolambda](https://github.com/orfjackal/retrolambda) repository.
+For use lambda expressions in Java 6, Java 7 or Android, take a look at [Retrolambda](https://github.com/orfjackal/retrolambda) repository.
