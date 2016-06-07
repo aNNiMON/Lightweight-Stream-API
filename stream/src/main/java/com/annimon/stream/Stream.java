@@ -1,6 +1,8 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.*;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -1241,7 +1243,21 @@ public class Stream<T> {
 
     @SafeVarargs
     static <E> E[] newArray(int length, E... array) {
-        return Arrays.copyOf(array, length);
+        try {
+            return Arrays.copyOf(array, length);
+        } catch (NoSuchMethodError nme) {
+            return newArrayCompat(length, array);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    static<E> E[] newArrayCompat(int length, E... array) {
+
+        final E[] res = (E[])Array.newInstance(array.getClass().getComponentType(), length);
+
+        System.arraycopy(array, 0, res, 0, Math.min(length, array.length));
+
+        return res;
     }
 
     private List<T> collectToList() {
