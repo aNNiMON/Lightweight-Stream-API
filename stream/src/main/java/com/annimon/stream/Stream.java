@@ -1255,8 +1255,7 @@ public class Stream<T> {
 
         final E[] res = (E[])Array.newInstance(array.getClass().getComponentType(), length);
 
-        for(int i = 0; i < res.length && i < array.length; i++)
-            res[i] = array[i];
+        System.arraycopy(array, 0, res, 0, Math.min(length, array.length));
 
         return res;
     }
