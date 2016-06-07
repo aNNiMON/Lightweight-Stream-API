@@ -1018,6 +1018,28 @@ public class StreamTest {
     }
 
     @Test
+    public void testNewArrayCompat() {
+        String[] strings = new String[] {"abc", "def", "fff"};
+
+        String[] copy = Stream.newArrayCompat(5, strings);
+
+        assertEquals(5, copy.length);
+        assertEquals("abc", copy[0]);
+        assertEquals(null, copy[3]);
+
+        String[] empty = new String[0];
+
+        String[] emptyCopy = Stream.newArrayCompat(3, empty);
+
+        assertEquals(3, emptyCopy.length);
+
+        emptyCopy = Stream.newArrayCompat(0, empty);
+
+        assertEquals(0, emptyCopy.length);
+    }
+
+
+    @Test
     public void testCustomTerminalOperator_ForEach() {
         PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
         Stream.range(0, 10)
