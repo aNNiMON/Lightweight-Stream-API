@@ -1,14 +1,16 @@
 package com.annimon.stream.test;
 
 import com.annimon.stream.Optional;
+
+import org.junit.Test;
+
 import static com.annimon.stream.test.CommonMatcher.description;
 import static com.annimon.stream.test.CommonMatcher.hasOnlyPrivateConstructors;
 import static com.annimon.stream.test.OptionalMatcher.isEmpty;
 import static com.annimon.stream.test.OptionalMatcher.isPresent;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.*;
-import org.junit.Test;
+import static org.junit.Assert.assertThat;
 
 public class OptionalMatcherTest {
 
@@ -31,5 +33,17 @@ public class OptionalMatcherTest {
         Optional<Integer> optional = Optional.empty();
         assertThat(optional, isEmpty());
         assertThat(optional, not(isPresent()));
+
+        assertThat(isEmpty(), description(is("Optional value should be empty")));
+    }
+
+    @Test(expected = AssertionError.class)
+    public void testIsEmptyOnNullValue() {
+        assertThat(null, isEmpty());
+    }
+
+    @Test(expected = AssertionError.class)
+    public void testIsPresentOnNullValue() {
+        assertThat(null, isPresent());
     }
 }
