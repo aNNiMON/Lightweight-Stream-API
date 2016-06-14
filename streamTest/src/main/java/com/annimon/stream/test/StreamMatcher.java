@@ -2,11 +2,14 @@ package com.annimon.stream.test;
 
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
-import java.util.List;
-import static org.hamcrest.CoreMatchers.not;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
+
+import java.util.List;
+
+import static org.hamcrest.CoreMatchers.not;
 
 public class StreamMatcher {
 
@@ -16,8 +19,16 @@ public class StreamMatcher {
         return new IsEmptyMatcher();
     }
 
+    /**
+     * @deprecated Use not({@link StreamMatcher#isEmpty()}) or {@link StreamMatcher#hasElements()} instead
+     */
+    @Deprecated
     public static Matcher<Stream<?>> isNotEmpty() {
         return not(isEmpty());
+    }
+
+    public static Matcher<Stream<?>> hasElements() {
+        return new HasElementsMatcher();
     }
 
     public static <T> Matcher<Stream<T>> elements(Matcher<List<T>> matcher) {
@@ -35,6 +46,20 @@ public class StreamMatcher {
         @Override
         public void describeTo(Description description) {
             description.appendText("an empty stream");
+        }
+    }
+
+    public static class HasElementsMatcher extends TypeSafeDiagnosingMatcher<Stream<?>> {
+
+        @Override
+        protected boolean matchesSafely(Stream<?> stream, Description mismatchDescription) {
+            mismatchDescription.appendText("Stream was empty");
+            return stream.count() > 0;
+        }
+
+        @Override
+        public void describeTo(Description description) {
+            description.appendText("a non-empty stream");
         }
     }
 
