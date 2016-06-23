@@ -1,6 +1,7 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.Consumer;
+import com.annimon.stream.function.ThrowableFunction;
 import com.annimon.stream.function.ThrowableSupplier;
 
 /**
@@ -128,6 +129,24 @@ public class Exceptional<T> {
             throw exception;
         }
         return value;
+    }
+
+    /**
+     * Invokes mapping function on inner value if there were no exceptions.
+     *
+     * @param <U> the type of result value
+     * @param mapper  mapping function
+     * @return an {@code Exceptional} with transformed value if there were no exceptions
+     */
+    public <U> Exceptional<U> map(ThrowableFunction<? super T, ? extends U, Throwable> mapper) {
+        if (throwable != null) {
+            return new Exceptional<U>(null, throwable);
+        }
+        try {
+            return new Exceptional<U>(mapper.apply(value), null);
+        } catch (Throwable throwable) {
+            return new Exceptional<U>(null, throwable);
+        }
     }
     
     /**
