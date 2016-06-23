@@ -1,6 +1,7 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.Consumer;
+import com.annimon.stream.function.ThrowableFunction;
 import com.annimon.stream.function.ThrowableSupplier;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -104,7 +105,47 @@ public class ExceptionalTest {
             assertThat(ae.getCause(), instanceOf(IOException.class));
         }
     }
-    
+
+    @Test
+    public void testMapWithoutException() {
+        String value = Exceptional
+                .of(tenSupplier)
+                .map(new ThrowableFunction<Integer, String, Throwable>() {
+                    @Override
+                    public String apply(Integer value) throws Throwable {
+                        return Integer.toString(value);
+                    }
+                })
+                .get();
+        assertEquals("10", value);
+    }
+
+    @Test(expected = NumberFormatException.class)
+    public void testMapWithException() throws Throwable {
+        Exceptional
+                .of(tenSupplier)
+                .map(new ThrowableFunction<Integer, String, Throwable>() {
+                    @Override
+                    public String apply(Integer value) throws Throwable {
+                        throw new NumberFormatException();
+                    }
+                })
+                .getOrThrow();
+    }
+
+    @Test(expected = IOException.class)
+    public void testMapOnAlreadyFailedExceptional() throws Throwable {
+        Exceptional
+                .of(ioExceptionSupplier)
+                .map(new ThrowableFunction<Integer, String, Throwable>() {
+                    @Override
+                    public String apply(Integer value) throws Throwable {
+                        return Integer.toString(value);
+                    }
+                })
+                .getOrThrow();
+    }
+
     @Test
     public void testIfException() {
         for (final ExceptionType type : ExceptionType.values()) {
