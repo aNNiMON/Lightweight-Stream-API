@@ -74,9 +74,12 @@ public interface Function<T, R> {
          * @param <R> the type of the result of the function
          * @param throwableFunction  the function that may throw an exception
          * @return the function result or {@code null} if exception was thrown
+         * @throws NullPointerException if {@code throwableFunction} is null
+         * @see #safe(com.annimon.stream.function.ThrowableFunction, java.lang.Object)
          */
-        public static <T, R> Function<T, R> safe(ThrowableFunction<T, R, Throwable> throwableFunction) {
-            return safe(throwableFunction, null);
+        public static <T, R> Function<T, R> safe(
+                ThrowableFunction<? super T, ? extends R, Throwable> throwableFunction) {
+            return Util.<T, R>safe(throwableFunction, null);
         }
 
         /**
@@ -87,9 +90,11 @@ public interface Function<T, R> {
          * @param throwableFunction  the function that may throw an exception
          * @param resultIfFailed  the result which returned if exception was thrown
          * @return the function result or {@code resultIfFailed}
+         * @throws NullPointerException if {@code throwableFunction} is null
+         * @see #safe(com.annimon.stream.function.ThrowableFunction)
          */
         public static <T, R> Function<T, R> safe(
-                final ThrowableFunction<T, R, Throwable> throwableFunction,
+                final ThrowableFunction<? super T, ? extends R, Throwable> throwableFunction,
                 final R resultIfFailed) {
             return new Function<T, R>() {
 
