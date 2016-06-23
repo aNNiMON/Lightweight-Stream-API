@@ -2,6 +2,7 @@ package com.annimon.stream.function;
 
 import com.annimon.stream.Functions;
 import static com.annimon.stream.test.CommonMatcher.hasOnlyPrivateConstructors;
+import java.io.IOException;
 import java.util.Locale;
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -42,8 +43,43 @@ public class FunctionTest {
     }
 
     @Test
+    public void testSafe() {
+        Function<Boolean, Integer> function = Function.Util.safe(new ThrowableFunction<Boolean, Integer, Throwable>() {
+
+            @Override
+            public Integer apply(Boolean value) throws IOException {
+                return unsafeFunction(value);
+            }
+        });
+
+        assertEquals(10, (int) function.apply(false));
+        assertEquals(null, function.apply(true));
+    }
+
+    @Test
+    public void testSafeWithResultIfFailed() {
+        Function<Object, String> function = Function.Util.safe(new ThrowableFunction<Object, String, Throwable>() {
+
+            @Override
+            public String apply(Object value) {
+                return value.toString();
+            }
+        }, "default");
+
+        assertEquals("10", function.apply(10));
+        assertEquals("default", function.apply(null));
+    }
+
+    @Test
     public void testPrivateConstructor() throws Exception {
         assertThat(Function.Util.class, hasOnlyPrivateConstructors());
+    }
+
+    private static int unsafeFunction(boolean throwException) throws IOException {
+        if (throwException) {
+            throw new IOException();
+        }
+        return 10;
     }
 
     private static final Function<Character, String> toString = Functions.<Character>convertToString();
@@ -54,5 +90,4 @@ public class FunctionTest {
             return value.toUpperCase(Locale.ENGLISH);
         }
     };
-
 }

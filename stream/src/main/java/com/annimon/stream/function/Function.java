@@ -66,5 +66,43 @@ public interface Function<T, R> {
                 }
             };
         }
+
+        /**
+         * Creates a safe {@code Function},
+         *
+         * @param <T> the type of the input of the function
+         * @param <R> the type of the result of the function
+         * @param throwableFunction  the function that may throw an exception
+         * @return the function result or {@code null} if exception was thrown
+         */
+        public static <T, R> Function<T, R> safe(ThrowableFunction<T, R, Throwable> throwableFunction) {
+            return safe(throwableFunction, null);
+        }
+
+        /**
+         * Creates a safe {@code Function},
+         *
+         * @param <T> the type of the input of the function
+         * @param <R> the type of the result of the function
+         * @param throwableFunction  the function that may throw an exception
+         * @param resultIfFailed  the result which returned if exception was thrown
+         * @return the function result or {@code resultIfFailed}
+         */
+        public static <T, R> Function<T, R> safe(
+                final ThrowableFunction<T, R, Throwable> throwableFunction,
+                final R resultIfFailed) {
+            return new Function<T, R>() {
+
+                @Override
+                public R apply(T value) {
+                    try {
+                        return throwableFunction.apply(value);
+                    } catch (Throwable throwable) {
+                        return resultIfFailed;
+                    }
+                }
+            };
+        }
+
     }
 }
