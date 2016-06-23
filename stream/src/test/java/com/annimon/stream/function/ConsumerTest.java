@@ -1,6 +1,8 @@
 package com.annimon.stream.function;
 
 import static com.annimon.stream.test.CommonMatcher.hasOnlyPrivateConstructors;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
@@ -36,6 +38,35 @@ public class ConsumerTest {
         consumer.accept(holder);
         assertEquals(46, holder.value);
     }
+
+    @Test
+    public void testSafe() {
+        Consumer<OutputStream> consumer = Consumer.Util.safe(writer);
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(5);
+        consumer.accept(baos);
+        consumer.accept(null);
+        consumer.accept(null);
+        consumer.accept(baos);
+        assertEquals(">>", baos.toString());
+    }
+
+    @Test
+    public void testSafeWithOnFailedConsumer() {
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream(5);
+        Consumer<OutputStream> consumer = Consumer.Util.safe(writer, new Consumer<OutputStream>() {
+            @Override
+            public void accept(OutputStream os) {
+                baos.write('<');
+            }
+        });
+
+        consumer.accept(baos);
+        consumer.accept(baos);
+        consumer.accept(null);
+        consumer.accept(null);
+        assertEquals(">><<", baos.toString());
+    }
     
     @Test
     public void testPrivateConstructor() throws Exception {
@@ -53,6 +84,14 @@ public class ConsumerTest {
         @Override
         public void accept(IntHolder holder) {
             holder.value *= 2;
+        }
+    };
+
+    private static final ThrowableConsumer<OutputStream, Throwable> writer
+            = new ThrowableConsumer<OutputStream, Throwable>() {
+        @Override
+        public void accept(OutputStream os) throws Throwable {
+            os.write('>');
         }
     };
     
