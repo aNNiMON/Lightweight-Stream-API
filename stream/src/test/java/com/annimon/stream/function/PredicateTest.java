@@ -2,6 +2,7 @@ package com.annimon.stream.function;
 
 import com.annimon.stream.Functions;
 import static com.annimon.stream.test.CommonMatcher.hasOnlyPrivateConstructors;
+import java.io.IOException;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
@@ -60,6 +61,24 @@ public class PredicateTest {
         assertTrue(isOdd.test(55));
         assertFalse(isOdd.test(56));
     }
+
+    @Test
+    public void testSafe() {
+        Predicate<Integer> predicate = Predicate.Util.safe(throwablePredicate);
+
+        assertTrue(predicate.test(40));
+        assertFalse(predicate.test(60));
+        assertFalse(predicate.test(-5));
+    }
+
+    @Test
+    public void testSafeWithResultIfFailed() {
+        Predicate<Integer> predicate = Predicate.Util.safe(throwablePredicate, true);
+
+        assertTrue(predicate.test(40));
+        assertFalse(predicate.test(60));
+        assertTrue(predicate.test(-5));
+    }
     
     @Test
     public void testPrivateConstructor() throws Exception {
@@ -74,5 +93,16 @@ public class PredicateTest {
     };
     
     private static final Predicate<Integer> isEven = Functions.remainder(2);
-    
+
+    private static final ThrowablePredicate<Integer, Throwable> throwablePredicate =
+            new ThrowablePredicate<Integer, Throwable>() {
+
+        @Override
+        public boolean test(Integer value) throws Throwable {
+            if (value < 0) {
+                throw new IOException();
+            }
+            return value < 50;
+        }
+    };
 }
