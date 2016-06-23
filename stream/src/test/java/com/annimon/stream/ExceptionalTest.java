@@ -31,6 +31,11 @@ public class ExceptionalTest {
                 .of(ioExceptionSupplier)
                 .getOrElse(20);
         assertEquals(20, value);
+
+        value = Exceptional
+                .of(tenSupplier)
+                .getOrElse(20);
+        assertEquals(10, value);
     }
     
     @Test
@@ -130,6 +135,14 @@ public class ExceptionalTest {
                         throw new NumberFormatException();
                     }
                 })
+                .getOrThrow();
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testMapOnNullFunction() throws Throwable {
+        Exceptional
+                .of(tenSupplier)
+                .map(null)
                 .getOrThrow();
     }
 
@@ -248,6 +261,20 @@ public class ExceptionalTest {
         });
         
         assertFalse(ten1.equals(tenByte));
+    }
+
+    @Test
+    public void testEqualsWithDifferentExceptions() {
+        final Exceptional<Integer> ten1 = Exceptional.of(tenSupplier);
+        final Exceptional<Integer> ten2 = Exceptional.of(new ThrowableSupplier<Integer, Throwable>() {
+            @Override
+            public Integer get() throws Throwable {
+                throwIO();
+                return 10;
+            }
+        });
+
+        assertFalse(ten1.equals(ten2));
     }
     
     @Test

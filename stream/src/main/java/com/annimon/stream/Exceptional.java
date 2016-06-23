@@ -137,15 +137,17 @@ public class Exceptional<T> {
      * @param <U> the type of result value
      * @param mapper  mapping function
      * @return an {@code Exceptional} with transformed value if there were no exceptions
+     * @throws NullPointerException if {@code mapper} is null
      */
     public <U> Exceptional<U> map(ThrowableFunction<? super T, ? extends U, Throwable> mapper) {
         if (throwable != null) {
             return new Exceptional<U>(null, throwable);
         }
+        Objects.requireNonNull(mapper);
         try {
             return new Exceptional<U>(mapper.apply(value), null);
-        } catch (Throwable throwable) {
-            return new Exceptional<U>(null, throwable);
+        } catch (Throwable t) {
+            return new Exceptional<U>(null, t);
         }
     }
     
