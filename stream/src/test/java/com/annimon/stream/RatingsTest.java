@@ -1,6 +1,8 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.Function;
+import com.annimon.stream.function.ThrowableFunction;
+import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.List;
@@ -53,12 +55,12 @@ public class RatingsTest {
     public void testRatings() {
         String ratings = Stream.of(fileContents.keySet()) // list files
                 // read content of files
-                .flatMap(new Function<String, Stream<String>>() {
+                .flatMap(Function.Util.safe(new ThrowableFunction<String, Stream<String>, Throwable>() {
                     @Override
-                    public Stream<String> apply(String filename) {
+                    public Stream<String> apply(String filename) throws IOException {
                         return readLines(filename);
                     }
-                })
+                }))
                 // split line by whitespaces
                 .map(new Function<String, String[]>() {
                     @Override
@@ -136,7 +138,7 @@ public class RatingsTest {
     /*
      * Emulates read lines from file
      */
-    private static Stream<String> readLines(String filename) {
+    private static Stream<String> readLines(String filename) throws IOException {
         return Stream.of(fileContents.get(filename).split("\n"));
     }
 }

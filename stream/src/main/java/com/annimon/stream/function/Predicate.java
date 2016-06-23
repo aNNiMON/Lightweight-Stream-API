@@ -90,5 +90,42 @@ public interface Predicate<T> {
                 }
             };
         }
+
+        /**
+         * Creates a safe {@code Predicate}.
+         *
+         * @param <T> the type of the input to the function
+         * @param throwablePredicate  the predicate that may throw an exception
+         * @return a {@code Predicate} or {@code false} if exception was thrown
+         */
+        public static <T> Predicate<T> safe(ThrowablePredicate<? super T, Throwable> throwablePredicate) {
+            return safe(throwablePredicate, false);
+        }
+
+        /**
+         * Creates a safe {@code Predicate}.
+         *
+         * @param <T> the type of the input to the function
+         * @param throwablePredicate  the predicate that may throw an exception
+         * @param resultIfFailed  the result which returned if exception was thrown
+         * @return a {@code Predicate} or {@code resultIfFailed}
+         * @throws NullPointerException if {@code throwablePredicate} is null
+         */
+        public static <T> Predicate<T> safe(
+                final ThrowablePredicate<? super T, Throwable> throwablePredicate,
+                final boolean resultIfFailed) {
+            return new Predicate<T>() {
+
+                @Override
+                public boolean test(T value) {
+                    try {
+                        return throwablePredicate.test(value);
+                    } catch (Throwable throwable) {
+                        return resultIfFailed;
+                    }
+                }
+            };
+        }
+
     }
 }
