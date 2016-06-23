@@ -265,8 +265,8 @@ public class StreamTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testSelect() {
-
         final PrintConsumer<String> consumer = new PrintConsumer<String>();
 
         Stream.of(1, "a", 2, "b", 3, "cc").select(String.class)

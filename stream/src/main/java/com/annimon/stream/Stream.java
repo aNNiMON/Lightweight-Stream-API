@@ -29,7 +29,7 @@ public class Stream<T> {
      * @return the new empty stream
      */
     public static <T> Stream<T> empty() {
-        return of(Collections.EMPTY_LIST);
+        return of(Collections.<T>emptyList());
     }
 
     /**
@@ -50,10 +50,11 @@ public class Stream<T> {
      * @param <T> the type of the stream elements		
      * @param list  the list with elements to be passed to stream		
      * @return the new stream		
-     */		
+     */
     // TODO: Only for binary level compatibility. Remove this method on next breaking-change version.
+    @SuppressWarnings("unchecked")
     public static <T> Stream<T> of(final List<? extends T> list) {
-        return of((Iterable) list);
+        return of((Iterable<T>) list);
     }
 
     /**
@@ -691,7 +692,7 @@ public class Stream<T> {
      * @return the new stream
      */
     public <K> Stream<Map.Entry<K, List<T>>> groupBy(final Function<? super T, ? extends K> classifier) {
-        return Stream.of( collect(Collectors.groupingBy(classifier)) );
+        return Stream.of( collect(Collectors.<T, K>groupingBy(classifier)) );
     }
 
     /**
@@ -1057,6 +1058,7 @@ public class Stream<T> {
      * @param generator  the array constructor reference that accommodates future array of assigned size
      * @return the result of collect elements
      */
+    @SuppressWarnings("unchecked")
     public <R> R[] toArray(IntFunction<R[]> generator) {
         final List<T> container = collectToList();
         final int size = container.size();
@@ -1123,7 +1125,7 @@ public class Stream<T> {
      * @return the minimum element
      */
     public Optional<T> min(Comparator<? super T> comparator) {
-        return reduce(BinaryOperator.Util.minBy(comparator));
+        return reduce(BinaryOperator.Util.<T>minBy(comparator));
     }
 
     /**
@@ -1135,7 +1137,7 @@ public class Stream<T> {
      * @return the maximum element
      */
     public Optional<T> max(Comparator<? super T> comparator) {
-        return reduce(BinaryOperator.Util.maxBy(comparator));
+        return reduce(BinaryOperator.Util.<T>maxBy(comparator));
     }
 
     /**
