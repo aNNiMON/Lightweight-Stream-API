@@ -8,6 +8,8 @@ import static org.mockito.Matchers.argThat;
 
 public class OptionalMatcher {
 
+    private OptionalMatcher() { }
+
     public static <T> Optional<T> anyPresentOptional() {
         return argThat(new PresentOptionalMatcher<T>());
     }

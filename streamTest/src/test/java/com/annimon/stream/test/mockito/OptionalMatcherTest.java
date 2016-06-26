@@ -7,10 +7,12 @@ import com.annimon.stream.test.mockito.OptionalMatcher.PresentOptionalMatcher;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import static com.annimon.stream.test.CommonMatcher.hasOnlyPrivateConstructors;
 import static com.annimon.stream.test.mockito.OptionalMatcher.anyEmptyOptional;
 import static com.annimon.stream.test.mockito.OptionalMatcher.anyPresentOptional;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -23,6 +25,11 @@ public final class OptionalMatcherTest {
     private static final Optional<Object> EMPTY_OBJECT_OPTIONAL = Optional.empty();
     private static final Optional<String> PRESENT_STRING_OPTIONAL = Optional.of("ANY_STRING");
     private static final Optional<String> EMPTY_STRING_OPTIONAL = Optional.empty();
+
+    @Test
+    public void testPrivateConstructor() throws Exception {
+        assertThat(OptionalMatcher.class, hasOnlyPrivateConstructors());
+    }
 
     @Test
     public void testPresentOptionalMatcherMatching() {
