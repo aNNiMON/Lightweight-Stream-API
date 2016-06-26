@@ -1,4 +1,4 @@
-package com.annimon.stream.test;
+package com.annimon.stream.test.hamcrest;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

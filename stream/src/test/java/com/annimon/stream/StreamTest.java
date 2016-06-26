@@ -8,7 +8,7 @@ import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Predicate;
 import com.annimon.stream.function.Supplier;
 import com.annimon.stream.function.UnaryOperator;
-import com.annimon.stream.test.OptionalMatcher;
+import com.annimon.stream.test.hamcrest.OptionalMatcher;
 
 import org.junit.Test;
 
@@ -20,9 +20,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static com.annimon.stream.test.OptionalMatcher.isPresent;
-import static com.annimon.stream.test.StreamMatcher.elements;
-import static com.annimon.stream.test.StreamMatcher.isEmpty;
+import static com.annimon.stream.test.hamcrest.OptionalMatcher.isPresent;
+import static com.annimon.stream.test.hamcrest.StreamMatcher.elements;
+import static com.annimon.stream.test.hamcrest.StreamMatcher.isEmpty;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;

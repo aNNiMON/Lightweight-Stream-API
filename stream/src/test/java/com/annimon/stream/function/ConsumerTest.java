@@ -1,6 +1,6 @@
 package com.annimon.stream.function;
 
-import static com.annimon.stream.test.CommonMatcher.hasOnlyPrivateConstructors;
+import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import static org.junit.Assert.*;

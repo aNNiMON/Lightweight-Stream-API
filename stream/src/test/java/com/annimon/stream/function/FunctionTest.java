@@ -1,7 +1,7 @@
 package com.annimon.stream.function;
 
 import com.annimon.stream.Functions;
-import static com.annimon.stream.test.CommonMatcher.hasOnlyPrivateConstructors;
+import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import java.io.IOException;
 import java.util.Locale;
 import static org.junit.Assert.*;

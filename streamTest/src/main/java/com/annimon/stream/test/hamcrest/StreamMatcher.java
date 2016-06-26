@@ -1,4 +1,4 @@
-package com.annimon.stream.test;
+package com.annimon.stream.test.hamcrest;
 
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;

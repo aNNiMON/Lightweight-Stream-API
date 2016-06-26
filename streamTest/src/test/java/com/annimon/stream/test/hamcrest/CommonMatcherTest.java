@@ -1,7 +1,7 @@
-package com.annimon.stream.test;
+package com.annimon.stream.test.hamcrest;
 
-import static com.annimon.stream.test.CommonMatcher.description;
-import static com.annimon.stream.test.CommonMatcher.hasOnlyPrivateConstructors;
+import static com.annimon.stream.test.hamcrest.CommonMatcher.description;
+import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.equalTo;

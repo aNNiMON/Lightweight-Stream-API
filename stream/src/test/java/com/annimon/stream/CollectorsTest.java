@@ -4,7 +4,7 @@ import com.annimon.stream.function.BinaryOperator;
 import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Supplier;
 import com.annimon.stream.function.UnaryOperator;
-import static com.annimon.stream.test.CommonMatcher.hasOnlyPrivateConstructors;
+import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;

@@ -42,7 +42,7 @@ buildscript {
 
 cobertura {
     coverageFormats = ['html', 'xml']
-    coverageExcludes = ['.*com.annimon.stream.test.CommonMatcher.*']
+    coverageExcludes = ['.*com.annimon.stream.test.hamcrest.CommonMatcher.*']
 }
 
 // maven signing

@@ -7,7 +7,7 @@ import com.annimon.stream.test.mockito.OptionalMatcher.PresentOptionalMatcher;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import static com.annimon.stream.test.CommonMatcher.hasOnlyPrivateConstructors;
+import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static com.annimon.stream.test.mockito.OptionalMatcher.anyEmptyOptional;
 import static com.annimon.stream.test.mockito.OptionalMatcher.anyPresentOptional;
 import static org.junit.Assert.assertEquals;

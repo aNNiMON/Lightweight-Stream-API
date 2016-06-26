@@ -1,4 +1,4 @@
-package com.annimon.stream.test;
+package com.annimon.stream.test.hamcrest;
 
 import com.annimon.stream.Stream;
 
@@ -9,12 +9,12 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.annimon.stream.test.CommonMatcher.description;
-import static com.annimon.stream.test.CommonMatcher.hasOnlyPrivateConstructors;
-import static com.annimon.stream.test.StreamMatcher.elements;
-import static com.annimon.stream.test.StreamMatcher.hasElements;
-import static com.annimon.stream.test.StreamMatcher.isEmpty;
-import static com.annimon.stream.test.StreamMatcher.isNotEmpty;
+import static com.annimon.stream.test.hamcrest.CommonMatcher.description;
+import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
+import static com.annimon.stream.test.hamcrest.StreamMatcher.elements;
+import static com.annimon.stream.test.hamcrest.StreamMatcher.hasElements;
+import static com.annimon.stream.test.hamcrest.StreamMatcher.isEmpty;
+import static com.annimon.stream.test.hamcrest.StreamMatcher.isNotEmpty;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
