@@ -127,6 +127,20 @@ public class Optional<T> {
         if (!isPresent()) return empty();
         return Objects.requireNonNull(mapper.apply(value));
     }
+
+    /**
+     * Keeps inner value only if is present and instance of given class.
+     *
+     * @param <R> a type of instance to select.
+     * @param clazz a class which instance should be selected
+     * @return an {@code Optional} with value of type class if present, otherwise an empty {@code Optional}
+     */
+    @SuppressWarnings("unchecked")
+    public <R> Optional<R> select(Class<R> clazz) {
+        Objects.requireNonNull(clazz);
+        if (!isPresent()) return empty();
+        return (Optional<R>) Optional.ofNullable(clazz.isInstance(value) ? value : null);
+    }
     
     /**
      * Returns inner value if present, otherwise returns {@code other}.

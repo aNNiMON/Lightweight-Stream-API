@@ -128,7 +128,48 @@ public final class OptionalTest {
                     }
                 });
     }
-    
+
+    @Test
+    public void testSelectOnEmptyOptional() {
+        Optional<Integer> result = Optional.empty()
+                .select(Integer.class);
+
+        assertFalse(result.isPresent());
+    }
+
+    @Test
+    @SuppressWarnings("UnnecessaryBoxing")
+    public void testSelectValidSubclassOnOptional() {
+        Number number = new Integer(42);
+
+        Optional<Integer> result = Optional.of(number)
+                .select(Integer.class);
+
+        assertTrue(result.isPresent());
+        assertEquals(result.get().intValue(), 42);
+    }
+
+    @Test
+    @SuppressWarnings("UnnecessaryBoxing")
+    public void testSelectInvalidSubclassOnOptional() {
+        Number number = new Integer(42);
+
+        Optional<String> result = Optional.of(number)
+                .select(String.class);
+
+        assertFalse(result.isPresent());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testSelectWithNullClassOnPresentOptional() {
+        Optional.of(42).select(null);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testSelectWithNullClassOnEmptyOptional() {
+        Optional.empty().select(null);
+    }
+
     @Test
     public void testOrElseWithPresentValue() {
         int value = Optional.<Integer>empty().orElse(42);
