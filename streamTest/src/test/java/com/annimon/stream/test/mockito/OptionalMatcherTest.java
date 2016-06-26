@@ -9,6 +9,7 @@ import org.mockito.Mockito;
 
 import static com.annimon.stream.test.mockito.OptionalMatcher.anyEmptyOptional;
 import static com.annimon.stream.test.mockito.OptionalMatcher.anyPresentOptional;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.never;
@@ -30,6 +31,13 @@ public final class OptionalMatcherTest {
         assertTrue(matcher.matches(PRESENT_OBJECT_OPTIONAL));
         assertFalse(matcher.matches(EMPTY_OBJECT_OPTIONAL));
         assertFalse(matcher.matches(null));
+    }
+
+    @Test
+    public void testPresentOptionalMatcherToString() {
+        PresentOptionalMatcher<Object> matcher = new PresentOptionalMatcher<Object>();
+
+        assertEquals(matcher.toString(), "anyPresentOptional()");
     }
 
     @Test
@@ -77,6 +85,13 @@ public final class OptionalMatcherTest {
         assertFalse(matcher.matches(PRESENT_OBJECT_OPTIONAL));
         assertTrue(matcher.matches(EMPTY_OBJECT_OPTIONAL));
         assertFalse(matcher.matches(null));
+    }
+
+    @Test
+    public void testEmptyOptionalMatcherToString() {
+        EmptyOptionalMatcher<Object> matcher = new EmptyOptionalMatcher<Object>();
+
+        assertEquals(matcher.toString(), "anyEmptyOptional()");
     }
 
     @Test
