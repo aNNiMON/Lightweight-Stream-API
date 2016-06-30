@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 archivesBaseName = 'stream-test'
-version = '1.0.9-SNAPSHOT'
+version = '1.0.1-SNAPSHOT'
 group = 'com.annimon'
 ext.isReleaseVersion = !version.contains("SNAPSHOT")
 

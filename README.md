@@ -12,8 +12,8 @@ Stream API from Java 8 rewritten on iterators for Java 7 and below.
 
 ### Includes
 
- + Functional interfaces (Supplier, Function, Consumer etc);
- + `Stream` (without parallel processing but with custom operators);
+ + Functional interfaces (`Supplier`, `Function`, `Consumer` etc);
+ + `Stream` (without parallel processing but with a variety of additional methods and with custom operators);
  + `Optional` class;
  + `Exceptional` class - functional way to deal with exceptions;
  + `Objects` from Java 7.
@@ -33,6 +33,8 @@ Stream.range(0, 10)...
 ```
 Example project: https://github.com/aNNiMON/Android-Java-8-Stream-Example
 
+
+## Key features
 
 ### Custom operators
 
@@ -59,22 +61,111 @@ public final class Reverse<T> implements UnaryOperator<Stream<T>> {
 
 You can find more examples [here](https://github.com/aNNiMON/Lightweight-Stream-API/blob/master/stream/src/test/java/com/annimon/stream/CustomOperators.java).
 
+### Additional operators
 
-### Download
+In addition to backported Java 8 Stream operators, the library provides:
+
+- `filterNot` - negated `filter` operator
+
+  ```java
+  // Java 8
+  stream.filter(((Predicate<String>) String::isEmpty).negate())
+  // LSA
+  stream.filterNot(String::isEmpty)
+  ```
+
+- `select` - filters instances of the given class
+
+  ```java
+  // Java 8
+  stream.filter(Integer.class::isInstance)
+  // LSA
+  stream.select(Integer.class)
+  ```
+
+- `sortBy` - sorts by extractor function
+
+  ```java
+  // Java 8
+  stream.sorted(Comparator.comparing(Person::getName))
+  // LSA
+  stream.sortBy(Person::getName)
+  ```
+
+- `groupBy` - groups by extractor function
+
+  ```java
+  // Java 8
+  stream.collect(Collectors.groupingBy(Person::getName)).entrySet().stream()
+  // LSA
+  stream.groupBy(Person::getName)
+  ```
+
+- `chunkBy` - partitions sorted stream by classifier function
+
+  ```java
+  Stream.of("a", "b", "cd", "ef", "gh", "ij", "klmnn")
+      .chunkBy(String::length) // [[a, b], [cd, ef, gh, ij], [klmnn]]
+  ```
+
+- `sample` - emits every n-th elements
+
+  ```java
+  Stream.rangeClosed(0, 10)
+      .sample(2) // [0, 2, 4, 6, 8, 10]
+  ```
+
+- `slidingWindow` - partitions stream into fixed-sized list and sliding over the elements
+
+  ```java
+  Stream.rangeClosed(0, 10)
+      .slidingWindow(4, 6) // [[0, 1, 2, 3], [6, 7, 8, 9]]
+  ```
+
+- `takeWhile` / `dropWhile` - introduced in Java 9, limits/skips stream by predicate function
+
+  ```java
+  Stream.of("a", "b", "cd", "ef", "g")
+      .takeWhile(s -> s.length() == 1) // [a, b]
+  Stream.of("a", "b", "cd", "ef", "g")
+      .dropWhile(s -> s.length() == 1) // [cd, ef, g]
+  ```
+
+### Throwable functions
+
+No more ugly try/catch in lambda expressions.
+
+```java
+// Java 8
+stream.map(file -> {
+    try {
+        return new FileInputStream(file);
+    } catch (IOException ioe) {
+        return null;
+    }
+})
+// LSA
+stream.map(Function.Util.safe(FileInputStream::new))
+```
+
+
+## Download
 
 Download [latest release](https://github.com/aNNiMON/Lightweight-Stream-API/releases) or grab via Maven:
+
 ```xml
 <dependency>
   <groupId>com.annimon</groupId>
   <artifactId>stream</artifactId>
-  <version>1.0.9</version>
+  <version>1.1.0</version>
 </dependency>
 ```
 or Gradle:
+
 ```groovy
 dependencies {
   ...
-  compile 'com.annimon:stream:1.0.9'
+  compile 'com.annimon:stream:1.1.0'
   ...
 }
 ```
