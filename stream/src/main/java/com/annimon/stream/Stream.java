@@ -46,11 +46,11 @@ public class Stream<T> {
     }
 
     /**
-     * Creates a {@code Stream} from {@code List}.		
-     *		
-     * @param <T> the type of the stream elements		
-     * @param list  the list with elements to be passed to stream		
-     * @return the new stream		
+     * Creates a {@code Stream} from {@code List}.
+     *
+     * @param <T> the type of the stream elements
+     * @param list  the list with elements to be passed to stream
+     * @return the new stream
      */
     // TODO: Only for binary level compatibility. Remove this method on next breaking-change version.
     @SuppressWarnings("unchecked")
@@ -498,7 +498,7 @@ public class Stream<T> {
                 hasNextEvaluated = false;
                 return next;
             }
-            
+
             private void nextIteration() {
                 while (iterator.hasNext()) {
                     next = iterator.next();
@@ -508,6 +508,11 @@ public class Stream<T> {
                     }
                 }
                 hasNext = false;
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException("remove not supported");
             }
         });
     }
