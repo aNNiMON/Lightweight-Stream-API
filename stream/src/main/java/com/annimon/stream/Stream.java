@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.Set;
 
@@ -472,10 +473,33 @@ public class Stream<T> {
      * @return the new stream
      */
     public Stream<T> filter(final Predicate<? super T> predicate) {
-        return new Stream<T>(new LsaExtIterator<T>() {
+        return new Stream<T>(new Iterator<T>() {
+
+            private boolean hasNext, hasNextEvaluated;
+            private T next;
 
             @Override
-            protected void nextIteration() {
+            public boolean hasNext() {
+                if (!hasNextEvaluated) {
+                    nextIteration();
+                    hasNextEvaluated = true;
+                }
+                return hasNext;
+            }
+
+            @Override
+            public T next() {
+                if (!hasNextEvaluated) {
+                    hasNext = hasNext();
+                }
+                if (!hasNext) {
+                    throw new NoSuchElementException();
+                }
+                hasNextEvaluated = false;
+                return next;
+            }
+            
+            private void nextIteration() {
                 while (iterator.hasNext()) {
                     next = iterator.next();
                     if (predicate.test(next)) {
