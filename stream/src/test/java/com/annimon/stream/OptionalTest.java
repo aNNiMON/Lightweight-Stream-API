@@ -130,6 +130,18 @@ public final class OptionalTest {
     }
 
     @Test
+    public void testStream() {
+        long count = Optional.of(10).stream().count();
+        assertThat(count, is(1L));
+    }
+
+    @Test
+    public void testStreamOnEmptyOptional() {
+        long count = Optional.empty().stream().count();
+        assertThat(count, is(0L));
+    }
+
+    @Test
     public void testSelectOnEmptyOptional() {
         Optional<Integer> result = Optional.empty()
                 .select(Integer.class);

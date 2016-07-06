@@ -129,6 +129,16 @@ public class Optional<T> {
     }
 
     /**
+     * Wraps a value into {@code Stream} if present, otherwise returns an empty {@code Stream}.
+     *
+     * @return the optional value as a {@code Stream}
+     */
+    public Stream<T> stream() {
+        if (!isPresent()) return Stream.empty();
+        return Stream.of(value);
+    }
+
+    /**
      * Keeps inner value only if is present and instance of given class.
      *
      * @param <R> a type of instance to select.
