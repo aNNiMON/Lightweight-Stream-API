@@ -199,6 +199,26 @@ public class StreamTest {
         assertEquals(new BigInteger("1267650600228229401496703205375"), sum);
     }
 
+    @Test(timeout=2000)
+    public void testIterateIssue53() {
+        Optional<Integer> res = Stream
+                .iterate(0, new UnaryOperator<Integer>() {
+                    @Override
+                    public Integer apply(Integer value) {
+                        return value + 1;
+                    }
+                })
+                .filter(new Predicate<Integer>() {
+                    @Override
+                    public boolean test(Integer value) {
+                        return value == 0;
+                    }
+                })
+                .findFirst();
+        assertThat(res, isPresent());
+        assertThat(res.get(), is(0));
+    }
+
     @Test
     public void testConcat() {
         final PrintConsumer<String> consumer = new PrintConsumer<String>();

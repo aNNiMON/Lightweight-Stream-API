@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Queue;
 import java.util.Set;
 
@@ -45,11 +46,11 @@ public class Stream<T> {
     }
 
     /**
-     * Creates a {@code Stream} from {@code List}.		
-     *		
-     * @param <T> the type of the stream elements		
-     * @param list  the list with elements to be passed to stream		
-     * @return the new stream		
+     * Creates a {@code Stream} from {@code List}.
+     *
+     * @param <T> the type of the stream elements
+     * @param list  the list with elements to be passed to stream
+     * @return the new stream
      */
     // TODO: Only for binary level compatibility. Remove this method on next breaking-change version.
     @SuppressWarnings("unchecked")
@@ -472,10 +473,33 @@ public class Stream<T> {
      * @return the new stream
      */
     public Stream<T> filter(final Predicate<? super T> predicate) {
-        return new Stream<T>(new LsaExtIterator<T>() {
+        return new Stream<T>(new Iterator<T>() {
+
+            private boolean hasNext, hasNextEvaluated;
+            private T next;
 
             @Override
-            protected void nextIteration() {
+            public boolean hasNext() {
+                if (!hasNextEvaluated) {
+                    nextIteration();
+                    hasNextEvaluated = true;
+                }
+                return hasNext;
+            }
+
+            @Override
+            public T next() {
+                if (!hasNextEvaluated) {
+                    hasNext = hasNext();
+                }
+                if (!hasNext) {
+                    throw new NoSuchElementException();
+                }
+                hasNextEvaluated = false;
+                return next;
+            }
+
+            private void nextIteration() {
                 while (iterator.hasNext()) {
                     next = iterator.next();
                     if (predicate.test(next)) {
@@ -484,6 +508,11 @@ public class Stream<T> {
                     }
                 }
                 hasNext = false;
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException("remove not supported");
             }
         });
     }
