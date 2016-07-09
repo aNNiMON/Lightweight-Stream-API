@@ -21,7 +21,9 @@ public interface IntPredicate {
 
     class Util {
 
-        private Util() { }
+        private Util() {
+            throw new UnsupportedOperationException();
+        }
 
         /**
          * Applies logical AND to predicates.
@@ -89,41 +91,5 @@ public interface IntPredicate {
                 }
             };
         }
-
-        /**
-         * Creates a safe {@code Predicate}.
-         *
-         * @param throwablePredicate  the predicate that may throw an exception
-         * @return a {@code Predicate} or {@code false} if exception was thrown
-         */
-        public static IntPredicate safe(ThrowablePredicate<Integer, Throwable> throwablePredicate) {
-            return safe(throwablePredicate, false);
-        }
-
-        /**
-         * Creates a safe {@code Predicate}.
-         *
-         * @param throwablePredicate  the predicate that may throw an exception
-         * @param resultIfFailed  the result which returned if exception was thrown
-         * @return a {@code Predicate} or {@code resultIfFailed}
-         * @throws NullPointerException if {@code throwablePredicate} is null
-         */
-        public static IntPredicate safe(
-                final ThrowablePredicate<Integer, Throwable> throwablePredicate,
-                final boolean resultIfFailed) {
-            return new IntPredicate() {
-
-                @Override
-                public boolean test(int value) {
-                    try {
-                        return throwablePredicate.test(value);
-                    } catch (Throwable throwable) {
-                        return resultIfFailed;
-                    }
-                }
-            };
-        }
-
     }
-
 }

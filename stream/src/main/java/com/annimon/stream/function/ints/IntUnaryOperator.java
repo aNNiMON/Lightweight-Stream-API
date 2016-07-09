@@ -20,7 +20,9 @@ public interface IntUnaryOperator {
 
     class Util {
 
-        private Util() { }
+        private Util() {
+            throw new UnsupportedOperationException();
+        }
 
         /**
          * Returns a unary operator that always returns its input argument.

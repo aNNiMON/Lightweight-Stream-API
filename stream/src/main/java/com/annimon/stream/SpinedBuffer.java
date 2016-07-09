@@ -6,7 +6,11 @@ import com.annimon.stream.function.ints.IntConsumer;
 import java.util.Arrays;
 import java.util.Iterator;
 
-class SpinedBuffer {
+final class SpinedBuffer {
+
+    private SpinedBuffer() {
+        throw new UnsupportedOperationException();
+    }
 
     abstract static class OfPrimitive<E, T_ARR, T_CONS>
             extends AbstractSpinedBuffer implements Iterable<E> {
@@ -113,8 +117,10 @@ class SpinedBuffer {
 
         public T_ARR asPrimitiveArray() {
             long size = count();
+
             if (size >= Stream.MAX_ARRAY_SIZE)
                 throw new IllegalArgumentException(Stream.BAD_SIZE);
+
             T_ARR result = newArray((int) size);
             copyInto(result, 0);
             return result;
@@ -161,11 +167,17 @@ class SpinedBuffer {
         }
 
         @Override
-        public void forEach(Consumer<? super Integer> consumer) {
+        public void forEach(final Consumer<? super Integer> consumer) {
             if (consumer instanceof IntConsumer) {
                 forEach((IntConsumer) consumer);
             } else {
-                throw new IllegalArgumentException("not supported consumer: " + consumer);
+
+                forEach(new IntConsumer() {
+                    @Override
+                    public void accept(int value) {
+                        consumer.accept(value);
+                    }
+                });
             }
         }
 
