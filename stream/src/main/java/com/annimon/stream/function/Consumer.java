@@ -14,9 +14,9 @@ public interface Consumer<T> {
     /**
      * Performs operation on argument.
      *
-     * @param value  the input argument
+     * @param t  the input argument
      */
-    void accept(T value);
+    void accept(T t);
 
     class Util {
 
