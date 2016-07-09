@@ -13,9 +13,9 @@ public interface ThrowableFunction<I, R, E extends Throwable> {
     /**
      * Applies this function to the given argument.
      *
-     * @param value  an argument
+     * @param i  an argument
      * @return the function result
      * @throws E an exception
      */
-    R apply(I value) throws E;
+    R apply(I i) throws E;
 }
