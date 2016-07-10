@@ -14,22 +14,27 @@ import java.util.Iterator;
 public final class IntStream {
 
     /**
+     * single instance for empty stream. It is safe for multi-thread environment because it has no content.
+     */
+    private static final IntStream EMPTY = new IntStream(new PrimitiveIterator.OfInt() {
+        @Override
+        public int nextInt() {
+            return 0;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return false;
+        }
+    });
+
+    /**
      * Returns an empty stream.
      *
-     * @return the new empty stream
+     * @return the empty stream
      */
     public static IntStream empty() {
-        return new IntStream(new PrimitiveIterator.OfInt() {
-            @Override
-            public int nextInt() {
-                return 0;
-            }
-
-            @Override
-            public boolean hasNext() {
-                return false;
-            }
-        });
+        return EMPTY;
     }
 
     /**
