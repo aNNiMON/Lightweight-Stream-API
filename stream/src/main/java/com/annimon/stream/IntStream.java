@@ -1,10 +1,6 @@
 package com.annimon.stream;
 
-import com.annimon.stream.function.BiConsumer;
-import com.annimon.stream.function.Function;
-import com.annimon.stream.function.IntFunction;
-import com.annimon.stream.function.Supplier;
-import com.annimon.stream.function.ints.*;
+import com.annimon.stream.function.*;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -14,6 +10,7 @@ import java.util.Iterator;
  * primitive specialization of {@link Stream}
  *
  */
+@SuppressWarnings("WeakerAccess")
 public final class IntStream {
 
     /**

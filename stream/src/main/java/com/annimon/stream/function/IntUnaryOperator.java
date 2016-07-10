@@ -1,6 +1,4 @@
-package com.annimon.stream.function.ints;
-
-import com.annimon.stream.function.FunctionalInterface;
+package com.annimon.stream.function;
 
 /**
  * Represents an operation on a single int-valued operand that produces an int-valued result.

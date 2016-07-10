@@ -4,56 +4,55 @@ package com.annimon.stream;
  * Base class for a data structure for gathering elements into a buffer and then
  * iterating them. Maintains an array of increasingly sized arrays, so there is
  * no copying cost associated with growing the data structure.
- * @since 1.8
  */
 abstract class AbstractSpinedBuffer {
     /**
      * Minimum power-of-two for the first chunk.
      */
-    public static final int MIN_CHUNK_POWER = 4;
+    static final int MIN_CHUNK_POWER = 4;
 
     /**
      * Minimum size for the first chunk.
      */
-    public static final int MIN_CHUNK_SIZE = 1 << MIN_CHUNK_POWER;
+    static final int MIN_CHUNK_SIZE = 1 << MIN_CHUNK_POWER;
 
     /**
      * Max power-of-two for chunks.
      */
-    public static final int MAX_CHUNK_POWER = 30;
+    private static final int MAX_CHUNK_POWER = 30;
 
     /**
      * Minimum array size for array-of-chunks.
      */
-    public static final int MIN_SPINE_SIZE = 8;
+    static final int MIN_SPINE_SIZE = 8;
 
 
     /**
      * log2 of the size of the first chunk.
      */
-    protected final int initialChunkPower;
+    final int initialChunkPower;
 
     /**
      * Index of the *next* element to write; may point into, or just outside of,
      * the current chunk.
      */
-    protected int elementIndex;
+    int elementIndex;
 
     /**
      * Index of the *current* chunk in the spine array, if the spine array is
      * non-null.
      */
-    protected int spineIndex;
+    int spineIndex;
 
     /**
      * Count of elements in all prior chunks.
      */
-    protected long[] priorElementCount;
+    long[] priorElementCount;
 
     /**
      * Construct with an initial capacity of 16.
      */
-    protected AbstractSpinedBuffer() {
+    AbstractSpinedBuffer() {
         this.initialChunkPower = MIN_CHUNK_POWER;
     }
 
@@ -62,7 +61,7 @@ abstract class AbstractSpinedBuffer {
      *
      * @param initialCapacity The minimum expected number of elements
      */
-    protected AbstractSpinedBuffer(int initialCapacity) {
+    AbstractSpinedBuffer(int initialCapacity) {
         if (initialCapacity < 0)
             throw new IllegalArgumentException("Illegal Capacity: "+ initialCapacity);
 
@@ -89,7 +88,7 @@ abstract class AbstractSpinedBuffer {
     /**
      * How big should the nth chunk be?
      */
-    protected int chunkSize(int n) {
+    int chunkSize(int n) {
         int power = (n == 0 || n == 1)
                 ? initialChunkPower
                 : Math.min(initialChunkPower + n - 1, MAX_CHUNK_POWER);

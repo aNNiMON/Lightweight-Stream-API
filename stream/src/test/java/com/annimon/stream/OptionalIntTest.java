@@ -1,8 +1,8 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.Supplier;
-import com.annimon.stream.function.ints.IntConsumer;
-import com.annimon.stream.function.ints.IntSupplier;
+import com.annimon.stream.function.IntConsumer;
+import com.annimon.stream.function.IntSupplier;
 import org.junit.Test;
 
 import java.util.NoSuchElementException;

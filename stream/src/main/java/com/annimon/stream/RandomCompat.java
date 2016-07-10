@@ -1,6 +1,6 @@
 package com.annimon.stream;
 
-import com.annimon.stream.function.ints.IntSupplier;
+import com.annimon.stream.function.IntSupplier;
 
 import java.util.Random;
 
@@ -8,6 +8,7 @@ import java.util.Random;
  * Backported stream apis from {@link java.util.Random} class,
  * based on {@link IntStream} only for now.
  */
+@SuppressWarnings("WeakerAccess")
 public final class RandomCompat {
 
     private final Random random;

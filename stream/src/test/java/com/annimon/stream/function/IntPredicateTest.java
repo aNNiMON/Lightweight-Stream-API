@@ -1,11 +1,9 @@
-package com.annimon.stream.function.ints;
+package com.annimon.stream.function;
 
 import com.annimon.stream.IntStream;
 import org.junit.Test;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
+import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static org.junit.Assert.*;
 
 /**
@@ -140,21 +138,8 @@ public class IntPredicateTest {
         assertEquals(IntStream.of(1,2,3,4,5,6,7,8,9).filter(notDivBy3).count(), 6);
     }
 
-    @Test(expected = InvocationTargetException.class)
-    public void testPrivateUtilConstructor() throws InvocationTargetException {
-
-        try {
-            Constructor<IntPredicate.Util> c = IntPredicate.Util.class.getDeclaredConstructor();
-            c.setAccessible(true);
-            IntPredicate.Util u = c.newInstance();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            throw e;
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
+    @Test
+    public void testPrivateUtilConstructor() {
+        assertThat(IntPredicate.Util.class, hasOnlyPrivateConstructors());
     }
 }

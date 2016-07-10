@@ -1,8 +1,6 @@
 package com.annimon.stream;
 
-import com.annimon.stream.function.BiFunction;
-import com.annimon.stream.function.IntFunction;
-import com.annimon.stream.function.ints.*;
+import com.annimon.stream.function.*;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

@@ -1,8 +1,4 @@
-package com.annimon.stream.function.ints;
-
-import com.annimon.stream.function.FunctionalInterface;
-import com.annimon.stream.function.Predicate;
-import com.annimon.stream.function.ThrowablePredicate;
+package com.annimon.stream.function;
 
 /**
  * Represents a predicate, i.e. function with boolean type result.

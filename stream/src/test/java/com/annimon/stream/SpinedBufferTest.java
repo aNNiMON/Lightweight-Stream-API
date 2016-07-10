@@ -1,15 +1,11 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.Consumer;
-import com.annimon.stream.function.ints.IntConsumer;
+import com.annimon.stream.function.IntConsumer;
 import org.junit.Test;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
+import static org.junit.Assert.*;
 
 /**
  * Tests for {@link SpinedBuffer}
@@ -125,9 +121,6 @@ public class SpinedBufferTest {
 
         b.accept(42);
 
-        for(int i = 0; i < 8; i++)
-            System.out.print(b.spine[i].length + " ");
-
         assertEquals(16, b.spine.length);
     }
 
@@ -219,7 +212,7 @@ public class SpinedBufferTest {
         assertEquals(0, b3.elementIndex);
     }
 
-    class TestForEach implements Consumer<Integer>, IntConsumer {
+    private class TestForEach implements Consumer<Integer>, IntConsumer {
         @Override
         public void accept(Integer value) {
             throw new IllegalStateException();
@@ -329,21 +322,8 @@ public class SpinedBufferTest {
         new SpinedBuffer.OfInt().iterator().remove();
     }
 
-    @Test(expected = InvocationTargetException.class)
-    public void testPrivateConstructor() throws InvocationTargetException {
-
-        try {
-            Constructor<SpinedBuffer> c = SpinedBuffer.class.getDeclaredConstructor();
-            c.setAccessible(true);
-            SpinedBuffer u = c.newInstance();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            throw e;
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
+    @Test
+    public void testPrivateConstructor() {
+        assertThat(SpinedBuffer.class, hasOnlyPrivateConstructors());
     }
 }

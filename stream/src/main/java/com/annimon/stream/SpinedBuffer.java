@@ -1,7 +1,7 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.Consumer;
-import com.annimon.stream.function.ints.IntConsumer;
+import com.annimon.stream.function.IntConsumer;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -42,7 +42,7 @@ final class SpinedBuffer {
 
         protected abstract void arrayForEach(T_ARR array, int from, int to, T_CONS consumer);
 
-        protected long capacity() {
+        long capacity() {
             return (spineIndex == 0)
                     ? arrayLength(curChunk)
                     : priorElementCount[spineIndex] + arrayLength(spine[spineIndex]);
@@ -56,7 +56,7 @@ final class SpinedBuffer {
             }
         }
 
-        protected final void ensureCapacity(long targetSize) {
+        final void ensureCapacity(long targetSize) {
             long capacity = capacity();
             if (targetSize > capacity) {
                 inflateSpine();
@@ -74,11 +74,11 @@ final class SpinedBuffer {
             }
         }
 
-        protected void increaseCapacity() {
+        void increaseCapacity() {
             ensureCapacity(capacity() + 1);
         }
 
-        protected int chunkFor(long index) {
+        int chunkFor(long index) {
             if (spineIndex == 0) {
                 if (index < elementIndex)
                     return 0;
@@ -96,7 +96,8 @@ final class SpinedBuffer {
             throw new IndexOutOfBoundsException(Long.toString(index));
         }
 
-        public void copyInto(T_ARR array, int offset) {
+        @SuppressWarnings("SuspiciousSystemArraycopy")
+        void copyInto(T_ARR array, int offset) {
             long finalOffset = offset + count();
             if (finalOffset > arrayLength(array) || finalOffset < offset) {
                 throw new IndexOutOfBoundsException("does not fit");
@@ -115,7 +116,7 @@ final class SpinedBuffer {
             }
         }
 
-        public T_ARR asPrimitiveArray() {
+        T_ARR asPrimitiveArray() {
             long size = count();
 
             if (size >= Stream.MAX_ARRAY_SIZE)
@@ -126,7 +127,7 @@ final class SpinedBuffer {
             return result;
         }
 
-        protected void preAccept() {
+        void preAccept() {
             if (elementIndex == arrayLength(curChunk)) {
                 inflateSpine();
                 if (spineIndex+1 >= spine.length || spine[spineIndex+1] == null)
@@ -148,7 +149,7 @@ final class SpinedBuffer {
         }
 
         @SuppressWarnings("overloads")
-        public void forEach(T_CONS consumer) {
+        void forEach(T_CONS consumer) {
             // completed chunks, if any
             for (int j = 0; j < spineIndex; j++)
                 arrayForEach(spine[j], 0, arrayLength(spine[j]), consumer);
@@ -171,7 +172,6 @@ final class SpinedBuffer {
             if (consumer instanceof IntConsumer) {
                 forEach((IntConsumer) consumer);
             } else {
-
                 forEach(new IntConsumer() {
                     @Override
                     public void accept(int value) {

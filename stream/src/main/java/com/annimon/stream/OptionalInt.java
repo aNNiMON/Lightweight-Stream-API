@@ -1,8 +1,8 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.Supplier;
-import com.annimon.stream.function.ints.IntConsumer;
-import com.annimon.stream.function.ints.IntSupplier;
+import com.annimon.stream.function.IntConsumer;
+import com.annimon.stream.function.IntSupplier;
 
 import java.util.NoSuchElementException;
 
@@ -11,6 +11,7 @@ import java.util.NoSuchElementException;
  * If a value is present, {@code isPresent()} will return {@code true} and
  * {@code getAsInt()} will return the value.
  */
+@SuppressWarnings("WeakerAccess")
 public final class OptionalInt {
     /**
      * Common instance for {@code empty()}.

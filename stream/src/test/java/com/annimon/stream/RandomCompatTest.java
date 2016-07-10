@@ -1,6 +1,6 @@
 package com.annimon.stream;
 
-import com.annimon.stream.function.ints.IntConsumer;
+import com.annimon.stream.function.IntConsumer;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

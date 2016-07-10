@@ -1,8 +1,4 @@
-package com.annimon.stream.function.ints;
-
-
-import com.annimon.stream.function.FunctionalInterface;
-import com.annimon.stream.function.Supplier;
+package com.annimon.stream.function;
 
 /**
  * Represents a supplier of {@code int}-valued results.  This is the

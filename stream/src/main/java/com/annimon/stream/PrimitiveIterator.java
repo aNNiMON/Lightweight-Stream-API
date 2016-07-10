@@ -1,6 +1,6 @@
 package com.annimon.stream;
 
-import com.annimon.stream.function.ints.IntConsumer;
+import com.annimon.stream.function.IntConsumer;
 
 import java.util.Iterator;
 
@@ -8,6 +8,7 @@ import java.util.Iterator;
  * A base type for primitive specializations of {@code Iterator}. Specialized
  * subtypes are provided for {@link OfInt int} values.
  */
+@SuppressWarnings("WeakerAccess")
 public interface PrimitiveIterator<T, T_CONS> extends Iterator<T> {
 
     void forEachRemaining(T_CONS action);
