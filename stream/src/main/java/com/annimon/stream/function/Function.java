@@ -12,10 +12,10 @@ public interface Function<T, R> {
     /**
      * Applies this function to the given argument.
      *
-     * @param value  an argument
+     * @param t  an argument
      * @return the function result
      */
-    R apply(T value);
+    R apply(T t);
 
     class Util {
 
