@@ -69,6 +69,39 @@ public class OptionalIntTest {
     }
 
     @Test
+    public void testOr() {
+        int value = OptionalInt.of(42).or(new Supplier<OptionalInt>() {
+            @Override
+            public OptionalInt get() {
+                return OptionalInt.of(19);
+            }
+        }).getAsInt();
+        assertEquals(42, value);
+    }
+
+    @Test
+    public void testOrOnEmptyOptional() {
+        int value = OptionalInt.empty().or(new Supplier<OptionalInt>() {
+            @Override
+            public OptionalInt get() {
+                return OptionalInt.of(19);
+            }
+        }).getAsInt();
+        assertEquals(19, value);
+    }
+
+    @Test
+    public void testOrOnEmptyOptionalAndEmptySupplierOptional() {
+        final OptionalInt optional = OptionalInt.empty().or(new Supplier<OptionalInt>() {
+            @Override
+            public OptionalInt get() {
+                return OptionalInt.empty();
+            }
+        });
+        assertFalse(optional.isPresent());
+    }
+
+    @Test
     public void testOrElse() {
         assertEquals(17, OptionalInt.empty().orElse(17));
         assertEquals(17, OptionalInt.of(17).orElse(0));

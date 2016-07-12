@@ -111,6 +111,22 @@ public final class OptionalInt {
     }
 
     /**
+     * Returns current {@code OptionalInt} if value is present, otherwise
+     * returns an {@code Optional} produced by supplier function.
+     *
+     * @param supplier  supplier function that produced an {@code OptionalInt} to be returned
+     * @return this {@code OptionalInt} if value is present, otherwise
+     *         an {@code OptionalInt} produced by supplier function
+     * @throws NullPointerException if value is not present and
+     *         {@code supplier} or value produced by it is {@code null}
+     */
+    public OptionalInt or(Supplier<OptionalInt> supplier) {
+        if (isPresent()) return this;
+        Objects.requireNonNull(supplier);
+        return Objects.requireNonNull(supplier.get());
+    }
+
+    /**
      * Return the value if present, otherwise return {@code other}.
      *
      * @param other the value to be returned if there is no value present
