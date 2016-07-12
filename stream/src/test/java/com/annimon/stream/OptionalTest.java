@@ -5,6 +5,7 @@ import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Predicate;
 import com.annimon.stream.function.Supplier;
 import com.annimon.stream.function.UnaryOperator;
+import static com.annimon.stream.test.hamcrest.OptionalMatcher.hasValue;
 import static com.annimon.stream.test.hamcrest.OptionalMatcher.isEmpty;
 import static com.annimon.stream.test.hamcrest.OptionalMatcher.isPresent;
 import java.util.NoSuchElementException;
@@ -89,7 +90,7 @@ public final class OptionalTest {
                     }
                 });
 
-        assertThat(result.get(), is("A"));
+        assertThat(result, hasValue("A"));
     }
 
     @Test
@@ -102,7 +103,7 @@ public final class OptionalTest {
                     }
                 });
 
-        assertThat(result.get(), is("A"));
+        assertThat(result, hasValue("A"));
     }
 
     @Test
@@ -146,7 +147,7 @@ public final class OptionalTest {
         Optional<Integer> result = Optional.empty()
                 .select(Integer.class);
 
-        assertFalse(result.isPresent());
+        assertThat(result, isEmpty());
     }
 
     @Test
@@ -157,8 +158,8 @@ public final class OptionalTest {
         Optional<Integer> result = Optional.of(number)
                 .select(Integer.class);
 
-        assertTrue(result.isPresent());
-        assertEquals(result.get().intValue(), 42);
+        assertThat(result, isPresent());
+        assertThat(result, hasValue(42));
     }
 
     @Test
@@ -169,7 +170,7 @@ public final class OptionalTest {
         Optional<String> result = Optional.of(number)
                 .select(String.class);
 
-        assertFalse(result.isPresent());
+        assertThat(result, isEmpty());
     }
 
     @Test(expected = NullPointerException.class)

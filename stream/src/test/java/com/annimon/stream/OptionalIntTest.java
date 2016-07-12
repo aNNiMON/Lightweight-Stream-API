@@ -3,6 +3,8 @@ package com.annimon.stream;
 import com.annimon.stream.function.Supplier;
 import com.annimon.stream.function.IntConsumer;
 import com.annimon.stream.function.IntSupplier;
+import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.isEmpty;
+import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.isPresent;
 import org.junit.Test;
 
 import java.util.NoSuchElementException;
@@ -11,7 +13,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for {@link OptionalInt}
@@ -31,12 +32,12 @@ public class OptionalIntTest {
 
     @Test
     public void testIsPresent() {
-        assertTrue(OptionalInt.of(10).isPresent());
+        assertThat(OptionalInt.of(10), isPresent());
     }
 
     @Test
     public void testIsPresentOnEmptyOptional() {
-        assertFalse(OptionalInt.empty().isPresent());
+        assertThat(OptionalInt.empty(), isEmpty());
     }
 
     @Test
@@ -98,7 +99,7 @@ public class OptionalIntTest {
                 return OptionalInt.empty();
             }
         });
-        assertFalse(optional.isPresent());
+        assertThat(optional, isEmpty());
     }
 
     @Test
@@ -138,18 +139,14 @@ public class OptionalIntTest {
         }
     }
 
-    @Test
+    @Test(expected = NoSuchElementException.class)
     public void testOrElseThrow2() {
-        try {
-            assertEquals(25, OptionalInt.empty().orElseThrow(new Supplier<NoSuchElementException>() {
-                @Override
-                public NoSuchElementException get() {
-                    return new NoSuchElementException();
-                }
-            }));
-        } catch (Exception ne) {
-            assertEquals(NoSuchElementException.class, ne.getClass());
-        }
+        assertEquals(25, OptionalInt.empty().orElseThrow(new Supplier<NoSuchElementException>() {
+            @Override
+            public NoSuchElementException get() {
+                return new NoSuchElementException();
+            }
+        }));
     }
 
     @SuppressWarnings("EqualsBetweenInconvertibleTypes")
