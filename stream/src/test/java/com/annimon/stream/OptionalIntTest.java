@@ -6,9 +6,11 @@ import com.annimon.stream.function.IntSupplier;
 import org.junit.Test;
 
 import java.util.NoSuchElementException;
+import static org.hamcrest.CoreMatchers.is;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -52,6 +54,18 @@ public class OptionalIntTest {
                 assertEquals(15, value);
             }
         });
+    }
+
+    @Test
+    public void testStream() {
+        long count = OptionalInt.of(10).stream().count();
+        assertThat(count, is(1L));
+    }
+
+    @Test
+    public void testStreamOnEmptyOptional() {
+        long count = OptionalInt.empty().stream().count();
+        assertThat(count, is(0L));
     }
 
     @Test

@@ -101,6 +101,16 @@ public final class OptionalInt {
     }
 
     /**
+     * Wraps a value into {@code IntStream} if present, otherwise returns an empty {@code IntStream}.
+     *
+     * @return the optional value as an {@code IntStream}
+     */
+    public IntStream stream() {
+        if (!isPresent()) return IntStream.empty();
+        return IntStream.of(value);
+    }
+
+    /**
      * Return the value if present, otherwise return {@code other}.
      *
      * @param other the value to be returned if there is no value present
