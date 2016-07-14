@@ -17,9 +17,7 @@ public interface IntUnaryOperator {
 
     class Util {
 
-        private Util() {
-            throw new UnsupportedOperationException();
-        }
+        private Util() { }
 
         /**
          * Returns a unary operator that always returns its input argument.

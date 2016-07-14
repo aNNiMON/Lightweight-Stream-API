@@ -9,7 +9,6 @@ import java.util.Iterator;
 final class SpinedBuffer {
 
     private SpinedBuffer() {
-        throw new UnsupportedOperationException();
     }
 
     abstract static class OfPrimitive<E, T_ARR, T_CONS>

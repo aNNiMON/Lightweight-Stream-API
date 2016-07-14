@@ -16,9 +16,7 @@ public interface IntPredicate {
 
     class Util {
 
-        private Util() {
-            throw new UnsupportedOperationException();
-        }
+        private Util() { }
 
         /**
          * Applies logical AND to predicates.

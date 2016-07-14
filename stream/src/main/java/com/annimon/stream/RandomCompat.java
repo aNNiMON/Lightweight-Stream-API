@@ -58,12 +58,7 @@ public final class RandomCompat {
         if(streamSize == 0L)
             return IntStream.empty();
 
-        return IntStream.generate(new IntSupplier() {
-            @Override
-            public int getAsInt() {
-                return random.nextInt();
-            }
-        }).limit(streamSize);
+        return ints().limit(streamSize);
     }
 
     /**
@@ -126,7 +121,7 @@ public final class RandomCompat {
 
         return IntStream.generate(new IntSupplier() {
 
-            private int bound = randomNumberBound - randomNumberOrigin;
+            private final int bound = randomNumberBound - randomNumberOrigin;
 
             @Override
             public int getAsInt() {
