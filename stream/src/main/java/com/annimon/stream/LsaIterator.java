@@ -4,8 +4,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- *
- * @author aNNiMON
+ * Abstract iterator with implemented {@code remove} method.
  */
 abstract class LsaIterator<T> implements Iterator<T> {
  

@@ -14,23 +14,24 @@ public final class RandomCompat {
     private final Random random;
 
     /**
-     * Constructs object, inner {@code random} created with default constructor
+     * Constructs object, inner {@code random} created with default constructor.
      */
     public RandomCompat() {
         this.random = new Random();
     }
 
     /**
-     * Constructs object, inner {@code random} created with seed passed as param
+     * Constructs object, inner {@code random} created with seed passed as param.
      *
-     * @param seed seed to initialize {@code random} object.
+     * @param seed seed to initialize {@code random} object
      */
     public RandomCompat(long seed) {
         this.random = new Random(seed);
     }
 
     /**
-     * Returns underlying {@link java.util.Random} instance
+     * Returns underlying {@link java.util.Random} instance.
+     * 
      * @return {@link java.util.Random} object instance
      */
     public Random getRandom() {

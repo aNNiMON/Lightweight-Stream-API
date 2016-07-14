@@ -138,6 +138,7 @@ final class SpinedBuffer {
             }
         }
 
+        @Override
         public void clear() {
             if (spine != null) {
                 curChunk = spine[0];
@@ -220,6 +221,7 @@ final class SpinedBuffer {
                 return spine[ch][(int) (index - priorElementCount[ch])];
         }
 
+        @Override
         public PrimitiveIterator.OfInt iterator() {
             return new PrimitiveIterator.OfInt() {
 

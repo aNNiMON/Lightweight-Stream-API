@@ -7,6 +7,9 @@ import java.util.Iterator;
 /**
  * A base type for primitive specializations of {@code Iterator}. Specialized
  * subtypes are provided for {@link OfInt int} values.
+ *
+ * @param <T> the type of the iterator elements
+ * @param <T_CONS> the type of consumer
  */
 @SuppressWarnings("WeakerAccess")
 public interface PrimitiveIterator<T, T_CONS> extends Iterator<T> {

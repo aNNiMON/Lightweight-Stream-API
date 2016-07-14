@@ -3,6 +3,11 @@ package com.annimon.stream;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/**
+ * Extended iterator for common purposes.
+ *
+ * @param <T> the type of the inner value
+ */
 public abstract class LsaExtIterator<T> implements Iterator<T> {
 
     protected T next;

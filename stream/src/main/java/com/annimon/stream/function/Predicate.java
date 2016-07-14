@@ -1,7 +1,7 @@
 package com.annimon.stream.function;
 
 /**
- * Represents a predicate, i.e. function with boolean type result.
+ * Represents a predicate (function with boolean type result).
  *
  * @param <T> the type of the input to the function
  */

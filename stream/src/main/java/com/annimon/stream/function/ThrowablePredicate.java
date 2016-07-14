@@ -1,10 +1,11 @@
 package com.annimon.stream.function;
 
 /**
- * Represents a predicate, i.e. function with boolean type result which can throw an exception.
+ * Represents a predicate (function with boolean type result) which can throw an exception.
  *
  * @param <T> the type of the input to the function
  * @param <E> the type of the exception
+ * @see Predicate
  */
 @FunctionalInterface
 public interface ThrowablePredicate<T, E extends Throwable> {

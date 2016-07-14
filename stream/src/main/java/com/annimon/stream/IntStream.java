@@ -7,14 +7,13 @@ import java.util.Iterator;
 
 /**
  * A sequence of primitive int-valued elements supporting sequential operations. This is the {@code int}
- * primitive specialization of {@link Stream}
- *
+ * primitive specialization of {@link Stream}.
  */
 @SuppressWarnings("WeakerAccess")
 public final class IntStream {
 
     /**
-     * single instance for empty stream. It is safe for multi-thread environment because it has no content.
+     * Single instance for empty stream. It is safe for multi-thread environment because it has no content.
      */
     private static final IntStream EMPTY = new IntStream(new PrimitiveIterator.OfInt() {
         @Override
@@ -89,6 +88,7 @@ public final class IntStream {
      * Creates a lazily concatenated stream whose elements are all the
      * elements of the first stream followed by all the elements of the
      * second stream.
+     *
      * @param a the first stream
      * @param b the second stream
      * @return the concatenation of the two input streams
@@ -145,7 +145,7 @@ public final class IntStream {
     /**
      * Returns an infinite sequential ordered {@code IntStream} produced by iterative
      * application of a function {@code f} to an initial element {@code seed},
-     * prooducing a {@code Stream} consisting of {@code seed}, {@code f(seed)},
+     * producing a {@code Stream} consisting of {@code seed}, {@code f(seed)},
      * {@code f(f(seed))}, etc.
      *
      * <p> The first element (position {@code 0}) in the {@code IntStream} will be
@@ -231,8 +231,9 @@ public final class IntStream {
     }
 
     /**
-     * Returns stream's internal iterator
-     * @return stream's internal iterator
+     * Returns internal {@code IntStream} iterator.
+     *
+     * @return internal {@code IntStream} iterator.
      */
     public PrimitiveIterator.OfInt iterator() {
         return iterator;
@@ -242,7 +243,7 @@ public final class IntStream {
      * Returns a stream consisting of the elements of this stream that match
      * the given predicate.
      *
-     * <p> This is an intermidiate operation.
+     * <p> This is an intermediate operation.
      *
      * @param predicate non-interfering, stateless predicate to apply to each
      *                  element to determine if it should be included
@@ -278,7 +279,7 @@ public final class IntStream {
      * Returns a stream consisting of the elements of this stream that don't
      * match the given predicate.
      *
-     * <p> This is an intermidiate operation.
+     * <p> This is an intermediate operation.
      *
      * @param predicate non-interfering, stateless predicate to apply to each
      *                  element to determine if it should not be included
@@ -292,7 +293,7 @@ public final class IntStream {
      * Returns a stream consisting of the results of applying the given
      * function to the elements of this stream.
      *
-     * <p> This is an intermidiate operation.
+     * <p> This is an intermediate operation.
      *
      * @param mapper a non-interfering stateless function to apply to
      *               each element
@@ -317,7 +318,8 @@ public final class IntStream {
      * this stream with the contents of a mapped stream produced by applying
      * the provided mapping function to each element.
      *
-     * <p>This is an intermidiate operation.
+     * <p>This is an intermediate operation.
+     * 
      * @param mapper a non-interfering stateless function to apply to each
      *               element which produces an {@code IntStream} of new values
      * @return the new stream
@@ -426,6 +428,7 @@ public final class IntStream {
      * from the resulting stream. Handy method for debugging purposes.
      *
      * <p>This is an intermediate operation.
+     * 
      * @param action the action to be performed on each element
      * @return the new stream
      */
@@ -629,7 +632,7 @@ public final class IntStream {
      * <p>This is a terminal operation.
      *
      * @return an {@code OptionalInt} containing the minimum element of this
-     * stream, or an empty {@code OptionalInt} if the stream is empty
+     *         stream, or an empty {@code OptionalInt} if the stream is empty
      */
     public OptionalInt min() {
         return reduce(new IntBinaryOperator() {
@@ -647,7 +650,7 @@ public final class IntStream {
      * <p>This is a terminal operation.
      *
      * @return an {@code OptionalInt} containing the maximum element of this
-     * stream, or an empty {@code OptionalInt} if the stream is empty
+     *         stream, or an empty {@code OptionalInt} if the stream is empty
      */
     public OptionalInt max() {
         return reduce(new IntBinaryOperator() {
@@ -685,7 +688,7 @@ public final class IntStream {
      * @param predicate a non-interfering stateless predicate to apply
      *                  to elements of this stream
      * @return {@code true} if any elements of the stream match the provided
-     * predicate, otherwise {@code false}
+     *         predicate, otherwise {@code false}
      */
     public boolean anyMatch(IntPredicate predicate) {
         while(iterator.hasNext()) {
@@ -707,7 +710,7 @@ public final class IntStream {
      * @param predicate a non-interfering stateless predicate to apply to
      *                  elements of this stream
      * @return {@code true} if either all elements of the stream match the
-     * provided predicate or the stream is empty, otherwise {@code false}
+     *         provided predicate or the stream is empty, otherwise {@code false}
      */
     public boolean allMatch(IntPredicate predicate) {
         while(iterator.hasNext()) {
@@ -729,7 +732,7 @@ public final class IntStream {
      * @param predicate a non-interfering stateless predicate to apply to
      *                  elements of this stream
      * @return {@code true} if either no elements of the stream match the
-     * provided predicate or the stream is empty, otherwise {@code false}
+     *         provided predicate or the stream is empty, otherwise {@code false}
      */
     public boolean noneMatch(IntPredicate predicate) {
 
@@ -751,7 +754,7 @@ public final class IntStream {
      * <p>This is a short-circuiting terminal operation.
      *
      * @return an {@code OptionalInt} describing the first element of this stream,
-     * or an empty {@code OptionalInt} if the stream is empty
+     *         or an empty {@code OptionalInt} if the stream is empty
      */
     public OptionalInt findFirst() {
         if(iterator.hasNext()) {
@@ -768,7 +771,7 @@ public final class IntStream {
      * <p>This is an lazy intermediate operation.
      *
      * @return a {@code Stream} consistent of the elements of this stream,
-     * each boxed to an {@code Integer}
+     *         each boxed to an {@code Integer}
      */
     public Stream<Integer> boxed() {
         return Stream.of(iterator);

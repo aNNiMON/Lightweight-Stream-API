@@ -6,6 +6,7 @@ package com.annimon.stream.function;
  * @param <I> the type of the input of the function
  * @param <R> the type of the result of the function
  * @param <E> the type of the exception
+ * @see Function
  */
 @FunctionalInterface
 public interface ThrowableFunction<I, R, E extends Throwable> {

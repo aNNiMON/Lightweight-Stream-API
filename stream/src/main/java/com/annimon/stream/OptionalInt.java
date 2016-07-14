@@ -93,7 +93,7 @@ public final class OptionalInt {
      *
      * @param consumer block to be executed if a value is present
      * @throws NullPointerException if value is present and {@code consumer} is
-     * null
+     *         null
      */
     public void ifPresent(IntConsumer consumer) {
         if (isPresent)
@@ -144,13 +144,21 @@ public final class OptionalInt {
      *              is present
      * @return the value if present otherwise the result of {@code other.getAsInt()}
      * @throws NullPointerException if value is not present and {@code other} is
-     * null
+     *         null
      */
     public int orElseGet(IntSupplier other) {
         return isPresent ? value : other.getAsInt();
     }
 
-    public<X extends Throwable> int orElseThrow(Supplier<X> exceptionSupplier) throws X {
+    /**
+     * Returns the value if present, otherwise throws an exception provided by supplier function.
+     *
+     * @param <X> the type of exception to be thrown
+     * @param exceptionSupplier  supplier function that produced exception to be thrown
+     * @return inner value if present
+     * @throws X if inner value is not present
+     */
+    public <X extends Throwable> int orElseThrow(Supplier<X> exceptionSupplier) throws X {
         if(isPresent) {
             return value;
         } else {
@@ -159,7 +167,7 @@ public final class OptionalInt {
     }
 
     /**
-     * Indicates wheter some other object is "equal to" this OptionalInt. The
+     * Indicates whether some other object is "equal to" this OptionalInt. The
      * other object is considered equal if:
      * <ul>
      *    <li> it is also an {@code OptionalInt} and;
@@ -169,7 +177,7 @@ public final class OptionalInt {
      *
      * @param obj an object to be tested for equality
      * @return {@code true} if the other object is "equal to" this object
-     * otherwise {@code false}
+     *         otherwise {@code false}
      */
     @Override
     public boolean equals(Object obj) {
@@ -201,6 +209,7 @@ public final class OptionalInt {
     /**
      * Returns a non-empty string representation of this object suitable for
      * debugging.
+     * 
      * @return the string representation of this instance
      */
     @Override
