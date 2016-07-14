@@ -290,14 +290,14 @@ public final class IntStream {
     }
 
     /**
-     * Returns a stream consisting of the results of applying the given
+     * Returns an {@code IntStream} consisting of the results of applying the given
      * function to the elements of this stream.
      *
      * <p> This is an intermediate operation.
      *
      * @param mapper a non-interfering stateless function to apply to
      *               each element
-     * @return the new stream
+     * @return the new {@code IntStream}
      */
     public IntStream map(final IntUnaryOperator mapper) {
         return new IntStream(new PrimitiveIterator.OfInt() {
@@ -314,12 +314,37 @@ public final class IntStream {
     }
 
     /**
+     * Returns a {@code Stream} consisting of the results of applying the given
+     * function to the elements of this stream.
+     *
+     * <p> This is an intermediate operation.
+     *
+     * @param <R> the type result
+     * @param mapper the mapper function used to apply to each element
+     * @return the new {@code Stream}
+     */
+    public <R> Stream<R> mapToObj(final IntFunction<? extends R> mapper) {
+        return Stream.of(new LsaIterator<R>() {
+
+            @Override
+            public boolean hasNext() {
+                return iterator.hasNext();
+            }
+
+            @Override
+            public R nextIteration() {
+                return mapper.apply(iterator.nextInt());
+            }
+        });
+    }
+
+    /**
      * Returns a stream consisting of the results of replacing each element of
      * this stream with the contents of a mapped stream produced by applying
      * the provided mapping function to each element.
      *
      * <p>This is an intermediate operation.
-     * 
+     *
      * @param mapper a non-interfering stateless function to apply to each
      *               element which produces an {@code IntStream} of new values
      * @return the new stream
@@ -428,7 +453,7 @@ public final class IntStream {
      * from the resulting stream. Handy method for debugging purposes.
      *
      * <p>This is an intermediate operation.
-     * 
+     *
      * @param action the action to be performed on each element
      * @return the new stream
      */

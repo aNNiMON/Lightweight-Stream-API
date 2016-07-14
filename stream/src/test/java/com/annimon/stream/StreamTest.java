@@ -5,8 +5,10 @@ import com.annimon.stream.function.BiFunction;
 import com.annimon.stream.function.BinaryOperator;
 import com.annimon.stream.function.Consumer;
 import com.annimon.stream.function.Function;
+import com.annimon.stream.function.IntUnaryOperator;
 import com.annimon.stream.function.Predicate;
 import com.annimon.stream.function.Supplier;
+import com.annimon.stream.function.ToIntFunction;
 import com.annimon.stream.function.UnaryOperator;
 import com.annimon.stream.test.hamcrest.OptionalMatcher;
 
@@ -381,6 +383,22 @@ public class StreamTest {
     }
 
     @Test
+    public void testMapToInt() {
+        final ToIntFunction<String> stringToSquareInt = new ToIntFunction<String>() {
+            @Override
+            public int applyAsInt(String t) {
+                final String str = t.substring(1, t.length() - 1);
+                final int value = Integer.parseInt(str);
+                return value * value;
+            }
+        };
+        int[] expected = { 4, 9, 16, 64, 625 };
+        IntStream stream = Stream.of("[2]", "[3]", "[4]", "[8]", "[25]")
+                .mapToInt(stringToSquareInt);
+        assertThat(stream.toArray(), is(expected));
+    }
+
+    @Test
     public void testFlatMap() {
         final PrintConsumer<String> consumer = new PrintConsumer<String>();
         Stream.rangeClosed(2, 4)
@@ -408,6 +426,24 @@ public class StreamTest {
                 "3 * 4 = 12\n" +
                 "4 * 2 = 8\n" +
                 "4 * 4 = 16\n", consumer.toString());
+    }
+
+    @Test
+    public void testFlatMapToInt() {
+        int[] actual = Stream.rangeClosed(2, 4)
+                .flatMapToInt(new Function<Integer, IntStream>() {
+
+                    @Override
+                    public IntStream apply(Integer t) {
+                        return IntStream
+                                .iterate(t, IntUnaryOperator.Util.identity())
+                                .limit(t);
+                    }
+                })
+                .toArray();
+
+        int[] expected = { 2, 2, 3, 3, 3, 4, 4, 4, 4 };
+        assertThat(actual, is(expected));
     }
 
     @Test

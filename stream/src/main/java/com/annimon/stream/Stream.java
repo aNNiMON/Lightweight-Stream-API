@@ -456,7 +456,7 @@ public class Stream<T> {
      *     }
      * </code></pre>
      *
-     * @param <R> the type result
+     * @param <R> the type of the result
      * @param function  a transforming function
      * @return a result of the transforming function
      */
@@ -574,6 +574,30 @@ public class Stream<T> {
     }
 
     /**
+     * Returns {@code IntStream} with elements that obtained by applying the given function.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @param mapper  the mapper function used to apply to each element
+     * @return the new {@code IntStream}
+     * @see #map(com.annimon.stream.function.Function)
+     */
+    public IntStream mapToInt(final ToIntFunction<? super T> mapper) {
+        return new IntStream(new PrimitiveIterator.OfInt() {
+
+            @Override
+            public boolean hasNext() {
+                return iterator.hasNext();
+            }
+
+            @Override
+            public int nextInt() {
+                return mapper.applyAsInt(iterator.next());
+            }
+        });
+    }
+
+    /**
      * Generates {@code Stream} by concatenating elements that obtained by applying the given function.
      *
      * <p>This is an intermediate operation.
@@ -600,6 +624,66 @@ public class Stream<T> {
                         final Stream <? extends R> result = mapper.apply(arg);
                         if (result != null) {
                             inner = result.iterator;
+                        }
+                    }
+                    if ((inner != null) && inner.hasNext()) {
+                        next = inner.next();
+                        hasNext = true;
+                        return;
+                    }
+                }
+                hasNext = false;
+            }
+        });
+    }
+
+    /**
+     * Generates {@code IntStream} by concatenating elements that obtained by applying the given function.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @param mapper  the mapper function used to apply to each element
+     * @return the new {@code IntStream}
+     * @see #flatMap(com.annimon.stream.function.Function)
+     */
+    public IntStream flatMapToInt(final Function<? super T, ? extends IntStream> mapper) {
+        return new IntStream(new PrimitiveIterator.OfInt() {
+
+            private int next;
+            private PrimitiveIterator.OfInt inner;
+            private boolean hasNext, isInit;
+
+            @Override
+            public boolean hasNext() {
+                if (!isInit) {
+                    nextIteration();
+                    isInit = true;
+                }
+                return hasNext;
+            }
+
+            @Override
+            public int nextInt() {
+                if (!hasNext) {
+                    throw new NoSuchElementException();
+                }
+                final int result = next;
+                nextIteration();
+                return result;
+            }
+
+            private void nextIteration() {
+                if ((inner != null) && inner.hasNext()) {
+                    next = inner.next();
+                    hasNext = true;
+                    return;
+                }
+                while (iterator.hasNext()) {
+                    if (inner == null || !inner.hasNext()) {
+                        final T arg = iterator.next();
+                        final IntStream result = mapper.apply(arg);
+                        if (result != null) {
+                            inner = result.iterator();
                         }
                     }
                     if ((inner != null) && inner.hasNext()) {

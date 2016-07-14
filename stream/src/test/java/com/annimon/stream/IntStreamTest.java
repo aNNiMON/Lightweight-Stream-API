@@ -1,6 +1,10 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.*;
+import static com.annimon.stream.test.hamcrest.StreamMatcher.elements;
+import java.util.Arrays;
+import java.util.List;
+import static org.hamcrest.CoreMatchers.is;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -174,6 +178,19 @@ public class IntStreamTest {
                 return -operand;
             }
         }).sum() < 0);
+    }
+
+    @Test
+    public void testStreamMapToObj() {
+        Stream<String> stream = IntStream.rangeClosed(2, 4)
+                .mapToObj(new IntFunction<String>() {
+                    @Override
+                    public String apply(int value) {
+                        return Integer.toString(value);
+                    }
+                });
+        List<String> expected = Arrays.asList("2", "3", "4");
+        assertThat(stream, elements(is(expected)));
     }
 
     @Test
