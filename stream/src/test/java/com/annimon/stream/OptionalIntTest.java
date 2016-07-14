@@ -3,13 +3,16 @@ package com.annimon.stream;
 import com.annimon.stream.function.Supplier;
 import com.annimon.stream.function.IntConsumer;
 import com.annimon.stream.function.IntSupplier;
+import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.isEmpty;
+import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.isPresent;
 import org.junit.Test;
 
 import java.util.NoSuchElementException;
+import static org.hamcrest.CoreMatchers.is;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertThat;
 
 /**
  * Tests for {@link OptionalInt}
@@ -29,12 +32,12 @@ public class OptionalIntTest {
 
     @Test
     public void testIsPresent() {
-        assertTrue(OptionalInt.of(10).isPresent());
+        assertThat(OptionalInt.of(10), isPresent());
     }
 
     @Test
     public void testIsPresentOnEmptyOptional() {
-        assertFalse(OptionalInt.empty().isPresent());
+        assertThat(OptionalInt.empty(), isEmpty());
     }
 
     @Test
@@ -52,6 +55,51 @@ public class OptionalIntTest {
                 assertEquals(15, value);
             }
         });
+    }
+
+    @Test
+    public void testStream() {
+        long count = OptionalInt.of(10).stream().count();
+        assertThat(count, is(1L));
+    }
+
+    @Test
+    public void testStreamOnEmptyOptional() {
+        long count = OptionalInt.empty().stream().count();
+        assertThat(count, is(0L));
+    }
+
+    @Test
+    public void testOr() {
+        int value = OptionalInt.of(42).or(new Supplier<OptionalInt>() {
+            @Override
+            public OptionalInt get() {
+                return OptionalInt.of(19);
+            }
+        }).getAsInt();
+        assertEquals(42, value);
+    }
+
+    @Test
+    public void testOrOnEmptyOptional() {
+        int value = OptionalInt.empty().or(new Supplier<OptionalInt>() {
+            @Override
+            public OptionalInt get() {
+                return OptionalInt.of(19);
+            }
+        }).getAsInt();
+        assertEquals(19, value);
+    }
+
+    @Test
+    public void testOrOnEmptyOptionalAndEmptySupplierOptional() {
+        final OptionalInt optional = OptionalInt.empty().or(new Supplier<OptionalInt>() {
+            @Override
+            public OptionalInt get() {
+                return OptionalInt.empty();
+            }
+        });
+        assertThat(optional, isEmpty());
     }
 
     @Test
@@ -91,18 +139,14 @@ public class OptionalIntTest {
         }
     }
 
-    @Test
+    @Test(expected = NoSuchElementException.class)
     public void testOrElseThrow2() {
-        try {
-            assertEquals(25, OptionalInt.empty().orElseThrow(new Supplier<NoSuchElementException>() {
-                @Override
-                public NoSuchElementException get() {
-                    return new NoSuchElementException();
-                }
-            }));
-        } catch (Exception ne) {
-            assertEquals(NoSuchElementException.class, ne.getClass());
-        }
+        assertEquals(25, OptionalInt.empty().orElseThrow(new Supplier<NoSuchElementException>() {
+            @Override
+            public NoSuchElementException get() {
+                return new NoSuchElementException();
+            }
+        }));
     }
 
     @SuppressWarnings("EqualsBetweenInconvertibleTypes")

@@ -129,6 +129,16 @@ public class Optional<T> {
     }
 
     /**
+     * Wraps a value into {@code Stream} if present, otherwise returns an empty {@code Stream}.
+     *
+     * @return the optional value as a {@code Stream}
+     */
+    public Stream<T> stream() {
+        if (!isPresent()) return Stream.empty();
+        return Stream.of(value);
+    }
+
+    /**
      * Keeps inner value only if is present and instance of given class.
      *
      * @param <R> a type of instance to select.
@@ -140,6 +150,22 @@ public class Optional<T> {
         Objects.requireNonNull(clazz);
         if (!isPresent()) return empty();
         return (Optional<R>) Optional.ofNullable(clazz.isInstance(value) ? value : null);
+    }
+
+    /**
+     * Returns current {@code Optional} if value is present, otherwise
+     * returns an {@code Optional} produced by supplier function.
+     *
+     * @param supplier  supplier function that produced an {@code Optional} to be returned
+     * @return this {@code Optional} if value is present, otherwise
+     *         an {@code Optional} produced by supplier function
+     * @throws NullPointerException if value is not present and
+     *         {@code supplier} or value produced by it is {@code null}
+     */
+    public Optional<T> or(Supplier<Optional<T>> supplier) {
+        if (isPresent()) return this;
+        Objects.requireNonNull(supplier);
+        return Objects.requireNonNull(supplier.get());
     }
     
     /**

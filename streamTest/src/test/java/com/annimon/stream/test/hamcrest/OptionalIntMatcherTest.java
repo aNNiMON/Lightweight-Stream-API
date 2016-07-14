@@ -1,65 +1,64 @@
 package com.annimon.stream.test.hamcrest;
 
-import com.annimon.stream.Optional;
+import com.annimon.stream.OptionalInt;
 
 import org.junit.Test;
 
 import static com.annimon.stream.test.hamcrest.CommonMatcher.description;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
-import static com.annimon.stream.test.hamcrest.OptionalMatcher.isEmpty;
-import static com.annimon.stream.test.hamcrest.OptionalMatcher.isPresent;
-import static com.annimon.stream.test.hamcrest.OptionalMatcher.hasValue;
-import static com.annimon.stream.test.hamcrest.OptionalMatcher.hasValueThat;
+import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.isEmpty;
+import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.isPresent;
+import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.hasValue;
+import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.hasValueThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.startsWith;
 import static org.junit.Assert.assertThat;
 
-public class OptionalMatcherTest {
+public class OptionalIntMatcherTest {
 
     @Test
     public void testPrivateConstructor() throws Exception {
-        assertThat(OptionalMatcher.class, hasOnlyPrivateConstructors());
+        assertThat(OptionalIntMatcher.class, hasOnlyPrivateConstructors());
     }
 
     @Test
     public void testIsPresent() {
-        Optional<Integer> optional = Optional.of(5);
+        OptionalInt optional = OptionalInt.of(5);
         assertThat(optional, isPresent());
         assertThat(optional, not(isEmpty()));
 
-        assertThat(isPresent(), description(is("Optional value should be present")));
+        assertThat(isPresent(), description(is("OptionalInt value should be present")));
     }
 
     @Test
     public void testIsEmpty() {
-        Optional<Integer> optional = Optional.empty();
+        OptionalInt optional = OptionalInt.empty();
         assertThat(optional, isEmpty());
         assertThat(optional, not(isPresent()));
 
-        assertThat(isEmpty(), description(is("Optional value should be empty")));
+        assertThat(isEmpty(), description(is("OptionalInt value should be empty")));
     }
 
     @Test
     public void testHasValue() {
-        Optional<String> optional = Optional.of("text");
-        assertThat(optional, hasValue("text"));
-        assertThat(optional, not(hasValue("test")));
+        OptionalInt optional = OptionalInt.of(42);
+        assertThat(optional, hasValue(42));
+        assertThat(optional, not(hasValue(13)));
 
-        assertThat(hasValue(42), description(is("Optional value is <42>")));
+        assertThat(hasValue(42), description(is("OptionalInt value is <42>")));
     }
 
     @Test
     public void testHasValueThat() {
-        Optional<String> optional = Optional.of("text");
-        assertThat(optional, hasValueThat(startsWith("te")));
+        OptionalInt optional = OptionalInt.of(42);
+        assertThat(optional, hasValueThat(is(not(17))));
 
-        assertThat(hasValueThat(is(42)), description(is("Optional value is <42>")));
+        assertThat(hasValueThat(is(42)), description(is("OptionalInt value is <42>")));
     }
 
     @Test(expected = AssertionError.class)
     public void testHasValueOnEmptyOptional() {
-        assertThat(Optional.<String>empty(), hasValue(""));
+        assertThat(OptionalInt.empty(), hasValue(0));
     }
 
     @Test(expected = AssertionError.class)
@@ -74,11 +73,11 @@ public class OptionalMatcherTest {
 
     @Test(expected = AssertionError.class)
     public void testHasValueOnNullValue() {
-        assertThat(null, hasValue(""));
+        assertThat(null, hasValue(0));
     }
 
     @Test(expected = AssertionError.class)
     public void testHasValueThatOnNullValue() {
-        assertThat(null, hasValueThat(is("")));
+        assertThat(null, hasValueThat(is(0)));
     }
 }
