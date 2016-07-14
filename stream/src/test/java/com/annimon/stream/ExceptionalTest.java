@@ -1,6 +1,7 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.Consumer;
+import com.annimon.stream.function.Supplier;
 import com.annimon.stream.function.ThrowableFunction;
 import com.annimon.stream.function.ThrowableSupplier;
 import java.io.FileNotFoundException;
@@ -12,11 +13,11 @@ import org.junit.Test;
 
 /**
  * Tests {@code Exceptional}.
- * 
+ *
  * @see com.annimon.stream.Exceptional
  */
 public class ExceptionalTest {
-    
+
     @Test
     public void testGet() {
         int value = Exceptional
@@ -24,7 +25,7 @@ public class ExceptionalTest {
                 .get();
         assertEquals(10, value);
     }
-    
+
     @Test
     public void testGetOrElse() {
         int value = Exceptional
@@ -37,7 +38,7 @@ public class ExceptionalTest {
                 .getOrElse(20);
         assertEquals(10, value);
     }
-    
+
     @Test
     public void testGetOptional() {
         Optional<Integer> value = Exceptional
@@ -45,7 +46,7 @@ public class ExceptionalTest {
                 .getOptional();
         assertFalse(value.isPresent());
     }
-    
+
     @Test
     public void testGetException() {
         Throwable throwable = Exceptional
@@ -53,8 +54,8 @@ public class ExceptionalTest {
                 .getException();
         assertThat(throwable, instanceOf(IOException.class));
     }
-    
-    
+
+
     @Test
     public void testGetOrThrowWithoutException() throws Throwable {
         int value = Exceptional
@@ -62,14 +63,14 @@ public class ExceptionalTest {
                 .getOrThrow();
         assertEquals(10, value);
     }
-    
+
     @Test(expected = IOException.class)
     public void testGetOrThrowWithException() throws Throwable {
         Exceptional
                 .of(ioExceptionSupplier)
                 .getOrThrow();
     }
-    
+
     @Test
     public void testGetOrThrowRuntimeExceptionWithoutException() throws Throwable {
         int value = Exceptional
@@ -77,14 +78,14 @@ public class ExceptionalTest {
                 .getOrThrowRuntimeException();
         assertEquals(10, value);
     }
-    
+
     @Test(expected = RuntimeException.class)
     public void testGetOrThrowRuntimeExceptionWithException() throws Throwable {
         Exceptional
                 .of(ioExceptionSupplier)
                 .getOrThrowRuntimeException();
     }
-    
+
     @Test
     public void testGetOrThrowNewExceptionWithoutException() throws Throwable {
         int value = Exceptional
@@ -92,14 +93,14 @@ public class ExceptionalTest {
                 .getOrThrow(new ArithmeticException());
         assertEquals(10, value);
     }
-    
+
     @Test(expected = ArithmeticException.class)
     public void testGetOrThrowNewExceptionWithException() throws Throwable {
         Exceptional
                 .of(ioExceptionSupplier)
                 .getOrThrow(new ArithmeticException());
     }
-    
+
     @Test
     public void testGetOrThrowNewExceptionTestCause() {
         try {
@@ -109,6 +110,44 @@ public class ExceptionalTest {
         } catch (ArithmeticException ae) {
             assertThat(ae.getCause(), instanceOf(IOException.class));
         }
+    }
+
+    @Test
+    public void testOr() {
+        int value = Exceptional.of(tenSupplier)
+                .or(new Supplier<Exceptional<Integer>>() {
+                    @Override
+                    public Exceptional<Integer> get() {
+                        return Exceptional.of(ioExceptionSupplier);
+                    }
+                })
+                .get();
+        assertEquals(10, value);
+    }
+
+    @Test
+    public void testOrWithExceptionAndValueInSupplier() {
+        int value = Exceptional.of(ioExceptionSupplier)
+                .or(new Supplier<Exceptional<Integer>>() {
+                    @Override
+                    public Exceptional<Integer> get() {
+                        return Exceptional.of(tenSupplier);
+                    }
+                })
+                .get();
+        assertEquals(10, value);
+    }
+
+    @Test(expected = IOException.class)
+    public void testOrWithExceptionBoth() throws Throwable {
+        Exceptional.of(ioExceptionSupplier)
+                .or(new Supplier<Exceptional<Integer>>() {
+                    @Override
+                    public Exceptional<Integer> get() {
+                        return Exceptional.of(ioExceptionSupplier);
+                    }
+                })
+                .getOrThrow();
     }
 
     @Test
@@ -178,14 +217,14 @@ public class ExceptionalTest {
                     });
         }
     }
-    
+
     @Test
     public void testIfExceptionIs() {
         final int INTERRUPTED = 0;
         final int EXCEPTION = 1;
         final int FILE_NOT_FOUND = 2;
         final boolean[] data = new boolean[3];
-        
+
         Exceptional
                 .of(new ThrowableSupplier<Integer, Throwable>() {
                     @Override
@@ -217,39 +256,39 @@ public class ExceptionalTest {
         assertTrue(data[EXCEPTION]);
         assertFalse(data[FILE_NOT_FOUND]);
     }
-    
+
     @Test
     public void testEqualsReflexive() {
         final Exceptional<Integer> ten1 = Exceptional.of(tenSupplier);
         assertTrue(ten1.equals(ten1));
     }
-    
+
     @Test
     public void testEqualsSymmetric() {
         final Exceptional<Integer> ten1 = Exceptional.of(tenSupplier);
         final Exceptional<Integer> ten2 = Exceptional.of(tenSupplier);
-        
+
         assertTrue(ten1.equals(ten2));
         assertTrue(ten2.equals(ten1));
     }
-    
+
     @Test
     public void testEqualsTransitive() {
         final Exceptional<Integer> ten1 = Exceptional.of(tenSupplier);
         final Exceptional<Integer> ten2 = Exceptional.of(tenSupplier);
         final Exceptional<Integer> ten3 = Exceptional.of(tenSupplier);
-        
+
         assertTrue(ten1.equals(ten2));
         assertTrue(ten2.equals(ten3));
         assertTrue(ten1.equals(ten3));
     }
-    
+
     @Test
     public void testEqualsWithDifferentTypes() {
         final Exceptional<Integer> ten1 = Exceptional.of(tenSupplier);
         assertFalse(ten1.equals(10));
     }
-    
+
     @Test
     public void testEqualsWithDifferentNumberTypes() {
         final Exceptional<Integer> ten1 = Exceptional.of(tenSupplier);
@@ -259,7 +298,7 @@ public class ExceptionalTest {
                 return (byte) 10;
             }
         });
-        
+
         assertFalse(ten1.equals(tenByte));
     }
 
@@ -276,27 +315,27 @@ public class ExceptionalTest {
 
         assertFalse(ten1.equals(ten2));
     }
-    
+
     @Test
     public void testEqualsWithDifferentGenericTypes() {
         final Exceptional<Integer> ten = Exceptional.of(tenSupplier);
         final Exceptional<Integer> io = Exceptional.of(ioExceptionSupplier);
-        
+
         assertFalse(ten.equals(io));
     }
-    
-    
+
+
     @Test
     public void testHashCodeWithSameObject() {
         final Exceptional<Integer> ten1 = Exceptional.of(tenSupplier);
         final Exceptional<Integer> ten2 = Exceptional.of(tenSupplier);
-        
+
         int initial = ten1.hashCode();
         assertEquals(initial, ten1.hashCode());
         assertEquals(initial, ten1.hashCode());
         assertEquals(initial, ten2.hashCode());
     }
-    
+
     @Test
     public void testHashCodeWithDifferentGenericType() {
         final Exceptional<Byte> tenByte = Exceptional.of(new ThrowableSupplier<Byte, Throwable>() {
@@ -308,18 +347,18 @@ public class ExceptionalTest {
         final Exceptional<Integer> io = Exceptional.of(ioExceptionSupplier);
         assertNotEquals(io.hashCode(), tenByte.hashCode());
     }
-    
+
     @Test
     public void testToStringWithoutException() {
         assertEquals("Exceptional value 10", Exceptional.of(tenSupplier).toString());
     }
-    
+
     @Test
     public void testToStringWithException() {
         assertEquals("Exceptional throwable java.io.IOException", Exceptional.of(ioExceptionSupplier).toString());
     }
-    
-    
+
+
     private static final ThrowableSupplier<Integer, Throwable> tenSupplier
             = new ThrowableSupplier<Integer, Throwable>() {
         @Override
@@ -327,7 +366,7 @@ public class ExceptionalTest {
             return 10;
         }
     };
-    
+
     private static final ThrowableSupplier<Integer, Throwable> ioExceptionSupplier
             = new ThrowableSupplier<Integer, Throwable>() {
         @Override
@@ -336,15 +375,15 @@ public class ExceptionalTest {
             return 10;
         }
     };
-    
+
     private static void throwException(ExceptionType type) throws Exception {
         throw type.getException();
     }
-    
+
     private static void throwIO() throws IOException {
         throw new IOException();
     }
-    
+
     private static enum ExceptionType {
         NULL_POINTER(new NullPointerException()),
         UNSUPPORTED_OPERATION(new UnsupportedOperationException()),
@@ -352,7 +391,7 @@ public class ExceptionalTest {
         INTERRUPTED(new InterruptedException()),
         UNSUPPORTED_ENCODING(new UnsupportedEncodingException()),
         IO(new IOException());
-        
+
         private final Exception exception;
 
         private ExceptionType(Exception exception) {

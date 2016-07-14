@@ -1,6 +1,7 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.Consumer;
+import com.annimon.stream.function.Supplier;
 import com.annimon.stream.function.ThrowableFunction;
 import com.annimon.stream.function.ThrowableSupplier;
 
@@ -129,6 +130,21 @@ public class Exceptional<T> {
             throw exception;
         }
         return value;
+    }
+
+    /**
+     * Returns current {@code Exceptional} if there were no exceptions, otherwise
+     * returns an {@code Exceptional} produced by supplier function.
+     *
+     * @param supplier  supplier function that produced an {@code Exceptional} to be returned
+     * @return this {@code Exceptional} if there were no exceptions, otherwise
+     *         an {@code Exceptional} produced by supplier function
+     */
+    public Exceptional<T> or(Supplier<Exceptional<T>> supplier) {
+        if (throwable == null) return this;
+
+        Objects.requireNonNull(supplier);
+        return Objects.requireNonNull(supplier.get());
     }
 
     /**
