@@ -303,7 +303,6 @@ public class IntStreamTest {
     }
 
     @Test
-    @Ignore
     public void testStreamSortedLazy() {
         int[] expected = { -7, 0, 3, 6, 9, 19 };
 
