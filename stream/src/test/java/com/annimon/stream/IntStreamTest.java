@@ -1,13 +1,16 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.*;
+import com.annimon.stream.test.hamcrest.OptionalMatcher;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.elements;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
-import org.junit.Test;
-
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
+import org.junit.Test;
 
 /**
  * Tests {@code IntStream}
@@ -119,19 +122,9 @@ public class IntStreamTest {
 
     @Test
     public void testStreamFilter() {
-        assertTrue(IntStream.rangeClosed(1, 10).filter(new IntPredicate() {
-            @Override
-            public boolean test(int value) {
-                return value % 2 == 0;
-            }
-        }).count() == 5);
+        assertTrue(IntStream.rangeClosed(1, 10).filter(Functions.remainderInt(2)).count() == 5);
 
-        assertTrue(IntStream.rangeClosed(1, 10).filter(new IntPredicate() {
-            @Override
-            public boolean test(int value) {
-                return value % 2 == 0;
-            }
-        }).sum() == 30);
+        assertTrue(IntStream.rangeClosed(1, 10).filter(Functions.remainderInt(2)).sum() == 30);
 
         assertTrue(IntStream.iterate(0, new IntUnaryOperator() {
             @Override
@@ -148,19 +141,9 @@ public class IntStreamTest {
 
     @Test
     public void testStreamFilterNot() {
-        assertTrue(IntStream.rangeClosed(1, 10).filterNot(new IntPredicate() {
-            @Override
-            public boolean test(int value) {
-                return value % 2 == 0;
-            }
-        }).count() == 5);
+        assertTrue(IntStream.rangeClosed(1, 10).filterNot(Functions.remainderInt(2)).count() == 5);
 
-        assertTrue(IntStream.rangeClosed(1, 10).filterNot(new IntPredicate() {
-            @Override
-            public boolean test(int value) {
-                return value % 2 == 0;
-            }
-        }).sum() == 25);
+        assertTrue(IntStream.rangeClosed(1, 10).filterNot(Functions.remainderInt(2)).sum() == 25);
     }
 
     @Test
@@ -219,6 +202,21 @@ public class IntStreamTest {
     }
 
     @Test
+    public void testDistinctLazy() {
+        Integer[] expected = { -1, 1, 2, 3, 5 };
+
+        List<Integer> input = new ArrayList<Integer>();
+        input.addAll(Arrays.asList(1, 1, 2, 3, 5));
+        IntStream stream = Stream.of(input)
+                .mapToInt(Functions.toInt())
+                .distinct();
+        input.addAll(Arrays.asList(3, 2, 1, 1, -1));
+
+        List<Integer> actual = stream.boxed().collect(Collectors.<Integer>toList());
+        assertThat(actual, containsInAnyOrder(expected));
+    }
+
+    @Test
     public void testStreamLimit() {
         assertTrue(IntStream.of(1,2,3,4,5,6).limit(3).count() == 3);
         assertTrue(IntStream.generate(new IntSupplier() {
@@ -269,12 +267,8 @@ public class IntStreamTest {
 
     @Test
     public void testStreamBoxed() {
-        assertTrue(IntStream.of(1, 10, 20).boxed().reduce(new BiFunction<Integer, Integer, Integer>() {
-            @Override
-            public Integer apply(Integer value1, Integer value2) {
-                return value1 + value2;
-            }
-        }).get() == 31);
+        assertThat(IntStream.of(1, 10, 20).boxed().reduce(Functions.addition()),
+                OptionalMatcher.hasValue(31));
     }
 
     @Test
@@ -306,6 +300,19 @@ public class IntStreamTest {
         });
 
         assertTrue(!wrongOrder[0]);
+    }
+
+    @Test
+    @Ignore
+    public void testStreamSortedLazy() {
+        int[] expected = { -7, 0, 3, 6, 9, 19 };
+
+        List<Integer> input = new ArrayList<Integer>(6);
+        input.addAll(Arrays.asList(6, 3, 9));
+        IntStream stream = Stream.of(input).mapToInt(Functions.toInt()).sorted();
+        input.addAll(Arrays.asList(0, -7, 19));
+
+        assertThat(stream.toArray(), is(expected));
     }
 
     @Test
@@ -492,19 +499,9 @@ public class IntStreamTest {
             }
         }));
 
-        assertTrue(IntStream.of(5, 7, 9, 10, 7, 5).anyMatch(new IntPredicate() {
-            @Override
-            public boolean test(int value) {
-                return value % 2 == 0;
-            }
-        }));
+        assertTrue(IntStream.of(5, 7, 9, 10, 7, 5).anyMatch(Functions.remainderInt(2)));
 
-        assertFalse(IntStream.of(5, 7, 9, 11, 7, 5).anyMatch(new IntPredicate() {
-            @Override
-            public boolean test(int value) {
-                return value % 2 == 0;
-            }
-        }));
+        assertFalse(IntStream.of(5, 7, 9, 11, 7, 5).anyMatch(Functions.remainderInt(2)));
     }
 
     @Test
@@ -523,19 +520,11 @@ public class IntStreamTest {
             }
         }));
 
-        assertFalse(IntStream.of(5, 7, 9, 10, 7, 5).allMatch(new IntPredicate() {
-            @Override
-            public boolean test(int value) {
-                return value % 2 != 0;
-            }
-        }));
+        assertFalse(IntStream.of(5, 7, 9, 10, 7, 5).allMatch(
+                IntPredicate.Util.negate(Functions.remainderInt(2))));
 
-        assertTrue(IntStream.of(5, 7, 9, 11, 7, 5).allMatch(new IntPredicate() {
-            @Override
-            public boolean test(int value) {
-                return value % 2 != 0;
-            }
-        }));
+        assertTrue(IntStream.of(5, 7, 9, 11, 7, 5).allMatch(
+                IntPredicate.Util.negate(Functions.remainderInt(2))));
     }
 
     @Test
@@ -554,18 +543,8 @@ public class IntStreamTest {
             }
         }));
 
-        assertFalse(IntStream.of(5, 7, 9, 10, 7, 5).noneMatch(new IntPredicate() {
-            @Override
-            public boolean test(int value) {
-                return value % 2 == 0;
-            }
-        }));
+        assertFalse(IntStream.of(5, 7, 9, 10, 7, 5).noneMatch(Functions.remainderInt(2)));
 
-        assertTrue(IntStream.of(5, 7, 9, 11, 7, 5).noneMatch(new IntPredicate() {
-            @Override
-            public boolean test(int value) {
-                return value % 2 == 0;
-            }
-        }));
+        assertTrue(IntStream.of(5, 7, 9, 11, 7, 5).noneMatch(Functions.remainderInt(2)));
     }
 }

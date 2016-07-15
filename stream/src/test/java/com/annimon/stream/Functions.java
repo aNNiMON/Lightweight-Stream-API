@@ -4,8 +4,10 @@ import com.annimon.stream.function.BiConsumer;
 import com.annimon.stream.function.BiFunction;
 import com.annimon.stream.function.Function;
 import com.annimon.stream.function.IntFunction;
+import com.annimon.stream.function.IntPredicate;
 import com.annimon.stream.function.Predicate;
 import com.annimon.stream.function.Supplier;
+import com.annimon.stream.function.ToIntFunction;
 import java.lang.reflect.Array;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -43,6 +45,16 @@ public final class Functions {
             @Override
             public Integer apply(String value) {
                 return Integer.parseInt(value);
+            }
+        };
+    }
+
+    public static ToIntFunction<? super Number> toInt() {
+        return new ToIntFunction<Number>() {
+
+            @Override
+            public int applyAsInt(Number t) {
+                return t.intValue();
             }
         };
     }
@@ -129,6 +141,16 @@ public final class Functions {
             
             @Override
             public boolean test(Integer v) {
+                return (v % val == 0);
+            }
+        };
+    }
+
+    public static IntPredicate remainderInt(final int val) {
+        return new IntPredicate() {
+
+            @Override
+            public boolean test(int v) {
                 return (v % val == 0);
             }
         };
