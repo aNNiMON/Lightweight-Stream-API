@@ -1072,12 +1072,10 @@ public class Stream<T> {
 
             @Override
             public boolean hasNext() {
-                if (skippedCount < n) {
-                    while (skippedCount < n) {
-                        if (!iterator.hasNext()) return false;
-                        iterator.next();
-                        skippedCount++;
-                    }
+                while (skippedCount < n) {
+                    if (!iterator.hasNext()) return false;
+                    iterator.next();
+                    skippedCount++;
                 }
                 return iterator.hasNext();
             }

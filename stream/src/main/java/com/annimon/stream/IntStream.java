@@ -1,9 +1,7 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.*;
-
 import java.util.Arrays;
-import java.util.NoSuchElementException;
 
 /**
  * A sequence of primitive int-valued elements supporting sequential operations. This is the {@code int}
@@ -413,33 +411,13 @@ public final class IntStream {
      * @return the new stream
      */
     public IntStream sorted() {
-        return new IntStream(new PrimitiveIterator.OfInt() {
+        return new IntStream(new PrimitiveExtIterator.OfInt() {
 
             private int index = 0;
             private int[] array;
-            private int next;
-            private boolean hasNext, isInit;
 
             @Override
-            public boolean hasNext() {
-                if (!isInit) {
-                    nextIteration();
-                    isInit = true;
-                }
-                return hasNext;
-            }
-
-            @Override
-            public int nextInt() {
-                if (!hasNext) {
-                    throw new NoSuchElementException();
-                }
-                final int result = next;
-                nextIteration();
-                return result;
-            }
-
-            private void nextIteration() {
+            protected void nextIteration() {
                 if (!isInit) {
                     SpinedBuffer.OfInt buffer = new SpinedBuffer.OfInt();
                     forEach(buffer);
