@@ -559,7 +559,7 @@ public final class IntStream {
 
         return new IntStream(new PrimitiveIterator.OfInt() {
 
-            private long index;
+            private long index = 0;
 
             @Override
             public int nextInt() {
@@ -569,7 +569,7 @@ public final class IntStream {
 
             @Override
             public boolean hasNext() {
-                return index < maxSize;
+                return (index < maxSize) && iterator.hasNext();
             }
         });
     }
