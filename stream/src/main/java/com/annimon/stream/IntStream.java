@@ -3,7 +3,6 @@ package com.annimon.stream;
 import com.annimon.stream.function.*;
 
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
@@ -397,21 +396,10 @@ public final class IntStream {
     public IntStream distinct() {
         // While functional and quick to implement, this approach is not very efficient.
         // An efficient version requires an int-specific map/set implementation.
-
-        final Stream<Integer> dist = boxed().distinct();
-
-        return new IntStream(new PrimitiveIterator.OfInt() {
-
-            Iterator<? extends Integer> inner = dist.getIterator();
-
+        return boxed().distinct().mapToInt(new ToIntFunction<Integer>() {
             @Override
-            public int nextInt() {
-                return inner.next().intValue();
-            }
-
-            @Override
-            public boolean hasNext() {
-                return inner.hasNext();
+            public int applyAsInt(Integer t) {
+                return t;
             }
         });
     }
