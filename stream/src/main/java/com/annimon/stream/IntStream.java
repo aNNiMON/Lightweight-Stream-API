@@ -493,6 +493,55 @@ public final class IntStream {
     }
 
     /**
+     * Takes elements while the predicate is true.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @param predicate  the predicate used to take elements
+     * @return the new {@code IntStream}
+     */
+    public IntStream takeWhile(final IntPredicate predicate) {
+        return new IntStream(new PrimitiveExtIterator.OfInt() {
+
+            @Override
+            protected void nextIteration() {
+                hasNext = iterator.hasNext() && predicate.test(next = iterator.next());
+            }
+        });
+    }
+
+    /**
+     * Drops elements while the predicate is true and returns the rest.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @param predicate  the predicate used to drop elements
+     * @return the new {@code IntStream}
+     */
+    public IntStream dropWhile(final IntPredicate predicate) {
+        return new IntStream(new PrimitiveExtIterator.OfInt() {
+
+            @Override
+            protected void nextIteration() {
+                if (!isInit) {
+                    // Skip first time
+                    while (hasNext = iterator.hasNext()) {
+                        next = iterator.next();
+                        if (!predicate.test(next)) {
+                            return;
+                        }
+                    }
+                }
+
+                hasNext = hasNext && iterator.hasNext();
+                if (!hasNext) return;
+
+                next = iterator.next();
+            }
+        });
+    }
+
+    /**
      * Returns a stream consisting of the elements of this stream, truncated
      * to be no longer than {@code maxSize} in length.
      *

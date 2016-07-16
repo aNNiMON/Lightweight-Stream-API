@@ -217,6 +217,58 @@ public class IntStreamTest {
     }
 
     @Test
+    public void testTakeWhile() {
+        int[] expected = {2, 4, 6};
+        int[] actual = IntStream.of(2, 4, 6, 7, 8, 10, 11)
+                .takeWhile(Functions.remainderInt(2))
+                .toArray();
+        assertThat(actual, is(expected));
+    }
+
+    @Test
+    public void testTakeWhileNonFirstMatch() {
+        assertThat(
+                IntStream.of(2, 4, 6, 7, 8, 10, 11)
+                        .takeWhile(Functions.remainderInt(3))
+                         .count(),
+                is(0L));
+    }
+
+    @Test
+    public void testTakeWhileAllMatch() {
+        long count = IntStream.of(2, 4, 6, 7, 8, 10, 11)
+                .takeWhile(Functions.remainderInt(1))
+                .count();
+        assertEquals(7, count);
+    }
+
+    @Test
+    public void testDropWhile() {
+        int[] expected = {7, 8, 10, 11};
+        int[] actual  = IntStream.of(2, 4, 6, 7, 8, 10, 11)
+                .dropWhile(Functions.remainderInt(2))
+                .toArray();
+        assertThat(actual, is(expected));
+    }
+
+    @Test
+    public void testDropNonFirstMatch() {
+        long count = IntStream.of(2, 4, 6, 7, 8, 10, 11)
+                .dropWhile(Functions.remainderInt(3))
+                .count();
+        assertEquals(7, count);
+    }
+
+    @Test
+    public void testDropWhileAllMatch() {
+        assertThat(
+                IntStream.of(2, 4, 6, 7, 8, 10, 11)
+                        .dropWhile(Functions.remainderInt(1))
+                        .count(),
+                is(0L));
+    }
+
+    @Test
     public void testStreamLimit() {
         assertTrue(IntStream.of(1,2,3,4,5,6).limit(3).count() == 3);
         assertTrue(IntStream.generate(new IntSupplier() {
