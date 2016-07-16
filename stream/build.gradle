@@ -41,7 +41,6 @@ buildscript {
 
 cobertura {
     coverageFormats = ['html', 'xml']
-    coverageExcludes = ['.*com.annimon.stream.LsaIterator', '.*com.annimon.stream.LsaExtIterator', '.*com.annimon.stream.LazyIterator']
 }
 
 // maven signing

@@ -20,9 +20,9 @@ public class PrimitiveExtIteratorTest {
 
     @Test(expected = NoSuchElementException.class)
     public void testOfIntNext() {
-        final PrimitiveExtIteratorOfIntImpl infinite = new PrimitiveExtIteratorOfIntImpl();
-        assertEquals(infinite.nextInt(), 1);
-        assertEquals(infinite.nextInt(), 2);
+        final PrimitiveExtIteratorOfIntImpl iterator = new PrimitiveExtIteratorOfIntImpl();
+        assertEquals(iterator.nextInt(), 1);
+        assertEquals(iterator.nextInt(), 2);
 
         new EmptyPrimitiveExtIteratorOfInt().nextInt();
     }
@@ -34,14 +34,14 @@ public class PrimitiveExtIteratorTest {
 
     @Test(expected = NoSuchElementException.class)
     public void testOfInt() {
-        final PrimitiveExtIteratorOfIntImpl infinite = new PrimitiveExtIteratorOfIntImpl();
-        assertTrue(infinite.hasNext());
-        assertTrue(infinite.hasNext());
-        assertEquals(infinite.nextInt(), 1);
-        assertEquals(infinite.nextInt(), 2);
-        assertFalse(infinite.hasNext());
-        assertFalse(infinite.hasNext());
-        infinite.nextInt();
+        final PrimitiveExtIteratorOfIntImpl iterator = new PrimitiveExtIteratorOfIntImpl();
+        assertTrue(iterator.hasNext());
+        assertTrue(iterator.hasNext());
+        assertEquals(iterator.nextInt(), 1);
+        assertEquals(iterator.nextInt(), 2);
+        assertFalse(iterator.hasNext());
+        assertFalse(iterator.hasNext());
+        iterator.nextInt();
     }
 
     private class EmptyPrimitiveExtIteratorOfInt extends PrimitiveExtIterator.OfInt {
