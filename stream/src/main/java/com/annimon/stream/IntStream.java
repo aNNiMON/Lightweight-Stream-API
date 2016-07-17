@@ -84,39 +84,48 @@ public final class IntStream {
     }
 
     /**
-     * Creates a lazily concatenated stream whose elements are all the
-     * elements of the first stream followed by all the elements of the
-     * second stream.
+     * Returns a sequential ordered {@code IntStream} from {@code startInclusive}
+     * (inclusive) to {@code endExclusive} (exclusive) by an incremental step of
+     * {@code 1}.
      *
-     * @param a the first stream
-     * @param b the second stream
-     * @return the concatenation of the two input streams
+     * @param startInclusive the (inclusive) initial value
+     * @param endExclusive the exclusive upper bound
+     * @return a sequential {@code IntStream} for the range of {@code int}
+     *         elements
      */
-    public static IntStream concat(final IntStream a, final IntStream b) {
-        Objects.requireNonNull(a);
-        Objects.requireNonNull(b);
+    public static IntStream range(final int startInclusive, final int endExclusive) {
+
+        if(startInclusive >= endExclusive)
+            return empty();
 
         return new IntStream(new PrimitiveIterator.OfInt() {
 
-            private boolean firstStreamIsCurrent = true;
+            private int current = startInclusive;
 
             @Override
             public int nextInt() {
-                return firstStreamIsCurrent ? a.iterator.nextInt() : b.iterator.nextInt();
+                return current++;
             }
 
             @Override
             public boolean hasNext() {
-                if(firstStreamIsCurrent) {
-                    if(a.iterator.hasNext())
-                        return true;
-
-                    firstStreamIsCurrent = false;
-                }
-
-                return b.iterator.hasNext();
+                return current < endExclusive;
             }
         });
+    }
+
+    /**
+     * Returns a sequential ordered {@code IntStream} from {@code startInclusive}
+     * (inclusive) to {@code endInclusive} (inclusive) by an incremental step of
+     * {@code 1}.
+     *
+     * @param startInclusive the (inclusive) initial value
+     * @param endInclusive the inclusive upper bound
+     * @return a sequential {@code IntStream} for the range of {@code int}
+     *         elements
+     */
+    public static IntStream rangeClosed(int startInclusive, int endInclusive) {
+        return range(startInclusive, endInclusive+1);
     }
 
     /**
@@ -179,48 +188,39 @@ public final class IntStream {
     }
 
     /**
-     * Returns a sequential ordered {@code IntStream} from {@code startInclusive}
-     * (inclusive) to {@code endExclusive} (exclusive) by an incremental step of
-     * {@code 1}.
+     * Creates a lazily concatenated stream whose elements are all the
+     * elements of the first stream followed by all the elements of the
+     * second stream.
      *
-     * @param startInclusive the (inclusive) initial value
-     * @param endExclusive the exclusive upper bound
-     * @return a sequential {@code IntStream} for the range of {@code int}
-     *         elements
+     * @param a the first stream
+     * @param b the second stream
+     * @return the concatenation of the two input streams
      */
-    public static IntStream range(final int startInclusive, final int endExclusive) {
-
-        if(startInclusive >= endExclusive)
-            return empty();
+    public static IntStream concat(final IntStream a, final IntStream b) {
+        Objects.requireNonNull(a);
+        Objects.requireNonNull(b);
 
         return new IntStream(new PrimitiveIterator.OfInt() {
 
-            private int current = startInclusive;
+            private boolean firstStreamIsCurrent = true;
 
             @Override
             public int nextInt() {
-                return current++;
+                return firstStreamIsCurrent ? a.iterator.nextInt() : b.iterator.nextInt();
             }
 
             @Override
             public boolean hasNext() {
-                return current < endExclusive;
+                if(firstStreamIsCurrent) {
+                    if(a.iterator.hasNext())
+                        return true;
+
+                    firstStreamIsCurrent = false;
+                }
+
+                return b.iterator.hasNext();
             }
         });
-    }
-
-    /**
-     * Returns a sequential ordered {@code IntStream} from {@code startInclusive}
-     * (inclusive) to {@code endInclusive} (inclusive) by an incremental step of
-     * {@code 1}.
-     *
-     * @param startInclusive the (inclusive) initial value
-     * @param endInclusive the inclusive upper bound
-     * @return a sequential {@code IntStream} for the range of {@code int}
-     *         elements
-     */
-    public static IntStream rangeClosed(int startInclusive, int endInclusive) {
-        return range(startInclusive, endInclusive+1);
     }
 
     private final PrimitiveIterator.OfInt iterator;
@@ -236,6 +236,19 @@ public final class IntStream {
      */
     public PrimitiveIterator.OfInt iterator() {
         return iterator;
+    }
+
+    /**
+     * Returns a {@code Stream} consisting of the elements of this stream,
+     * each boxed to an {@code Integer}.
+     *
+     * <p>This is an lazy intermediate operation.
+     *
+     * @return a {@code Stream} consistent of the elements of this stream,
+     *         each boxed to an {@code Integer}
+     */
+    public Stream<Integer> boxed() {
+        return Stream.of(iterator);
     }
 
     /**
@@ -604,21 +617,6 @@ public final class IntStream {
     }
 
     /**
-     * Returns an array containing the elements of this stream.
-     *
-     * <p>This is a terminal operation.
-     *
-     * @return an array containing the elements of this stream
-     */
-    public int[] toArray() {
-        SpinedBuffer.OfInt b = new SpinedBuffer.OfInt();
-
-        forEach(b);
-
-        return b.asPrimitiveArray();
-    }
-
-    /**
      * Performs a reduction on the elements of this stream, using the provided
      * identity value and an associative accumulation function, and returns the
      * reduced value.
@@ -675,6 +673,21 @@ public final class IntStream {
             }
         }
         return foundAny ? OptionalInt.of(result) : OptionalInt.empty();
+    }
+
+    /**
+     * Returns an array containing the elements of this stream.
+     *
+     * <p>This is a terminal operation.
+     *
+     * @return an array containing the elements of this stream
+     */
+    public int[] toArray() {
+        SpinedBuffer.OfInt b = new SpinedBuffer.OfInt();
+
+        forEach(b);
+
+        return b.asPrimitiveArray();
     }
 
     /**
@@ -848,19 +861,6 @@ public final class IntStream {
         } else {
             return OptionalInt.empty();
         }
-    }
-
-    /**
-     * Returns a {@code Stream} consisting of the elements of this stream,
-     * each boxed to an {@code Integer}.
-     *
-     * <p>This is an lazy intermediate operation.
-     *
-     * @return a {@code Stream} consistent of the elements of this stream,
-     *         each boxed to an {@code Integer}
-     */
-    public Stream<Integer> boxed() {
-        return Stream.of(iterator);
     }
 
 
