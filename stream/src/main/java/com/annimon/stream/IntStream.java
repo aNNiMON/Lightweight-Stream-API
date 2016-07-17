@@ -677,6 +677,25 @@ public final class IntStream {
         return foundAny ? OptionalInt.of(result) : OptionalInt.empty();
     }
 
+    /**
+     * Collects elements to {@code supplier} provided container by applying the given accumulation function.
+     *
+     * <p>This is a terminal operation.
+     *
+     * @param <R> the type of the result
+     * @param supplier  the supplier function that provides container
+     * @param accumulator  the accumulation function
+     * @return the result of collect elements
+     * @see Stream#collect(com.annimon.stream.function.Supplier, com.annimon.stream.function.BiConsumer)
+     */
+    public <R> R collect(Supplier<R> supplier, ObjIntConsumer<R> accumulator) {
+        R result = supplier.get();
+        while (iterator.hasNext()) {
+            final int value = iterator.nextInt();
+            accumulator.accept(result, value);
+        }
+        return result;
+    }
 
     /**
      * Returns the sum of elements in this stream.

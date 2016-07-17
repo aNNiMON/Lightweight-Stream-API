@@ -543,6 +543,18 @@ public class IntStreamTest {
     }
 
     @Test
+    public void testStreamCollect() {
+        String result = IntStream.of(0, 1, 5, 10)
+                .collect(Functions.stringBuilderSupplier(), new ObjIntConsumer<StringBuilder>() {
+            @Override
+            public void accept(StringBuilder t, int value) {
+                t.append(value);
+            }
+        }).toString();
+        assertThat(result, is("01510"));
+    }
+
+    @Test
     public void testStreamMin() {
         assertFalse(IntStream.empty().min().isPresent());
 
