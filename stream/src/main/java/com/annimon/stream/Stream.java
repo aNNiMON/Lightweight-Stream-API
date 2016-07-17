@@ -647,32 +647,12 @@ public class Stream<T> {
      * @see #flatMap(com.annimon.stream.function.Function)
      */
     public IntStream flatMapToInt(final Function<? super T, ? extends IntStream> mapper) {
-        return new IntStream(new PrimitiveIterator.OfInt() {
+        return new IntStream(new PrimitiveExtIterator.OfInt() {
 
-            private int next;
             private PrimitiveIterator.OfInt inner;
-            private boolean hasNext, isInit;
 
             @Override
-            public boolean hasNext() {
-                if (!isInit) {
-                    nextIteration();
-                    isInit = true;
-                }
-                return hasNext;
-            }
-
-            @Override
-            public int nextInt() {
-                if (!hasNext) {
-                    throw new NoSuchElementException();
-                }
-                final int result = next;
-                nextIteration();
-                return result;
-            }
-
-            private void nextIteration() {
+            protected void nextIteration() {
                 if ((inner != null) && inner.hasNext()) {
                     next = inner.next();
                     hasNext = true;
