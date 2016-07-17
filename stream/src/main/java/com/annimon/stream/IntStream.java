@@ -250,6 +250,75 @@ public final class IntStream {
     }
 
     /**
+     * Applies custom operator on stream.
+     *
+     * Transforming function can return {@code IntStream} for intermediate operations,
+     * or any value for terminal operation.
+     *
+     * <p>Operator examples:
+     * <pre><code>
+     *     // Intermediate operator
+     *     public class Zip&lt;T&gt; implements Function&lt;IntStream, IntStream&gt; {
+     *         &#64;Override
+     *         public IntStream apply(IntStream firstStream) {
+     *             final PrimitiveIterator.OfInt it1 = firstStream.iterator();
+     *             final PrimitiveIterator.OfInt it2 = secondStream.iterator();
+     *             return IntStream.of(new PrimitiveIterator.OfInt() {
+     *                 &#64;Override
+     *                 public boolean hasNext() {
+     *                     return it1.hasNext() &amp;&amp; it2.hasNext();
+     *                 }
+     *
+     *                 &#64;Override
+     *                 public int nextInt() {
+     *                     return combiner.applyAsInt(it1.nextInt(), it2.nextInt());
+     *                 }
+     *             });
+     *         }
+     *     }
+     *
+     *     // Intermediate operator based on existing stream operators
+     *     public class SkipAndLimit implements UnaryOperator&lt;IntStream&gt; {
+     *
+     *         private final int skip, limit;
+     *
+     *         public SkipAndLimit(int skip, int limit) {
+     *             this.skip = skip;
+     *             this.limit = limit;
+     *         }
+     *
+     *         &#64;Override
+     *         public IntStream apply(IntStream stream) {
+     *             return stream.skip(skip).limit(limit);
+     *         }
+     *     }
+     *
+     *     // Terminal operator
+     *     public class Average implements Function&lt;IntStream, Double&gt; {
+     *         long count = 0, sum = 0;
+     *
+     *         &#64;Override
+     *         public Double apply(IntStream stream) {
+     *             final PrimitiveIterator.OfInt it = stream.iterator();
+     *             while (it.hasNext()) {
+     *                 count++;
+     *                 sum += it.nextInt();
+     *             }
+     *             return (count == 0) ? 0 : sum / (double) count;
+     *         }
+     *     }
+     * </code></pre>
+     *
+     * @param <R> the type of the result
+     * @param function  a transforming function
+     * @return a result of the transforming function
+     * @see Stream#custom(com.annimon.stream.function.Function)
+     */
+    public <R> R custom(Function<IntStream, R> function) {
+        return function.apply(this);
+    }
+
+    /**
      * Returns a {@code Stream} consisting of the elements of this stream,
      * each boxed to an {@code Integer}.
      *

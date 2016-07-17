@@ -412,7 +412,7 @@ public class Stream<T> {
      * <p>Operator examples:
      * <pre><code>
      *     // Intermediate operator
-     *     public static class Reverse&lt;T&gt; implements Function&lt;Stream&lt;T&gt;, Stream&lt;T&gt;&gt; {
+     *     public class Reverse&lt;T&gt; implements Function&lt;Stream&lt;T&gt;, Stream&lt;T&gt;&gt; {
      *         &#64;Override
      *         public Stream&lt;T&gt; apply(Stream&lt;T&gt; stream) {
      *             final Iterator&lt;? extends T&gt; iterator = stream.getIterator();
@@ -425,7 +425,7 @@ public class Stream<T> {
      *     }
      *
      *     // Intermediate operator based on existing stream operators
-     *     public static class SkipAndLimit&lt;T&gt; implements UnaryOperator&lt;Stream&lt;T&gt;&gt; {
+     *     public class SkipAndLimit&lt;T&gt; implements UnaryOperator&lt;Stream&lt;T&gt;&gt; {
      *
      *         private final int skip, limit;
      *
@@ -441,7 +441,7 @@ public class Stream<T> {
      *     }
      *
      *     // Terminal operator
-     *     public static class Sum implements Function&lt;Stream&lt;Integer&gt;, Integer&gt; {
+     *     public class Sum implements Function&lt;Stream&lt;Integer&gt;, Integer&gt; {
      *         &#64;Override
      *         public Integer apply(Stream&lt;Integer&gt; stream) {
      *             return stream.reduce(0, new BinaryOperator&lt;Integer&gt;() {

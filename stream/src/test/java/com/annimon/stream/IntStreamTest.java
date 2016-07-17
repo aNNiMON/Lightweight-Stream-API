@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.*;
 import org.junit.Ignore;
@@ -659,5 +660,26 @@ public class IntStreamTest {
         assertFalse(IntStream.of(5, 7, 9, 10, 7, 5).noneMatch(Functions.remainderInt(2)));
 
         assertTrue(IntStream.of(5, 7, 9, 11, 7, 5).noneMatch(Functions.remainderInt(2)));
+    }
+
+    @Test
+    public void testCustomIntermediateOperator_Zip() {
+        final IntBinaryOperator op = new IntBinaryOperator() {
+            @Override
+            public int applyAsInt(int left, int right) {
+                return left + right;
+            }
+        };
+        IntStream s1 = IntStream.of(1, 3,  5,  7, 9);
+        IntStream s2 = IntStream.of(2, 4,  6,  8);
+        int[] expected =           {3, 7, 11, 15};
+        IntStream result = s1.custom(new CustomOperators.Zip(s2, op));
+        assertThat(result.toArray(), is(expected));
+    }
+
+    @Test
+    public void testCustomTerminalOperator_Average() {
+        double average = IntStream.range(0, 10).custom(new CustomOperators.Average());
+        assertThat(average, closeTo(4.5, 0.001));
     }
 }
