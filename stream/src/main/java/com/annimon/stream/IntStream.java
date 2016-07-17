@@ -36,6 +36,17 @@ public final class IntStream {
     }
 
     /**
+     * Creates a {@code IntStream} from {@code PrimitiveIterator.OfInt}.
+     *
+     * @param iterator  the iterator with elements to be passed to stream
+     * @return the new {@code IntStream}
+     */
+    public static IntStream of(PrimitiveIterator.OfInt iterator) {
+        Objects.requireNonNull(iterator);
+        return new IntStream(iterator);
+    }
+
+    /**
      * Returns stream whose elements are the specified values.
      *
      * @param values the elements of the new stream

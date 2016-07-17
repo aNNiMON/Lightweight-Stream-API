@@ -26,6 +26,26 @@ public class IntStreamTest {
     }
 
     @Test
+    public void testStreamOfPrimitiveIterator() {
+        int[] expected = { 0, 1 };
+        IntStream stream = IntStream.of(new PrimitiveIterator.OfInt() {
+
+            int index = 0;
+
+            @Override
+            public boolean hasNext() {
+                return index < 2;
+            }
+
+            @Override
+            public int nextInt() {
+                return index++;
+            }
+        });
+        assertThat(stream.toArray(), is(expected));
+    }
+
+    @Test
     public void testStreamOfInts() {
         int[] data1 = {1, 2, 3, 4, 5};
         int[] data2 = {42};
