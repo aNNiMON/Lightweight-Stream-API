@@ -228,27 +228,6 @@ public class SpinedBufferTest {
     }
 
     @Test
-    public void testForEach() {
-        SpinedBuffer.OfInt b = new SpinedBuffer.OfInt();
-
-        for(int i = 0; i < 64; i++)
-            b.accept(i);
-
-        b.forEach((Consumer<? super Integer>) new TestForEach());
-
-        b.forEach(new Consumer<Integer>() {
-
-            Integer cur = -1;
-
-            @Override
-            public void accept(Integer value) {
-                assertTrue(cur < value);
-                cur = value;
-            }
-        });
-    }
-
-    @Test
     public void testCopyInto() {
         SpinedBuffer.OfInt b = new SpinedBuffer.OfInt();
 
@@ -294,17 +273,6 @@ public class SpinedBufferTest {
             assertTrue(i >= 0);
             assertTrue(i < 255);
         }
-
-        final int[] sum = new int[1];
-
-        b.iterator().forEachRemaining(new IntConsumer() {
-            @Override
-            public void accept(int value) {
-                sum[0] += value;
-            }
-        });
-
-        assertEquals(32385, sum[0]);
 
         PrimitiveIterator.OfInt iterator = b.iterator();
 

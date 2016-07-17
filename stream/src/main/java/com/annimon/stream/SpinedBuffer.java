@@ -1,6 +1,5 @@
 package com.annimon.stream;
 
-import com.annimon.stream.function.Consumer;
 import com.annimon.stream.function.IntConsumer;
 
 import java.util.Arrays;
@@ -31,15 +30,11 @@ final class SpinedBuffer {
         @Override
         public abstract Iterator<E> iterator();
 
-        public abstract void forEach(Consumer<? super E> consumer);
-
         protected abstract T_ARR[] newArrayArray(int size);
 
         public abstract T_ARR newArray(int size);
 
         protected abstract int arrayLength(T_ARR array);
-
-        protected abstract void arrayForEach(T_ARR array, int from, int to, T_CONS consumer);
 
         long capacity() {
             return (spineIndex == 0)
@@ -147,16 +142,6 @@ final class SpinedBuffer {
             elementIndex = 0;
             spineIndex = 0;
         }
-
-        @SuppressWarnings("overloads")
-        void forEach(T_CONS consumer) {
-            // completed chunks, if any
-            for (int j = 0; j < spineIndex; j++)
-                arrayForEach(spine[j], 0, arrayLength(spine[j]), consumer);
-
-            // current chunk
-            arrayForEach(curChunk, 0, elementIndex, consumer);
-        }
     }
 
     static class OfInt extends SpinedBuffer.OfPrimitive<Integer, int[], IntConsumer>
@@ -165,20 +150,6 @@ final class SpinedBuffer {
 
         OfInt(int initialCapacity) {
             super(initialCapacity);
-        }
-
-        @Override
-        public void forEach(final Consumer<? super Integer> consumer) {
-            if (consumer instanceof IntConsumer) {
-                forEach((IntConsumer) consumer);
-            } else {
-                forEach(new IntConsumer() {
-                    @Override
-                    public void accept(int value) {
-                        consumer.accept(value);
-                    }
-                });
-            }
         }
 
         @Override
@@ -194,14 +165,6 @@ final class SpinedBuffer {
         @Override
         protected int arrayLength(int[] array) {
             return array.length;
-        }
-
-        @Override
-        protected void arrayForEach(int[] array,
-                                    int from, int to,
-                                    IntConsumer consumer) {
-            for (int i = from; i < to; i++)
-                consumer.accept(array[i]);
         }
 
         @Override
