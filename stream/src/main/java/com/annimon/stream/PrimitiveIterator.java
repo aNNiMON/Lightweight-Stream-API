@@ -8,6 +8,8 @@ import java.util.Iterator;
  */
 public final class PrimitiveIterator {
 
+    private PrimitiveIterator() { }
+
     public abstract static class OfInt implements Iterator<Integer> {
 
         public abstract int nextInt();

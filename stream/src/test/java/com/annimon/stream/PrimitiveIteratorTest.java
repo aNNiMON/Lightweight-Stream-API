@@ -1,10 +1,16 @@
 package com.annimon.stream;
 
+import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import java.util.NoSuchElementException;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class PrimitiveIteratorTest {
+
+    @Test
+    public void testPrivateConstructor() throws Exception {
+        assertThat(PrimitiveIterator.class, hasOnlyPrivateConstructors());
+    }
 
     @Test
     public void testOfIntHasNext() {
