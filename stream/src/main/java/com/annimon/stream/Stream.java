@@ -913,7 +913,7 @@ public class Stream<T> {
             @Override
             public List<T> nextIteration() {
                 int i = queue.size();
-                while (iterator.hasNext() && i < windowSize) {
+                while (i < windowSize && iterator.hasNext()) {
                     queue.offer(iterator.next());
                     i++;
                 }
@@ -928,7 +928,7 @@ public class Stream<T> {
                 }
 
                 // if the stepWidth is greater than the windowSize, skip (stepWidth - windowSize) elements
-                for (int j = windowSize; iterator.hasNext() && j < stepWidth; j++) {
+                for (int j = windowSize; j < stepWidth && iterator.hasNext(); j++) {
                     iterator.next();
                 }
 
