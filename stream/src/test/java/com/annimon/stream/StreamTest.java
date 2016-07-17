@@ -25,6 +25,8 @@ import java.util.Map;
 import static com.annimon.stream.test.hamcrest.OptionalMatcher.isPresent;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.elements;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.isEmpty;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
@@ -266,6 +268,16 @@ public class StreamTest {
             }
         });
         assertThat(zipped, elements(is(Arrays.asList(2, 4, 6, 8, 10))));
+    }
+
+    @Test
+    public void testGetIterator() {
+        assertThat(Stream.of(1).getIterator(), is(not(nullValue())));
+    }
+
+    @Test
+    public void testIterator() {
+        assertThat(Stream.of(1).iterator(), is(not(nullValue())));
     }
 
     @Test

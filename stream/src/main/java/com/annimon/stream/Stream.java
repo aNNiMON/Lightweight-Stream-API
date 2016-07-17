@@ -399,9 +399,20 @@ public class Stream<T> {
     /**
      * Returns internal stream iterator.
      *
+     * @deprecated  As of release 1.1.1, replaced by {@link #iterator()}
      * @return internal stream iterator
      */
+    @Deprecated
     public Iterator<? extends T> getIterator() {
+        return iterator;
+    }
+
+    /**
+     * Returns internal stream iterator.
+     *
+     * @return internal stream iterator
+     */
+    public Iterator<? extends T> iterator() {
         return iterator;
     }
 

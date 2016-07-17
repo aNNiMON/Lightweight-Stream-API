@@ -24,7 +24,7 @@ public final class CustomOperators {
 
         @Override
         public Stream<T> apply(Stream<T> stream) {
-            final Iterator<? extends T> iterator = stream.getIterator();
+            final Iterator<? extends T> iterator = stream.iterator();
             final ArrayDeque<T> deque = new ArrayDeque<T>();
             while (iterator.hasNext()) {
                 deque.addFirst(iterator.next());
@@ -84,7 +84,7 @@ public final class CustomOperators {
         
         @Override
         public Void apply(Stream<T> stream) {
-            final Iterator<? extends T> iterator = stream.getIterator();
+            final Iterator<? extends T> iterator = stream.iterator();
             while (iterator.hasNext()) {
                 action.accept(iterator.next());
             }
@@ -108,7 +108,7 @@ public final class CustomOperators {
         
         @Override
         public Stream<R> apply(final Stream<T> stream) {
-            final Iterator<? extends T> iterator = stream.getIterator();
+            final Iterator<? extends T> iterator = stream.iterator();
             return Stream.of(new LsaIterator<R>() {
 
                 @Override
@@ -139,7 +139,7 @@ public final class CustomOperators {
         
         @Override
         public Stream<R> apply(final Stream<T> stream) {
-            final Iterator<? extends T> iterator = stream.getIterator();
+            final Iterator<? extends T> iterator = stream.iterator();
             return Stream.of(new LsaIterator<R>() {
 
                 private Iterator<? extends R> inner;
@@ -164,7 +164,7 @@ public final class CustomOperators {
                         final T arg = iterator.next();
                         final Stream<? extends R> result = mapper.apply(arg);
                         if (result != null) {
-                            inner = result.getIterator();
+                            inner = result.iterator();
                             if (inner.hasNext()) {
                                 return;
                             }
