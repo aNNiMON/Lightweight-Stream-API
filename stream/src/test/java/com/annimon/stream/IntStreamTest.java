@@ -372,6 +372,16 @@ public class IntStreamTest {
     }
 
     @Test
+    public void testSortedWithComparator() {
+        int[] expected = { 19, 9, -7, 6, 3, 0 };
+
+        int[] actual = IntStream.of(6, 3, 9, 0, -7, 19)
+                .sorted(Functions.descendingAbsoluteOrder())
+                .toArray();
+        assertThat(actual, is(expected));
+    }
+
+    @Test
     public void testStreamPeek() {
 
         assertTrue(IntStream.empty().peek(new IntConsumer() {

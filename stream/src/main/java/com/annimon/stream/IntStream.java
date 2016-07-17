@@ -2,6 +2,7 @@ package com.annimon.stream;
 
 import com.annimon.stream.function.*;
 import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * A sequence of primitive int-valued elements supporting sequential operations. This is the {@code int}
@@ -394,12 +395,7 @@ public final class IntStream {
     public IntStream distinct() {
         // While functional and quick to implement, this approach is not very efficient.
         // An efficient version requires an int-specific map/set implementation.
-        return boxed().distinct().mapToInt(new ToIntFunction<Integer>() {
-            @Override
-            public int applyAsInt(Integer t) {
-                return t;
-            }
-        });
+        return boxed().distinct().mapToInt(UNBOX_FUNCTION);
     }
 
     /**
@@ -430,6 +426,18 @@ public final class IntStream {
                 }
             }
         });
+    }
+
+    /**
+     * Returns {@code IntStream} with sorted elements (as determinated by provided {@code Comparator}).
+     *
+     * <p>This is a stateful intermediate operation.
+     *
+     * @param comparator  the {@code Comparator} to compare elements
+     * @return the new {@code IntStream}
+     */
+    public IntStream sorted(Comparator<Integer> comparator) {
+        return boxed().sorted(comparator).mapToInt(UNBOX_FUNCTION);
     }
 
     /**
@@ -837,4 +845,10 @@ public final class IntStream {
     }
 
 
+    private static final ToIntFunction<Integer> UNBOX_FUNCTION = new ToIntFunction<Integer>() {
+        @Override
+        public int applyAsInt(Integer t) {
+            return t;
+        }
+    };
 }
