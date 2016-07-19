@@ -297,6 +297,13 @@ public class IntStreamTest {
     }
 
     @Test
+    public void testSample() {
+        int[] expected = { 1, 1, 1 };
+        int[] actual = IntStream.of(1, 2, 3, 1, 2, 3, 1, 2, 3).sample(3).toArray();
+        assertThat(actual, is(expected));
+    }
+
+    @Test
     public void testPeek() {
         assertTrue(IntStream.empty().peek(new IntConsumer() {
             @Override

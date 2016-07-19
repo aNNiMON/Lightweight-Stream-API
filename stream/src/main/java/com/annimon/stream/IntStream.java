@@ -534,6 +534,36 @@ public final class IntStream {
     }
 
     /**
+     * Samples the {@code IntStream} by emitting every n-th element.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @param stepWidth  step width
+     * @return the new {@code IntStream}
+     * @see Stream#sample(int)
+     */
+    public IntStream sample(final int stepWidth) {
+        return new IntStream(new PrimitiveIterator.OfInt() {
+
+            @Override
+            public boolean hasNext() {
+                return iterator.hasNext();
+            }
+
+            @Override
+            public int nextInt() {
+                final int result = iterator.nextInt();
+                int skip = 1;
+                while (skip < stepWidth && iterator.hasNext()) {
+                    iterator.nextInt();
+                    skip++;
+                }
+                return result;
+            }
+        });
+    }
+
+    /**
      * Returns a stream consisting of the elements of this stream, additionally
      * performing the provided action on each element as elements are consumed
      * from the resulting stream. Handy method for debugging purposes.
