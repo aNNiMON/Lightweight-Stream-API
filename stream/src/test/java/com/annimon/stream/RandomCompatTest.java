@@ -1,10 +1,13 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.IntConsumer;
+import java.security.SecureRandom;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.instanceOf;
 
 public class RandomCompatTest {
 
@@ -12,6 +15,9 @@ public class RandomCompatTest {
     public void testRandomConstructor() {
         assertTrue(new RandomCompat(1).getRandom() != null);
         assertTrue(new RandomCompat().getRandom() != null);
+
+        final RandomCompat secureRandom = new RandomCompat(new SecureRandom());
+        assertThat(secureRandom.getRandom(), instanceOf(SecureRandom.class));
     }
 
     @Test

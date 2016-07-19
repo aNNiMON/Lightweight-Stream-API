@@ -30,8 +30,17 @@ public final class RandomCompat {
     }
 
     /**
+     * Constructs object with the given {@code Random} instance.
+     *
+     * @param random  {@code Random} instance
+     */
+    public RandomCompat(Random random) {
+        this.random = random;
+    }
+
+    /**
      * Returns underlying {@link java.util.Random} instance.
-     * 
+     *
      * @return {@link java.util.Random} object instance
      */
     public Random getRandom() {
