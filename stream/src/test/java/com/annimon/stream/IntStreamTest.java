@@ -405,6 +405,11 @@ public class IntStreamTest {
     }
 
     @Test
+    public void testLimitZero() {
+         assertTrue(IntStream.of(1,2).limit(0).count() == 0);
+    }
+
+    @Test
     public void testLimitMoreThanCount() {
         assertThat(IntStream.range(0, 5).limit(15).count(), is(5L));
     }
@@ -421,6 +426,11 @@ public class IntStreamTest {
     @Test(expected = IllegalArgumentException.class)
     public void testSkipNegative() {
         IntStream.empty().skip(-5);
+    }
+
+    @Test
+    public void testSkipZero() {
+         assertTrue(IntStream.of(1,2).skip(0).count() == 2);
     }
 
     @Test

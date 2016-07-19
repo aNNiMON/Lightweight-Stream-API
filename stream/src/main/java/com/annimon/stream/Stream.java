@@ -847,6 +847,8 @@ public class Stream<T> {
      * @return the new stream
      */
     public Stream<T> sample(final int stepWidth) {
+        if (stepWidth == 1) return this;
+        
         return slidingWindow(1, stepWidth).map(new Function<List<T>, T>() {
             @Override
             public T apply(List<T> list) {
@@ -1016,8 +1018,15 @@ public class Stream<T> {
      *
      * @param maxSize  the number of elements to limit
      * @return the new stream
+     * @throws IllegalArgumentException if {@code maxSize} is negative
      */
     public Stream<T> limit(final long maxSize) {
+        if (maxSize < 0) {
+            throw new IllegalArgumentException();
+        }
+        if (maxSize == 0) {
+            return Stream.empty();
+        }
         return new Stream<T>(new LsaIterator<T>() {
 
             private long index = 0;
@@ -1042,8 +1051,15 @@ public class Stream<T> {
      *
      * @param n  the number of elements to skip
      * @return the new stream
+     * @throws IllegalArgumentException if {@code n} is negative
      */
     public Stream<T> skip(final long n) {
+        if (n < 0) {
+            throw new IllegalArgumentException();
+        }
+        if (n == 0) {
+            return this;
+        }
         return new Stream<T>(new LsaIterator<T>() {
 
             private long skippedCount;

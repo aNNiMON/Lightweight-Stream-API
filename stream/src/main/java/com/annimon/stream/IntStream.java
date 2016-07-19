@@ -649,11 +649,12 @@ public final class IntStream {
      * @throws IllegalArgumentException if {@code maxSize} is negative
      */
     public IntStream limit(final long maxSize) {
-
-        if(maxSize < 0) {
+        if (maxSize < 0) {
             throw new IllegalArgumentException();
         }
-
+        if (maxSize == 0) {
+            return IntStream.empty();
+        }
         return new IntStream(new PrimitiveIterator.OfInt() {
 
             private long index = 0;

@@ -46,7 +46,7 @@ public class StreamTest {
     public void testStreamEmpty() {
         assertThat(Stream.empty(), isEmpty());
     }
-    
+
     @Test
     public void testStreamOfList() {
         final PrintConsumer<String> consumer = new PrintConsumer<String>();
@@ -519,7 +519,7 @@ public class StreamTest {
                 });
         assertThat(stream, elements(is(expected)));
     }
-    
+
     @Test
     public void testSortByStudentName() {
         final List<Student> students = Arrays.asList(
@@ -606,6 +606,13 @@ public class StreamTest {
         final PrintConsumer<Integer> pc1 = new PrintConsumer<Integer>();
         Stream.of(1, 2, 3, 1, 2, 3, 1, 2, 3).sample(3).forEach(pc1);
         assertEquals("111", pc1.toString());
+    }
+
+    @Test
+    public void testSampleWithStep1() {
+        final PrintConsumer<Integer> pc1 = new PrintConsumer<Integer>();
+        Stream.of(1, 2, 3, 1, 2, 3, 1, 2, 3).sample(1).forEach(pc1);
+        assertEquals("123123123", pc1.toString());
     }
 
     @Test
@@ -707,6 +714,17 @@ public class StreamTest {
         assertEquals("01", consumer.toString());
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testLimitNegative() {
+        Stream.range(0, 10).limit(-2).count();
+    }
+
+    @Test
+    public void testLimitZero() {
+        final Stream<Integer> stream = Stream.range(0, 10).limit(0);
+        assertThat(stream, isEmpty());
+    }
+
     @Test
     public void testLimitMoreThanCount() {
         final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
@@ -725,6 +743,17 @@ public class StreamTest {
                 .skip(7)
                 .forEach(consumer);
         assertEquals("789", consumer.toString());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testSkipNegative() {
+        Stream.range(0, 10).skip(-2).count();
+    }
+
+    @Test
+    public void testSkipZero() {
+        long count = Stream.range(0, 2).skip(0).count();
+        assertEquals(2, count);
     }
 
     @Test
