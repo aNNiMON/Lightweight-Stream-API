@@ -3,6 +3,7 @@ package com.annimon.stream;
 import com.annimon.stream.function.*;
 
 import java.lang.reflect.Array;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -923,7 +924,7 @@ public class Stream<T> {
      */
     public Stream<List<T>> slidingWindow(final int windowSize, final int stepWidth) {
         return new Stream<List<T>>(new LsaIterator<List<T>>() {
-            private final Queue<T> queue = new LinkedList<T>();
+            private final Queue<T> queue = queueCompat();
 
             @Override
             public boolean hasNext() {
@@ -1393,6 +1394,15 @@ public class Stream<T> {
             container.add(iterator.next());
         }
         return container;
+    }
+
+    private Queue<T> queueCompat() {
+        // ArrayDeque was introduced in Android 2.3
+        try {
+            return new ArrayDeque<T>();
+        } catch (NoClassDefFoundError nce) {
+            return new LinkedList<T>();
+        }
     }
 
 //</editor-fold>
