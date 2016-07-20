@@ -79,6 +79,11 @@ public class StreamTest {
         assertEquals("This is a test", consumer.toString());
     }
 
+    @Test(expected = NullPointerException.class)
+    public void testStreamOfMapNull() {
+        Stream.of((Map)null);
+    }
+
     @Test
     public void testStreamOfIterator() {
         final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
@@ -88,6 +93,11 @@ public class StreamTest {
                 .count();
         assertEquals(5, count);
         assertEquals("01234", consumer.toString());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testStreamOfIteratorNull() {
+        Stream.of((Iterator)null);
     }
 
     @Test
@@ -106,6 +116,11 @@ public class StreamTest {
                 .count();
         assertEquals(5, count);
         assertEquals("01234", consumer.toString());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testStreamOfIterableNull() {
+        Stream.of((Iterable)null);
     }
 
     @Test
@@ -183,6 +198,11 @@ public class StreamTest {
         assertThat(stream, elements(is(expected)));
     }
 
+    @Test(expected = NullPointerException.class)
+    public void testGenerateNull() {
+        Stream.generate(null);
+    }
+
     @Test
     public void testIterate() {
         final BigInteger two = BigInteger.valueOf(2);
@@ -201,6 +221,11 @@ public class StreamTest {
                     }
                 });
         assertEquals(new BigInteger("1267650600228229401496703205375"), sum);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testIterateNull() {
+        Stream.iterate(1, null);
     }
 
     @Test(timeout=2000)
@@ -231,6 +256,16 @@ public class StreamTest {
         Stream<String> stream = Stream.concat(stream1, stream2);
         stream.forEach(consumer);
         assertEquals("abcdefgh", consumer.toString());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testConcatNull1() {
+        Stream.concat(null, Stream.empty());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testConcatNull2() {
+        Stream.concat(Stream.empty(), null);
     }
 
     @Test
@@ -268,6 +303,16 @@ public class StreamTest {
             }
         });
         assertThat(zipped, elements(is(Arrays.asList(2, 4, 6, 8, 10))));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testZipNull1() {
+        Stream.zip(null, Stream.<Integer>empty(), Functions.addition());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testZipNull2() {
+        Stream.zip(Stream.<Integer>empty(), null, Functions.addition());
     }
 
     @Test
@@ -1067,6 +1112,11 @@ public class StreamTest {
 
         assertTrue(numbers.length > 0);
         assertNotNull(numbers[100]);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testCustomNull() {
+        Stream.empty().custom(null);
     }
 
     @Test

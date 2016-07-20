@@ -40,6 +40,7 @@ public final class IntStream {
      *
      * @param iterator  the iterator with elements to be passed to stream
      * @return the new {@code IntStream}
+     * @throws NullPointerException if {@code iterator} is null
      */
     public static IntStream of(PrimitiveIterator.OfInt iterator) {
         Objects.requireNonNull(iterator);
@@ -51,6 +52,7 @@ public final class IntStream {
      *
      * @param values the elements of the new stream
      * @return the new stream
+     * @throws NullPointerException if {@code values} is null
      */
     public static IntStream of(final int... values) {
         Objects.requireNonNull(values);
@@ -146,8 +148,10 @@ public final class IntStream {
      *
      * @param s the {@code IntSupplier} for generated elements
      * @return a new infinite sequential {@code IntStream}
+     * @throws NullPointerException if {@code s} is null
      */
     public static IntStream generate(final IntSupplier s) {
+        Objects.requireNonNull(s);
         return new IntStream(new PrimitiveIterator.OfInt() {
             @Override
             public int nextInt() {
@@ -175,9 +179,11 @@ public final class IntStream {
      * @param seed the initial element
      * @param f a function to be applied to to the previous element to produce
      *          a new element
-     * @return A new sequential {@code IntStream}
+     * @return a new sequential {@code IntStream}
+     * @throws NullPointerException if {@code f} is null
      */
     public static IntStream iterate(final int seed, final IntUnaryOperator f) {
+        Objects.requireNonNull(f);
         return new IntStream(new PrimitiveIterator.OfInt() {
 
             private int current = seed;
@@ -206,6 +212,7 @@ public final class IntStream {
      * @param a the first stream
      * @param b the second stream
      * @return the concatenation of the two input streams
+     * @throws NullPointerException if {@code a} or {@code b} is null
      */
     public static IntStream concat(final IntStream a, final IntStream b) {
         Objects.requireNonNull(a);
@@ -313,8 +320,10 @@ public final class IntStream {
      * @param function  a transforming function
      * @return a result of the transforming function
      * @see Stream#custom(com.annimon.stream.function.Function)
+     * @throws NullPointerException if {@code function} is null
      */
-    public <R> R custom(Function<IntStream, R> function) {
+    public <R> R custom(final Function<IntStream, R> function) {
+        Objects.requireNonNull(function);
         return function.apply(this);
     }
 
@@ -342,8 +351,6 @@ public final class IntStream {
      * @return the new stream
      */
     public IntStream filter(final IntPredicate predicate) {
-        Objects.requireNonNull(predicate);
-
         return new IntStream(new PrimitiveIterator.OfInt() {
 
             private int next;

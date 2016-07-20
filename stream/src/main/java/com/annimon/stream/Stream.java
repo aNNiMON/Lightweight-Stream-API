@@ -40,8 +40,10 @@ public class Stream<T> {
      * @param <V> the type of map values
      * @param map  the map with elements to be passed to stream
      * @return the new stream
+     * @throws NullPointerException if {@code map} is null
      */
     public static <K, V> Stream<Map.Entry<K, V>> of(Map<K, V> map) {
+        Objects.requireNonNull(map);
         return new Stream<Map.Entry<K, V>>(map.entrySet());
     }
 
@@ -51,8 +53,10 @@ public class Stream<T> {
      * @param <T> the type of the stream elements
      * @param iterator  the iterator with elements to be passed to stream
      * @return the new stream
+     * @throws NullPointerException if {@code iterator} is null
      */
     public static <T> Stream<T> of(Iterator<? extends T> iterator) {
+        Objects.requireNonNull(iterator);
         return new Stream<T>(iterator);
     }
 
@@ -62,8 +66,10 @@ public class Stream<T> {
      * @param <T> the type of the stream elements
      * @param iterable  the iterable with elements to be passed to stream
      * @return the new stream
+     * @throws NullPointerException if {@code iterable} is null
      */
     public static <T> Stream<T> of(Iterable<? extends T> iterable) {
+        Objects.requireNonNull(iterable);
         return new Stream<T>(iterable);
     }
 
@@ -73,8 +79,10 @@ public class Stream<T> {
      * @param <T> the type of the stream elements
      * @param elements  the elements to be passed to stream
      * @return the new stream
+     * @throws NullPointerException if {@code elements} is null
      */
     public static <T> Stream<T> of(final T... elements) {
+        Objects.requireNonNull(elements);
         return new Stream<T>(new LsaIterator<T>() {
 
             private int index = 0;
@@ -263,8 +271,10 @@ public class Stream<T> {
      * @param <T> the type of the stream elements
      * @param supplier  the {@code Supplier} of generated elements
      * @return the new stream
+     * @throws NullPointerException if {@code supplier} is null
      */
     public static <T> Stream<T> generate(final Supplier<T> supplier) {
+        Objects.requireNonNull(supplier);
         return new Stream<T>(new LsaIterator<T>() {
 
             @Override
@@ -286,8 +296,10 @@ public class Stream<T> {
      * @param seed  the initial value
      * @param op  operator to produce new element by previous one
      * @return the new stream
+     * @throws NullPointerException if {@code op} is null
      */
     public static <T> Stream<T> iterate(final T seed, final UnaryOperator<T> op) {
+        Objects.requireNonNull(op);
         return new Stream<T>(new LsaIterator<T>() {
 
             private boolean firstRun = true;
@@ -318,8 +330,11 @@ public class Stream<T> {
      * @param stream1  the first stream
      * @param stream2  the second stream
      * @return the new concatenated stream
+     * @throws NullPointerException if {@code stream1} or {@code stream2} is null
      */
     public static <T> Stream<T> concat(Stream<? extends T> stream1, Stream<? extends T> stream2) {
+        Objects.requireNonNull(stream1);
+        Objects.requireNonNull(stream2);
         final Iterator<? extends T> it1 = stream1.iterator;
         final Iterator<? extends T> it2 = stream2.iterator;
         return new Stream<T>(new LsaExtIterator<T>() {
@@ -351,8 +366,11 @@ public class Stream<T> {
      * @param stream2  the second stream
      * @param combiner  the combiner function used to apply to each element
      * @return the new stream
+     * @throws NullPointerException if {@code stream1} or {@code stream2} is null
      */
     public static <F, S, R> Stream<R> zip(Stream<? extends F> stream1, Stream<? extends S> stream2, final BiFunction<? super F, ? super S, ? extends R> combiner) {
+        Objects.requireNonNull(stream1);
+        Objects.requireNonNull(stream2);
         final Iterator<? extends F> it1 = stream1.iterator;
         final Iterator<? extends S> it2 = stream2.iterator;
         return new Stream<R>(new LsaIterator<R>() {
@@ -457,8 +475,10 @@ public class Stream<T> {
      * @param <R> the type of the result
      * @param function  a transforming function
      * @return a result of the transforming function
+     * @throws NullPointerException if {@code function} is null
      */
     public <R> R custom(Function<Stream<T>, R> function) {
+        Objects.requireNonNull(function);
         return function.apply(this);
     }
 

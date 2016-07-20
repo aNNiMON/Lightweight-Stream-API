@@ -46,6 +46,11 @@ public class IntStreamTest {
         assertThat(stream.toArray(), is(expected));
     }
 
+    @Test(expected = NullPointerException.class)
+    public void testStreamOfPrimitiveIteratorNull() {
+        IntStream.of((PrimitiveIterator.OfInt) null);
+    }
+
     @Test
     public void testStreamOfInts() {
         int[] data1 = {1, 2, 3, 4, 5};
@@ -55,6 +60,11 @@ public class IntStreamTest {
         assertTrue(IntStream.of(data1).count() == 5);
         assertTrue(IntStream.of(data2).findFirst().getAsInt() == 42);
         assertTrue(!IntStream.of(data3).findFirst().isPresent());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testStreamOfIntsNull() {
+        IntStream.of((int[]) null);
     }
 
     @Test
@@ -87,6 +97,11 @@ public class IntStreamTest {
         assertTrue(IntStream.generate(s).findFirst().getAsInt() == 42);
     }
 
+    @Test(expected = NullPointerException.class)
+    public void testStreamGenerateNull() {
+        IntStream.generate(null);
+    }
+
     @Test
     public void testStreamIterate() {
         IntUnaryOperator operator = new IntUnaryOperator() {
@@ -98,6 +113,11 @@ public class IntStreamTest {
 
         assertTrue(IntStream.iterate(1, operator).limit(3).sum() == 6);
         assertTrue(IntStream.iterate(1, operator).iterator().hasNext());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testStreamIterateNull() {
+        IntStream.iterate(0, null);
     }
 
     @Test
@@ -121,6 +141,16 @@ public class IntStreamTest {
         IntStream b4 = IntStream.of(1, 3, 5, 7, 9);
 
         assertTrue(IntStream.concat(a4, b4).count() == 9);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testStreamConcatNullA() {
+        IntStream.concat(null, IntStream.empty());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testStreamConcatNullB() {
+        IntStream.concat(IntStream.empty(), null);
     }
 
     @Test
@@ -172,7 +202,7 @@ public class IntStreamTest {
 
         assertTrue(IntStream.rangeClosed(1, 10).filterNot(Functions.remainderInt(2)).sum() == 25);
     }
-
+    
     @Test
     public void testMap() {
         assertTrue(IntStream.of(5).map(new IntUnaryOperator() {
@@ -671,6 +701,11 @@ public class IntStreamTest {
         assertFalse(IntStream.empty().findFirst().isPresent());
         assertEquals(IntStream.of(42).findFirst().getAsInt(), 42);
         assertTrue(IntStream.rangeClosed(2, 5).findFirst().isPresent());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testCustomNull() {
+        IntStream.empty().custom(null);
     }
 
     @Test
