@@ -54,5 +54,5 @@ coveralls {
 }
 
 tasks.coveralls {
-  dependsOn cobertura
+  dependsOn coberturaReport
 }
