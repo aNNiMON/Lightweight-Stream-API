@@ -23,27 +23,6 @@ dependencies {
     testCompile project(':streamTest')
 }
 
-// coveralls
-
-apply plugin: 'cobertura'
-apply plugin: 'com.github.kt3k.coveralls'
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath 'net.saliman:gradle-cobertura-plugin:2.0.0'
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.6.3'
-    }
-}
-
-cobertura {
-    coverageFormats = ['html', 'xml']
-    coverageExcludes = ['.*com.annimon.stream.Compat']
-}
-
 // maven signing
 if (ext.isReleaseVersion) {
     apply from: 'signing.gradle'
