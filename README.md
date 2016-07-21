@@ -13,7 +13,7 @@ Stream API from Java 8 rewritten on iterators for Java 7 and below.
 ### Includes
 
  + Functional interfaces (`Supplier`, `Function`, `Consumer` etc);
- + `Stream` (without parallel processing but with a variety of additional methods and with custom operators);
+ + `Stream`/`IntStream` (without parallel processing but with a variety of additional methods and with custom operators);
  + `Optional` class;
  + `Exceptional` class - functional way to deal with exceptions;
  + `Objects` from Java 7.
@@ -29,7 +29,7 @@ Stream.of(/* array | list | set | map | anything based on Iterator/Iterable inte
     .sorted()
     .forEach(..);
 Stream.of(value1, value2, value3)...
-Stream.range(0, 10)...
+InStream.range(0, 10)...
 ```
 Example project: https://github.com/aNNiMON/Android-Java-8-Stream-Example
 
@@ -157,7 +157,7 @@ Download [latest release](https://github.com/aNNiMON/Lightweight-Stream-API/rele
 <dependency>
   <groupId>com.annimon</groupId>
   <artifactId>stream</artifactId>
-  <version>1.1.0</version>
+  <version>1.1.1</version>
 </dependency>
 ```
 or Gradle:
@@ -165,7 +165,7 @@ or Gradle:
 ```groovy
 dependencies {
   ...
-  compile 'com.annimon:stream:1.1.0'
+  compile 'com.annimon:stream:1.1.1'
   ...
 }
 ```
