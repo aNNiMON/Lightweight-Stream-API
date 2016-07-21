@@ -23,6 +23,10 @@ dependencies {
     testCompile project(':streamTest')
 }
 
+cobertura {
+    coverageExcludes = ['.*com.annimon.stream.Compat.*']
+}
+
 // maven signing
 if (ext.isReleaseVersion) {
     apply from: 'signing.gradle'
