@@ -25,6 +25,7 @@ import java.util.Map;
 import static com.annimon.stream.test.hamcrest.OptionalMatcher.isPresent;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.elements;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.isEmpty;
+import java.util.NoSuchElementException;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.instanceOf;
@@ -341,6 +342,22 @@ public class StreamTest {
                 .filterNot(Functions.remainder(2))
                 .forEach(consumer);
         assertEquals("13579", consumer.toString());
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testFilterIteratorNextOnEmpty() {
+        Stream.<Integer>empty()
+                .filter(Functions.remainder(2))
+                .iterator()
+                .next();
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testFilterIteratorRemove() {
+        Stream.range(0, 10)
+                .filter(Functions.remainder(2))
+                .iterator()
+                .remove();
     }
 
     @Test
