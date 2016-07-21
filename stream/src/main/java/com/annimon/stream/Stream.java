@@ -2,15 +2,11 @@ package com.annimon.stream;
 
 import com.annimon.stream.function.*;
 
-import java.lang.reflect.Array;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -924,7 +920,7 @@ public class Stream<T> {
      */
     public Stream<List<T>> slidingWindow(final int windowSize, final int stepWidth) {
         return new Stream<List<T>>(new LsaIterator<List<T>>() {
-            private final Queue<T> queue = queueCompat();
+            private final Queue<T> queue = Compat.queue();
 
             @Override
             public boolean hasNext() {
@@ -943,8 +939,8 @@ public class Stream<T> {
                 List<T> list = new ArrayList<T>(queue);
 
                 // remove stepWidth elements from the queue
-                int queueSize = queue.size();
-                for (int j = 0; j < stepWidth && j < queueSize; j++) {
+                final int pollCount = Math.min(queue.size(), stepWidth);
+                for (int j = 0; j < pollCount; j++) {
                     queue.poll();
                 }
 
@@ -1192,7 +1188,7 @@ public class Stream<T> {
         if (size >= MAX_ARRAY_SIZE) throw new IllegalArgumentException(BAD_SIZE);
 
         //noinspection unchecked
-        T[] source = container.toArray(Stream.<T>newArray(size));
+        T[] source = container.toArray(Compat.<T>newArray(size));
         R[] boxed = generator.apply(size);
 
         //noinspection SuspiciousSystemArraycopy
@@ -1369,40 +1365,12 @@ public class Stream<T> {
         return !kindAny;
     }
 
-    @SafeVarargs
-    static <E> E[] newArray(int length, E... array) {
-        try {
-            return Arrays.copyOf(array, length);
-        } catch (NoSuchMethodError nme) {
-            return newArrayCompat(length, array);
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    static<E> E[] newArrayCompat(int length, E... array) {
-
-        final E[] res = (E[])Array.newInstance(array.getClass().getComponentType(), length);
-
-        System.arraycopy(array, 0, res, 0, Math.min(length, array.length));
-
-        return res;
-    }
-
     private List<T> collectToList() {
         final List<T> container = new ArrayList<T>();
         while (iterator.hasNext()) {
             container.add(iterator.next());
         }
         return container;
-    }
-
-    private Queue<T> queueCompat() {
-        // ArrayDeque was introduced in Android 2.3
-        try {
-            return new ArrayDeque<T>();
-        } catch (NoClassDefFoundError nce) {
-            return new LinkedList<T>();
-        }
     }
 
 //</editor-fold>

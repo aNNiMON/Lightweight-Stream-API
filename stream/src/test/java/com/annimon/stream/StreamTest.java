@@ -1168,7 +1168,7 @@ public class StreamTest {
     public void testNewArrayCompat() {
         String[] strings = new String[] {"abc", "def", "fff"};
 
-        String[] copy = Stream.newArrayCompat(5, strings);
+        String[] copy = Compat.newArrayCompat(strings, 5);
 
         assertEquals(5, copy.length);
         assertEquals("abc", copy[0]);
@@ -1176,11 +1176,11 @@ public class StreamTest {
 
         String[] empty = new String[0];
 
-        String[] emptyCopy = Stream.newArrayCompat(3, empty);
+        String[] emptyCopy = Compat.newArrayCompat(empty, 3);
 
         assertEquals(3, emptyCopy.length);
 
-        emptyCopy = Stream.newArrayCompat(0, empty);
+        emptyCopy = Compat.newArrayCompat(empty, 0);
 
         assertEquals(0, emptyCopy.length);
     }
