@@ -1,1 +1,46 @@
-apply plugin: 'base'
+// Plugins
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'net.saliman:gradle-cobertura-plugin:2.2.6'
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.6.3'
+    }
+}
+
+apply plugin: 'com.github.kt3k.coveralls'
+apply plugin: 'net.saliman.cobertura'
+
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    apply plugin: 'net.saliman.cobertura'
+    cobertura {
+        coverageFormats = ['html', 'xml']
+    }
+}
+
+cobertura {
+    coverageFormats = ['html', 'xml']
+    coverageReportDatafile = file("build/cobertura/cobertura.ser")
+    coverageReportDir = file("build/reports/coverage")
+    coverageSourceDirs = subprojects.sourceSets.main.allSource.srcDirs.flatten()
+    coverageMergeDatafiles = subprojects.collect { file("${it.buildDir}/cobertura/cobertura.ser") }
+    coverageDirs = subprojects.collect { file("${it.buildDir}/classes/main") }
+}
+
+coveralls {
+    coberturaReportPath = "${rootProject.buildDir}/reports/coverage/coverage.xml"
+}
+
+test.dependsOn(rootProject.subprojects.collect { ":${it.name}:cobertura" })
+
+tasks.coveralls {
+    dependsOn coberturaReport
+}

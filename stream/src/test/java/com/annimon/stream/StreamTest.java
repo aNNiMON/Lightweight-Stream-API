@@ -25,6 +25,7 @@ import java.util.Map;
 import static com.annimon.stream.test.hamcrest.OptionalMatcher.isPresent;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.elements;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.isEmpty;
+import java.util.NoSuchElementException;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.instanceOf;
@@ -341,6 +342,22 @@ public class StreamTest {
                 .filterNot(Functions.remainder(2))
                 .forEach(consumer);
         assertEquals("13579", consumer.toString());
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testFilterIteratorNextOnEmpty() {
+        Stream.<Integer>empty()
+                .filter(Functions.remainder(2))
+                .iterator()
+                .next();
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testFilterIteratorRemove() {
+        Stream.range(0, 10)
+                .filter(Functions.remainder(2))
+                .iterator()
+                .remove();
     }
 
     @Test
@@ -1168,7 +1185,7 @@ public class StreamTest {
     public void testNewArrayCompat() {
         String[] strings = new String[] {"abc", "def", "fff"};
 
-        String[] copy = Stream.newArrayCompat(5, strings);
+        String[] copy = Compat.newArrayCompat(strings, 5);
 
         assertEquals(5, copy.length);
         assertEquals("abc", copy[0]);
@@ -1176,11 +1193,11 @@ public class StreamTest {
 
         String[] empty = new String[0];
 
-        String[] emptyCopy = Stream.newArrayCompat(3, empty);
+        String[] emptyCopy = Compat.newArrayCompat(empty, 3);
 
         assertEquals(3, emptyCopy.length);
 
-        emptyCopy = Stream.newArrayCompat(0, empty);
+        emptyCopy = Compat.newArrayCompat(empty, 0);
 
         assertEquals(0, emptyCopy.length);
     }
