@@ -25,7 +25,7 @@ dependencies {
 }
 
 cobertura {
-    coverageExcludes = ['.*com.annimon.stream.test.hamcrest.CommonMatcher.*']
+    coverageExcludes = ['.*com\\.annimon\\.stream\\.test\\.hamcrest\\.CommonMatcher.*']
 }
 
 // maven signing

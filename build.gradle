@@ -28,6 +28,7 @@ subprojects {
 
 cobertura {
     coverageFormats = ['html', 'xml']
+    coverageExcludes = ['.*com\\.annimon\\.stream\\.Compat.*', '.*com\\.annimon\\.stream\\.test\\.hamcrest\\.CommonMatcher.*']
     coverageReportDatafile = file("build/cobertura/cobertura.ser")
     coverageReportDir = file("build/reports/coverage")
     coverageSourceDirs = subprojects.sourceSets.main.allSource.srcDirs.flatten()

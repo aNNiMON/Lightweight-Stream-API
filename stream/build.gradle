@@ -24,7 +24,7 @@ dependencies {
 }
 
 cobertura {
-    coverageExcludes = ['.*com.annimon.stream.Compat.*']
+    coverageExcludes = ['.*com\\.annimon\\.stream\\.Compat.*']
 }
 
 // maven signing
