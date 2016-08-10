@@ -862,10 +862,11 @@ public class Stream<T> {
      *
      * @param stepWidth  step width
      * @return the new stream
+     * @throws IllegalArgumentException if {@code stepWidth} is zero or negative
      */
     public Stream<T> sample(final int stepWidth) {
+        if (stepWidth <= 0) throw new IllegalArgumentException("stepWidth cannot be zero or negative");
         if (stepWidth == 1) return this;
-        
         return slidingWindow(1, stepWidth).map(new Function<List<T>, T>() {
             @Override
             public T apply(List<T> list) {

@@ -547,9 +547,12 @@ public final class IntStream {
      *
      * @param stepWidth  step width
      * @return the new {@code IntStream}
+     * @throws IllegalArgumentException if {@code stepWidth} is zero or negative
      * @see Stream#sample(int)
      */
     public IntStream sample(final int stepWidth) {
+        if (stepWidth <= 0) throw new IllegalArgumentException("stepWidth cannot be zero or negative");
+        if (stepWidth == 1) return this;
         return new IntStream(new PrimitiveIterator.OfInt() {
 
             @Override

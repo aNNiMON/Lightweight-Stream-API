@@ -685,6 +685,11 @@ public class StreamTest {
         assertEquals("123123123", pc1.toString());
     }
 
+    @Test(expected = IllegalArgumentException.class, timeout=1000)
+    public void testSampleWithNegativeStep() {
+        Stream.of(1, 2, 3, 1, 2, 3, 1, 2, 3).sample(-1).count();
+    }
+
     @Test
     public void testSlidingWindow() {
         long count = Stream.<Integer>empty().slidingWindow(5, 6).count();

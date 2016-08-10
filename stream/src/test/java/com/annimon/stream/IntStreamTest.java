@@ -338,6 +338,18 @@ public class IntStreamTest {
     }
 
     @Test
+    public void testSampleWithStep1() {
+        int[] expected = { 1, 2, 3, 1, 2, 3, 1, 2, 3 };
+        int[] actual = IntStream.of(1, 2, 3, 1, 2, 3, 1, 2, 3).sample(1).toArray();
+        assertThat(actual, is(expected));
+    }
+
+    @Test(expected = IllegalArgumentException.class, timeout=1000)
+    public void testSampleWithNegativeStep() {
+        IntStream.of(1, 2, 3, 1, 2, 3, 1, 2, 3).sample(-1).count();
+    }
+
+    @Test
     public void testPeek() {
         assertTrue(IntStream.empty().peek(new IntConsumer() {
             @Override
