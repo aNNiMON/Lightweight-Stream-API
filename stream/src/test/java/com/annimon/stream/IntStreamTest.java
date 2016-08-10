@@ -8,8 +8,11 @@ import java.util.Arrays;
 import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.closeTo;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.*;
+
+import org.hamcrest.Matchers;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -260,7 +263,7 @@ public class IntStreamTest {
 
     @Test
     public void testDistinctLazy() {
-        Integer[] expected = { -1, 1, 2, 3, 5 };
+        Integer[] expected = { 1, 2, 3, 5, -1 };
 
         List<Integer> input = new ArrayList<Integer>();
         input.addAll(Arrays.asList(1, 1, 2, 3, 5));
@@ -269,8 +272,9 @@ public class IntStreamTest {
                 .distinct();
         input.addAll(Arrays.asList(3, 2, 1, 1, -1));
 
+
         List<Integer> actual = stream.boxed().collect(Collectors.<Integer>toList());
-        assertThat(actual, containsInAnyOrder(expected));
+        assertThat(actual, Matchers.contains(expected));
     }
 
     @Test

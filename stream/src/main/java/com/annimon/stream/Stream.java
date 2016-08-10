@@ -2,16 +2,7 @@ package com.annimon.stream;
 
 import com.annimon.stream.function.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A sequence of elements supporting aggregate operations.
@@ -707,7 +698,7 @@ public class Stream<T> {
             @Override
             protected void nextIteration() {
                 if (!isInit) {
-                    final Set<T> set = new HashSet<T>();
+                    final Set<T> set = new LinkedHashSet<T>();
                     while (iterator.hasNext()) {
                         set.add(iterator.next());
                     }
