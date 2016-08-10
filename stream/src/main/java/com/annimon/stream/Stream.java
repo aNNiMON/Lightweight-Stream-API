@@ -918,8 +918,12 @@ public class Stream<T> {
      * @param windowSize  number of elements that will be emitted together in a list
      * @param stepWidth  step width
      * @return the new stream
+     * @throws IllegalArgumentException if {@code windowSize} is zero or negative
+     * @throws IllegalArgumentException if {@code stepWidth} is zero or negative
      */
     public Stream<List<T>> slidingWindow(final int windowSize, final int stepWidth) {
+        if (windowSize <= 0) throw new IllegalArgumentException("windowSize cannot be zero or negative");
+        if (stepWidth <= 0) throw new IllegalArgumentException("stepWidth cannot be zero or negative");
         return new Stream<List<T>>(new LsaIterator<List<T>>() {
             private final Queue<T> queue = Compat.queue();
 
@@ -1040,7 +1044,7 @@ public class Stream<T> {
      */
     public Stream<T> limit(final long maxSize) {
         if (maxSize < 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("maxSize cannot be negative");
         }
         if (maxSize == 0) {
             return Stream.empty();
@@ -1073,7 +1077,7 @@ public class Stream<T> {
      */
     public Stream<T> skip(final long n) {
         if (n < 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("n cannot be negative");
         }
         if (n == 0) {
             return this;

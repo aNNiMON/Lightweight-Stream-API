@@ -660,7 +660,7 @@ public final class IntStream {
      */
     public IntStream limit(final long maxSize) {
         if (maxSize < 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("maxSize cannot be negative");
         }
         if (maxSize == 0) {
             return IntStream.empty();
@@ -696,7 +696,7 @@ public final class IntStream {
      */
     public IntStream skip(final long n) {
         if(n < 0)
-            throw new IllegalArgumentException(Long.toString(n));
+            throw new IllegalArgumentException("n cannot be negative");
 
         if(n == 0)
             return this;

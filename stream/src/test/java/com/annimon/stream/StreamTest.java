@@ -716,6 +716,16 @@ public class StreamTest {
         assertEquals("[1, 2]", pc5.toString());
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testSlidingWindowWithNegativeWindowSize() {
+        Stream.of(1, 2, 3, 4).slidingWindow(-1, 1).count();
+    }
+
+    @Test(expected = IllegalArgumentException.class, timeout=1000)
+    public void testSlidingWindowWithNegativeStepSize() {
+        Stream.of(1, 2, 3, 4).slidingWindow(5, -1).count();
+    }
+
     @Test
     public void testPeek() {
         final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
