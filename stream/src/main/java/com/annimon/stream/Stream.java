@@ -2,7 +2,16 @@ package com.annimon.stream;
 
 import com.annimon.stream.function.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Queue;
+import java.util.Set;
 
 /**
  * A sequence of elements supporting aggregate operations.
