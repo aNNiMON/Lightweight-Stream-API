@@ -530,6 +530,14 @@ public class StreamTest {
     }
 
     @Test
+    public void testDistinctPreservesOrder() {
+        List<Integer> expected = Arrays.asList(1, 2, 3, 5, -1);
+        Stream<Integer> stream = Stream.of(1, 1, 2, 3, 5, 3, 2, 1, 1, -1)
+                .distinct();
+        assertThat(stream, elements(is(expected)));
+    }
+
+    @Test
     public void testDistinctLazy() {
         List<Integer> expected = Arrays.asList(-1, 1, 2, 3, 5);
 

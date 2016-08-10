@@ -5,7 +5,7 @@ import com.annimon.stream.function.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -707,7 +707,7 @@ public class Stream<T> {
             @Override
             protected void nextIteration() {
                 if (!isInit) {
-                    final Set<T> set = new HashSet<T>();
+                    final Set<T> set = new LinkedHashSet<T>();
                     while (iterator.hasNext()) {
                         set.add(iterator.next());
                     }
