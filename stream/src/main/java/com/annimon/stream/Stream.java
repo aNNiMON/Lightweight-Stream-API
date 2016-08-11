@@ -1321,7 +1321,7 @@ public class Stream<T> {
 
     /**
      * Returns the first element wrapped by {@code Optional} class.
-     * If stream is empty, returns .
+     * If stream is empty, returns {@code Optional.empty()}.
      *
      * <p>This is a short-circuiting terminal operation.
      *
@@ -1332,6 +1332,29 @@ public class Stream<T> {
             return Optional.of(iterator.next());
         }
         return Optional.empty();
+    }
+
+    /**
+     * Returns the single element wrapped by {@code Optional} class.
+     * If stream is empty, returns {@code Optional.empty()}.
+     * If stream contains more than one element, throws {@code IllegalStateException}.
+     * <p/>
+     * <p>This is a short-circuiting terminal operation.
+     *
+     * @return an {@code Optional} with single element, {@code Optional.empty()} if stream is empty
+     * or throw {@code IllegalStateException} if stream contains more than one element.
+     */
+    public Optional<T> single() {
+        if (iterator.hasNext()) {
+            T singleCandidate = iterator.next();
+            if (iterator.hasNext()) {
+                throw new IllegalStateException("Stream contains more than one element");
+            } else {
+                return Optional.of(singleCandidate);
+            }
+        } else {
+            return Optional.empty();
+        }
     }
 
     private static final int MATCH_ANY = 0;
