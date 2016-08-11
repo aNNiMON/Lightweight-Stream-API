@@ -10,3 +10,5 @@
 /streamTest/target/
 /streamTest/build/
 /.idea/
+*.iml
+local.properties
