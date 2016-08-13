@@ -1,6 +1,7 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.Consumer;
+import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Supplier;
 import com.annimon.stream.function.ThrowableFunction;
 import com.annimon.stream.function.ThrowableSupplier;
@@ -255,6 +256,82 @@ public class ExceptionalTest {
         assertTrue(data[INTERRUPTED]);
         assertTrue(data[EXCEPTION]);
         assertFalse(data[FILE_NOT_FOUND]);
+    }
+
+    @Test
+    public void testRecover() {
+        int value = Exceptional
+                .of(ioExceptionSupplier)
+                .recover(new ThrowableFunction<Throwable, Integer, Throwable>() {
+                    @Override
+                    public Integer apply(Throwable throwable) {
+                        return 10;
+                    }
+                })
+                .get();
+        assertEquals(10, value);
+    }
+
+    @Test(expected = FileNotFoundException.class)
+    public void testRecoverError() throws Throwable {
+        Exceptional
+                .of(ioExceptionSupplier)
+                .recover(new ThrowableFunction<Throwable, Integer, Throwable>() {
+                    @Override
+                    public Integer apply(Throwable throwable) throws FileNotFoundException {
+                        throw new FileNotFoundException();
+                    }
+                })
+                .getOrThrow();
+    }
+
+    @Test
+    public void testRecoverChain() {
+        int value = Exceptional
+                .of(ioExceptionSupplier)
+                .recover(new ThrowableFunction<Throwable, Integer, Throwable>() {
+                    @Override
+                    public Integer apply(Throwable throwable) throws IOException {
+                        assertThat(throwable, instanceOf(IOException.class));
+                        throw new FileNotFoundException();
+                    }
+                })
+                .recover(new ThrowableFunction<Throwable, Integer, Throwable>() {
+                    @Override
+                    public Integer apply(Throwable throwable) throws IOException {
+                        assertThat(throwable, instanceOf(FileNotFoundException.class));
+                        return 10;
+                    }
+                })
+                .get();
+        assertEquals(10, value);
+    }
+
+    @Test
+    public void testRecoverWith() {
+        int value = Exceptional
+                .of(ioExceptionSupplier)
+                .recoverWith(new Function<Throwable, Exceptional<Integer>>() {
+                    @Override
+                    public Exceptional<Integer> apply(Throwable throwable) {
+                        return Exceptional.of(tenSupplier);
+                    }
+                })
+                .get();
+        assertEquals(10, value);
+    }
+
+    @Test(expected = IOException.class)
+    public void testRecoverWithError() throws Throwable {
+        Exceptional
+                .of(ioExceptionSupplier)
+                .recoverWith(new Function<Throwable, Exceptional<Integer>>() {
+                    @Override
+                    public Exceptional<Integer> apply(Throwable throwable) {
+                        return Exceptional.of(ioExceptionSupplier);
+                    }
+                })
+                .getOrThrow();
     }
 
     @Test

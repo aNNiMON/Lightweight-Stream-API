@@ -1,6 +1,7 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.Consumer;
+import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Supplier;
 import com.annimon.stream.function.ThrowableFunction;
 import com.annimon.stream.function.ThrowableSupplier;
@@ -139,6 +140,7 @@ public class Exceptional<T> {
      * @param supplier  supplier function that produced an {@code Exceptional} to be returned
      * @return this {@code Exceptional} if there were no exceptions, otherwise
      *         an {@code Exceptional} produced by supplier function
+     * @throws NullPointerException if {@code supplier} or its result is null
      */
     public Exceptional<T> or(Supplier<Exceptional<T>> supplier) {
         if (throwable == null) return this;
@@ -195,6 +197,42 @@ public class Exceptional<T> {
             consumer.accept((E) throwable);
         }
         return this;
+    }
+
+    /**
+     * Returns current {@code Exceptional} if there were no exceptions, otherwise
+     * calls {@code function} and wraps produced result with an {@code Exceptional}.
+     *
+     * @param function  recovering function
+     * @return this {@code Exceptional} if there were no exceptions, otherwise
+     *         an {@code Exceptional} with wrapped recovering function result
+     * @throws NullPointerException if {@code function} is null
+     */
+    public Exceptional<T> recover(final ThrowableFunction<Throwable, ? extends T, Throwable> function) {
+        if (throwable == null) return this;
+
+        Objects.requireNonNull(function);
+        try {
+            return new Exceptional<T>(function.apply(throwable), null);
+        } catch (Throwable throwable) {
+            return new Exceptional<T>(null, throwable);
+        }
+    }
+
+    /**
+     * Returns current {@code Exceptional} if there were no exceptions, otherwise
+     * returns an {@code Exceptional} produced by {@code function}.
+     *
+     * @param function  recovering function
+     * @return this {@code Exceptional} if there were no exceptions, otherwise
+     *         an {@code Exceptional} produced by recovering function
+     * @throws NullPointerException if {@code function} or produced result is null
+     */
+    public Exceptional<T> recoverWith(final Function<Throwable, ? extends Exceptional<T>> function) {
+        if (throwable == null) return this;
+
+        Objects.requireNonNull(function);
+        return Objects.requireNonNull(function.apply(throwable));
     }
     
     @Override
