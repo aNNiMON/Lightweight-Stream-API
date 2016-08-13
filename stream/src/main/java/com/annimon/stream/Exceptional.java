@@ -140,6 +140,7 @@ public class Exceptional<T> {
      * @param supplier  supplier function that produced an {@code Exceptional} to be returned
      * @return this {@code Exceptional} if there were no exceptions, otherwise
      *         an {@code Exceptional} produced by supplier function
+     * @throws NullPointerException if {@code supplier} or its result is null
      */
     public Exceptional<T> or(Supplier<Exceptional<T>> supplier) {
         if (throwable == null) return this;
@@ -205,6 +206,7 @@ public class Exceptional<T> {
      * @param function  recovering function
      * @return this {@code Exceptional} if there were no exceptions, otherwise
      *         an {@code Exceptional} with wrapped recovering function result
+     * @throws NullPointerException if {@code function} is null
      */
     public Exceptional<T> recover(final ThrowableFunction<Throwable, ? extends T, Throwable> function) {
         if (throwable == null) return this;
@@ -224,6 +226,7 @@ public class Exceptional<T> {
      * @param function  recovering function
      * @return this {@code Exceptional} if there were no exceptions, otherwise
      *         an {@code Exceptional} produced by recovering function
+     * @throws NullPointerException if {@code function} or produced result is null
      */
     public Exceptional<T> recoverWith(final Function<Throwable, ? extends Exceptional<T>> function) {
         if (throwable == null) return this;
