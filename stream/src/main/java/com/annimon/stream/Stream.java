@@ -1358,6 +1358,29 @@ public class Stream<T> {
         }
     }
 
+    /**
+     * Returns the single element wrapped by {@code Optional} class.
+     * If stream is empty, returns {@code Optional.empty()}.
+     * If stream contains more than one element, throws {@code IllegalStateException}.
+     * <p/>
+     * <p>This is a short-circuiting terminal operation.
+     *
+     * @return an {@code Optional} with single element or {@code Optional.empty()} if stream is empty.
+     * @throws IllegalStateException if stream contains more than one element.
+     */
+    public Optional<T> findSingle() {
+        if (iterator.hasNext()) {
+            T singleCandidate = iterator.next();
+            if (iterator.hasNext()) {
+                throw new IllegalStateException("Stream contains more than one element");
+            } else {
+                return Optional.of(singleCandidate);
+            }
+        } else {
+            return Optional.empty();
+        }
+    }
+
     private static final int MATCH_ANY = 0;
     private static final int MATCH_ALL = 1;
     private static final int MATCH_NONE = 2;

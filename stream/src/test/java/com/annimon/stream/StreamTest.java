@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import static com.annimon.stream.test.hamcrest.OptionalMatcher.hasValue;
 import static com.annimon.stream.test.hamcrest.OptionalMatcher.isPresent;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.elements;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.isEmpty;
@@ -1171,6 +1172,48 @@ public class StreamTest {
         Stream.range(1, 100)
                 .filter(Functions.remainder(6))
                 .single();
+    }
+
+    @Test
+    public void testFindSingleOnEmptyStream() {
+        assertThat(Stream.empty().findSingle(), OptionalMatcher.isEmpty());
+    }
+
+    @Test
+    public void testFindSingleOnOneElementStream() {
+        Optional<Integer> result = Stream.of(42).findSingle();
+
+        assertThat(result, hasValue(42));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testFindSingleOnMoreElementsStream() {
+        Stream.rangeClosed(1, 2).findSingle();
+    }
+
+    @Test
+    public void testFindSingleAfterFilteringToEmptyStream() {
+        Optional<Integer> result = Stream.range(1, 5)
+                .filter(Functions.remainder(6))
+                .findSingle();
+
+        assertThat(result, OptionalMatcher.isEmpty());
+    }
+
+    @Test
+    public void testFindSingleAfterFilteringToOneElementStream() {
+        Optional<Integer> result = Stream.range(1, 10)
+                .filter(Functions.remainder(6))
+                .findSingle();
+
+        assertThat(result, hasValue(6));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testFindSingleAfterFilteringToMoreElementStream() {
+        Stream.range(1, 100)
+                .filter(Functions.remainder(6))
+                .findSingle();
     }
 
     @Test
