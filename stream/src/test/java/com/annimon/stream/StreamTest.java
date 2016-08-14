@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import static com.annimon.stream.test.hamcrest.OptionalMatcher.hasValue;
 import static com.annimon.stream.test.hamcrest.OptionalMatcher.isPresent;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.elements;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.isEmpty;
@@ -1134,16 +1133,16 @@ public class StreamTest {
         assertEquals(6, (int) result.get());
     }
 
-    @Test
+    @Test(expected = NoSuchElementException.class)
     public void testSingleOnEmptyStream() {
-        assertThat(Stream.empty().single(), OptionalMatcher.isEmpty());
+        Stream.empty().single();
     }
 
     @Test
     public void testSingleOnOneElementStream() {
-        Optional<Integer> result = Stream.of(42).single();
+        Integer result = Stream.of(42).single();
 
-        assertThat(result, hasValue(42));
+        assertThat(result, is(42));
     }
 
     @Test(expected = IllegalStateException.class)
@@ -1151,22 +1150,20 @@ public class StreamTest {
         Stream.rangeClosed(1, 2).single();
     }
 
-    @Test
+    @Test(expected = NoSuchElementException.class)
     public void testSingleAfterFilteringToEmptyStream() {
-        Optional<Integer> result = Stream.range(1, 5)
+        Stream.range(1, 5)
                 .filter(Functions.remainder(6))
                 .single();
-
-        assertThat(result, OptionalMatcher.isEmpty());
     }
 
     @Test
     public void testSingleAfterFilteringToOneElementStream() {
-        Optional<Integer> result = Stream.range(1, 10)
+        Integer result = Stream.range(1, 10)
                 .filter(Functions.remainder(6))
                 .single();
 
-        assertThat(result, hasValue(6));
+        assertThat(result, is(6));
     }
 
     @Test(expected = IllegalStateException.class)
