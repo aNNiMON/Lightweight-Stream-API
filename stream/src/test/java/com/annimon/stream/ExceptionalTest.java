@@ -199,6 +199,30 @@ public class ExceptionalTest {
                 .getOrThrow();
     }
 
+    @Test(expected = RuntimeException.class)
+    public void testIfPresent() {
+        Exceptional
+                .of(tenSupplier)
+                .ifPresent(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer value) {
+                        throw new RuntimeException();
+                    }
+                });
+    }
+
+    @Test
+    public void testIfPresentOnAbsentValue() {
+        Exceptional
+                .of(ioExceptionSupplier)
+                .ifPresent(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer value) {
+                        fail();
+                    }
+                });
+    }
+
     @Test
     public void testIfException() {
         for (final ExceptionType type : ExceptionType.values()) {

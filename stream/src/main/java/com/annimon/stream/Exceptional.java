@@ -170,6 +170,19 @@ public class Exceptional<T> {
     }
     
     /**
+     * Invokes consumer function with value if present.
+     *
+     * @param consumer  a consumer function
+     * @return this {@code Exceptional}
+     */
+    public Exceptional<T> ifPresent(Consumer<? super T> consumer) {
+        if (throwable == null) {
+            consumer.accept(value);
+        }
+        return this;
+    }
+
+    /**
      * Invokes consumer function if there were any exception.
      * 
      * @param consumer  a consumer function

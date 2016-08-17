@@ -74,7 +74,7 @@ public final class OptionalTest {
                     }
                 })
                 .get();
-        assertEquals(10, (int) value);
+        assertEquals(10, value);
     }
 
     @Test
