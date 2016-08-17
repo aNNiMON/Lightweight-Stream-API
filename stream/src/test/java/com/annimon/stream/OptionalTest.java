@@ -65,6 +65,52 @@ public final class OptionalTest {
     }
 
     @Test
+    public void testExecuteIfPresent() {
+        int value = Optional.of(10)
+                .executeIfPresent(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer value) {
+                        assertEquals(10, (int) value);
+                    }
+                })
+                .get();
+        assertEquals(10, (int) value);
+    }
+
+    @Test
+    public void testExecuteIfPresentOnAbsentValue() {
+        Optional.<Integer>empty()
+                .executeIfPresent(new Consumer<Integer>() {
+                    @Override
+                    public void accept(Integer value) {
+                        fail();
+                    }
+                });
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testExecuteIfAbsent() {
+        Optional.empty()
+                .executeIfAbsent(new Runnable() {
+                    @Override
+                    public void run() {
+                        throw new RuntimeException();
+                    }
+                });
+    }
+
+    @Test
+    public void testExecuteIfAbsentOnPresentValue() {
+        Optional.of(10)
+                .executeIfAbsent(new Runnable() {
+                    @Override
+                    public void run() {
+                        fail();
+                    }
+                });
+    }
+
+    @Test
     public void testFilter() {
         Optional<Integer> result = Optional.of(10)
                 .filter(Predicate.Util.negate(Functions.remainder(2)));

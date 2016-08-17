@@ -92,6 +92,31 @@ public class Optional<T> {
         if (value != null)
             consumer.accept(value);
     }
+
+    /**
+     * Invokes consumer function with value if present.
+     * This method same as {@code ifPresent}, but does not break chaining
+     *
+     * @param consumer  consumer function
+     * @return this {@code Optional}
+     * @see #ifPresent(com.annimon.stream.function.Consumer)
+     */
+    public Optional<T> executeIfPresent(Consumer<? super T> consumer) {
+        ifPresent(consumer);
+        return this;
+    }
+
+    /**
+     * Invokes action function if value is absent.
+     *
+     * @param action  action that invokes if value absent
+     * @return this {@code Optional}
+     */
+    public Optional<T> executeIfAbsent(Runnable action) {
+        if (value == null)
+            action.run();
+        return this;
+    }
     
     /**
      * Performs filtering on inner value if present.
