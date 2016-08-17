@@ -101,6 +101,31 @@ public final class OptionalInt {
     }
 
     /**
+     * Invokes consumer function with value if present.
+     * This method same as {@code ifPresent}, but does not break chaining
+     *
+     * @param consumer  consumer function
+     * @return this {@code OptionalInt}
+     * @see #ifPresent(com.annimon.stream.function.IntConsumer)
+     */
+    public OptionalInt executeIfPresent(IntConsumer consumer) {
+        ifPresent(consumer);
+        return this;
+    }
+
+    /**
+     * Invokes action function if value is absent.
+     *
+     * @param action  action that invokes if value absent
+     * @return this {@code OptionalInt}
+     */
+    public OptionalInt executeIfAbsent(Runnable action) {
+        if (!isPresent())
+            action.run();
+        return this;
+    }
+
+    /**
      * Wraps a value into {@code IntStream} if present, otherwise returns an empty {@code IntStream}.
      *
      * @return the optional value as an {@code IntStream}
