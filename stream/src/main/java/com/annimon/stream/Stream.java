@@ -1338,7 +1338,7 @@ public class Stream<T> {
      * Returns the single element of stream.
      * If stream is empty, throws {@code NoSuchElementException}.
      * If stream contains more than one element, throws {@code IllegalStateException}.
-     * <p/>
+     *
      * <p>This is a short-circuiting terminal operation.
      *
      * @return single element of stream
@@ -1362,7 +1362,7 @@ public class Stream<T> {
      * Returns the single element wrapped by {@code Optional} class.
      * If stream is empty, returns {@code Optional.empty()}.
      * If stream contains more than one element, throws {@code IllegalStateException}.
-     * <p/>
+     *
      * <p>This is a short-circuiting terminal operation.
      *
      * @return an {@code Optional} with single element or {@code Optional.empty()} if stream is empty.
