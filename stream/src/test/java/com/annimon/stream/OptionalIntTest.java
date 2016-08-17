@@ -1,18 +1,14 @@
 package com.annimon.stream;
 
-import com.annimon.stream.function.Supplier;
 import com.annimon.stream.function.IntConsumer;
 import com.annimon.stream.function.IntSupplier;
+import com.annimon.stream.function.Supplier;
 import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.isEmpty;
 import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.isPresent;
-import org.junit.Test;
-
 import java.util.NoSuchElementException;
 import static org.hamcrest.CoreMatchers.is;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  * Tests for {@link OptionalInt}
@@ -45,7 +41,7 @@ public class OptionalIntTest {
         OptionalInt.empty().ifPresent(new IntConsumer() {
             @Override
             public void accept(int value) {
-                throw new IllegalStateException();
+                fail();
             }
         });
 
@@ -55,6 +51,52 @@ public class OptionalIntTest {
                 assertEquals(15, value);
             }
         });
+    }
+
+    @Test
+    public void testExecuteIfPresent() {
+        int value = OptionalInt.of(10)
+                .executeIfPresent(new IntConsumer() {
+                    @Override
+                    public void accept(int value) {
+                        assertEquals(10, value);
+                    }
+                })
+                .getAsInt();
+        assertEquals(10, (int) value);
+    }
+
+    @Test
+    public void testExecuteIfPresentOnAbsentValue() {
+        OptionalInt.empty()
+                .executeIfPresent(new IntConsumer() {
+                    @Override
+                    public void accept(int value) {
+                        fail();
+                    }
+                });
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testExecuteIfAbsent() {
+        OptionalInt.empty()
+                .executeIfAbsent(new Runnable() {
+                    @Override
+                    public void run() {
+                        throw new RuntimeException();
+                    }
+                });
+    }
+
+    @Test
+    public void testExecuteIfAbsentOnPresentValue() {
+        OptionalInt.of(10)
+                .executeIfAbsent(new Runnable() {
+                    @Override
+                    public void run() {
+                        fail();
+                    }
+                });
     }
 
     @Test
