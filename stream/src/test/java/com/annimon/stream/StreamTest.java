@@ -318,6 +318,19 @@ public class StreamTest {
     }
 
     @Test
+    public void testZipIterator() {
+        List<Integer> shorter = Arrays.asList(1, 2, 3, 4, 5);
+        Stream<Integer> longer = Stream.rangeClosed(1, 10);
+        Stream<Integer> zipped = Stream.zip(shorter.iterator(), longer.iterator(), new BiFunction<Integer, Integer, Integer>() {
+            @Override
+            public Integer apply(Integer value1, Integer value2) {
+                return value1 + value2;
+            }
+        });
+        assertThat(zipped, elements(is(Arrays.asList(2, 4, 6, 8, 10))));
+    }
+
+    @Test
     public void testGetIterator() {
         assertThat(Stream.of(1).getIterator(), is(not(nullValue())));
     }
