@@ -712,6 +712,35 @@ public class Stream<T> {
     }
 
     /**
+     * Returns {@code Stream} with indexed elements.
+     * Indexing starts from 0 with step 1.
+     *
+     * @return the new {@code IntPair} stream
+     */
+    public Stream<IntPair<T>> indexed() {
+        return indexed(0, 1);
+    }
+
+    /**
+     * Returns {@code Stream} with indexed elements.
+     *
+     * @param from  the initial value (inclusive)
+     * @param step  the step
+     * @return the new {@code IntPair} stream
+     */
+    public Stream<IntPair<T>> indexed(final int from, final int step) {
+        return map(new Function<T, IntPair<T>>() {
+
+            private int index = from - step;
+
+            @Override
+            public IntPair<T> apply(T value) {
+                return new IntPair<T>(index += step, value);
+            }
+        });
+    }
+
+    /**
      * Returns {@code Stream} with distinct elements (as determinated by {@code equals} method).
      *
      * <p>This is a stateful intermediate operation.
