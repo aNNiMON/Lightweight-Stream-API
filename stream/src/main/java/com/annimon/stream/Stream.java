@@ -365,20 +365,39 @@ public class Stream<T> {
      * @return the new stream
      * @throws NullPointerException if {@code stream1} or {@code stream2} is null
      */
-    public static <F, S, R> Stream<R> zip(Stream<? extends F> stream1, Stream<? extends S> stream2, final BiFunction<? super F, ? super S, ? extends R> combiner) {
+    public static <F, S, R> Stream<R> zip(Stream<? extends F> stream1, Stream<? extends S> stream2,
+            final BiFunction<? super F, ? super S, ? extends R> combiner) {
         Objects.requireNonNull(stream1);
         Objects.requireNonNull(stream2);
-        final Iterator<? extends F> it1 = stream1.iterator;
-        final Iterator<? extends S> it2 = stream2.iterator;
+        return zip(stream1.iterator, stream2.iterator, combiner);
+    }
+
+    /**
+     * Combines two iterators to a stream by applying specified combiner function to each element at same position.
+     *
+     * @param <F> the type of first iterator elements
+     * @param <S> the type of second iterator elements
+     * @param <R> the type of elements in resulting stream
+     * @param iterator1  the first iterator
+     * @param iterator2  the second iterator
+     * @param combiner  the combiner function used to apply to each element
+     * @return the new stream
+     * @throws NullPointerException if {@code iterator1} or {@code iterator2} is null
+     */
+    public static <F, S, R> Stream<R> zip(final Iterator<? extends F> iterator1,
+            final Iterator<? extends S> iterator2,
+            final BiFunction<? super F, ? super S, ? extends R> combiner) {
+        Objects.requireNonNull(iterator1);
+        Objects.requireNonNull(iterator2);
         return new Stream<R>(new LsaIterator<R>() {
             @Override
             public boolean hasNext() {
-                return it1.hasNext() && it2.hasNext();
+                return iterator1.hasNext() && iterator2.hasNext();
             }
 
             @Override
             public R nextIteration() {
-                return combiner.apply(it1.next(), it2.next());
+                return combiner.apply(iterator1.next(), iterator2.next());
             }
         });
     }
