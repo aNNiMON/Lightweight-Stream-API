@@ -78,6 +78,15 @@ public final class Functions {
             }
         };
     }
+    public static <T> ToIntFunction<IntPair<T>> intPairIndex() {
+        return new ToIntFunction<IntPair<T>>() {
+
+            @Override
+            public int applyAsInt(IntPair<T> t) {
+                return t.getFirst();
+            }
+        };
+    }
     
     public static Function<String, Character> firstCharacterExtractor() {
         return new Function<String, Character>() {

@@ -2,8 +2,8 @@ package com.annimon.stream;
 
 import com.annimon.stream.function.Function;
 import com.annimon.stream.function.ThrowableFunction;
+import com.annimon.stream.function.ToIntFunction;
 import java.io.IOException;
-import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,44 +68,55 @@ public class RatingsTest {
                         return line.split("\\s+");
                     }
                 })
-                // calculate sum by line and store in tuple <string, int>
-                .map(new Function<String[], Map.Entry<String, Integer>>() {
+                // calculate sum by line and store in pair <int, string>
+                .map(new Function<String[], IntPair<String>>() {
                     @Override
-                    public Map.Entry<String, Integer> apply(String[] arr) {
-                        // <name, sum of marks>
-                        return new AbstractMap.SimpleEntry<String, Integer>(
-                                arr[0], Stream.of(arr)
+                    public IntPair<String> apply(String[] arr) {
+                        // <sum of marks, name>
+                        return new IntPair<String>(
+                                Stream.of(arr)
                                         .skip(1)
-                                        .map(Functions.stringToInteger())
-                                        .custom(new CustomOperators.Sum())
+                                        .mapToInt(new ToIntFunction<String>() {
+                                            @Override
+                                            public int applyAsInt(String t) {
+                                                return Integer.parseInt(t);
+                                            }
+                                        })
+                                        .sum(),
+                                arr[0]
                         );
                     }
                 })
                 // Group by name
-                .groupBy(Functions.<String, Integer>entryKey())
-                // Calculate summary ratings
-                .map(new Function<Map.Entry<String, List<Map.Entry<String, Integer>>>, Map.Entry<String, Integer>>() {
+                .groupBy(new Function<IntPair<String>, String>() {
                     @Override
-                    public Map.Entry<String, Integer> apply(Map.Entry<String, List<Map.Entry<String, Integer>>> entry) {
+                    public String apply(IntPair<String> t) {
+                        return t.getSecond();
+                    }
+                })
+                // Calculate summary ratings
+                .map(new Function<Map.Entry<String, List<IntPair<String>>>, IntPair<String>>() {
+                    @Override
+                    public IntPair<String> apply(Map.Entry<String, List<IntPair<String>>> entry) {
                         final String name = entry.getKey();
                         final int ratings = Stream.of(entry.getValue())
-                                .map(Functions.<String, Integer>entryValue())
-                                .custom(new CustomOperators.Sum());
-                        return new AbstractMap.SimpleEntry<String, Integer>(name, ratings);
+                                .mapToInt(Functions.<String>intPairIndex())
+                                .sum();
+                        return new IntPair<String>(ratings, name);
                     }
                 })
                 // Sort by total rating descending
-                .sortBy(new Function<Map.Entry<String, Integer>, Integer>() {
+                .sortBy(new Function<IntPair<String>, Integer>() {
                     @Override
-                    public Integer apply(Map.Entry<String, Integer> value) {
-                        return -value.getValue();
+                    public Integer apply(IntPair<String> value) {
+                        return -value.getFirst();
                     }
                 })
                 // Convert to formatted string
-                .map(new Function<Map.Entry<String, Integer>, String>() {
+                .map(new Function<IntPair<String>, String>() {
                     @Override
-                    public String apply(Map.Entry<String, Integer> value) {
-                        return String.format("%12s: %d", value.getKey(), value.getValue());
+                    public String apply(IntPair<String> value) {
+                        return String.format("%12s: %d", value.getSecond(), value.getFirst());
                     }
                 })
                 // lines to string

@@ -535,6 +535,47 @@ public class StreamTest {
     }
 
     @Test
+    public void testIndexed() {
+        int[] expectedIndices = new int[] {0, 1, 2, 3};
+        int[] actualIndices = Stream.of("a", "b", "c", "d")
+                .indexed()
+                .mapToInt(Functions.<String>intPairIndex())
+                .toArray();
+        assertThat(actualIndices, is(expectedIndices));
+    }
+
+    @Test
+    public void testIndexedCustomStep() {
+        int[] expectedIndices = new int[] {-10, -15, -20, -25};
+        int[] actualIndices = Stream.of("a", "b", "c", "d")
+                .indexed(-10, -5)
+                .mapToInt(Functions.<String>intPairIndex())
+                .toArray();
+        assertThat(actualIndices, is(expectedIndices));
+    }
+
+    @Test
+    public void testIndexedReverse() {
+        List<String> expected = Arrays.asList("fifth", "fourth", "third", "second", "first");
+        Stream<String> stream = Stream.of("first", "second", "third", "fourth", "fifth")
+                .indexed(0, -1)
+                .sortBy(new Function<IntPair<String>, Integer>() {
+                    @Override
+                    public Integer apply(IntPair<String> t) {
+                        return t.getFirst();
+                    }
+                })
+                .map(new Function<IntPair<String>, String>() {
+
+                    @Override
+                    public String apply(IntPair<String> t) {
+                        return t.getSecond();
+                    }
+                });
+        assertThat(stream, elements(is(expected)));
+    }
+
+    @Test
     public void testDistinct() {
         List<Integer> expected = Arrays.asList(-1, 1, 2, 3, 5);
         Stream<Integer> stream = Stream.of(1, 1, 2, 3, 5, 3, 2, 1, 1, -1)
