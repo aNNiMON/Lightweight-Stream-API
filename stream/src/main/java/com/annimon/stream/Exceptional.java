@@ -174,6 +174,7 @@ public class Exceptional<T> {
      *
      * @param consumer  a consumer function
      * @return this {@code Exceptional}
+     * @since 1.1.2
      */
     public Exceptional<T> ifPresent(Consumer<? super T> consumer) {
         if (throwable == null) {
@@ -220,6 +221,7 @@ public class Exceptional<T> {
      * @return this {@code Exceptional} if there were no exceptions, otherwise
      *         an {@code Exceptional} with wrapped recovering function result
      * @throws NullPointerException if {@code function} is null
+     * @since 1.1.2
      */
     public Exceptional<T> recover(final ThrowableFunction<Throwable, ? extends T, Throwable> function) {
         if (throwable == null) return this;
@@ -240,6 +242,7 @@ public class Exceptional<T> {
      * @return this {@code Exceptional} if there were no exceptions, otherwise
      *         an {@code Exceptional} produced by recovering function
      * @throws NullPointerException if {@code function} or produced result is null
+     * @since 1.1.2
      */
     public Exceptional<T> recoverWith(final Function<Throwable, ? extends Exceptional<T>> function) {
         if (throwable == null) return this;

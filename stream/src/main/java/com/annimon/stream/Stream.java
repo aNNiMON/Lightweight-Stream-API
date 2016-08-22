@@ -383,6 +383,7 @@ public class Stream<T> {
      * @param combiner  the combiner function used to apply to each element
      * @return the new stream
      * @throws NullPointerException if {@code iterator1} or {@code iterator2} is null
+     * @since 1.1.2
      */
     public static <F, S, R> Stream<R> zip(final Iterator<? extends F> iterator1,
             final Iterator<? extends S> iterator2,
@@ -716,6 +717,7 @@ public class Stream<T> {
      * Indexing starts from 0 with step 1.
      *
      * @return the new {@code IntPair} stream
+     * @since 1.1.2
      */
     public Stream<IntPair<T>> indexed() {
         return indexed(0, 1);
@@ -727,6 +729,7 @@ public class Stream<T> {
      * @param from  the initial value (inclusive)
      * @param step  the step
      * @return the new {@code IntPair} stream
+     * @since 1.1.2
      */
     public Stream<IntPair<T>> indexed(final int from, final int step) {
         return map(new Function<T, IntPair<T>>() {
@@ -1392,6 +1395,7 @@ public class Stream<T> {
      * @return single element of stream
      * @throws NoSuchElementException if stream is empty
      * @throws IllegalStateException if stream contains more than one element.
+     * @since 1.1.2
      */
     public T single() {
         if (iterator.hasNext()) {
@@ -1413,8 +1417,9 @@ public class Stream<T> {
      *
      * <p>This is a short-circuiting terminal operation.
      *
-     * @return an {@code Optional} with single element or {@code Optional.empty()} if stream is empty.
-     * @throws IllegalStateException if stream contains more than one element.
+     * @return an {@code Optional} with single element or {@code Optional.empty()} if stream is empty
+     * @throws IllegalStateException if stream contains more than one element
+     * @since 1.1.2
      */
     public Optional<T> findSingle() {
         if (iterator.hasNext()) {

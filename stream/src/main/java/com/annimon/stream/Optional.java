@@ -100,6 +100,7 @@ public class Optional<T> {
      * @param consumer  consumer function
      * @return this {@code Optional}
      * @see #ifPresent(com.annimon.stream.function.Consumer)
+     * @since 1.1.2
      */
     public Optional<T> executeIfPresent(Consumer<? super T> consumer) {
         ifPresent(consumer);
@@ -111,6 +112,7 @@ public class Optional<T> {
      *
      * @param action  action that invokes if value absent
      * @return this {@code Optional}
+     * @since 1.1.2
      */
     public Optional<T> executeIfAbsent(Runnable action) {
         if (value == null)

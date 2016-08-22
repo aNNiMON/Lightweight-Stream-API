@@ -107,6 +107,7 @@ public final class OptionalInt {
      * @param consumer  consumer function
      * @return this {@code OptionalInt}
      * @see #ifPresent(com.annimon.stream.function.IntConsumer)
+     * @since 1.1.2
      */
     public OptionalInt executeIfPresent(IntConsumer consumer) {
         ifPresent(consumer);
@@ -118,6 +119,7 @@ public final class OptionalInt {
      *
      * @param action  action that invokes if value absent
      * @return this {@code OptionalInt}
+     * @since 1.1.2
      */
     public OptionalInt executeIfAbsent(Runnable action) {
         if (!isPresent())
