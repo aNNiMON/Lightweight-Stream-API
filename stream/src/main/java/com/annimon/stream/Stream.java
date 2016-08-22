@@ -61,7 +61,7 @@ public class Stream<T> {
      * Creates a {@code Stream} from any class that implements {@code Iterable} interface.
      *
      * @param <T> the type of the stream elements
-     * @param iterable  the iterable with elements to be passed to stream
+     * @param iterable  the {@code Iterable} with elements to be passed to stream
      * @return the new stream
      * @throws NullPointerException if {@code iterable} is null
      */
@@ -450,7 +450,7 @@ public class Stream<T> {
      *     public class Reverse&lt;T&gt; implements Function&lt;Stream&lt;T&gt;, Stream&lt;T&gt;&gt; {
      *         &#64;Override
      *         public Stream&lt;T&gt; apply(Stream&lt;T&gt; stream) {
-     *             final Iterator&lt;? extends T&gt; iterator = stream.getIterator();
+     *             final Iterator&lt;? extends T&gt; iterator = stream.iterator();
      *             final ArrayDeque&lt;T&gt; deque = new ArrayDeque&lt;T&gt;();
      *             while (iterator.hasNext()) {
      *                 deque.addFirst(iterator.next());
@@ -716,6 +716,8 @@ public class Stream<T> {
      * Returns {@code Stream} with indexed elements.
      * Indexing starts from 0 with step 1.
      *
+     * <p>This is an intermediate operation.
+     *
      * @return the new {@code IntPair} stream
      * @since 1.1.2
      */
@@ -725,6 +727,8 @@ public class Stream<T> {
 
     /**
      * Returns {@code Stream} with indexed elements.
+     *
+     * <p>This is an intermediate operation.
      *
      * @param from  the initial value (inclusive)
      * @param step  the step
@@ -1394,7 +1398,7 @@ public class Stream<T> {
      *
      * @return single element of stream
      * @throws NoSuchElementException if stream is empty
-     * @throws IllegalStateException if stream contains more than one element.
+     * @throws IllegalStateException if stream contains more than one element
      * @since 1.1.2
      */
     public T single() {
