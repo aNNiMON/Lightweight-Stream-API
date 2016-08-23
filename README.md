@@ -131,6 +131,13 @@ In addition to backported Java 8 Stream operators, the library provides:
       .dropWhile(s -> s.length() == 1) // [cd, ef, g]
   ```
 
+- `indexed` - add index to every element, result is `IntPair`
+
+  ```java
+  Stream.of("a", "b", "c")
+      .indexed() // [(0 : "a"), (1 : "b"), (2 : "c")]
+  ```
+
 ### Throwable functions
 
 No more ugly try/catch in lambda expressions.
@@ -157,7 +164,7 @@ Download [latest release](https://github.com/aNNiMON/Lightweight-Stream-API/rele
 <dependency>
   <groupId>com.annimon</groupId>
   <artifactId>stream</artifactId>
-  <version>1.1.1</version>
+  <version>1.1.2</version>
 </dependency>
 ```
 or Gradle:
@@ -165,7 +172,7 @@ or Gradle:
 ```groovy
 dependencies {
   ...
-  compile 'com.annimon:stream:1.1.1'
+  compile 'com.annimon:stream:1.1.2'
   ...
 }
 ```
