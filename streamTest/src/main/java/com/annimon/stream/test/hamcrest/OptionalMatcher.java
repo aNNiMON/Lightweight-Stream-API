@@ -23,7 +23,7 @@ public class OptionalMatcher {
     }
 
     public static <T> Matcher<Optional<T>> hasValueThat(Matcher<? super T> matcher) {
-        return new HasValueMatcher(matcher);
+        return new HasValueMatcher<T>(matcher);
     }
 
     public static class IsPresentMatcher extends TypeSafeDiagnosingMatcher<Optional<?>> {

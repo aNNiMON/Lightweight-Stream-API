@@ -45,3 +45,11 @@ test.dependsOn(rootProject.subprojects.collect { ":${it.name}:cobertura" })
 tasks.coveralls {
     dependsOn coberturaReport
 }
+
+/*allprojects {
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+        }
+    }
+}*/

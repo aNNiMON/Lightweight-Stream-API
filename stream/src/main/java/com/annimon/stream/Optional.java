@@ -160,6 +160,7 @@ public class Optional<T> {
      *
      * @return the optional value as a {@code Stream}
      */
+    @SuppressWarnings("unchecked")
     public Stream<T> stream() {
         if (!isPresent()) return Stream.empty();
         return Stream.of(value);

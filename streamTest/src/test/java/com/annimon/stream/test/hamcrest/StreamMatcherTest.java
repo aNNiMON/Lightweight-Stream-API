@@ -31,6 +31,7 @@ public class StreamMatcherTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     public void testIsEmpty() {
         assertThat(Stream.empty(), isEmpty());
         assertThat(Stream.of(1, 2), isNotEmpty());
@@ -56,6 +57,7 @@ public class StreamMatcherTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     public void testIsNotEmptyOnNullValue() {
         assertThat(null, isNotEmpty());
     }

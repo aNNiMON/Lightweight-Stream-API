@@ -83,7 +83,7 @@ public class StreamTest {
 
     @Test(expected = NullPointerException.class)
     public void testStreamOfMapNull() {
-        Stream.of((Map)null);
+        Stream.of((Map<?, ?>)null);
     }
 
     @Test
@@ -99,7 +99,7 @@ public class StreamTest {
 
     @Test(expected = NullPointerException.class)
     public void testStreamOfIteratorNull() {
-        Stream.of((Iterator)null);
+        Stream.of((Iterator<?>)null);
     }
 
     @Test
@@ -122,7 +122,7 @@ public class StreamTest {
 
     @Test(expected = NullPointerException.class)
     public void testStreamOfIterableNull() {
-        Stream.of((Iterable)null);
+        Stream.of((Iterable<?>)null);
     }
 
     @Test
@@ -331,6 +331,7 @@ public class StreamTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     public void testGetIterator() {
         assertThat(Stream.of(1).getIterator(), is(not(nullValue())));
     }
