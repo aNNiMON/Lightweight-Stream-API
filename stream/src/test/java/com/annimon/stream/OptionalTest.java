@@ -65,6 +65,76 @@ public final class OptionalTest {
     }
 
     @Test
+    public void testIfPresentOrElseWhenValuePresent() {
+        Optional.of(10).ifPresentOrElse(new Consumer<Integer>() {
+            @Override
+            public void accept(Integer value) {
+                assertEquals(10, (int) value);
+            }
+        }, new Runnable() {
+            @Override
+            public void run() {
+                fail("Should not execute empty action when value is present.");
+            }
+        });
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testIfPresentOrElseWhenValueAbsent() {
+        Optional.<Integer>empty().ifPresentOrElse(new Consumer<Integer>() {
+            @Override
+            public void accept(Integer value) {
+                fail();
+            }
+        }, new Runnable() {
+            @Override
+            public void run() {
+                throw new RuntimeException();
+            }
+        });
+    }
+
+    @Test
+    public void testIfPresentOrElseWhenValuePresentAndEmptyActionNull() {
+        Optional.of(10).ifPresentOrElse(new Consumer<Integer>() {
+            @Override
+            public void accept(Integer value) {
+                assertEquals(10, (int) value);
+            }
+        }, null);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testIfPresentOrElseWhenValueAbsentAndConsumerNull() {
+        Optional.<Integer>empty().ifPresentOrElse(null, new Runnable() {
+            @Override
+            public void run() {
+                throw new RuntimeException();
+            }
+        });
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testIfPresentOrElseWhenValuePresentAndConsumerNull() {
+        Optional.of(10).ifPresentOrElse(null, new Runnable() {
+            @Override
+            public void run() {
+                fail("Should not have been executed.");
+            }
+        });
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testIfPresentOrElseWhenValueAbsentAndEmptyActionNull() {
+        Optional.<Integer>empty().ifPresentOrElse(new Consumer<Integer>() {
+            @Override
+            public void accept(Integer value) {
+                fail("Should not have been executed.");
+            }
+        }, null);
+    }
+
+    @Test
     public void testExecuteIfPresent() {
         int value = Optional.of(10)
                 .executeIfPresent(new Consumer<Integer>() {

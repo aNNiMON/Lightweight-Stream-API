@@ -94,6 +94,22 @@ public class Optional<T> {
     }
 
     /**
+     * If a value is present, performs the given action with the value, otherwise performs the given empty-based action.
+     *
+     * @param consumer  the consumer function to be executed, if a value is present
+     * @param emptyAction  the empty-based action to be performed, if no value is present
+     *
+     * @throws NullPointerException - if a value is present and the given consumer function is null,
+     *         or no value is present and the given empty-based action is null.
+     */
+    public void ifPresentOrElse(Consumer<? super T> consumer, Runnable emptyAction) {
+        if (value != null)
+            consumer.accept(value);
+        else
+            emptyAction.run();
+    }
+
+    /**
      * Invokes consumer function with value if present.
      * This method same as {@code ifPresent}, but does not break chaining
      *
