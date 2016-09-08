@@ -121,7 +121,7 @@ public final class Collectors {
     }
     
     /**
-     * Returns a {@code Collector} that fills new {@code List} with input elements.
+     * Returns a {@code Collector} that fills new {@code Map} with input elements.
      * 
      * @param <T> the type of the input elements
      * @param <K> the result type of key mapping function
