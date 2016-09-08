@@ -1,9 +1,7 @@
 package com.annimon.stream;
 
-import com.annimon.stream.function.BiConsumer;
-import com.annimon.stream.function.BinaryOperator;
-import com.annimon.stream.function.Function;
-import com.annimon.stream.function.Supplier;
+import com.annimon.stream.function.*;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -92,10 +90,23 @@ public final class Collectors {
                 }
         );
     }
-    
+
     /**
      * Returns a {@code Collector} that fills new {@code Map} with input elements.
-     * 
+     *
+     * @param <T> the type of the input elements and the result type of value mapping function
+     * @param <K> the result type of key mapping function
+     * @param keyMapper  a mapping function to produce keys
+     * @return a {@code Collector}
+     */
+    public static <T, K> Collector<T, ?, Map<K, T>> toMap(
+            final Function<? super T, ? extends K> keyMapper) {
+        return toMap(keyMapper, UnaryOperator.Util.<T>identity(), Collectors.<K, T>hashMapSupplier());
+    }
+
+    /**
+     * Returns a {@code Collector} that fills new {@code Map} with input elements.
+     *
      * @param <T> the type of the input elements
      * @param <K> the result type of key mapping function
      * @param <V> the result type of value mapping function

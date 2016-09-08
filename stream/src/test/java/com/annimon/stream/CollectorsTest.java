@@ -51,6 +51,21 @@ public class CollectorsTest {
     }
 
     @Test
+    public void testToMapWithDefaultValueMapper() {
+        final Function<String, Character> keyMapper = Functions.firstCharacterExtractor();
+        Map<Character, String> chars = Stream.of("a", "b", "c", "d")
+                .collect(Collectors.toMap(keyMapper));
+
+        assertThat(chars.size(), is(4));
+        assertThat(chars, allOf(
+                hasEntry('a', "a"),
+                hasEntry('b', "b"),
+                hasEntry('c', "c"),
+                hasEntry('d', "d")
+        ));
+    }
+
+    @Test
     public void testToMapWithIdentityValueMapper() {
         final Function<String, Character> keyMapper = Functions.firstCharacterExtractor();
         Map<Character, String> chars = Stream.of("a", "b", "c", "d")
