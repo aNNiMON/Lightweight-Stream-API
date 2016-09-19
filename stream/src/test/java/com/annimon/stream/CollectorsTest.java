@@ -11,6 +11,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import org.junit.Test;
@@ -48,6 +50,13 @@ public class CollectorsTest {
         Set<Integer> set = Stream.of(1, 2, 2, 3, 3, 3)
                 .collect(Collectors.<Integer>toSet());
         assertThat(set, containsInAnyOrder(1, 2, 3));
+    }
+
+    @Test
+    public void testToSortedSet() {
+        SortedSet<Integer> set = Stream.of(4, 3, 3, 2, 1)
+            .collect(Collectors.<Integer>toSortedSet());
+        assertThat(set, contains(1, 2, 3, 4));
     }
 
     @Test

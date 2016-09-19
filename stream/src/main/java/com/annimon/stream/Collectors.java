@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * Common implementations of {@code Collector} interface.
@@ -85,6 +87,25 @@ public final class Collectors {
                 new BiConsumer<Set<T>, T>() {
                     @Override
                     public void accept(Set<T> t, T u) {
+                        t.add(u);
+                    }
+                }
+        );
+    }
+
+    public static <T> Collector<T, ?, SortedSet<T>> toSortedSet() {
+        return new CollectorsImpl<T, SortedSet<T>, SortedSet<T>>(
+
+                new Supplier<SortedSet<T>>() {
+                    @Override
+                    public SortedSet<T> get() {
+                        return new TreeSet<T>();
+                    }
+                },
+
+                new BiConsumer<SortedSet<T>, T>() {
+                    @Override
+                    public void accept(SortedSet<T> t, T u) {
                         t.add(u);
                     }
                 }
