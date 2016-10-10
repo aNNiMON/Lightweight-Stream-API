@@ -338,6 +338,39 @@ public final class Collectors {
                 }
         );
     }
+
+    /**
+     * Returns a {@code Collector} that summing long-valued input elements.
+     *
+     * @param <T> the type of the input elements
+     * @param mapper  the mapping function which extracts value from element to calculate result
+     * @return a {@code Collector}
+     */
+    public static <T> Collector<T, ?, Long> summingLong(final ToLongFunction<? super T> mapper) {
+        return new CollectorsImpl<T, long[], Long>(
+
+                new Supplier<long[]>() {
+                    @Override
+                    public long[] get() {
+                        return new long[] { 0L };
+                    }
+                },
+
+                new BiConsumer<long[], T>() {
+                    @Override
+                    public void accept(long[] t, T u) {
+                        t[0] += mapper.applyAsLong(u);
+                    }
+                },
+
+                new Function<long[], Long>() {
+                    @Override
+                    public Long apply(long[] value) {
+                        return value[0];
+                    }
+                }
+        );
+    }
     
     /**
      * Returns a {@code Collector} that counts the number of input elements.
@@ -346,29 +379,13 @@ public final class Collectors {
      * @return a {@code Collector}
      */
     public static <T> Collector<T, ?, Long> counting() {
-        return new CollectorsImpl<T, Long[], Long>(
-                
-                new Supplier<Long[]>() {
-                    @Override
-                    public Long[] get() {
-                        return new Long[] { 0L };
-                    }
-                },
-                
-                new BiConsumer<Long[], T>() {
-                    @Override
-                    public void accept(Long[] t, T u) {
-                        t[0]++;
-                    }
-                },
-                
-                new Function<Long[], Long>() {
-                    @Override
-                    public Long apply(Long[] value) {
-                        return value[0];
-                    }
-                }
-        );
+        return summingLong(new ToLongFunction<T>() {
+
+            @Override
+            public long applyAsLong(T t) {
+                return 1L;
+            }
+        });
     }
     
     /**
