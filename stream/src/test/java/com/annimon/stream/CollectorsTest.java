@@ -179,6 +179,10 @@ public class CollectorsTest {
         avg = Stream.of(1, 2, 3, 4)
                 .collect(Collectors.averagingInt(identity));
         assertThat(avg, closeTo(2.5, 0.001));
+
+        avg = Stream.of(Integer.MAX_VALUE, Integer.MAX_VALUE)
+                .collect(Collectors.averagingInt(identity));
+        assertThat(avg, closeTo(Integer.MAX_VALUE, 0.001));
     }
 
     @Test
@@ -219,6 +223,10 @@ public class CollectorsTest {
         sum = Stream.of(1L, 2L, 3L, 4L)
                 .collect(Collectors.summingLong(identity));
         assertThat(sum, is(10L));
+
+        sum = Stream.of(1L, Long.MAX_VALUE - 1)
+                .collect(Collectors.summingLong(identity));
+        assertThat(sum, is(Long.MAX_VALUE));
     }
 
     @Test
