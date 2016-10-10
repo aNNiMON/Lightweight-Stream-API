@@ -1,10 +1,14 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.IntConsumer;
+import com.annimon.stream.function.IntFunction;
 import com.annimon.stream.function.IntSupplier;
+import com.annimon.stream.function.IntUnaryOperator;
 import com.annimon.stream.function.Supplier;
+import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.hasValue;
 import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.isEmpty;
 import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.isPresent;
+import com.annimon.stream.test.hamcrest.OptionalMatcher;
 import java.util.NoSuchElementException;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
@@ -97,6 +101,42 @@ public class OptionalIntTest {
                         fail();
                     }
                 });
+    }
+
+    @Test
+    public void testMap() {
+        final IntUnaryOperator negatorFunction = new IntUnaryOperator() {
+
+            @Override
+            public int applyAsInt(int operand) {
+                return -operand;
+            }
+        };
+
+        OptionalInt result;
+        result = OptionalInt.empty().map(negatorFunction);
+        assertThat(result, isEmpty());
+
+        result = OptionalInt.of(10).map(negatorFunction);
+        assertThat(result, hasValue(-10));
+    }
+
+    @Test
+    public void testMapToObj() {
+        final IntFunction<String> asciiToString = new IntFunction<String>() {
+
+            @Override
+            public String apply(int value) {
+                return String.valueOf((char) value);
+            }
+        };
+
+        Optional<String> result;
+        result = OptionalInt.empty().mapToObj(asciiToString);
+        assertThat(result, OptionalMatcher.isEmpty());
+
+        result = OptionalInt.of(65).mapToObj(asciiToString);
+        assertThat(result, OptionalMatcher.hasValue("A"));
     }
 
     @Test
