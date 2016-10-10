@@ -98,6 +98,7 @@ public final class Collectors {
      * @param <K> the result type of key mapping function
      * @param keyMapper  a mapping function to produce keys
      * @return a {@code Collector}
+     * @since 1.1.3
      */
     public static <T, K> Collector<T, ?, Map<K, T>> toMap(
             final Function<? super T, ? extends K> keyMapper) {
