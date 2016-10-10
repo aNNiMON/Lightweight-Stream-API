@@ -137,6 +137,14 @@ public class OptionalIntTest {
 
         result = OptionalInt.of(65).mapToObj(asciiToString);
         assertThat(result, OptionalMatcher.hasValue("A"));
+
+        result = OptionalInt.empty().mapToObj(new IntFunction<String>() {
+            @Override
+            public String apply(int value) {
+                return null;
+            }
+        });
+        assertThat(result, OptionalMatcher.isEmpty());
     }
 
     @Test
