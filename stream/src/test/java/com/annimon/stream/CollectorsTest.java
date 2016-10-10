@@ -3,6 +3,7 @@ package com.annimon.stream;
 import com.annimon.stream.function.BinaryOperator;
 import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Supplier;
+import com.annimon.stream.function.ToDoubleFunction;
 import com.annimon.stream.function.ToIntFunction;
 import com.annimon.stream.function.ToLongFunction;
 import com.annimon.stream.function.UnaryOperator;
@@ -207,6 +208,25 @@ public class CollectorsTest {
         avg = Stream.of(Integer.MAX_VALUE, Integer.MAX_VALUE)
                 .collect(Collectors.averagingLong(identity));
         assertThat(avg, closeTo(Integer.MAX_VALUE, 0.001));
+    }
+
+    @Test
+    public void testAveragingDouble() {
+        final ToDoubleFunction<Integer> intToDoubleFunction = new ToDoubleFunction<Integer>() {
+            @Override
+            public double applyAsDouble(Integer t) {
+                return t.doubleValue();
+            }
+        };
+        double avg;
+
+        avg = Stream.<Integer>empty()
+                .collect(Collectors.averagingDouble(intToDoubleFunction));
+        assertThat(avg, closeTo(0, 0.001));
+
+        avg = Stream.of(1, 2, 3, 4)
+                .collect(Collectors.averagingDouble(intToDoubleFunction));
+        assertThat(avg, closeTo(2.5, 0.001));
     }
 
     @Test

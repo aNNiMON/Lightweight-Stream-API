@@ -330,6 +330,42 @@ public final class Collectors {
     }
 
     /**
+     * Returns a {@code Collector} that calculates average of double-valued input elements.
+     *
+     * @param <T> the type of the input elements
+     * @param mapper  the mapping function which extracts value from element to calculate result
+     * @return a {@code Collector}
+     * @since 1.1.3
+     */
+    public static <T> Collector<T, ?, Double> averagingDouble(final ToDoubleFunction<? super T> mapper) {
+        return new CollectorsImpl<T, double[], Double>(
+
+                new Supplier<double[]>() {
+                    @Override
+                    public double[] get() {
+                        return new double[] { 0d, 0d };
+                    }
+                },
+
+                new BiConsumer<double[], T>() {
+                    @Override
+                    public void accept(double[] t, T u) {
+                        t[0]++; // count
+                        t[1] += mapper.applyAsDouble(u); // sum
+                    }
+                },
+
+                new Function<double[], Double>() {
+                    @Override
+                    public Double apply(double[] t) {
+                        if (t[0] == 0) return 0d;
+                        return t[1] / t[0];
+                    }
+                }
+        );
+    }
+
+    /**
      * Returns a {@code Collector} that summing integer-valued input elements.
      *
      * @param <T> the type of the input elements
