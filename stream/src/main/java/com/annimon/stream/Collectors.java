@@ -277,6 +277,7 @@ public final class Collectors {
      * @param <T> the type of the input elements
      * @param mapper  the mapping function which extracts value from element to calculate result
      * @return a {@code Collector}
+     * @since 1.1.3
      */
     public static <T> Collector<T, ?, Double> averagingInt(final ToIntFunction<? super T> mapper) {
         return new CollectorsImpl<T, long[], Double>(
@@ -312,6 +313,7 @@ public final class Collectors {
      * @param <T> the type of the input elements
      * @param mapper  the mapping function which extracts value from element to calculate result
      * @return a {@code Collector}
+     * @since 1.1.3
      */
     public static <T> Collector<T, ?, Integer> summingInt(final ToIntFunction<? super T> mapper) {
         return new CollectorsImpl<T, int[], Integer>(
@@ -345,6 +347,7 @@ public final class Collectors {
      * @param <T> the type of the input elements
      * @param mapper  the mapping function which extracts value from element to calculate result
      * @return a {@code Collector}
+     * @since 1.1.3
      */
     public static <T> Collector<T, ?, Long> summingLong(final ToLongFunction<? super T> mapper) {
         return new CollectorsImpl<T, long[], Long>(
