@@ -264,6 +264,7 @@ public final class Collectors {
                 new Function<Double[], Double>() {
                     @Override
                     public Double apply(Double[] t) {
+                        if (t[0] == 0) return 0d;
                         return t[1] / t[0];
                     }
                 }

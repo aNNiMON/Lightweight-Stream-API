@@ -139,7 +139,18 @@ public class CollectorsTest {
 
     @Test
     public void testAveraging() {
-        double avg = Stream.of(10, 20, 30, 40)
+        double avg;
+
+        avg = Stream.<Integer>empty()
+                .collect(Collectors.averaging(new Function<Integer, Double>() {
+                    @Override
+                    public Double apply(Integer t) {
+                        return t.doubleValue();
+                    }
+                }));
+        assertThat(avg, closeTo(0, 0.001));
+
+        avg = Stream.of(10, 20, 30, 40)
                 .collect(Collectors.averaging(new Function<Integer, Double>() {
                     @Override
                     public Double apply(Integer value) {
