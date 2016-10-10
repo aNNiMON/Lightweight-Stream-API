@@ -4,7 +4,9 @@ import com.annimon.stream.function.Consumer;
 import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Predicate;
 import com.annimon.stream.function.Supplier;
+import com.annimon.stream.function.ToIntFunction;
 import com.annimon.stream.function.UnaryOperator;
+import com.annimon.stream.test.hamcrest.OptionalIntMatcher;
 import static com.annimon.stream.test.hamcrest.OptionalMatcher.hasValue;
 import static com.annimon.stream.test.hamcrest.OptionalMatcher.isEmpty;
 import static com.annimon.stream.test.hamcrest.OptionalMatcher.isPresent;
@@ -207,6 +209,26 @@ public final class OptionalTest {
                 });
 
         assertThat(result, hasValue("A"));
+    }
+
+    @Test
+    public void testMapToInt() {
+        final ToIntFunction<String> firstCharToIntFunction = new ToIntFunction<String>() {
+
+            @Override
+            public int applyAsInt(String t) {
+                return t.charAt(0);
+            }
+        };
+
+        OptionalInt result;
+        result = Optional.<String>empty()
+                .mapToInt(firstCharToIntFunction);
+        assertThat(result, OptionalIntMatcher.isEmpty());
+
+        result = Optional.of("A")
+                .mapToInt(firstCharToIntFunction);
+        assertThat(result, OptionalIntMatcher.hasValue(65));
     }
 
     @Test
