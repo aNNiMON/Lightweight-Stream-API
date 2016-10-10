@@ -3,6 +3,7 @@ package com.annimon.stream;
 import com.annimon.stream.function.BinaryOperator;
 import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Supplier;
+import com.annimon.stream.function.ToIntFunction;
 import com.annimon.stream.function.UnaryOperator;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import java.util.Arrays;
@@ -145,6 +146,26 @@ public class CollectorsTest {
                         return value / 10d;
                     }
                 }));
+        assertThat(avg, closeTo(2.5, 0.001));
+    }
+
+    @Test
+    public void testAveragingInt() {
+        final ToIntFunction<Integer> identity = new ToIntFunction<Integer>() {
+            @Override
+            public int applyAsInt(Integer t) {
+                return t;
+            }
+        };
+
+        double avg;
+        
+        avg = Stream.<Integer>empty()
+                .collect(Collectors.averagingInt(identity));
+        assertThat(avg, closeTo(0, 0.001));
+
+        avg = Stream.of(1, 2, 3, 4)
+                .collect(Collectors.averagingInt(identity));
         assertThat(avg, closeTo(2.5, 0.001));
     }
 

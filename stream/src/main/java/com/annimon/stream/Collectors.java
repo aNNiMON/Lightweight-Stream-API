@@ -269,6 +269,41 @@ public final class Collectors {
                 }
         );
     }
+
+    /**
+     * Returns a {@code Collector} that calculates average of integer-valued input elements.
+     *
+     * @param <T> the type of the input elements
+     * @param mapper  the mapping function which extracts value from element to calculate result
+     * @return a {@code Collector}
+     */
+    public static <T> Collector<T, ?, Double> averagingInt(final ToIntFunction<? super T> mapper) {
+        return new CollectorsImpl<T, long[], Double>(
+
+                new Supplier<long[]>() {
+                    @Override
+                    public long[] get() {
+                        return new long[] { 0, 0 };
+                    }
+                },
+
+                new BiConsumer<long[], T>() {
+                    @Override
+                    public void accept(long[] t, T u) {
+                        t[0]++; // count
+                        t[1] += mapper.applyAsInt(u); // sum
+                    }
+                },
+
+                new Function<long[], Double>() {
+                    @Override
+                    public Double apply(long[] t) {
+                        if (t[0] == 0) return 0d;
+                        return t[1] / (double) t[0];
+                    }
+                }
+        );
+    }
     
     /**
      * Returns a {@code Collector} that counts the number of input elements.
