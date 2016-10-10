@@ -186,6 +186,30 @@ public class CollectorsTest {
     }
 
     @Test
+    public void testAveragingLong() {
+        final ToLongFunction<Integer> identity = new ToLongFunction<Integer>() {
+            @Override
+            public long applyAsLong(Integer t) {
+                return t;
+            }
+        };
+
+        double avg;
+
+        avg = Stream.<Integer>empty()
+                .collect(Collectors.averagingLong(identity));
+        assertThat(avg, closeTo(0, 0.001));
+
+        avg = Stream.of(1, 2, 3, 4)
+                .collect(Collectors.averagingLong(identity));
+        assertThat(avg, closeTo(2.5, 0.001));
+
+        avg = Stream.of(Integer.MAX_VALUE, Integer.MAX_VALUE)
+                .collect(Collectors.averagingLong(identity));
+        assertThat(avg, closeTo(Integer.MAX_VALUE, 0.001));
+    }
+
+    @Test
     public void testSummingInt() {
         final ToIntFunction<Integer> identity = new ToIntFunction<Integer>() {
             @Override

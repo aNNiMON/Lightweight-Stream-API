@@ -280,6 +280,34 @@ public final class Collectors {
      * @since 1.1.3
      */
     public static <T> Collector<T, ?, Double> averagingInt(final ToIntFunction<? super T> mapper) {
+        return averagingHelper(new BiConsumer<long[], T>() {
+            @Override
+            public void accept(long[] t, T u) {
+                t[0]++; // count
+                t[1] += mapper.applyAsInt(u); // sum
+            }
+        });
+    }
+
+    /**
+     * Returns a {@code Collector} that calculates average of long-valued input elements.
+     *
+     * @param <T> the type of the input elements
+     * @param mapper  the mapping function which extracts value from element to calculate result
+     * @return a {@code Collector}
+     * @since 1.1.3
+     */
+    public static <T> Collector<T, ?, Double> averagingLong(final ToLongFunction<? super T> mapper) {
+        return averagingHelper(new BiConsumer<long[], T>() {
+            @Override
+            public void accept(long[] t, T u) {
+                t[0]++; // count
+                t[1] += mapper.applyAsLong(u); // sum
+            }
+        });
+    }
+
+    private static <T> Collector<T, ?, Double> averagingHelper(final BiConsumer<long[], T> accumulator) {
         return new CollectorsImpl<T, long[], Double>(
 
                 new Supplier<long[]>() {
@@ -289,13 +317,7 @@ public final class Collectors {
                     }
                 },
 
-                new BiConsumer<long[], T>() {
-                    @Override
-                    public void accept(long[] t, T u) {
-                        t[0]++; // count
-                        t[1] += mapper.applyAsInt(u); // sum
-                    }
-                },
+                accumulator,
 
                 new Function<long[], Double>() {
                     @Override
