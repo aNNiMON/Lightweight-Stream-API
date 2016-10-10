@@ -4,6 +4,7 @@ import com.annimon.stream.function.BinaryOperator;
 import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Supplier;
 import com.annimon.stream.function.ToIntFunction;
+import com.annimon.stream.function.ToLongFunction;
 import com.annimon.stream.function.UnaryOperator;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import java.util.Arrays;
@@ -198,6 +199,26 @@ public class CollectorsTest {
         sum = Stream.of(1, 2, 3, 4)
                 .collect(Collectors.summingInt(identity));
         assertThat(sum, is(10));
+    }
+
+    @Test
+    public void testSummingLong() {
+        final ToLongFunction<Long> identity = new ToLongFunction<Long>() {
+            @Override
+            public long applyAsLong(Long t) {
+                return t;
+            }
+        };
+
+        long sum;
+
+        sum = Stream.<Long>empty()
+                .collect(Collectors.summingLong(identity));
+        assertThat(sum, is(0L));
+
+        sum = Stream.of(1L, 2L, 3L, 4L)
+                .collect(Collectors.summingLong(identity));
+        assertThat(sum, is(10L));
     }
 
     @Test
