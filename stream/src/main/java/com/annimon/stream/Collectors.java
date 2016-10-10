@@ -17,6 +17,20 @@ import java.util.Set;
  */
 public final class Collectors {
 
+    private static final Supplier<long[]> LONG_2ELEMENTS_ARRAY_SUPPLIER = new Supplier<long[]>() {
+        @Override
+        public long[] get() {
+            return new long[] { 0L, 0L };
+        }
+    };
+
+    private static final Supplier<double[]> DOUBLE_2ELEMENTS_ARRAY_SUPPLIER = new Supplier<double[]>() {
+        @Override
+        public double[] get() {
+            return new double[] { 0d, 0d };
+        }
+    };
+
     private Collectors() { }
     
     /**
@@ -296,12 +310,7 @@ public final class Collectors {
     private static <T> Collector<T, ?, Double> averagingHelper(final BiConsumer<long[], T> accumulator) {
         return new CollectorsImpl<T, long[], Double>(
 
-                new Supplier<long[]>() {
-                    @Override
-                    public long[] get() {
-                        return new long[] { 0, 0 };
-                    }
-                },
+                LONG_2ELEMENTS_ARRAY_SUPPLIER,
 
                 accumulator,
 
@@ -326,12 +335,7 @@ public final class Collectors {
     public static <T> Collector<T, ?, Double> averagingDouble(final ToDoubleFunction<? super T> mapper) {
         return new CollectorsImpl<T, double[], Double>(
 
-                new Supplier<double[]>() {
-                    @Override
-                    public double[] get() {
-                        return new double[] { 0d, 0d };
-                    }
-                },
+                DOUBLE_2ELEMENTS_ARRAY_SUPPLIER,
 
                 new BiConsumer<double[], T>() {
                     @Override
@@ -396,12 +400,7 @@ public final class Collectors {
     public static <T> Collector<T, ?, Long> summingLong(final ToLongFunction<? super T> mapper) {
         return new CollectorsImpl<T, long[], Long>(
 
-                new Supplier<long[]>() {
-                    @Override
-                    public long[] get() {
-                        return new long[] { 0L };
-                    }
-                },
+                LONG_2ELEMENTS_ARRAY_SUPPLIER,
 
                 new BiConsumer<long[], T>() {
                     @Override
@@ -430,12 +429,7 @@ public final class Collectors {
     public static <T> Collector<T, ?, Double> summingDouble(final ToDoubleFunction<? super T> mapper) {
         return new CollectorsImpl<T, double[], Double>(
 
-                new Supplier<double[]>() {
-                    @Override
-                    public double[] get() {
-                        return new double[] { 0d };
-                    }
-                },
+                DOUBLE_2ELEMENTS_ARRAY_SUPPLIER,
 
                 new BiConsumer<double[], T>() {
                     @Override
