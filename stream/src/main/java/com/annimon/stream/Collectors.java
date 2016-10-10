@@ -418,6 +418,40 @@ public final class Collectors {
                 }
         );
     }
+
+    /**
+     * Returns a {@code Collector} that summing double-valued input elements.
+     *
+     * @param <T> the type of the input elements
+     * @param mapper  the mapping function which extracts value from element to calculate result
+     * @return a {@code Collector}
+     * @since 1.1.3
+     */
+    public static <T> Collector<T, ?, Double> summingDouble(final ToDoubleFunction<? super T> mapper) {
+        return new CollectorsImpl<T, double[], Double>(
+
+                new Supplier<double[]>() {
+                    @Override
+                    public double[] get() {
+                        return new double[] { 0d };
+                    }
+                },
+
+                new BiConsumer<double[], T>() {
+                    @Override
+                    public void accept(double[] t, T u) {
+                        t[0] += mapper.applyAsDouble(u);
+                    }
+                },
+
+                new Function<double[], Double>() {
+                    @Override
+                    public Double apply(double[] value) {
+                        return value[0];
+                    }
+                }
+        );
+    }
     
     /**
      * Returns a {@code Collector} that counts the number of input elements.

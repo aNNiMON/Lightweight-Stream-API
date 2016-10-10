@@ -275,6 +275,26 @@ public class CollectorsTest {
     }
 
     @Test
+    public void testSummingDouble() {
+        final ToDoubleFunction<Double> identity = new ToDoubleFunction<Double>() {
+            @Override
+            public double applyAsDouble(Double t) {
+                return t;
+            }
+        };
+
+        double sum;
+
+        sum = Stream.<Double>empty()
+                .collect(Collectors.summingDouble(identity));
+        assertThat(sum, closeTo(0, 0.001));
+
+        sum = Stream.of(1d, 2d, 3d, 4d)
+                .collect(Collectors.summingDouble(identity));
+        assertThat(sum, closeTo(10, 0.001));
+    }
+
+    @Test
     public void testCounting() {
         long count = Stream.range(0, 20)
                 .collect(Collectors.counting());
