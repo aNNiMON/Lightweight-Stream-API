@@ -241,34 +241,19 @@ public final class Collectors {
      * 
      * @param <T> the type of the input elements
      * @param mapper  the mapping function which extracts value from element to calculate result
+     * @deprecated  As of release 1.1.3, replaced by
+     *              {@link #averagingDouble(com.annimon.stream.function.ToDoubleFunction)}
      * @return a {@code Collector}
      */
+    @Deprecated
     public static <T> Collector<T, ?, Double> averaging(final Function<? super T, Double> mapper) {
-        return new CollectorsImpl<T, Double[], Double>(
-                
-                new Supplier<Double[]>() {
-                    @Override
-                    public Double[] get() {
-                        return new Double[] { 0d, 0d };
-                    }
-                },
-                
-                new BiConsumer<Double[], T>() {
-                    @Override
-                    public void accept(Double[] t, T u) {
-                        t[0]++; // count
-                        t[1] += mapper.apply(u); // sum
-                    }
-                },
-                
-                new Function<Double[], Double>() {
-                    @Override
-                    public Double apply(Double[] t) {
-                        if (t[0] == 0) return 0d;
-                        return t[1] / t[0];
-                    }
-                }
-        );
+        return averagingDouble(new ToDoubleFunction<T>() {
+
+            @Override
+            public double applyAsDouble(T t) {
+                return mapper.apply(t);
+            }
+        });
     }
 
     /**

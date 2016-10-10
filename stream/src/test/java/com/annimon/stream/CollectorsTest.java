@@ -140,6 +140,7 @@ public class CollectorsTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     public void testAveraging() {
         double avg;
 
