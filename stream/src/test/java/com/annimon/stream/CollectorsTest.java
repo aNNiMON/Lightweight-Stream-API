@@ -181,6 +181,26 @@ public class CollectorsTest {
     }
 
     @Test
+    public void testSummingInt() {
+        final ToIntFunction<Integer> identity = new ToIntFunction<Integer>() {
+            @Override
+            public int applyAsInt(Integer t) {
+                return t;
+            }
+        };
+
+        int sum;
+
+        sum = Stream.<Integer>empty()
+                .collect(Collectors.summingInt(identity));
+        assertThat(sum, is(0));
+
+        sum = Stream.of(1, 2, 3, 4)
+                .collect(Collectors.summingInt(identity));
+        assertThat(sum, is(10));
+    }
+
+    @Test
     public void testCounting() {
         long count = Stream.range(0, 20)
                 .collect(Collectors.counting());

@@ -305,6 +305,39 @@ public final class Collectors {
                 }
         );
     }
+
+    /**
+     * Returns a {@code Collector} that summing integer-valued input elements.
+     *
+     * @param <T> the type of the input elements
+     * @param mapper  the mapping function which extracts value from element to calculate result
+     * @return a {@code Collector}
+     */
+    public static <T> Collector<T, ?, Integer> summingInt(final ToIntFunction<? super T> mapper) {
+        return new CollectorsImpl<T, int[], Integer>(
+
+                new Supplier<int[]>() {
+                    @Override
+                    public int[] get() {
+                        return new int[] { 0 };
+                    }
+                },
+
+                new BiConsumer<int[], T>() {
+                    @Override
+                    public void accept(int[] t, T u) {
+                        t[0] += mapper.applyAsInt(u);
+                    }
+                },
+
+                new Function<int[], Integer>() {
+                    @Override
+                    public Integer apply(int[] value) {
+                        return value[0];
+                    }
+                }
+        );
+    }
     
     /**
      * Returns a {@code Collector} that counts the number of input elements.
