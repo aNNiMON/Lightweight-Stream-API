@@ -2,6 +2,7 @@ package com.annimon.stream;
 
 import com.annimon.stream.function.BinaryOperator;
 import com.annimon.stream.function.Function;
+import com.annimon.stream.function.IntSupplier;
 import com.annimon.stream.function.Supplier;
 import com.annimon.stream.function.ToDoubleFunction;
 import com.annimon.stream.function.ToIntFunction;
@@ -467,6 +468,41 @@ public class CollectorsTest {
                     Students.GEORGE_LAW_3.getName(),
                     Students.SERGEY_LAW_1.getName()
                 }));
+    }
+
+    @Test
+    public void testFlatMapping() {
+        Function<Integer, Stream<Integer>> repeaterFunction = new Function<Integer, Stream<Integer>>() {
+            @Override
+            public Stream<Integer> apply(final Integer value) {
+                if (value < 0) return null;
+                if (value == 0) return Stream.empty();
+                return IntStream.generate(new IntSupplier() {
+                    @Override
+                    public int getAsInt() {
+                        return value;
+                    }
+                }).limit(value).boxed();
+            }
+        };
+
+        List<Integer> list;
+
+        list = Stream.of(1, 2, 3, 4)
+                .collect( Collectors.flatMapping(repeaterFunction, Collectors.<Integer>toList()) );
+        assertThat(list, contains(1, 2, 2, 3, 3, 3, 4, 4, 4, 4));
+
+        list = Stream.of(-1, -1)
+                .collect( Collectors.flatMapping(repeaterFunction, Collectors.<Integer>toList()) );
+        assertThat(list, is(empty()));
+
+        list = Stream.of(0, 0)
+                .collect( Collectors.flatMapping(repeaterFunction, Collectors.<Integer>toList()) );
+        assertThat(list, is(empty()));
+
+        list = Stream.of(2, 0, 3, -4)
+                .collect( Collectors.flatMapping(repeaterFunction, Collectors.<Integer>toList()) );
+        assertThat(list, contains(2, 2, 3, 3, 3));
     }
 
     @Test

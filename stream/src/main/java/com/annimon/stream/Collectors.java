@@ -569,6 +569,45 @@ public final class Collectors {
                 downstream.finisher()
         );
     }
+
+    /**
+     * Returns a {@code Collector} that performs flat-mapping function before accumulation.
+     *
+     * @param <T> the type of the input elements
+     * @param <U> the result type of flat-mapping function
+     * @param <A> the accumulation type
+     * @param <R> the result type of collector
+     * @param mapper  a function that performs flat-mapping to input elements
+     * @param downstream  the collector of flat-mapped elements
+     * @return a {@code Collector}
+     * @since 1.1.3
+     */
+    public static <T, U, A, R> Collector<T, ?, R> flatMapping(
+            final Function<? super T, ? extends Stream<? extends U>> mapper,
+            final Collector<? super U, A, R> downstream) {
+
+        final BiConsumer<A, ? super U> accumulator = downstream.accumulator();
+        return new CollectorsImpl<T, A, R>(
+
+                downstream.supplier(),
+
+                new BiConsumer<A, T>() {
+                    @Override
+                    public void accept(final A a, T t) {
+                        final Stream<? extends U> stream = mapper.apply(t);
+                        if (stream == null) return;
+                        stream.forEach(new Consumer<U>() {
+                            @Override
+                            public void accept(U u) {
+                                accumulator.accept(a, u);
+                            }
+                        });
+                    }
+                },
+
+                downstream.finisher()
+        );
+    }
     
     /**
      * Returns a {@code Collector} that performs additional transformation.
