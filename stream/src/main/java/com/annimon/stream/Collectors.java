@@ -465,7 +465,7 @@ public final class Collectors {
     }
     
     /**
-     * Returns a {@code Collector} that reduces the input elements.
+     * Returns a {@code Collector} that reduces input elements.
      * 
      * @param <T> the type of the input elements
      * @param identity  the initial value
@@ -500,7 +500,7 @@ public final class Collectors {
     }
     
     /**
-     * Returns a {@code Collector} that reduces the input elements.
+     * Returns a {@code Collector} that reduces input elements.
      * 
      * @param <T> the type of the input elements
      * @param <R> the type of the output elements
@@ -571,7 +571,7 @@ public final class Collectors {
     }
     
     /**
-     * Returns a {@code Collector} that performs mapping function before accumulation.
+     * Returns a {@code Collector} that performs mapping before accumulation.
      * 
      * @param <T> the type of the input elements
      * @param <U> the result type of mapping function
@@ -602,7 +602,7 @@ public final class Collectors {
     }
 
     /**
-     * Returns a {@code Collector} that performs flat-mapping function before accumulation.
+     * Returns a {@code Collector} that performs flat-mapping before accumulation.
      *
      * @param <T> the type of the input elements
      * @param <U> the result type of flat-mapping function
@@ -645,8 +645,8 @@ public final class Collectors {
      * 
      * @param <T> the type of the input elements
      * @param <A> the accumulation type
-     * @param <IR> the input type of transformation function
-     * @param <OR> the output type of transformation function
+     * @param <IR> the input type of the transformation function
+     * @param <OR> the output type of the transformation function
      * @param c  the input {@code Collector}
      * @param finisher  the final transformation function
      * @return a {@code Collector}
