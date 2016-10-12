@@ -538,6 +538,37 @@ public final class Collectors {
                 }
         );
     }
+
+    /**
+     * Returns a {@code Collector} that filters input elements.
+     *
+     * @param <T> the type of the input elements
+     * @param <A> the accumulation type
+     * @param <R> the type of the output elements
+     * @param predicate  a predicate used to filter elements
+     * @param downstream  the collector of filtered elements
+     * @return a {@code Collector}
+     * @since 1.1.3
+     */
+    public static <T, A, R> Collector<T, ?, R> filtering(
+            final Predicate<? super T> predicate,
+            final Collector<? super T, A, R> downstream) {
+        final BiConsumer<A, ? super T> accumulator = downstream.accumulator();
+        return new CollectorsImpl<T, A, R>(
+
+                downstream.supplier(),
+
+                new BiConsumer<A, T>() {
+                    @Override
+                    public void accept(A a, T t) {
+                        if (predicate.test(t))
+                            accumulator.accept(a, t);
+                    }
+                },
+
+                downstream.finisher()
+        );
+    }
     
     /**
      * Returns a {@code Collector} that performs mapping function before accumulation.

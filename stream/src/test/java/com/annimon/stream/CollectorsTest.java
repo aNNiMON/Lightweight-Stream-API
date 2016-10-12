@@ -432,6 +432,22 @@ public class CollectorsTest {
     }
 
     @Test
+    public void testFiltering() {
+        List<Integer> list;
+        list = Stream.rangeClosed(1, 6)
+                .collect( Collectors.filtering(Functions.remainder(2), Collectors.<Integer>toList()) );
+        assertThat(list, contains(2, 4, 6));
+
+        list = Stream.rangeClosed(1, 6)
+                .collect( Collectors.filtering(Functions.remainder(20), Collectors.<Integer>toList()) );
+        assertThat(list, is(empty()));
+
+        list = Stream.<Integer>empty()
+                .collect( Collectors.filtering(Functions.remainder(20), Collectors.<Integer>toList()) );
+        assertThat(list, is(empty()));
+    }
+
+    @Test
     public void testMappingSquareIntToString() {
         Function<Integer, String> squareToString = new Function<Integer, String>() {
             @Override
