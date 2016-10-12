@@ -244,7 +244,8 @@ public final class Collectors {
                         if (value.length() == 0) {
                             return emptyValue;
                         } else {
-                            return value.toString() + suffix;
+                            value.append(suffix);
+                            return value.toString();
                         }
                     }
                 }
