@@ -2,7 +2,11 @@ package com.annimon.stream;
 
 import com.annimon.stream.function.BinaryOperator;
 import com.annimon.stream.function.Function;
+import com.annimon.stream.function.IntSupplier;
 import com.annimon.stream.function.Supplier;
+import com.annimon.stream.function.ToDoubleFunction;
+import com.annimon.stream.function.ToIntFunction;
+import com.annimon.stream.function.ToLongFunction;
 import com.annimon.stream.function.UnaryOperator;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import java.util.Arrays;
@@ -137,8 +141,20 @@ public class CollectorsTest {
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     public void testAveraging() {
-        double avg = Stream.of(10, 20, 30, 40)
+        double avg;
+
+        avg = Stream.<Integer>empty()
+                .collect(Collectors.averaging(new Function<Integer, Double>() {
+                    @Override
+                    public Double apply(Integer t) {
+                        return t.doubleValue();
+                    }
+                }));
+        assertThat(avg, closeTo(0, 0.001));
+
+        avg = Stream.of(10, 20, 30, 40)
                 .collect(Collectors.averaging(new Function<Integer, Double>() {
                     @Override
                     public Double apply(Integer value) {
@@ -146,6 +162,137 @@ public class CollectorsTest {
                     }
                 }));
         assertThat(avg, closeTo(2.5, 0.001));
+    }
+
+    @Test
+    public void testAveragingInt() {
+        final ToIntFunction<Integer> identity = new ToIntFunction<Integer>() {
+            @Override
+            public int applyAsInt(Integer t) {
+                return t;
+            }
+        };
+
+        double avg;
+        
+        avg = Stream.<Integer>empty()
+                .collect(Collectors.averagingInt(identity));
+        assertThat(avg, closeTo(0, 0.001));
+
+        avg = Stream.of(1, 2, 3, 4)
+                .collect(Collectors.averagingInt(identity));
+        assertThat(avg, closeTo(2.5, 0.001));
+
+        avg = Stream.of(Integer.MAX_VALUE, Integer.MAX_VALUE)
+                .collect(Collectors.averagingInt(identity));
+        assertThat(avg, closeTo(Integer.MAX_VALUE, 0.001));
+    }
+
+    @Test
+    public void testAveragingLong() {
+        final ToLongFunction<Integer> identity = new ToLongFunction<Integer>() {
+            @Override
+            public long applyAsLong(Integer t) {
+                return t;
+            }
+        };
+
+        double avg;
+
+        avg = Stream.<Integer>empty()
+                .collect(Collectors.averagingLong(identity));
+        assertThat(avg, closeTo(0, 0.001));
+
+        avg = Stream.of(1, 2, 3, 4)
+                .collect(Collectors.averagingLong(identity));
+        assertThat(avg, closeTo(2.5, 0.001));
+
+        avg = Stream.of(Integer.MAX_VALUE, Integer.MAX_VALUE)
+                .collect(Collectors.averagingLong(identity));
+        assertThat(avg, closeTo(Integer.MAX_VALUE, 0.001));
+    }
+
+    @Test
+    public void testAveragingDouble() {
+        final ToDoubleFunction<Integer> intToDoubleFunction = new ToDoubleFunction<Integer>() {
+            @Override
+            public double applyAsDouble(Integer t) {
+                return t.doubleValue();
+            }
+        };
+        double avg;
+
+        avg = Stream.<Integer>empty()
+                .collect(Collectors.averagingDouble(intToDoubleFunction));
+        assertThat(avg, closeTo(0, 0.001));
+
+        avg = Stream.of(1, 2, 3, 4)
+                .collect(Collectors.averagingDouble(intToDoubleFunction));
+        assertThat(avg, closeTo(2.5, 0.001));
+    }
+
+    @Test
+    public void testSummingInt() {
+        final ToIntFunction<Integer> identity = new ToIntFunction<Integer>() {
+            @Override
+            public int applyAsInt(Integer t) {
+                return t;
+            }
+        };
+
+        int sum;
+
+        sum = Stream.<Integer>empty()
+                .collect(Collectors.summingInt(identity));
+        assertThat(sum, is(0));
+
+        sum = Stream.of(1, 2, 3, 4)
+                .collect(Collectors.summingInt(identity));
+        assertThat(sum, is(10));
+    }
+
+    @Test
+    public void testSummingLong() {
+        final ToLongFunction<Long> identity = new ToLongFunction<Long>() {
+            @Override
+            public long applyAsLong(Long t) {
+                return t;
+            }
+        };
+
+        long sum;
+
+        sum = Stream.<Long>empty()
+                .collect(Collectors.summingLong(identity));
+        assertThat(sum, is(0L));
+
+        sum = Stream.of(1L, 2L, 3L, 4L)
+                .collect(Collectors.summingLong(identity));
+        assertThat(sum, is(10L));
+
+        sum = Stream.of(1L, Long.MAX_VALUE - 1)
+                .collect(Collectors.summingLong(identity));
+        assertThat(sum, is(Long.MAX_VALUE));
+    }
+
+    @Test
+    public void testSummingDouble() {
+        final ToDoubleFunction<Double> identity = new ToDoubleFunction<Double>() {
+            @Override
+            public double applyAsDouble(Double t) {
+                return t;
+            }
+        };
+
+        double sum;
+
+        sum = Stream.<Double>empty()
+                .collect(Collectors.summingDouble(identity));
+        assertThat(sum, closeTo(0, 0.001));
+
+        sum = Stream.of(1d, 2d, 3d, 4d)
+                .collect(Collectors.summingDouble(identity));
+        assertThat(sum, closeTo(10, 0.001));
     }
 
     @Test
@@ -285,6 +432,22 @@ public class CollectorsTest {
     }
 
     @Test
+    public void testFiltering() {
+        List<Integer> list;
+        list = Stream.rangeClosed(1, 6)
+                .collect( Collectors.filtering(Functions.remainder(2), Collectors.<Integer>toList()) );
+        assertThat(list, contains(2, 4, 6));
+
+        list = Stream.rangeClosed(1, 6)
+                .collect( Collectors.filtering(Functions.remainder(20), Collectors.<Integer>toList()) );
+        assertThat(list, is(empty()));
+
+        list = Stream.<Integer>empty()
+                .collect( Collectors.filtering(Functions.remainder(20), Collectors.<Integer>toList()) );
+        assertThat(list, is(empty()));
+    }
+
+    @Test
     public void testMappingSquareIntToString() {
         Function<Integer, String> squareToString = new Function<Integer, String>() {
             @Override
@@ -321,6 +484,41 @@ public class CollectorsTest {
                     Students.GEORGE_LAW_3.getName(),
                     Students.SERGEY_LAW_1.getName()
                 }));
+    }
+
+    @Test
+    public void testFlatMapping() {
+        Function<Integer, Stream<Integer>> repeaterFunction = new Function<Integer, Stream<Integer>>() {
+            @Override
+            public Stream<Integer> apply(final Integer value) {
+                if (value < 0) return null;
+                if (value == 0) return Stream.empty();
+                return IntStream.generate(new IntSupplier() {
+                    @Override
+                    public int getAsInt() {
+                        return value;
+                    }
+                }).limit(value).boxed();
+            }
+        };
+
+        List<Integer> list;
+
+        list = Stream.of(1, 2, 3, 4)
+                .collect( Collectors.flatMapping(repeaterFunction, Collectors.<Integer>toList()) );
+        assertThat(list, contains(1, 2, 2, 3, 3, 3, 4, 4, 4, 4));
+
+        list = Stream.of(-1, -1)
+                .collect( Collectors.flatMapping(repeaterFunction, Collectors.<Integer>toList()) );
+        assertThat(list, is(empty()));
+
+        list = Stream.of(0, 0)
+                .collect( Collectors.flatMapping(repeaterFunction, Collectors.<Integer>toList()) );
+        assertThat(list, is(empty()));
+
+        list = Stream.of(2, 0, 3, -4)
+                .collect( Collectors.flatMapping(repeaterFunction, Collectors.<Integer>toList()) );
+        assertThat(list, contains(2, 2, 3, 3, 3));
     }
 
     @Test

@@ -17,6 +17,20 @@ import java.util.Set;
  */
 public final class Collectors {
 
+    private static final Supplier<long[]> LONG_2ELEMENTS_ARRAY_SUPPLIER = new Supplier<long[]>() {
+        @Override
+        public long[] get() {
+            return new long[] { 0L, 0L };
+        }
+    };
+
+    private static final Supplier<double[]> DOUBLE_2ELEMENTS_ARRAY_SUPPLIER = new Supplier<double[]>() {
+        @Override
+        public double[] get() {
+            return new double[] { 0d, 0d };
+        }
+    };
+
     private Collectors() { }
     
     /**
@@ -98,6 +112,7 @@ public final class Collectors {
      * @param <K> the result type of key mapping function
      * @param keyMapper  a mapping function to produce keys
      * @return a {@code Collector}
+     * @since 1.1.3
      */
     public static <T, K> Collector<T, ?, Map<K, T>> toMap(
             final Function<? super T, ? extends K> keyMapper) {
@@ -229,7 +244,8 @@ public final class Collectors {
                         if (value.length() == 0) {
                             return emptyValue;
                         } else {
-                            return value.toString() + suffix;
+                            value.append(suffix);
+                            return value.toString();
                         }
                     }
                 }
@@ -241,30 +257,192 @@ public final class Collectors {
      * 
      * @param <T> the type of the input elements
      * @param mapper  the mapping function which extracts value from element to calculate result
+     * @deprecated  As of release 1.1.3, replaced by
+     *              {@link #averagingDouble(com.annimon.stream.function.ToDoubleFunction)}
      * @return a {@code Collector}
      */
+    @Deprecated
     public static <T> Collector<T, ?, Double> averaging(final Function<? super T, Double> mapper) {
-        return new CollectorsImpl<T, Double[], Double>(
-                
-                new Supplier<Double[]>() {
+        return averagingDouble(new ToDoubleFunction<T>() {
+
+            @Override
+            public double applyAsDouble(T t) {
+                return mapper.apply(t);
+            }
+        });
+    }
+
+    /**
+     * Returns a {@code Collector} that calculates average of integer-valued input elements.
+     *
+     * @param <T> the type of the input elements
+     * @param mapper  the mapping function which extracts value from element to calculate result
+     * @return a {@code Collector}
+     * @since 1.1.3
+     */
+    public static <T> Collector<T, ?, Double> averagingInt(final ToIntFunction<? super T> mapper) {
+        return averagingHelper(new BiConsumer<long[], T>() {
+            @Override
+            public void accept(long[] t, T u) {
+                t[0]++; // count
+                t[1] += mapper.applyAsInt(u); // sum
+            }
+        });
+    }
+
+    /**
+     * Returns a {@code Collector} that calculates average of long-valued input elements.
+     *
+     * @param <T> the type of the input elements
+     * @param mapper  the mapping function which extracts value from element to calculate result
+     * @return a {@code Collector}
+     * @since 1.1.3
+     */
+    public static <T> Collector<T, ?, Double> averagingLong(final ToLongFunction<? super T> mapper) {
+        return averagingHelper(new BiConsumer<long[], T>() {
+            @Override
+            public void accept(long[] t, T u) {
+                t[0]++; // count
+                t[1] += mapper.applyAsLong(u); // sum
+            }
+        });
+    }
+
+    private static <T> Collector<T, ?, Double> averagingHelper(final BiConsumer<long[], T> accumulator) {
+        return new CollectorsImpl<T, long[], Double>(
+
+                LONG_2ELEMENTS_ARRAY_SUPPLIER,
+
+                accumulator,
+
+                new Function<long[], Double>() {
                     @Override
-                    public Double[] get() {
-                        return new Double[] { 0d, 0d };
+                    public Double apply(long[] t) {
+                        if (t[0] == 0) return 0d;
+                        return t[1] / (double) t[0];
                     }
-                },
-                
-                new BiConsumer<Double[], T>() {
+                }
+        );
+    }
+
+    /**
+     * Returns a {@code Collector} that calculates average of double-valued input elements.
+     *
+     * @param <T> the type of the input elements
+     * @param mapper  the mapping function which extracts value from element to calculate result
+     * @return a {@code Collector}
+     * @since 1.1.3
+     */
+    public static <T> Collector<T, ?, Double> averagingDouble(final ToDoubleFunction<? super T> mapper) {
+        return new CollectorsImpl<T, double[], Double>(
+
+                DOUBLE_2ELEMENTS_ARRAY_SUPPLIER,
+
+                new BiConsumer<double[], T>() {
                     @Override
-                    public void accept(Double[] t, T u) {
+                    public void accept(double[] t, T u) {
                         t[0]++; // count
-                        t[1] += mapper.apply(u); // sum
+                        t[1] += mapper.applyAsDouble(u); // sum
                     }
                 },
-                
-                new Function<Double[], Double>() {
+
+                new Function<double[], Double>() {
                     @Override
-                    public Double apply(Double[] t) {
+                    public Double apply(double[] t) {
+                        if (t[0] == 0) return 0d;
                         return t[1] / t[0];
+                    }
+                }
+        );
+    }
+
+    /**
+     * Returns a {@code Collector} that summing integer-valued input elements.
+     *
+     * @param <T> the type of the input elements
+     * @param mapper  the mapping function which extracts value from element to calculate result
+     * @return a {@code Collector}
+     * @since 1.1.3
+     */
+    public static <T> Collector<T, ?, Integer> summingInt(final ToIntFunction<? super T> mapper) {
+        return new CollectorsImpl<T, int[], Integer>(
+
+                new Supplier<int[]>() {
+                    @Override
+                    public int[] get() {
+                        return new int[] { 0 };
+                    }
+                },
+
+                new BiConsumer<int[], T>() {
+                    @Override
+                    public void accept(int[] t, T u) {
+                        t[0] += mapper.applyAsInt(u);
+                    }
+                },
+
+                new Function<int[], Integer>() {
+                    @Override
+                    public Integer apply(int[] value) {
+                        return value[0];
+                    }
+                }
+        );
+    }
+
+    /**
+     * Returns a {@code Collector} that summing long-valued input elements.
+     *
+     * @param <T> the type of the input elements
+     * @param mapper  the mapping function which extracts value from element to calculate result
+     * @return a {@code Collector}
+     * @since 1.1.3
+     */
+    public static <T> Collector<T, ?, Long> summingLong(final ToLongFunction<? super T> mapper) {
+        return new CollectorsImpl<T, long[], Long>(
+
+                LONG_2ELEMENTS_ARRAY_SUPPLIER,
+
+                new BiConsumer<long[], T>() {
+                    @Override
+                    public void accept(long[] t, T u) {
+                        t[0] += mapper.applyAsLong(u);
+                    }
+                },
+
+                new Function<long[], Long>() {
+                    @Override
+                    public Long apply(long[] value) {
+                        return value[0];
+                    }
+                }
+        );
+    }
+
+    /**
+     * Returns a {@code Collector} that summing double-valued input elements.
+     *
+     * @param <T> the type of the input elements
+     * @param mapper  the mapping function which extracts value from element to calculate result
+     * @return a {@code Collector}
+     * @since 1.1.3
+     */
+    public static <T> Collector<T, ?, Double> summingDouble(final ToDoubleFunction<? super T> mapper) {
+        return new CollectorsImpl<T, double[], Double>(
+
+                DOUBLE_2ELEMENTS_ARRAY_SUPPLIER,
+
+                new BiConsumer<double[], T>() {
+                    @Override
+                    public void accept(double[] t, T u) {
+                        t[0] += mapper.applyAsDouble(u);
+                    }
+                },
+
+                new Function<double[], Double>() {
+                    @Override
+                    public Double apply(double[] value) {
+                        return value[0];
                     }
                 }
         );
@@ -277,33 +455,17 @@ public final class Collectors {
      * @return a {@code Collector}
      */
     public static <T> Collector<T, ?, Long> counting() {
-        return new CollectorsImpl<T, Long[], Long>(
-                
-                new Supplier<Long[]>() {
-                    @Override
-                    public Long[] get() {
-                        return new Long[] { 0L };
-                    }
-                },
-                
-                new BiConsumer<Long[], T>() {
-                    @Override
-                    public void accept(Long[] t, T u) {
-                        t[0]++;
-                    }
-                },
-                
-                new Function<Long[], Long>() {
-                    @Override
-                    public Long apply(Long[] value) {
-                        return value[0];
-                    }
-                }
-        );
+        return summingLong(new ToLongFunction<T>() {
+
+            @Override
+            public long applyAsLong(T t) {
+                return 1L;
+            }
+        });
     }
     
     /**
-     * Returns a {@code Collector} that reduces the input elements.
+     * Returns a {@code Collector} that reduces input elements.
      * 
      * @param <T> the type of the input elements
      * @param identity  the initial value
@@ -338,7 +500,7 @@ public final class Collectors {
     }
     
     /**
-     * Returns a {@code Collector} that reduces the input elements.
+     * Returns a {@code Collector} that reduces input elements.
      * 
      * @param <T> the type of the input elements
      * @param <R> the type of the output elements
@@ -376,9 +538,40 @@ public final class Collectors {
                 }
         );
     }
+
+    /**
+     * Returns a {@code Collector} that filters input elements.
+     *
+     * @param <T> the type of the input elements
+     * @param <A> the accumulation type
+     * @param <R> the type of the output elements
+     * @param predicate  a predicate used to filter elements
+     * @param downstream  the collector of filtered elements
+     * @return a {@code Collector}
+     * @since 1.1.3
+     */
+    public static <T, A, R> Collector<T, ?, R> filtering(
+            final Predicate<? super T> predicate,
+            final Collector<? super T, A, R> downstream) {
+        final BiConsumer<A, ? super T> accumulator = downstream.accumulator();
+        return new CollectorsImpl<T, A, R>(
+
+                downstream.supplier(),
+
+                new BiConsumer<A, T>() {
+                    @Override
+                    public void accept(A a, T t) {
+                        if (predicate.test(t))
+                            accumulator.accept(a, t);
+                    }
+                },
+
+                downstream.finisher()
+        );
+    }
     
     /**
-     * Returns a {@code Collector} that performs mapping function before accumulation.
+     * Returns a {@code Collector} that performs mapping before accumulation.
      * 
      * @param <T> the type of the input elements
      * @param <U> the result type of mapping function
@@ -407,14 +600,53 @@ public final class Collectors {
                 downstream.finisher()
         );
     }
+
+    /**
+     * Returns a {@code Collector} that performs flat-mapping before accumulation.
+     *
+     * @param <T> the type of the input elements
+     * @param <U> the result type of flat-mapping function
+     * @param <A> the accumulation type
+     * @param <R> the result type of collector
+     * @param mapper  a function that performs flat-mapping to input elements
+     * @param downstream  the collector of flat-mapped elements
+     * @return a {@code Collector}
+     * @since 1.1.3
+     */
+    public static <T, U, A, R> Collector<T, ?, R> flatMapping(
+            final Function<? super T, ? extends Stream<? extends U>> mapper,
+            final Collector<? super U, A, R> downstream) {
+
+        final BiConsumer<A, ? super U> accumulator = downstream.accumulator();
+        return new CollectorsImpl<T, A, R>(
+
+                downstream.supplier(),
+
+                new BiConsumer<A, T>() {
+                    @Override
+                    public void accept(final A a, T t) {
+                        final Stream<? extends U> stream = mapper.apply(t);
+                        if (stream == null) return;
+                        stream.forEach(new Consumer<U>() {
+                            @Override
+                            public void accept(U u) {
+                                accumulator.accept(a, u);
+                            }
+                        });
+                    }
+                },
+
+                downstream.finisher()
+        );
+    }
     
     /**
      * Returns a {@code Collector} that performs additional transformation.
      * 
      * @param <T> the type of the input elements
      * @param <A> the accumulation type
-     * @param <IR> the input type of transformation function
-     * @param <OR> the output type of transformation function
+     * @param <IR> the input type of the transformation function
+     * @param <OR> the output type of the transformation function
      * @param c  the input {@code Collector}
      * @param finisher  the final transformation function
      * @return a {@code Collector}
