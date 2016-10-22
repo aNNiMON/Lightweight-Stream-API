@@ -1,11 +1,14 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.*;
+import com.annimon.stream.test.hamcrest.OptionalIntMatcher;
+import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.hasValue;
 import com.annimon.stream.test.hamcrest.OptionalMatcher;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.elements;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.contains;
@@ -717,6 +720,88 @@ public class IntStreamTest {
         assertFalse(IntStream.empty().findFirst().isPresent());
         assertEquals(IntStream.of(42).findFirst().getAsInt(), 42);
         assertTrue(IntStream.rangeClosed(2, 5).findFirst().isPresent());
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testSingleOnEmptyStream() {
+        IntStream.empty().single();
+    }
+
+    @Test
+    public void testSingleOnOneElementStream() {
+        int result = IntStream.of(42).single();
+
+        assertThat(result, is(42));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testSingleOnMoreElementsStream() {
+        IntStream.rangeClosed(1, 2).single();
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testSingleAfterFilteringToEmptyStream() {
+        IntStream.range(1, 5)
+                .filter(Functions.remainderInt(6))
+                .single();
+    }
+
+    @Test
+    public void testSingleAfterFilteringToOneElementStream() {
+        int result = IntStream.range(1, 10)
+                .filter(Functions.remainderInt(6))
+                .single();
+
+        assertThat(result, is(6));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testSingleAfterFilteringToMoreElementStream() {
+        IntStream.range(1, 100)
+                .filter(Functions.remainderInt(6))
+                .single();
+    }
+
+    @Test
+    public void testFindSingleOnEmptyStream() {
+        assertThat(IntStream.empty().findSingle(), OptionalIntMatcher.isEmpty());
+    }
+
+    @Test
+    public void testFindSingleOnOneElementStream() {
+        OptionalInt result = IntStream.of(42).findSingle();
+
+        assertThat(result, hasValue(42));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testFindSingleOnMoreElementsStream() {
+        IntStream.rangeClosed(1, 2).findSingle();
+    }
+
+    @Test
+    public void testFindSingleAfterFilteringToEmptyStream() {
+        OptionalInt result = IntStream.range(1, 5)
+                .filter(Functions.remainderInt(6))
+                .findSingle();
+
+        assertThat(result, OptionalIntMatcher.isEmpty());
+    }
+
+    @Test
+    public void testFindSingleAfterFilteringToOneElementStream() {
+        OptionalInt result = IntStream.range(1, 10)
+                .filter(Functions.remainderInt(6))
+                .findSingle();
+
+        assertThat(result, hasValue(6));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testFindSingleAfterFilteringToMoreElementStream() {
+        IntStream.range(1, 100)
+                .filter(Functions.remainderInt(6))
+                .findSingle();
     }
 
     @Test(expected = NullPointerException.class)

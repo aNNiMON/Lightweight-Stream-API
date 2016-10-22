@@ -3,6 +3,7 @@ package com.annimon.stream;
 import com.annimon.stream.function.*;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.NoSuchElementException;
 
 /**
  * A sequence of primitive int-valued elements supporting sequential operations. This is the {@code int}
@@ -1117,6 +1118,79 @@ public final class IntStream {
     public OptionalInt findFirst() {
         if(iterator.hasNext()) {
             return OptionalInt.of(iterator.nextInt());
+        } else {
+            return OptionalInt.empty();
+        }
+    }
+
+    /**
+     * Returns the single element of stream.
+     * If stream is empty, throws {@code NoSuchElementException}.
+     * If stream contains more than one element, throws {@code IllegalStateException}.
+     *
+     * <p>This is a short-circuiting terminal operation.
+     *
+     * <p>Example:
+     * <pre>
+     * stream: []
+     * result: NoSuchElementException
+     *
+     * stream: [1]
+     * result: 1
+     *
+     * stream: [1, 2, 3]
+     * result: IllegalStateException
+     * </pre>
+     *
+     * @return single element of stream
+     * @throws NoSuchElementException if stream is empty
+     * @throws IllegalStateException if stream contains more than one element
+     * @since 1.1.3
+     */
+    public int single() {
+        if (iterator.hasNext()) {
+            int singleCandidate = iterator.next();
+            if (iterator.hasNext()) {
+                throw new IllegalStateException("IntStream contains more than one element");
+            } else {
+                return singleCandidate;
+            }
+        } else {
+            throw new NoSuchElementException("IntStream contains no element");
+        }
+    }
+
+    /**
+     * Returns the single element wrapped by {@code OptionalInt} class.
+     * If stream is empty, returns {@code OptionalInt.empty()}.
+     * If stream contains more than one element, throws {@code IllegalStateException}.
+     *
+     * <p>This is a short-circuiting terminal operation.
+     *
+     * <p>Example:
+     * <pre>
+     * stream: []
+     * result: OptionalInt.empty()
+     *
+     * stream: [1]
+     * result: OptionalInt.of(1)
+     *
+     * stream: [1, 2, 3]
+     * result: IllegalStateException
+     * </pre>
+     *
+     * @return an {@code OptionalInt} with single element or {@code OptionalInt.empty()} if stream is empty
+     * @throws IllegalStateException if stream contains more than one element
+     * @since 1.1.3
+     */
+    public OptionalInt findSingle() {
+        if (iterator.hasNext()) {
+            int singleCandidate = iterator.next();
+            if (iterator.hasNext()) {
+                throw new IllegalStateException("IntStream contains more than one element");
+            } else {
+                return OptionalInt.of(singleCandidate);
+            }
         } else {
             return OptionalInt.empty();
         }
