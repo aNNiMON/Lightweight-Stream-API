@@ -748,7 +748,7 @@ public class Stream<T> {
     }
 
     /**
-     * Returns {@code Stream} with distinct elements (as determinated by {@code equals} method).
+     * Returns {@code Stream} with distinct elements (as determinated by {@code hashCode} method).
      *
      * <p>This is a stateful intermediate operation.
      *
