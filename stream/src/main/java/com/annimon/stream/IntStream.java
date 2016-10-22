@@ -176,6 +176,13 @@ public final class IntStream {
      * {@code n}, will be the result of applying the function {@code f} to the
      * element at position {@code n - 1}.
      *
+     * <p>Example:
+     * <pre>
+     * seed: 1
+     * f: (a) -&gt; a + 5
+     * result: [1, 6, 11, 16, ...]
+     * </pre>
+     *
      * @param seed the initial element
      * @param f a function to be applied to to the previous element to produce
      *          a new element
@@ -208,6 +215,13 @@ public final class IntStream {
      * Creates a lazily concatenated stream whose elements are all the
      * elements of the first stream followed by all the elements of the
      * second stream.
+     *
+     * <p>Example:
+     * <pre>
+     * stream a: [1, 2, 3, 4]
+     * stream b: [5, 6]
+     * result:   [1, 2, 3, 4, 5, 6]
+     * </pre>
      *
      * @param a the first stream
      * @param b the second stream
@@ -346,6 +360,13 @@ public final class IntStream {
      *
      * <p> This is an intermediate operation.
      *
+     * <p>Example:
+     * <pre>
+     * predicate: (a) -&gt; a &gt; 2
+     * stream: [1, 2, 3, 4, -8, 0, 11]
+     * result: [3, 4, 11]
+     * </pre>
+     *
      * @param predicate non-interfering, stateless predicate to apply to each
      *                  element to determine if it should be included
      * @return the new stream
@@ -393,6 +414,13 @@ public final class IntStream {
      * function to the elements of this stream.
      *
      * <p> This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * mapper: (a) -&gt; a + 5
+     * stream: [1, 2, 3, 4]
+     * result: [6, 7, 8, 9]
+     * </pre>
      *
      * @param mapper a non-interfering stateless function to apply to
      *               each element
@@ -444,6 +472,13 @@ public final class IntStream {
      *
      * <p>This is an intermediate operation.
      *
+     * <p>Example:
+     * <pre>
+     * mapper: (a) -&gt; [a, a + 5]
+     * stream: [1, 2, 3, 4]
+     * result: [1, 6, 2, 7, 3, 8, 4, 9]
+     * </pre>
+     *
      * @param mapper a non-interfering stateless function to apply to each
      *               element which produces an {@code IntStream} of new values
      * @return the new stream
@@ -490,6 +525,12 @@ public final class IntStream {
      *
      * <p>This is a stateful intermediate operation.
      *
+     * <p>Example:
+     * <pre>
+     * stream: [1, 4, 2, 3, 3, 4, 1]
+     * result: [1, 4, 2, 3]
+     * </pre>
+     *
      * @return the new stream
      */
     public IntStream distinct() {
@@ -503,6 +544,12 @@ public final class IntStream {
      * order.
      *
      * <p>This is a stateful intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * stream: [3, 4, 1, 2]
+     * result: [1, 2, 3, 4]
+     * </pre>
      *
      * @return the new stream
      */
@@ -533,6 +580,13 @@ public final class IntStream {
      *
      * <p>This is a stateful intermediate operation.
      *
+     * <p>Example:
+     * <pre>
+     * comparator: (a, b) -&gt; -a.compareTo(b)
+     * stream: [1, 2, 3, 4]
+     * result: [4, 3, 2, 1]
+     * </pre>
+     *
      * @param comparator  the {@code Comparator} to compare elements
      * @return the new {@code IntStream}
      */
@@ -544,6 +598,13 @@ public final class IntStream {
      * Samples the {@code IntStream} by emitting every n-th element.
      *
      * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * stepWidth: 3
+     * stream: [1, 2, 3, 4, 5, 6, 7, 8]
+     * result: [1, 4, 7]
+     * </pre>
      *
      * @param stepWidth  step width
      * @return the new {@code IntStream}
@@ -604,6 +665,13 @@ public final class IntStream {
      *
      * <p>This is an intermediate operation.
      *
+     * <p>Example:
+     * <pre>
+     * predicate: (a) -&gt; a &lt; 3
+     * stream: [1, 2, 3, 4, 1, 2, 3, 4]
+     * result: [1, 2]
+     * </pre>
+     *
      * @param predicate  the predicate used to take elements
      * @return the new {@code IntStream}
      */
@@ -621,6 +689,13 @@ public final class IntStream {
      * Drops elements while the predicate is true and returns the rest.
      *
      * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * predicate: (a) -&gt; a &lt; 3
+     * stream: [1, 2, 3, 4, 1, 2, 3, 4]
+     * result: [3, 4, 1, 2, 3, 4]
+     * </pre>
      *
      * @param predicate  the predicate used to drop elements
      * @return the new {@code IntStream}
@@ -653,6 +728,17 @@ public final class IntStream {
      * to be no longer than {@code maxSize} in length.
      *
      * <p> This is a short-circuiting stateful intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * maxSize: 3
+     * stream: [1, 2, 3, 4, 5]
+     * result: [1, 2, 3]
+     *
+     * maxSize: 10
+     * stream: [1, 2]
+     * result: [1, 2]
+     * </pre>
      *
      * @param maxSize the number of elements the stream should be limited to
      * @return the new stream
@@ -689,6 +775,17 @@ public final class IntStream {
      * empty stream will be returned.
      *
      * <p>This is a stateful intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * n: 3
+     * stream: [1, 2, 3, 4, 5]
+     * result: [4, 5]
+     *
+     * n: 10
+     * stream: [1, 2]
+     * result: []
+     * </pre>
      *
      * @param n the number of leading elements to skip
      * @return the new stream
@@ -748,6 +845,14 @@ public final class IntStream {
      * The {@code accumulator} function must be an associative function.
      *
      * <p>This is a terminal operation.
+     *
+     * <p>Example:
+     * <pre>
+     * identity: 0
+     * accumulator: (a, b) -&gt; a + b
+     * stream: [1, 2, 3, 4, 5]
+     * result: 15
+     * </pre>
      *
      * @param identity the identity value for the accumulating function
      * @param op an associative non-interfering stateless function for
@@ -905,6 +1010,17 @@ public final class IntStream {
      *
      * <p>This is a short-circuiting terminal operation.
      *
+     * <p>Example:
+     * <pre>
+     * predicate: (a) -&gt; a == 5
+     * stream: [1, 2, 3, 4, 5]
+     * result: true
+     *
+     * predicate: (a) -&gt; a == 5
+     * stream: [5, 5, 5]
+     * result: true
+     * </pre>
+     *
      * @param predicate a non-interfering stateless predicate to apply
      *                  to elements of this stream
      * @return {@code true} if any elements of the stream match the provided
@@ -927,6 +1043,17 @@ public final class IntStream {
      *
      * <p>This is a short-circuiting terminal operation.
      *
+     * <p>Example:
+     * <pre>
+     * predicate: (a) -&gt; a == 5
+     * stream: [1, 2, 3, 4, 5]
+     * result: false
+     *
+     * predicate: (a) -&gt; a == 5
+     * stream: [5, 5, 5]
+     * result: true
+     * </pre>
+     *
      * @param predicate a non-interfering stateless predicate to apply to
      *                  elements of this stream
      * @return {@code true} if either all elements of the stream match the
@@ -948,6 +1075,17 @@ public final class IntStream {
      * returned and the predicate is not evaluated.
      *
      * <p>This is a short-circuiting terminal operation.
+     *
+     * <p>Example:
+     * <pre>
+     * predicate: (a) -&gt; a == 5
+     * stream: [1, 2, 3, 4, 5]
+     * result: false
+     *
+     * predicate: (a) -&gt; a == 5
+     * stream: [1, 2, 3]
+     * result: true
+     * </pre>
      *
      * @param predicate a non-interfering stateless predicate to apply to
      *                  elements of this stream

@@ -34,7 +34,8 @@ public final class Collectors {
     private Collectors() { }
     
     /**
-     * Returns a {@code Collector} that fills new {@code Collection}, provided by {@code collectionSupplier}, with input elements.
+     * Returns a {@code Collector} that fills new {@code Collection}, provided by {@code collectionSupplier},
+     * with input elements.
      * 
      * @param <T> the type of the input elements
      * @param <R> the type of the resulting collection

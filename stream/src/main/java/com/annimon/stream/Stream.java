@@ -103,6 +103,7 @@ public class Stream<T> {
      * @param from  the initial value (inclusive)
      * @param to  the upper bound (exclusive)
      * @return the new stream
+     * @see IntStream#range(int, int)
      */
     public static Stream<Integer> range(final int from, final int to) {
         return new Stream<Integer>(new LsaIterator<Integer>() {
@@ -181,6 +182,7 @@ public class Stream<T> {
      * @param from  the initial value (inclusive)
      * @param to  the upper bound (inclusive)
      * @return the new stream
+     * @see IntStream#rangeClosed(int, int)
      */
     public static Stream<Integer> rangeClosed(final int from, final int to) {
         return new Stream<Integer>(new LsaIterator<Integer>() {
@@ -287,7 +289,16 @@ public class Stream<T> {
     }
 
     /**
-     * Creates a {@code Stream} by applying {@code UnaryOperator} operation to an initial element {@code seed}.
+     * Creates a {@code Stream} by iterative application {@code UnaryOperator} function
+     * to an initial element {@code seed}. Produces {@code Stream} consisting of
+     * {@code seed}, {@code op(seed)}, {@code op(op(seed))}, etc.
+     *
+     * <p>Example:
+     * <pre>
+     * seed: 1
+     * op: (a) -&gt; a + 5
+     * result: [1, 6, 11, 16, ...]
+     * </pre>
      *
      * @param <T> the type of the stream elements
      * @param seed  the initial value
@@ -323,6 +334,13 @@ public class Stream<T> {
     /**
      * Concatenates two streams.
      *
+     * <p>Example:
+     * <pre>
+     * stream 1: [1, 2, 3, 4]
+     * stream 2: [5, 6]
+     * result:   [1, 2, 3, 4, 5, 6]
+     * </pre>
+     *
      * @param <T> The type of stream elements
      * @param stream1  the first stream
      * @param stream2  the second stream
@@ -356,6 +374,14 @@ public class Stream<T> {
     /**
      * Combines two streams by applying specified combiner function to each element at same position.
      *
+     * <p>Example:
+     * <pre>
+     * combiner: (a, b) -&gt; a + b
+     * stream 1: [1, 2, 3, 4]
+     * stream 2: [5, 6, 7, 8]
+     * result:   [6, 8, 10, 12]
+     * </pre>
+     *
      * @param <F> the type of first stream elements
      * @param <S> the type of second stream elements
      * @param <R> the type of elements in resulting stream
@@ -374,6 +400,14 @@ public class Stream<T> {
 
     /**
      * Combines two iterators to a stream by applying specified combiner function to each element at same position.
+     *
+     * <p>Example:
+     * <pre>
+     * combiner: (a, b) -&gt; a + b
+     * stream 1: [1, 2, 3, 4]
+     * stream 2: [5, 6, 7, 8]
+     * result:   [6, 8, 10, 12]
+     * </pre>
      *
      * @param <F> the type of first iterator elements
      * @param <S> the type of second iterator elements
@@ -504,6 +538,13 @@ public class Stream<T> {
      *
      * <p>This is an intermediate operation.
      *
+     * <p>Example:
+     * <pre>
+     * predicate: (a) -&gt; a &gt; 2
+     * stream: [1, 2, 3, 4, -8, 0, 11]
+     * result: [3, 4, 11]
+     * </pre>
+     *
      * @param predicate  the predicate used to filter elements
      * @return the new stream
      */
@@ -572,7 +613,7 @@ public class Stream<T> {
      *
      * @param <TT> a type of instances to select.
      * @param clazz a class which instances should be selected
-     * @return the new stream of type passed as param
+     * @return the new stream of type passed as parameter
      */
     @SuppressWarnings("unchecked")
     public <TT> Stream<TT> select(final Class<TT> clazz) {
@@ -588,6 +629,13 @@ public class Stream<T> {
      * Returns {@code Stream} with elements that obtained by applying the given function.
      *
      * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * mapper: (a) -&gt; a + 5
+     * stream: [1, 2, 3, 4]
+     * result: [6, 7, 8, 9]
+     * </pre>
      *
      * @param <R> the type of elements in resulting stream
      * @param mapper  the mapper function used to apply to each element
@@ -636,6 +684,13 @@ public class Stream<T> {
      * Generates {@code Stream} by concatenating elements that obtained by applying the given function.
      *
      * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * mapper: (a) -&gt; [a, a + 5]
+     * stream: [1, 2, 3, 4]
+     * result: [1, 6, 2, 7, 3, 8, 4, 9]
+     * </pre>
      *
      * @param <R> the type of elements in resulting stream
      * @param mapper  the mapper function used to apply to each element
@@ -718,6 +773,12 @@ public class Stream<T> {
      *
      * <p>This is an intermediate operation.
      *
+     * <p>Example:
+     * <pre>
+     * stream: ["a", "b", "c"]
+     * result: [(0, "a"), (1, "b"), (2, "c")]
+     * </pre>
+     *
      * @return the new {@code IntPair} stream
      * @since 1.1.2
      */
@@ -729,6 +790,13 @@ public class Stream<T> {
      * Returns {@code Stream} with indexed elements.
      *
      * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * from: 5, step: 10
+     * stream: ["a", "b", "c"]
+     * result: [(5, "a"), (15, "b"), (25, "c")]
+     * </pre>
      *
      * @param from  the initial value (inclusive)
      * @param step  the step
@@ -748,9 +816,15 @@ public class Stream<T> {
     }
 
     /**
-     * Returns {@code Stream} with distinct elements (as determinated by {@code hashCode} method).
+     * Returns {@code Stream} with distinct elements (as determinated by {@code hashCode} and {@code equals} methods).
      *
      * <p>This is a stateful intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * stream: [1, 4, 2, 3, 3, 4, 1]
+     * result: [1, 4, 2, 3]
+     * </pre>
      *
      * @return the new stream
      */
@@ -783,6 +857,12 @@ public class Stream<T> {
      * <p>If the elements of this stream are not {@code Comparable},
      * a {@code java.lang.ClassCastException} may be thrown when the terminal operation is executed.
      *
+     * <p>Example:
+     * <pre>
+     * stream: [3, 4, 1, 2]
+     * result: [1, 2, 3, 4]
+     * </pre>
+     *
      * @return the new stream
      */
     public Stream<T> sorted() {
@@ -802,6 +882,13 @@ public class Stream<T> {
      * Returns {@code Stream} with sorted elements (as determinated by provided {@code Comparator}).
      *
      * <p>This is a stateful intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * comparator: (a, b) -&gt; -a.compareTo(b)
+     * stream: [1, 2, 3, 4]
+     * result: [4, 3, 2, 1]
+     * </pre>
      *
      * @param comparator  the {@code Comparator} to compare elements
      * @return the new stream
@@ -832,6 +919,13 @@ public class Stream<T> {
      *
      * <p>This is a stateful intermediate operation.
      *
+     * <p>Example:
+     * <pre>
+     * f: (a) -&gt; -a
+     * stream: [1, 2, 3, 4]
+     * result: [4, 3, 2, 1]
+     * </pre>
+     *
      * @param <R> the type of the result of transforming function
      * @param f  the transformation function
      * @return the new stream
@@ -850,6 +944,13 @@ public class Stream<T> {
      *
      * <p>This is a stateful intermediate operation.
      *
+     * <p>Example:
+     * <pre>
+     * classifier: (str) -&gt; str.length()
+     * stream: ["a", "bc", "d", "ef", "ghij"]
+     * result: [{1: ["a", "d"]}, {2: ["bc", "ef"]}, {4: ["ghij"]}]
+     * </pre>
+     *
      * @param <K> the type of the keys, which are result of the classifier function
      * @param classifier  the classifier function
      * @return the new stream
@@ -866,6 +967,13 @@ public class Stream<T> {
      * belong to the same chunk as the previous elements.
      *
      * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * classifier: (a) -&gt; a % 5 == 0
+     * stream: [1, 2, 5, 6, 7, 9, 10, 12, 14]
+     * result: [[1, 2], [5], [6, 7, 9], [10], [12, 14]]
+     * </pre>
      *
      * @param <K> the type of the keys, which are the result of the classifier function
      * @param classifier  the classifier function
@@ -915,6 +1023,13 @@ public class Stream<T> {
      *
      * <p>This is an intermediate operation.
      *
+     * <p>Example:
+     * <pre>
+     * stepWidth: 3
+     * stream: [1, 2, 3, 4, 5, 6, 7, 8]
+     * result: [1, 4, 7]
+     * </pre>
+     *
      * @param stepWidth  step width
      * @return the new stream
      * @throws IllegalArgumentException if {@code stepWidth} is zero or negative
@@ -937,6 +1052,13 @@ public class Stream<T> {
      *
      * <p>This is an intermediate operation.
      *
+     * <p>Example:
+     * <pre>
+     * windowSize: 3
+     * stream: [1, 2, 3, 4, 5]
+     * result: [[1, 2, 3], [2, 3, 4], [3, 4, 5]]
+     * </pre>
+     *
      * @param windowSize  number of elements that will be emitted together in a list
      * @return the new stream
      * @see #slidingWindow(int, int)
@@ -954,20 +1076,19 @@ public class Stream<T> {
      *
      * <p>This is an intermediate operation.
      *
-     * <p>Examples: <pre>
-     * elements: [1, 1, 1, 2, 2, 2, 3, 3, 3]    windowSize: 3   stepWidth: 3
+     * <p>Example:
+     * <pre>
+     * windowSize: 3, stepWidth: 3
+     * stream: [1, 1, 1, 2, 2, 2, 3, 3, 3]
+     * result: [[1, 1, 1], [2, 2, 2] [3, 3, 3]]
      *
-     * =&gt; [1, 1, 1], [2, 2, 2] [3, 3, 3]
+     * windowSize: 2, stepWidth: 3
+     * stream: [1, 2, 3, 1, 2, 3, 1, 2, 3]
+     * result: [[1, 2], [1, 2], [1, 2]]
      *
-     *
-     * elements: [1, 2, 3, 1, 2, 3, 1, 2, 3]    windowSize: 2   stepWidth: 3
-     *
-     * =&gt; [1, 2], [1, 2], [1, 2]
-     *
-     *
-     * elements: [1, 2, 3, 4, 5, 6]             windowSize: 3   stepWidth: 1
-     *
-     * =&gt; [1, 2, 3], [2, 3, 4], [3, 4, 5], [4, 5, 6]
+     * windowSize: 3, stepWidth: 1
+     * stream: [1, 2, 3, 4, 5, 6]
+     * result: [[1, 2, 3], [2, 3, 4], [3, 4, 5], [4, 5, 6]]
      * </pre>
      *
      * @param windowSize  number of elements that will be emitted together in a list
@@ -1044,6 +1165,13 @@ public class Stream<T> {
      *
      * <p>This is an intermediate operation.
      *
+     * <p>Example:
+     * <pre>
+     * predicate: (a) -&gt; a &lt; 3
+     * stream: [1, 2, 3, 4, 1, 2, 3, 4]
+     * result: [1, 2]
+     * </pre>
+     *
      * @param predicate  the predicate used to take elements
      * @return the new stream
      */
@@ -1061,6 +1189,13 @@ public class Stream<T> {
      * Drops elements while the predicate is true and returns the rest.
      *
      * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * predicate: (a) -&gt; a &lt; 3
+     * stream: [1, 2, 3, 4, 1, 2, 3, 4]
+     * result: [3, 4, 1, 2, 3, 4]
+     * </pre>
      *
      * @param predicate  the predicate used to drop elements
      * @return the new stream
@@ -1092,6 +1227,17 @@ public class Stream<T> {
      * Returns {@code Stream} with first {@code maxSize} elements.
      *
      * <p>This is a short-circuiting stateful intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * maxSize: 3
+     * stream: [1, 2, 3, 4, 5]
+     * result: [1, 2, 3]
+     *
+     * maxSize: 10
+     * stream: [1, 2]
+     * result: [1, 2]
+     * </pre>
      *
      * @param maxSize  the number of elements to limit
      * @return the new stream
@@ -1125,6 +1271,17 @@ public class Stream<T> {
      * Skips first {@code n} elements and returns {@code Stream} with remaining elements.
      *
      * <p>This is a stateful intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * n: 3
+     * stream: [1, 2, 3, 4, 5]
+     * result: [4, 5]
+     *
+     * n: 10
+     * stream: [1, 2]
+     * result: []
+     * </pre>
      *
      * @param n  the number of elements to skip
      * @return the new stream
@@ -1175,6 +1332,14 @@ public class Stream<T> {
      * Reduces the elements using provided identity value and the associative accumulation function.
      *
      * <p>This is a terminal operation.
+     *
+     * <p>Example:
+     * <pre>
+     * identity: 0
+     * accumulator: (a, b) -&gt; a + b
+     * stream: [1, 2, 3, 4, 5]
+     * result: 15
+     * </pre>
      *
      * @param <R> the type of the result
      * @param identity  the initial value
@@ -1303,6 +1468,13 @@ public class Stream<T> {
      *
      * <p>This is a terminal operation.
      *
+     * <p>Example:
+     * <pre>
+     * comparator: (a, b) -&gt; a.compareTo(b)
+     * stream: [1, 2, 3, 4, 5]
+     * result: 1
+     * </pre>
+     *
      * @param comparator  the {@code Comparator} to compare elements
      * @return the minimum element
      */
@@ -1314,6 +1486,13 @@ public class Stream<T> {
      * Finds the maximum element according to the given comparator.
      *
      * <p>This is a terminal operation.
+     *
+     * <p>Example:
+     * <pre>
+     * comparator: (a, b) -&gt; a.compareTo(b)
+     * stream: [1, 2, 3, 4, 5]
+     * result: 5
+     * </pre>
      *
      * @param comparator  the {@code Comparator} to compare elements
      * @return the maximum element
@@ -1343,6 +1522,17 @@ public class Stream<T> {
      *
      * <p>This is a short-circuiting terminal operation.
      *
+     * <p>Example:
+     * <pre>
+     * predicate: (a) -&gt; a == 5
+     * stream: [1, 2, 3, 4, 5]
+     * result: true
+     *
+     * predicate: (a) -&gt; a == 5
+     * stream: [5, 5, 5]
+     * result: true
+     * </pre>
+     *
      * @param predicate  the predicate used to match elements
      * @return {@code true} if any elements match the given predicate, otherwise {@code false}
      */
@@ -1355,6 +1545,17 @@ public class Stream<T> {
      *
      * <p>This is a short-circuiting terminal operation.
      *
+     * <p>Example:
+     * <pre>
+     * predicate: (a) -&gt; a == 5
+     * stream: [1, 2, 3, 4, 5]
+     * result: false
+     *
+     * predicate: (a) -&gt; a == 5
+     * stream: [5, 5, 5]
+     * result: true
+     * </pre>
+     *
      * @param predicate  the predicate used to match elements
      * @return {@code true} if all elements match the given predicate, otherwise {@code false}
      */
@@ -1366,6 +1567,17 @@ public class Stream<T> {
      * Tests whether no elements match the given predicate.
      *
      * <p>This is a short-circuiting terminal operation.
+     *
+     * <p>Example:
+     * <pre>
+     * predicate: (a) -&gt; a == 5
+     * stream: [1, 2, 3, 4, 5]
+     * result: false
+     *
+     * predicate: (a) -&gt; a == 5
+     * stream: [1, 2, 3]
+     * result: true
+     * </pre>
      *
      * @param predicate  the predicate used to match elements
      * @return {@code true} if no elements match the given predicate, otherwise {@code false}
@@ -1396,6 +1608,18 @@ public class Stream<T> {
      *
      * <p>This is a short-circuiting terminal operation.
      *
+     * <p>Example:
+     * <pre>
+     * stream: []
+     * result: NoSuchElementException
+     *
+     * stream: [1]
+     * result: 1
+     *
+     * stream: [1, 2, 3]
+     * result: IllegalStateException
+     * </pre>
+     *
      * @return single element of stream
      * @throws NoSuchElementException if stream is empty
      * @throws IllegalStateException if stream contains more than one element
@@ -1420,6 +1644,18 @@ public class Stream<T> {
      * If stream contains more than one element, throws {@code IllegalStateException}.
      *
      * <p>This is a short-circuiting terminal operation.
+     *
+     * <p>Example:
+     * <pre>
+     * stream: []
+     * result: Optional.empty()
+     *
+     * stream: [1]
+     * result: Optional.of(1)
+     *
+     * stream: [1, 2, 3]
+     * result: IllegalStateException
+     * </pre>
      *
      * @return an {@code Optional} with single element or {@code Optional.empty()} if stream is empty
      * @throws IllegalStateException if stream contains more than one element
