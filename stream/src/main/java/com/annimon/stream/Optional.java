@@ -4,6 +4,7 @@ import com.annimon.stream.function.Consumer;
 import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Predicate;
 import com.annimon.stream.function.Supplier;
+import com.annimon.stream.function.ToIntFunction;
 import java.util.NoSuchElementException;
 
 /**
@@ -157,6 +158,18 @@ public class Optional<T> {
     public <U> Optional<U> map(Function<? super T, ? extends U> mapper) {
         if (!isPresent()) return empty();
         return Optional.ofNullable(mapper.apply(value));
+    }
+
+    /**
+     * Invokes mapping function on inner value if present.
+     *
+     * @param mapper  mapping function
+     * @return an {@code OptionalInt} with transformed value if present, otherwise an empty {@code OptionalInt}
+     * @since 1.1.3
+     */
+    public OptionalInt mapToInt(ToIntFunction<? super T> mapper) {
+        if (!isPresent()) return OptionalInt.empty();
+        return OptionalInt.of(mapper.applyAsInt(value));
     }
     
     /**

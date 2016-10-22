@@ -2,7 +2,9 @@ package com.annimon.stream;
 
 import com.annimon.stream.function.Supplier;
 import com.annimon.stream.function.IntConsumer;
+import com.annimon.stream.function.IntFunction;
 import com.annimon.stream.function.IntSupplier;
+import com.annimon.stream.function.IntUnaryOperator;
 
 import java.util.NoSuchElementException;
 
@@ -125,6 +127,31 @@ public final class OptionalInt {
         if (!isPresent())
             action.run();
         return this;
+    }
+
+    /**
+     * Invokes mapping function on inner value if present.
+     *
+     * @param mapper  mapping function
+     * @return an {@code OptionalInt} with transformed value if present, otherwise an empty {@code OptionalInt}
+     * @since 1.1.3
+     */
+    public OptionalInt map(IntUnaryOperator mapper) {
+        if (!isPresent()) return empty();
+        return OptionalInt.of(mapper.applyAsInt(value));
+    }
+
+    /**
+     * Invokes mapping function on inner value if present.
+     *
+     * @param <U> the type of result value
+     * @param mapper  mapping function
+     * @return an {@code Optional} with transformed value if present, otherwise an empty {@code Optional}
+     * @since 1.1.3
+     */
+    public <U> Optional<U> mapToObj(IntFunction<U> mapper) {
+        if (!isPresent()) return Optional.empty();
+        return Optional.ofNullable(mapper.apply(value));
     }
 
     /**
