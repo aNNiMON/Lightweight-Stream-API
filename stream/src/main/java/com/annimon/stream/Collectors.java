@@ -792,23 +792,23 @@ public final class Collectors {
     
     private static final class CollectorsImpl<T, A, R> implements Collector<T, A, R> {
         
-        private final Supplier<A> suppiler;
+        private final Supplier<A> supplier;
         private final BiConsumer<A, T> accumulator;
         private final Function<A, R> finisher;
 
-        public CollectorsImpl(Supplier<A> suppiler, BiConsumer<A, T> accumulator) {
-            this(suppiler, accumulator, null);
+        public CollectorsImpl(Supplier<A> supplier, BiConsumer<A, T> accumulator) {
+            this(supplier, accumulator, null);
         }
         
-        public CollectorsImpl(Supplier<A> suppiler, BiConsumer<A, T> accumulator, Function<A, R> finisher) {
-            this.suppiler = suppiler;
+        public CollectorsImpl(Supplier<A> supplier, BiConsumer<A, T> accumulator, Function<A, R> finisher) {
+            this.supplier = supplier;
             this.accumulator = accumulator;
             this.finisher = finisher;
         }
         
         @Override
         public Supplier<A> supplier() {
-            return suppiler;
+            return supplier;
         }
 
         @Override
