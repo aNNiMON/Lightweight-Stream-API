@@ -30,7 +30,7 @@ import com.annimon.stream.function.ThrowableSupplier;
  * @param <T> the type of the inner value
  */
 public class Exceptional<T> {
-    
+
     /**
      * Returns an {@code Exceptional} with value provided by given {@code ThrowableSupplier} function.
      * 
@@ -44,6 +44,16 @@ public class Exceptional<T> {
         } catch (Throwable throwable) {
             return new Exceptional<T>(null, throwable);
         }
+    }
+
+    /**
+     * Returns an {@code Exceptional} with throwable already set.
+     *
+     * @param <T> the type of value
+     * @return an {@code Exceptional}
+     */
+    public static <T> Exceptional<T> of(Throwable throwable) {
+        return new Exceptional<T>(null, throwable);
     }
     
     private final T value;
