@@ -56,6 +56,11 @@ public class ExceptionalTest {
         assertThat(throwable, instanceOf(IOException.class));
     }
 
+    @Test
+    public void testGetExceptionFromAlreadySuppliedThrowable() {
+        Throwable throwable = Exceptional.of(new IOException()).getException();
+        assertThat(throwable, instanceOf(IOException.class));
+    }
 
     @Test
     public void testGetOrThrowWithoutException() throws Throwable {
