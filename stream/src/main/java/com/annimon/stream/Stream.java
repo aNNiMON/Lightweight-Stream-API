@@ -681,7 +681,34 @@ public class Stream<T> {
     }
 
     /**
-     * Generates {@code Stream} by concatenating elements that obtained by applying the given function.
+     * Returns {@code DoubleStream} with elements that obtained by applying the given function.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @param mapper  the mapper function used to apply to each element
+     * @return the new {@code DoubleStream}
+     * @since 1.1.4
+     * @see #map(com.annimon.stream.function.Function)
+     */
+    public DoubleStream mapToDouble(final ToDoubleFunction<? super T> mapper) {
+        return DoubleStream.of(new PrimitiveIterator.OfDouble() {
+
+            @Override
+            public boolean hasNext() {
+                return iterator.hasNext();
+            }
+
+            @Override
+            public double nextDouble() {
+                return mapper.applyAsDouble(iterator.next());
+            }
+        });
+    }
+
+    /**
+     * Returns a stream consisting of the results of replacing each element of
+     * this stream with the contents of a mapped stream produced by applying
+     * the provided mapping function to each element.
      *
      * <p>This is an intermediate operation.
      *
@@ -752,6 +779,48 @@ public class Stream<T> {
                     if (inner == null || !inner.hasNext()) {
                         final T arg = iterator.next();
                         final IntStream result = mapper.apply(arg);
+                        if (result != null) {
+                            inner = result.iterator();
+                        }
+                    }
+                    if ((inner != null) && inner.hasNext()) {
+                        next = inner.next();
+                        hasNext = true;
+                        return;
+                    }
+                }
+                hasNext = false;
+            }
+        });
+    }
+
+    /**
+     * Returns a stream consisting of the results of replacing each element of
+     * this stream with the contents of a mapped stream produced by applying
+     * the provided mapping function to each element.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @param mapper  the mapper function used to apply to each element
+     * @return the new {@code DoubleStream}
+     * @see #flatMap(com.annimon.stream.function.Function)
+     */
+    public DoubleStream flatMapToDouble(final Function<? super T, ? extends DoubleStream> mapper) {
+        return DoubleStream.of(new PrimitiveExtIterator.OfDouble() {
+
+            private PrimitiveIterator.OfDouble inner;
+
+            @Override
+            protected void nextIteration() {
+                if ((inner != null) && inner.hasNext()) {
+                    next = inner.next();
+                    hasNext = true;
+                    return;
+                }
+                while (iterator.hasNext()) {
+                    if (inner == null || !inner.hasNext()) {
+                        final T arg = iterator.next();
+                        final DoubleStream result = mapper.apply(arg);
                         if (result != null) {
                             inner = result.iterator();
                         }

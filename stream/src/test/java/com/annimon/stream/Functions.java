@@ -2,6 +2,7 @@ package com.annimon.stream;
 
 import com.annimon.stream.function.BiConsumer;
 import com.annimon.stream.function.BiFunction;
+import com.annimon.stream.function.DoublePredicate;
 import com.annimon.stream.function.Function;
 import com.annimon.stream.function.IntFunction;
 import com.annimon.stream.function.IntPredicate;
@@ -28,20 +29,20 @@ public final class Functions {
             }
         };
     }
-    
+
     public static <T> Function<T, String> convertToString() {
         return new Function<T, String>() {
-            
+
             @Override
             public String apply(T value) {
                 return String.valueOf(value);
             }
         };
     }
-    
+
     public static Function<String, Integer> stringToInteger() {
         return new Function<String, Integer>() {
-            
+
             @Override
             public Integer apply(String value) {
                 return Integer.parseInt(value);
@@ -61,17 +62,17 @@ public final class Functions {
 
     public static <K, V> Function<Map.Entry<K, V>, K> entryKey() {
         return new Function<Map.Entry<K, V>, K>() {
-            
+
             @Override
             public K apply(Map.Entry<K, V> value) {
                 return value.getKey();
             }
         };
     }
-    
+
     public static <K, V> Function<Map.Entry<K, V>, V> entryValue() {
         return new Function<Map.Entry<K, V>, V>() {
-            
+
             @Override
             public V apply(Map.Entry<K, V> value) {
                 return value.getValue();
@@ -87,7 +88,7 @@ public final class Functions {
             }
         };
     }
-    
+
     public static Function<String, Character> firstCharacterExtractor() {
         return new Function<String, Character>() {
 
@@ -97,7 +98,7 @@ public final class Functions {
             }
         };
     }
-    
+
     public static <T> Function<T, Boolean> equalityPartitionItem(final T item) {
         return new Function<T, Boolean>() {
 
@@ -107,10 +108,10 @@ public final class Functions {
             }
         };
     }
-    
+
     public static Iterator<Integer> counterIterator() {
         return new Iterator<Integer>() {
-            
+
             private int index = 0;
 
             @Override
@@ -127,10 +128,10 @@ public final class Functions {
             public void remove() { }
         };
     }
-    
+
     public static Supplier<Long> fibonacci() {
         return new Supplier<Long>() {
-            
+
             private long beforePrevious = 0;
             private long previous = 0;
 
@@ -144,10 +145,10 @@ public final class Functions {
             }
         };
     }
-    
+
     public static Predicate<Integer> remainder(final int val) {
         return new Predicate<Integer>() {
-            
+
             @Override
             public boolean test(Integer v) {
                 return (v % val == 0);
@@ -164,7 +165,17 @@ public final class Functions {
             }
         };
     }
-    
+
+    public static DoublePredicate greaterThan(final double value) {
+        return new DoublePredicate() {
+
+            @Override
+            public boolean test(double v) {
+                return v > value;
+            }
+        };
+    }
+
     public static BiFunction<Integer, Integer, Integer> addition() {
         return new BiFunction<Integer, Integer, Integer>() {
 
@@ -174,7 +185,7 @@ public final class Functions {
             }
         };
     }
-    
+
     public static Comparator<Integer> naturalOrder() {
         return new Comparator<Integer>() {
 
@@ -184,7 +195,7 @@ public final class Functions {
             }
         };
     }
-    
+
     public static Comparator<Integer> descendingAbsoluteOrder() {
         return new Comparator<Integer>() {
 
@@ -194,7 +205,7 @@ public final class Functions {
             }
         };
     }
-    
+
     public static Supplier<StringBuilder> stringBuilderSupplier() {
         return new Supplier<StringBuilder>() {
 
@@ -204,7 +215,7 @@ public final class Functions {
             }
         };
     }
-    
+
     public static BiConsumer<StringBuilder, CharSequence> joiningAccumulator() {
         return new BiConsumer<StringBuilder, CharSequence>() {
 
@@ -214,7 +225,7 @@ public final class Functions {
             }
         };
     }
-    
+
     public static Collector<CharSequence, ?, String> joiningCollector() {
         return new Collector<CharSequence, StringBuilder, String>() {
 

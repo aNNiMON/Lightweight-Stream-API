@@ -36,4 +36,31 @@ public final class PrimitiveExtIterator {
         protected abstract void nextIteration();
     }
 
+    public static abstract class OfDouble extends PrimitiveIterator.OfDouble {
+
+        protected double next;
+        protected boolean hasNext, isInit;
+
+        @Override
+        public boolean hasNext() {
+            if (!isInit) {
+                nextIteration();
+                isInit = true;
+            }
+            return hasNext;
+        }
+
+        @Override
+        public double nextDouble() {
+            if (!hasNext) {
+                throw new NoSuchElementException();
+            }
+            final double result = next;
+            nextIteration();
+            return result;
+        }
+
+        protected abstract void nextIteration();
+    }
+
 }

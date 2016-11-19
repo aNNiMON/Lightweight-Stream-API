@@ -467,6 +467,32 @@ public final class IntStream {
     }
 
     /**
+     * Returns a {@code DoubleStream} consisting of the results of applying the given
+     * function to the elements of this stream.
+     *
+     * <p> This is an intermediate operation.
+     *
+     * @param mapper  the mapper function used to apply to each element
+     * @return the new {@code DoubleStream}
+     * @since 1.1.4
+     * @see #flatMap(com.annimon.stream.function.IntFunction)
+     */
+    public DoubleStream mapToDouble(final IntToDoubleFunction mapper) {
+        return DoubleStream.of(new PrimitiveIterator.OfDouble() {
+
+            @Override
+            public boolean hasNext() {
+                return iterator.hasNext();
+            }
+
+            @Override
+            public double nextDouble() {
+                return mapper.applyAsDouble(iterator.nextInt());
+            }
+        });
+    }
+
+    /**
      * Returns a stream consisting of the results of replacing each element of
      * this stream with the contents of a mapped stream produced by applying
      * the provided mapping function to each element.

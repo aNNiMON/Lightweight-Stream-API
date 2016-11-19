@@ -1,6 +1,7 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.*;
+import com.annimon.stream.test.hamcrest.DoubleStreamMatcher;
 import com.annimon.stream.test.hamcrest.OptionalIntMatcher;
 import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.hasValue;
 import com.annimon.stream.test.hamcrest.OptionalMatcher;
@@ -10,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.array;
 import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -237,6 +239,22 @@ public class IntStreamTest {
                 });
         List<String> expected = Arrays.asList("2", "3", "4");
         assertThat(stream, elements(is(expected)));
+    }
+
+    @Test
+    public void testMapToDouble() {
+        DoubleStream stream = IntStream.rangeClosed(2, 4)
+                .mapToDouble(new IntToDoubleFunction() {
+                    @Override
+                    public double applyAsDouble(int value) {
+                        return value / 10d;
+                    }
+                });
+        assertThat(stream, DoubleStreamMatcher.elements(array(
+                closeTo(0.2, 0.00001),
+                closeTo(0.3, 0.00001),
+                closeTo(0.4, 0.00001)
+        )));
     }
 
     @Test

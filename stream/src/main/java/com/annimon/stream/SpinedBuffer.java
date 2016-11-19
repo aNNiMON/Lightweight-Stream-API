@@ -1,7 +1,7 @@
 package com.annimon.stream;
 
+import com.annimon.stream.function.DoubleConsumer;
 import com.annimon.stream.function.IntConsumer;
-
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -32,7 +32,7 @@ final class SpinedBuffer {
 
         protected abstract T_ARR[] newArrayArray(int size);
 
-        public abstract T_ARR newArray(int size);
+        protected abstract T_ARR newArray(int size);
 
         protected abstract int arrayLength(T_ARR array);
 
@@ -191,8 +191,63 @@ final class SpinedBuffer {
 
                 @Override
                 public int nextInt() {
-                    index++;
-                    return get(index-1);
+                    return get(index++);
+                }
+
+                @Override
+                public boolean hasNext() {
+                    return index < count();
+                }
+            };
+        }
+    }
+
+    static class OfDouble extends SpinedBuffer.OfPrimitive<Double, double[], DoubleConsumer>
+            implements DoubleConsumer {
+        OfDouble() { }
+
+        OfDouble(int initialCapacity) {
+            super(initialCapacity);
+        }
+
+        @Override
+        protected double[][] newArrayArray(int size) {
+            return new double[size][];
+        }
+
+        @Override
+        public double[] newArray(int size) {
+            return new double[size];
+        }
+
+        @Override
+        protected int arrayLength(double[] array) {
+            return array.length;
+        }
+
+        @Override
+        public void accept(double i) {
+            preAccept();
+            curChunk[elementIndex++] = i;
+        }
+
+        public double get(long index) {
+            int ch = chunkFor(index);
+            if (spineIndex == 0 && ch == 0)
+                return curChunk[(int) index];
+            else
+                return spine[ch][(int) (index - priorElementCount[ch])];
+        }
+
+        @Override
+        public PrimitiveIterator.OfDouble iterator() {
+            return new PrimitiveIterator.OfDouble() {
+
+                long index = 0;
+
+                @Override
+                public double nextDouble() {
+                    return get(index++);
                 }
 
                 @Override
