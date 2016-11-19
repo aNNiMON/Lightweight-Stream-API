@@ -2,6 +2,7 @@ package com.annimon.stream;
 
 import com.annimon.stream.function.DoubleConsumer;
 import com.annimon.stream.function.DoubleFunction;
+import com.annimon.stream.function.DoublePredicate;
 import com.annimon.stream.function.DoubleSupplier;
 import com.annimon.stream.function.DoubleUnaryOperator;
 import com.annimon.stream.function.Supplier;
@@ -126,6 +127,18 @@ public final class OptionalDouble {
             action.run();
         }
         return this;
+    }
+
+    /**
+     * Performs filtering on inner value if present.
+     *
+     * @param predicate  a predicate function
+     * @return this {@code OptionalDouble} if the value is present and matches predicate,
+     *         otherwise an empty {@code OptionalDouble}
+     */
+    public OptionalDouble filter(DoublePredicate predicate) {
+        if (!isPresent()) return this;
+        return predicate.test(value) ? this : OptionalDouble.empty();
     }
 
     /**

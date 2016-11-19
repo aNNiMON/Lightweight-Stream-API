@@ -179,6 +179,22 @@ public class OptionalDoubleTest {
     }
 
     @Test
+    public void testFilter() {
+        OptionalDouble result;
+        result = OptionalDouble.of(10d)
+                .filter(Functions.greaterThan(Math.PI));
+        assertThat(result, hasValueThat(closeTo(10d, 0.000001)));
+
+        result = OptionalDouble.empty()
+                .filter(Functions.greaterThan(Math.PI));
+        assertThat(result, isEmpty());
+
+        result = OptionalDouble.of(1.19)
+                .filter(Functions.greaterThan(Math.PI));
+        assertThat(result, isEmpty());
+    }
+
+    @Test
     public void testMap() {
         final DoubleUnaryOperator negatorFunction = new DoubleUnaryOperator() {
 
