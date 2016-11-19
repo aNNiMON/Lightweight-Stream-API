@@ -2,6 +2,7 @@ package com.annimon.stream;
 
 import com.annimon.stream.function.BinaryOperator;
 import com.annimon.stream.function.Consumer;
+import com.annimon.stream.function.DoubleBinaryOperator;
 import com.annimon.stream.function.Function;
 import com.annimon.stream.function.IntBinaryOperator;
 import java.util.ArrayDeque;
@@ -226,6 +227,57 @@ public final class CustomOperators {
                 sum += it.nextInt();
             }
             return (count == 0) ? 0 : sum / (double) count;
+        }
+    }
+
+    /**
+     * Example of intermediate zip operator applying on {@code DoubleStream} and {@code IntStream}.
+     */
+    public static class ZipWithIntStream implements Function<DoubleStream, DoubleStream> {
+
+        private final IntStream secondStream;
+        private final DoubleBinaryOperator combiner;
+
+        public ZipWithIntStream(IntStream secondStream, DoubleBinaryOperator combiner) {
+            this.secondStream = secondStream;
+            this.combiner = combiner;
+        }
+
+        @Override
+        public DoubleStream apply(DoubleStream firstStream) {
+            final PrimitiveIterator.OfDouble it1 = firstStream.iterator();
+            final PrimitiveIterator.OfInt it2 = secondStream.iterator();
+            return DoubleStream.of(new PrimitiveIterator.OfDouble() {
+
+                @Override
+                public boolean hasNext() {
+                    return it1.hasNext() && it2.hasNext();
+                }
+
+                @Override
+                public double nextDouble() {
+                    return combiner.applyAsDouble(it1.nextDouble(), it2.nextInt());
+                }
+            });
+        }
+    }
+
+    /**
+     * Example of terminal operator that calculates count, sum, and arithmetic mean of values.
+     */
+    public static class DoubleSummaryStatistics implements Function<DoubleStream, double[]> {
+
+        @Override
+        public double[] apply(DoubleStream stream) {
+            long count = 0;
+            double sum = 0;
+            final PrimitiveIterator.OfDouble it = stream.iterator();
+            while (it.hasNext()) {
+                count++;
+                sum += it.nextDouble();
+            }
+            double average = (count == 0) ? 0 : (sum / (double) count);
+            return new double[] {count, sum, average};
         }
     }
 }
