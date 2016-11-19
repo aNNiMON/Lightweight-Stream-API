@@ -589,9 +589,7 @@ public final class IntStream {
             @Override
             protected void nextIteration() {
                 if (!isInit) {
-                    SpinedBuffer.OfInt buffer = new SpinedBuffer.OfInt();
-                    forEach(buffer);
-                    array = buffer.asPrimitiveArray();
+                    array = toArray();
                     Arrays.sort(array);
                 }
                 hasNext = index < array.length;
