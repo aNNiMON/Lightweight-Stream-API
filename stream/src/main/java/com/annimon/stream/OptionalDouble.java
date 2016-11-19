@@ -4,6 +4,7 @@ import com.annimon.stream.function.DoubleConsumer;
 import com.annimon.stream.function.DoubleFunction;
 import com.annimon.stream.function.DoublePredicate;
 import com.annimon.stream.function.DoubleSupplier;
+import com.annimon.stream.function.DoubleToIntFunction;
 import com.annimon.stream.function.DoubleUnaryOperator;
 import com.annimon.stream.function.Supplier;
 import java.util.NoSuchElementException;
@@ -166,6 +167,20 @@ public final class OptionalDouble {
             return Optional.empty();
         }
         return Optional.ofNullable(mapper.apply(value));
+    }
+
+    /**
+     * Invokes the given mapping function on inner value if present.
+     *
+     * @param mapper  mapping function
+     * @return an {@code OptionalInt} with transformed value if present,
+     *         otherwise an empty {@code OptionalInt}
+     */
+    public OptionalInt mapToInt(DoubleToIntFunction mapper) {
+        if (!isPresent()) {
+            return OptionalInt.empty();
+        }
+        return OptionalInt.of(mapper.applyAsInt(value));
     }
 
     /**

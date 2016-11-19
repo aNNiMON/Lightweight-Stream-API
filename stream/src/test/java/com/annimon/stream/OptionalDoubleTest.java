@@ -3,6 +3,7 @@ package com.annimon.stream;
 import com.annimon.stream.function.DoubleConsumer;
 import com.annimon.stream.function.DoubleFunction;
 import com.annimon.stream.function.DoubleSupplier;
+import com.annimon.stream.function.DoubleToIntFunction;
 import com.annimon.stream.function.DoubleUnaryOperator;
 import com.annimon.stream.function.Supplier;
 import com.annimon.stream.test.hamcrest.OptionalMatcher;
@@ -236,6 +237,24 @@ public class OptionalDoubleTest {
             }
         });
         assertThat(result, OptionalMatcher.isEmpty());
+    }
+
+    @Test
+    public void testMapToInt() {
+        assertThat(OptionalDouble.of(0.2).mapToInt(new DoubleToIntFunction() {
+            @Override
+            public int applyAsInt(double value) {
+                return (int) (value * 10);
+            }
+        }).getAsInt(), is(2));
+
+        assertFalse(OptionalDouble.empty().mapToInt(new DoubleToIntFunction() {
+            @Override
+            public int applyAsInt(double value) {
+                fail();
+                return 0;
+            }
+        }).isPresent());
     }
 
     @Test
