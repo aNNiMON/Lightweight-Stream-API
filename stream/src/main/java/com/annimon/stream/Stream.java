@@ -17,7 +17,7 @@ import java.util.Set;
  *
  * @param <T> the type of the stream elements
  */
-public class Stream<T> {
+public final class Stream<T> {
 
     /**
      * Returns an empty stream.
