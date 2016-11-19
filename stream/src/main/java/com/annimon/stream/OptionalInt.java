@@ -3,6 +3,7 @@ package com.annimon.stream;
 import com.annimon.stream.function.Supplier;
 import com.annimon.stream.function.IntConsumer;
 import com.annimon.stream.function.IntFunction;
+import com.annimon.stream.function.IntPredicate;
 import com.annimon.stream.function.IntSupplier;
 import com.annimon.stream.function.IntUnaryOperator;
 
@@ -147,6 +148,19 @@ public final class OptionalInt {
     }
 
     /**
+     * Performs filtering on inner value if present.
+     *
+     * @param predicate  a predicate function
+     * @return this {@code OptionalInt} if the value is present and matches predicate,
+     *         otherwise an empty {@code OptionalInt}
+     * @since 1.1.4
+     */
+    public OptionalInt filter(IntPredicate predicate) {
+        if (!isPresent()) return this;
+        return predicate.test(value) ? this : OptionalInt.empty();
+    }
+
+    /**
      * Invokes mapping function on inner value if present.
      *
      * @param mapper  mapping function
@@ -280,7 +294,7 @@ public final class OptionalInt {
     /**
      * Returns a non-empty string representation of this object suitable for
      * debugging.
-     * 
+     *
      * @return the string representation of this instance
      */
     @Override

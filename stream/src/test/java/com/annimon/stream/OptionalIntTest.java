@@ -174,6 +174,23 @@ public class OptionalIntTest {
     }
 
     @Test
+    public void testFilter() {
+        OptionalInt result;
+        result = OptionalInt.of(4)
+                .filter(Functions.remainderInt(2));
+        assertThat(result, hasValue(4));
+
+        result = OptionalInt.empty()
+                .filter(Functions.remainderInt(2));
+        assertThat(result, isEmpty());
+
+        result = OptionalInt.of(9)
+                .filter(Functions.remainderInt(2));
+        assertThat(result, isEmpty());
+    }
+
+
+    @Test
     public void testMap() {
         final IntUnaryOperator negatorFunction = new IntUnaryOperator() {
 
