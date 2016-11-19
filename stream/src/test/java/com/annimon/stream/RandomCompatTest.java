@@ -158,6 +158,19 @@ public class RandomCompatTest {
                     fail();
             }
         }).limit(20).count();
+
+        new RandomCompat(new Random() {
+            @Override
+            public double nextDouble() {
+                return 1d;
+            }
+        }).doubles(0.1, 0.2).peek(new DoubleConsumer() {
+            @Override
+            public void accept(double value) {
+                if (value < 0.1 || value > 0.2)
+                    fail();
+            }
+        }).limit(10).count();
     }
 
 
