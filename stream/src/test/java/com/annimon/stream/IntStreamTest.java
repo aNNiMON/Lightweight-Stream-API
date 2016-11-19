@@ -165,24 +165,6 @@ public class IntStreamTest {
     }
 
     @Test
-    public void testStreamConstructor() {
-        IntStream s = new IntStream(new PrimitiveIterator.OfInt() {
-
-            @Override
-            public int nextInt() {
-                return 85;
-            }
-
-            @Override
-            public boolean hasNext() {
-                return false;
-            }
-        });
-
-        assertTrue(s.iterator().nextInt() == 85);
-    }
-
-    @Test
     public void testBoxed() {
         assertThat(IntStream.of(1, 10, 20).boxed().reduce(Functions.addition()),
                 OptionalMatcher.hasValue(31));

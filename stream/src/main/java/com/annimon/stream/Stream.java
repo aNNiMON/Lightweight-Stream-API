@@ -665,7 +665,7 @@ public class Stream<T> {
      * @see #map(com.annimon.stream.function.Function)
      */
     public IntStream mapToInt(final ToIntFunction<? super T> mapper) {
-        return new IntStream(new PrimitiveIterator.OfInt() {
+        return IntStream.of(new PrimitiveIterator.OfInt() {
 
             @Override
             public boolean hasNext() {
@@ -765,7 +765,7 @@ public class Stream<T> {
      * @see #flatMap(com.annimon.stream.function.Function)
      */
     public IntStream flatMapToInt(final Function<? super T, ? extends IntStream> mapper) {
-        return new IntStream(new PrimitiveExtIterator.OfInt() {
+        return IntStream.of(new PrimitiveExtIterator.OfInt() {
 
             private PrimitiveIterator.OfInt inner;
 

@@ -258,7 +258,7 @@ public final class IntStream {
 
     private final PrimitiveIterator.OfInt iterator;
 
-    IntStream(PrimitiveIterator.OfInt iterator) {
+    private IntStream(PrimitiveIterator.OfInt iterator) {
         this.iterator = iterator;
     }
 
