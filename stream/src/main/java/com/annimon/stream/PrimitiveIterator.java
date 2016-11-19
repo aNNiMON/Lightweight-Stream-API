@@ -25,4 +25,18 @@ public final class PrimitiveIterator {
         }
     }
 
+    public abstract static class OfDouble implements Iterator<Double> {
+
+        public abstract double nextDouble();
+
+        @Override
+        public Double next() {
+            return nextDouble();
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException("remove");
+        }
+    }
 }
