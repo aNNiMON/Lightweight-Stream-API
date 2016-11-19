@@ -58,6 +58,76 @@ public class OptionalIntTest {
     }
 
     @Test
+    public void testIfPresentOrElseWhenValuePresent() {
+        OptionalInt.of(10).ifPresentOrElse(new IntConsumer() {
+            @Override
+            public void accept(int value) {
+                assertThat(value, is(10));
+            }
+        }, new Runnable() {
+            @Override
+            public void run() {
+                fail("Should not execute empty action when value is present.");
+            }
+        });
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testIfPresentOrElseWhenValueAbsent() {
+        OptionalInt.empty().ifPresentOrElse(new IntConsumer() {
+            @Override
+            public void accept(int value) {
+                fail();
+            }
+        }, new Runnable() {
+            @Override
+            public void run() {
+                throw new RuntimeException();
+            }
+        });
+    }
+
+    @Test
+    public void testIfPresentOrElseWhenValuePresentAndEmptyActionNull() {
+        OptionalInt.of(10).ifPresentOrElse(new IntConsumer() {
+            @Override
+            public void accept(int value) {
+                assertThat(value, is(10));
+            }
+        }, null);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testIfPresentOrElseWhenValueAbsentAndConsumerNull() {
+        OptionalInt.empty().ifPresentOrElse(null, new Runnable() {
+            @Override
+            public void run() {
+                throw new RuntimeException();
+            }
+        });
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testIfPresentOrElseWhenValuePresentAndConsumerNull() {
+        OptionalInt.of(10).ifPresentOrElse(null, new Runnable() {
+            @Override
+            public void run() {
+                fail("Should not have been executed.");
+            }
+        });
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testIfPresentOrElseWhenValueAbsentAndEmptyActionNull() {
+        OptionalInt.empty().ifPresentOrElse(new IntConsumer() {
+            @Override
+            public void accept(int value) {
+                fail("Should not have been executed.");
+            }
+        }, null);
+    }
+
+    @Test
     public void testExecuteIfPresent() {
         int value = OptionalInt.of(10)
                 .executeIfPresent(new IntConsumer() {

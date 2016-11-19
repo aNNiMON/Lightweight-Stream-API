@@ -89,7 +89,8 @@ public final class OptionalDouble {
     }
 
     /**
-     * If a value is present, performs the given action with the value, otherwise performs the empty-based action.
+     * If a value is present, performs the given action with the value,
+     * otherwise performs the empty-based action.
      *
      * @param consumer  the consumer function to be executed, if a value is present
      * @param emptyAction  the empty-based action to be performed, if no value is present
