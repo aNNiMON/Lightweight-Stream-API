@@ -5,6 +5,7 @@ import com.annimon.stream.function.DoubleConsumer;
 import com.annimon.stream.function.DoubleFunction;
 import com.annimon.stream.function.DoublePredicate;
 import com.annimon.stream.function.DoubleSupplier;
+import com.annimon.stream.function.DoubleToIntFunction;
 import com.annimon.stream.function.DoubleUnaryOperator;
 import com.annimon.stream.function.ObjDoubleConsumer;
 import com.annimon.stream.test.hamcrest.OptionalDoubleMatcher;
@@ -215,6 +216,18 @@ public class DoubleStreamTest {
 
         assertThat(DoubleStream.empty().mapToObj(doubleToString),
                 StreamMatcher.isEmpty());
+    }
+
+    @Test
+    public void testMapToInt() {
+        DoubleToIntFunction mapper = new DoubleToIntFunction() {
+            @Override
+            public int applyAsInt(double value) {
+                return (int) (value * 10);
+            }
+        };
+        assertThat(DoubleStream.of(0.2, 0.3, 0.4).mapToInt(mapper).toArray(),
+                is(new int[] {2, 3, 4}));
     }
 
     @Test
