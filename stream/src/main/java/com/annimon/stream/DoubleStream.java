@@ -1070,7 +1070,6 @@ public final class DoubleStream {
      *         provided predicate or the stream is empty, otherwise {@code false}
      */
     public boolean noneMatch(DoublePredicate predicate) {
-        if (!iterator.hasNext()) return true;
         while (iterator.hasNext()) {
             if (predicate.test(iterator.nextDouble()))
                 return false;

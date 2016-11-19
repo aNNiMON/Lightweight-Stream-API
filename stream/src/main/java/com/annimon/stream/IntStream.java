@@ -1118,15 +1118,10 @@ public final class IntStream {
      *         provided predicate or the stream is empty, otherwise {@code false}
      */
     public boolean noneMatch(IntPredicate predicate) {
-
-        if(!iterator.hasNext())
-            return true;
-
-        while(iterator.hasNext()) {
-            if(predicate.test(iterator.nextInt()))
+        while (iterator.hasNext()) {
+            if (predicate.test(iterator.nextInt()))
                 return false;
         }
-
         return true;
     }
 
