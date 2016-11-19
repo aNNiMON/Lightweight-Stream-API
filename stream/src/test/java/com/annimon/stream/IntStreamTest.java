@@ -1,25 +1,28 @@
 package com.annimon.stream;
 
-import com.annimon.stream.function.*;
+import com.annimon.stream.function.IntBinaryOperator;
+import com.annimon.stream.function.IntConsumer;
+import com.annimon.stream.function.IntFunction;
+import com.annimon.stream.function.IntPredicate;
+import com.annimon.stream.function.IntSupplier;
+import com.annimon.stream.function.IntToDoubleFunction;
+import com.annimon.stream.function.IntUnaryOperator;
+import com.annimon.stream.function.ObjIntConsumer;
 import com.annimon.stream.test.hamcrest.DoubleStreamMatcher;
 import com.annimon.stream.test.hamcrest.OptionalIntMatcher;
-import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.hasValue;
 import com.annimon.stream.test.hamcrest.OptionalMatcher;
-import static com.annimon.stream.test.hamcrest.StreamMatcher.elements;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
+import org.hamcrest.Matchers;
+import org.junit.Test;
+import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.hasValue;
+import static com.annimon.stream.test.hamcrest.StreamMatcher.elements;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.array;
 import static org.hamcrest.Matchers.closeTo;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.*;
-
-import org.hamcrest.Matchers;
-import org.junit.Ignore;
-import org.junit.Test;
 
 /**
  * Tests {@code IntStream}
@@ -435,7 +438,7 @@ public class IntStreamTest {
     }
 
     @Test
-    public void testDropNonFirstMatch() {
+    public void testDropWhileNonFirstMatch() {
         long count = IntStream.of(2, 4, 6, 7, 8, 10, 11)
                 .dropWhile(Functions.remainderInt(3))
                 .count();

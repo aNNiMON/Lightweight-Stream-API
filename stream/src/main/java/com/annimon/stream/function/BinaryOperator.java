@@ -4,7 +4,7 @@ import com.annimon.stream.Objects;
 import java.util.Comparator;
 
 /**
- * Operation on a single operand that produces a result of the
+ * Represents an operation on two operands that produces a result of the
  * same type as its operand.
  *
  * @param <T> the type of the operands and result of the operator

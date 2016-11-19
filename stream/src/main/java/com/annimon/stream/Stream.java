@@ -1,12 +1,11 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.*;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedHashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -755,7 +754,9 @@ public class Stream<T> {
     }
 
     /**
-     * Generates {@code IntStream} by concatenating elements that obtained by applying the given function.
+     * Returns a stream consisting of the results of replacing each element of
+     * this stream with the contents of a mapped stream produced by applying
+     * the provided mapping function to each element.
      *
      * <p>This is an intermediate operation.
      *
@@ -1205,7 +1206,7 @@ public class Stream<T> {
     }
 
     /**
-     * Perform provided action to each elements.
+     * Performs provided action on each element.
      *
      * <p>This is an intermediate operation.
      *
@@ -1249,7 +1250,8 @@ public class Stream<T> {
 
             @Override
             protected void nextIteration() {
-                hasNext = iterator.hasNext() && predicate.test(next = iterator.next());
+                hasNext = iterator.hasNext()
+                        && predicate.test(next = iterator.next());
             }
         });
     }
@@ -1338,6 +1340,7 @@ public class Stream<T> {
 
     /**
      * Skips first {@code n} elements and returns {@code Stream} with remaining elements.
+     * If stream contains fewer than {@code n} elements, then an empty stream will be returned.
      *
      * <p>This is a stateful intermediate operation.
      *
@@ -1357,12 +1360,8 @@ public class Stream<T> {
      * @throws IllegalArgumentException if {@code n} is negative
      */
     public Stream<T> skip(final long n) {
-        if (n < 0) {
-            throw new IllegalArgumentException("n cannot be negative");
-        }
-        if (n == 0) {
-            return this;
-        }
+        if (n < 0) throw new IllegalArgumentException("n cannot be negative");
+        if (n == 0) return this;
         return new Stream<T>(new LsaIterator<T>() {
 
             private long skippedCount;
@@ -1385,7 +1384,7 @@ public class Stream<T> {
     }
 
     /**
-     * Performs the given action to each element.
+     * Performs the given action on each element.
      *
      * <p>This is a terminal operation.
      *
@@ -1431,6 +1430,7 @@ public class Stream<T> {
      *
      * @param accumulator  the accumulation function
      * @return the result of the reduction
+     * @see #reduce(java.lang.Object, com.annimon.stream.function.BiFunction)
      */
     public Optional<T> reduce(BiFunction<T, T, T> accumulator) {
         boolean foundAny = false;
@@ -1502,7 +1502,7 @@ public class Stream<T> {
      * @see #collect(com.annimon.stream.Collector)
      */
     public <R> R collect(Supplier<R> supplier, BiConsumer<R, ? super T> accumulator) {
-        R result = supplier.get();
+        final R result = supplier.get();
         while (iterator.hasNext()) {
             final T value = iterator.next();
             accumulator.accept(result, value);
@@ -1571,7 +1571,7 @@ public class Stream<T> {
     }
 
     /**
-     * Counts the number of elements in this stream.
+     * Returns the count of elements in this stream.
      *
      * <p>This is a terminal operation.
      *
@@ -1661,7 +1661,8 @@ public class Stream<T> {
      *
      * <p>This is a short-circuiting terminal operation.
      *
-     * @return an {@code Optional} with first element or {@code Optional.empty()} if stream is empty
+     * @return an {@code Optional} with first element
+     *         or {@code Optional.empty()} if stream is empty
      */
     public Optional<T> findFirst() {
         if (iterator.hasNext()) {

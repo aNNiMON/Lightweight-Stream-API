@@ -63,9 +63,9 @@ public class Optional<T> {
     }
     
     /**
-     * Returns inner value if present, otherwise throws {@code NoSuchElementException}.
+     * Returns an inner value if present, otherwise throws {@code NoSuchElementException}.
      * 
-     * @return inner value of {@code Optional}
+     * @return the inner value of {@code Optional}
      * @throws NoSuchElementException if value is not present
      */
     public T get() {
@@ -78,7 +78,7 @@ public class Optional<T> {
     /**
      * Checks value present.
      * 
-     * @return {@code true} if value present, {@code false} otherwise
+     * @return {@code true} if a value present, {@code false} otherwise
      */
     public boolean isPresent() {
         return value != null;
@@ -87,7 +87,7 @@ public class Optional<T> {
     /**
      * Invokes consumer function with value if present.
      * 
-     * @param consumer  consumer function
+     * @param consumer  the consumer function
      */
     public void ifPresent(Consumer<? super T> consumer) {
         if (value != null)
@@ -100,19 +100,20 @@ public class Optional<T> {
      * @param consumer  the consumer function to be executed, if a value is present
      * @param emptyAction  the empty-based action to be performed, if no value is present
      *
-     * @throws NullPointerException - if a value is present and the given consumer function is null,
+     * @throws NullPointerException if a value is present and the given consumer function is null,
      *         or no value is present and the given empty-based action is null.
      */
     public void ifPresentOrElse(Consumer<? super T> consumer, Runnable emptyAction) {
-        if (value != null)
+        if (value != null) {
             consumer.accept(value);
-        else
+        } else {
             emptyAction.run();
+        }
     }
 
     /**
-     * Invokes consumer function with value if present.
-     * This method same as {@code ifPresent}, but does not break chaining
+     * Invokes consumer function with the value if present.
+     * This method same as {@code ifPresent}, but does not breaks chaining
      *
      * @param consumer  consumer function
      * @return this {@code Optional}
@@ -141,7 +142,8 @@ public class Optional<T> {
      * Performs filtering on inner value if present.
      * 
      * @param predicate  a predicate function
-     * @return an {@code Optional} with value if present and matches predicate, otherwise an empty {@code Optional}
+     * @return this {@code Optional} if the value is present and matches predicate,
+     *              otherwise an empty {@code Optional}
      */
     public Optional<T> filter(Predicate<? super T> predicate) {
         if (!isPresent()) return this;
@@ -149,7 +151,7 @@ public class Optional<T> {
     }
     
     /**
-     * Invokes mapping function on inner value if present.
+     * Invokes the given mapping function on inner value if present.
      * 
      * @param <U> the type of result value
      * @param mapper  mapping function
@@ -161,7 +163,7 @@ public class Optional<T> {
     }
 
     /**
-     * Invokes mapping function on inner value if present.
+     * Invokes the given mapping function on inner value if present.
      *
      * @param mapper  mapping function
      * @return an {@code OptionalInt} with transformed value if present, otherwise an empty {@code OptionalInt}
@@ -213,7 +215,7 @@ public class Optional<T> {
      * Returns current {@code Optional} if value is present, otherwise
      * returns an {@code Optional} produced by supplier function.
      *
-     * @param supplier  supplier function that produced an {@code Optional} to be returned
+     * @param supplier  supplier function that produces an {@code Optional} to be returned
      * @return this {@code Optional} if value is present, otherwise
      *         an {@code Optional} produced by supplier function
      * @throws NullPointerException if value is not present and
@@ -238,7 +240,7 @@ public class Optional<T> {
     /**
      * Returns inner value if present, otherwise returns value produced by supplier function.
      * 
-     * @param other  supplier function that produced value if inner value is not present
+     * @param other  supplier function that produces value if inner value is not present
      * @return inner value if present, otherwise value produced by supplier function
      */
     public T orElseGet(Supplier<? extends T> other) {
@@ -249,7 +251,7 @@ public class Optional<T> {
      * Returns inner value if present, otherwise throws the exception provided by supplier function.
      * 
      * @param <X> the type of exception to be thrown
-     * @param exc  supplier function that produced exception to be thrown
+     * @param exc  supplier function that produces an exception to be thrown
      * @return inner value if present
      * @throws X if inner value is not present
      */

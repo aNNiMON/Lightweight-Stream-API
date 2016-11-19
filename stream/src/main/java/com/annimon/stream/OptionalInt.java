@@ -90,8 +90,7 @@ public final class OptionalInt {
     }
 
     /**
-     * Have the specified consumer accept the value if a value is present,
-     * otherwise do nothing.
+     * Invokes consumer function with value if present, otherwise does nothing.
      *
      * @param consumer block to be executed if a value is present
      * @throws NullPointerException if value is present and {@code consumer} is
@@ -166,9 +165,9 @@ public final class OptionalInt {
 
     /**
      * Returns current {@code OptionalInt} if value is present, otherwise
-     * returns an {@code Optional} produced by supplier function.
+     * returns an {@code OptionalInt} produced by supplier function.
      *
-     * @param supplier  supplier function that produced an {@code OptionalInt} to be returned
+     * @param supplier  supplier function that produces an {@code OptionalInt} to be returned
      * @return this {@code OptionalInt} if value is present, otherwise
      *         an {@code OptionalInt} produced by supplier function
      * @throws NullPointerException if value is not present and
@@ -181,9 +180,9 @@ public final class OptionalInt {
     }
 
     /**
-     * Return the value if present, otherwise return {@code other}.
+     * Returns the value if present, otherwise returns {@code other}.
      *
-     * @param other the value to be returned if there is no value present
+     * @param other  the value to be returned if there is no value present
      * @return the value, if present, otherwise {@code other}
      */
     public int orElse(int other) {
@@ -191,7 +190,7 @@ public final class OptionalInt {
     }
 
     /**
-     * Return the value if present, otherwise invoke {@code other} and return
+     * Returns the value if present, otherwise invokes {@code other} and returns
      * the result of that invocation.
      *
      * @param other a {@code IntSupplier} whose result is returned if no value
@@ -208,12 +207,12 @@ public final class OptionalInt {
      * Returns the value if present, otherwise throws an exception provided by supplier function.
      *
      * @param <X> the type of exception to be thrown
-     * @param exceptionSupplier  supplier function that produced exception to be thrown
+     * @param exceptionSupplier  supplier function that produces an exception to be thrown
      * @return inner value if present
      * @throws X if inner value is not present
      */
     public <X extends Throwable> int orElseThrow(Supplier<X> exceptionSupplier) throws X {
-        if(isPresent) {
+        if (isPresent) {
             return value;
         } else {
             throw exceptionSupplier.get();

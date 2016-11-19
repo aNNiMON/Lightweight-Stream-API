@@ -13,9 +13,6 @@ import com.annimon.stream.function.ToIntFunction;
 import com.annimon.stream.function.UnaryOperator;
 import com.annimon.stream.test.hamcrest.DoubleStreamMatcher;
 import com.annimon.stream.test.hamcrest.OptionalMatcher;
-
-import org.junit.Test;
-
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,7 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-
+import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.OptionalMatcher.hasValue;
 import static com.annimon.stream.test.hamcrest.OptionalMatcher.isPresent;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.elements;
@@ -866,7 +863,7 @@ public class StreamTest {
     }
 
     @Test
-    public void testDropNonFirstMatch() {
+    public void testDropWhileNonFirstMatch() {
         long count = Stream.of(2, 4, 6, 7, 8, 10, 11)
                 .dropWhile(Functions.remainder(3))
                 .count();
