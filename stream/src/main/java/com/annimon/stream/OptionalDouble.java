@@ -146,12 +146,16 @@ public final class OptionalDouble {
      * Invokes the given mapping function on inner value if present.
      *
      * @param mapper  mapping function
-     * @return an {@code OptionalDouble} with transformed value if present, otherwise an empty {@code OptionalDouble}
+     * @return an {@code OptionalDouble} with transformed value if present,
+     *         otherwise an empty {@code OptionalDouble}
+     * @throws NullPointerException if value is present and
+     *         {@code mapper} is {@code null}
      */
     public OptionalDouble map(DoubleUnaryOperator mapper) {
         if (!isPresent()) {
             return empty();
         }
+        Objects.requireNonNull(mapper);
         return OptionalDouble.of(mapper.applyAsDouble(value));
     }
 
@@ -160,12 +164,16 @@ public final class OptionalDouble {
      *
      * @param <U> the type of result value
      * @param mapper  mapping function
-     * @return an {@code Optional} with transformed value if present, otherwise an empty {@code Optional}
+     * @return an {@code Optional} with transformed value if present,
+     *         otherwise an empty {@code Optional}
+     * @throws NullPointerException if value is present and
+     *         {@code mapper} is {@code null}
      */
     public <U> Optional<U> mapToObj(DoubleFunction<U> mapper) {
         if (!isPresent()) {
             return Optional.empty();
         }
+        Objects.requireNonNull(mapper);
         return Optional.ofNullable(mapper.apply(value));
     }
 
@@ -175,16 +183,20 @@ public final class OptionalDouble {
      * @param mapper  mapping function
      * @return an {@code OptionalInt} with transformed value if present,
      *         otherwise an empty {@code OptionalInt}
+     * @throws NullPointerException if value is present and
+     *         {@code mapper} is {@code null}
      */
     public OptionalInt mapToInt(DoubleToIntFunction mapper) {
         if (!isPresent()) {
             return OptionalInt.empty();
         }
+        Objects.requireNonNull(mapper);
         return OptionalInt.of(mapper.applyAsInt(value));
     }
 
     /**
-     * Wraps a value into {@code DoubleStream} if present, otherwise returns an empty {@code DoubleStream}.
+     * Wraps a value into {@code DoubleStream} if present,
+     * otherwise returns an empty {@code DoubleStream}.
      *
      * @return the optional value as an {@code DoubleStream}
      */
