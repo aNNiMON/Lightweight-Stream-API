@@ -791,6 +791,48 @@ public class Stream<T> {
     }
 
     /**
+     * Returns a stream consisting of the results of replacing each element of
+     * this stream with the contents of a mapped stream produced by applying
+     * the provided mapping function to each element.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @param mapper  the mapper function used to apply to each element
+     * @return the new {@code DoubleStream}
+     * @see #flatMap(com.annimon.stream.function.Function)
+     */
+    public DoubleStream flatMapToDouble(final Function<? super T, ? extends DoubleStream> mapper) {
+        return DoubleStream.of(new PrimitiveExtIterator.OfDouble() {
+
+            private PrimitiveIterator.OfDouble inner;
+
+            @Override
+            protected void nextIteration() {
+                if ((inner != null) && inner.hasNext()) {
+                    next = inner.next();
+                    hasNext = true;
+                    return;
+                }
+                while (iterator.hasNext()) {
+                    if (inner == null || !inner.hasNext()) {
+                        final T arg = iterator.next();
+                        final DoubleStream result = mapper.apply(arg);
+                        if (result != null) {
+                            inner = result.iterator();
+                        }
+                    }
+                    if ((inner != null) && inner.hasNext()) {
+                        next = inner.next();
+                        hasNext = true;
+                        return;
+                    }
+                }
+                hasNext = false;
+            }
+        });
+    }
+
+    /**
      * Returns {@code Stream} with indexed elements.
      * Indexing starts from 0 with step 1.
      *

@@ -11,6 +11,7 @@ import com.annimon.stream.function.Supplier;
 import com.annimon.stream.function.ToDoubleFunction;
 import com.annimon.stream.function.ToIntFunction;
 import com.annimon.stream.function.UnaryOperator;
+import com.annimon.stream.test.hamcrest.DoubleStreamMatcher;
 import com.annimon.stream.test.hamcrest.OptionalMatcher;
 
 import org.junit.Test;
@@ -30,6 +31,8 @@ import static com.annimon.stream.test.hamcrest.StreamMatcher.elements;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.isEmpty;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.Matchers.array;
+import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
@@ -548,6 +551,23 @@ public class StreamTest {
 
         int[] expected = { 2, 2, 3, 3, 3, 4, 4, 4, 4 };
         assertThat(actual, is(expected));
+    }
+
+    @Test
+    public void testFlatMapToDouble() {
+        DoubleStream stream = Stream.of(2, 4)
+                .flatMapToDouble(new Function<Integer, DoubleStream>() {
+                    @Override
+                    public DoubleStream apply(Integer t) {
+                        return DoubleStream.of(t / 10d, t / 20d);
+                    }
+                });
+        assertThat(stream, DoubleStreamMatcher.elements(array(
+                closeTo(0.2, 0.0001),
+                closeTo(0.1, 0.0001),
+                closeTo(0.4, 0.0001),
+                closeTo(0.2, 0.0001)
+        )));
     }
 
     @Test
