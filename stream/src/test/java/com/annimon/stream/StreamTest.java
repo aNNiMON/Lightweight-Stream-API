@@ -8,6 +8,7 @@ import com.annimon.stream.function.Function;
 import com.annimon.stream.function.IntUnaryOperator;
 import com.annimon.stream.function.Predicate;
 import com.annimon.stream.function.Supplier;
+import com.annimon.stream.function.ToDoubleFunction;
 import com.annimon.stream.function.ToIntFunction;
 import com.annimon.stream.function.UnaryOperator;
 import com.annimon.stream.test.hamcrest.OptionalMatcher;
@@ -484,6 +485,20 @@ public class StreamTest {
         int[] expected = { 4, 9, 16, 64, 625 };
         IntStream stream = Stream.of("[2]", "[3]", "[4]", "[8]", "[25]")
                 .mapToInt(stringToSquareInt);
+        assertThat(stream.toArray(), is(expected));
+    }
+
+    @Test
+    public void testMapToDouble() {
+        final ToDoubleFunction<String> stringToDouble = new ToDoubleFunction<String>() {
+            @Override
+            public double applyAsDouble(String t) {
+                return Double.parseDouble(t);
+            }
+        };
+        double[] expected = { 1.23, 4.56789, 10.1112 };
+        DoubleStream stream = Stream.of("1.23", "4.56789", "10.1112")
+                .mapToDouble(stringToDouble);
         assertThat(stream.toArray(), is(expected));
     }
 

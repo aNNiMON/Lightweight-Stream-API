@@ -681,7 +681,30 @@ public class Stream<T> {
     }
 
     /**
-     * Generates {@code Stream} by concatenating elements that obtained by applying the given function.
+     * Returns {@code DoubleStream} with elements that obtained by applying the given function.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @param mapper  the mapper function used to apply to each element
+     * @return the new {@code DoubleStream}
+     * @since 1.1.4
+     * @see #map(com.annimon.stream.function.Function)
+     */
+    public DoubleStream mapToDouble(final ToDoubleFunction<? super T> mapper) {
+        return DoubleStream.of(new PrimitiveIterator.OfDouble() {
+
+            @Override
+            public boolean hasNext() {
+                return iterator.hasNext();
+            }
+
+            @Override
+            public double nextDouble() {
+                return mapper.applyAsDouble(iterator.next());
+            }
+        });
+    }
+
      *
      * <p>This is an intermediate operation.
      *
