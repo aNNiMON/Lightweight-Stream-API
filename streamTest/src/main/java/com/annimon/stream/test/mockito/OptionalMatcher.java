@@ -1,10 +1,8 @@
 package com.annimon.stream.test.mockito;
 
 import com.annimon.stream.Optional;
-
 import org.mockito.ArgumentMatcher;
-
-import static org.mockito.Matchers.argThat;
+import static org.mockito.ArgumentMatchers.argThat;
 
 public class OptionalMatcher {
 
