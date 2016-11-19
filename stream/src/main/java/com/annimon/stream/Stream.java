@@ -705,6 +705,10 @@ public class Stream<T> {
         });
     }
 
+    /**
+     * Returns a stream consisting of the results of replacing each element of
+     * this stream with the contents of a mapped stream produced by applying
+     * the provided mapping function to each element.
      *
      * <p>This is an intermediate operation.
      *
