@@ -828,6 +828,48 @@ public final class Stream<T> {
      * <p>This is an intermediate operation.
      *
      * @param mapper  the mapper function used to apply to each element
+     * @return the new {@code LongStream}
+     * @see #flatMap(com.annimon.stream.function.Function)
+     */
+    public LongStream flatMapToLong(final Function<? super T, ? extends LongStream> mapper) {
+        return LongStream.of(new PrimitiveExtIterator.OfLong() {
+
+            private PrimitiveIterator.OfLong inner;
+
+            @Override
+            protected void nextIteration() {
+                if ((inner != null) && inner.hasNext()) {
+                    next = inner.next();
+                    hasNext = true;
+                    return;
+                }
+                while (iterator.hasNext()) {
+                    if (inner == null || !inner.hasNext()) {
+                        final T arg = iterator.next();
+                        final LongStream result = mapper.apply(arg);
+                        if (result != null) {
+                            inner = result.iterator();
+                        }
+                    }
+                    if ((inner != null) && inner.hasNext()) {
+                        next = inner.next();
+                        hasNext = true;
+                        return;
+                    }
+                }
+                hasNext = false;
+            }
+        });
+    }
+
+    /**
+     * Returns a stream consisting of the results of replacing each element of
+     * this stream with the contents of a mapped stream produced by applying
+     * the provided mapping function to each element.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @param mapper  the mapper function used to apply to each element
      * @return the new {@code DoubleStream}
      * @see #flatMap(com.annimon.stream.function.Function)
      */
