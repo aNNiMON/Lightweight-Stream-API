@@ -3,16 +3,21 @@ package com.annimon.stream;
 import com.annimon.stream.function.IntConsumer;
 import com.annimon.stream.function.IntFunction;
 import com.annimon.stream.function.IntSupplier;
+import com.annimon.stream.function.IntToDoubleFunction;
+import com.annimon.stream.function.IntToLongFunction;
 import com.annimon.stream.function.IntUnaryOperator;
 import com.annimon.stream.function.Supplier;
+import com.annimon.stream.test.hamcrest.OptionalDoubleMatcher;
+import com.annimon.stream.test.hamcrest.OptionalLongMatcher;
+import com.annimon.stream.test.hamcrest.OptionalMatcher;
+import java.util.NoSuchElementException;
+import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.hasValue;
 import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.isEmpty;
 import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.isPresent;
-import com.annimon.stream.test.hamcrest.OptionalMatcher;
-import java.util.NoSuchElementException;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.closeTo;
 import static org.junit.Assert.*;
-import org.junit.Test;
 
 /**
  * Tests for {@link OptionalInt}
@@ -232,6 +237,40 @@ public class OptionalIntTest {
             }
         });
         assertThat(result, OptionalMatcher.isEmpty());
+    }
+
+    @Test
+    public void testMapToLong() {
+        final IntToLongFunction mapper = new IntToLongFunction() {
+            @Override
+            public long applyAsLong(int value) {
+                return value * 10000000000L;
+            }
+        };
+
+        OptionalLong result;
+        result = OptionalInt.empty().mapToLong(mapper);
+        assertThat(result, OptionalLongMatcher.isEmpty());
+
+        result = OptionalInt.of(65).mapToLong(mapper);
+        assertThat(result, OptionalLongMatcher.hasValue(650000000000L));
+    }
+
+    @Test
+    public void testMapToDouble() {
+        final IntToDoubleFunction mapper = new IntToDoubleFunction() {
+            @Override
+            public double applyAsDouble(int value) {
+                return value / 100d;
+            }
+        };
+
+        OptionalDouble result;
+        result = OptionalInt.empty().mapToDouble(mapper);
+        assertThat(result, OptionalDoubleMatcher.isEmpty());
+
+        result = OptionalInt.of(65).mapToDouble(mapper);
+        assertThat(result, OptionalDoubleMatcher.hasValueThat(closeTo(0.65, 0.0001)));
     }
 
     @Test

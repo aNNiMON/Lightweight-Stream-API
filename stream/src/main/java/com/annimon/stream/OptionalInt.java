@@ -1,12 +1,13 @@
 package com.annimon.stream;
 
-import com.annimon.stream.function.Supplier;
 import com.annimon.stream.function.IntConsumer;
 import com.annimon.stream.function.IntFunction;
 import com.annimon.stream.function.IntPredicate;
 import com.annimon.stream.function.IntSupplier;
+import com.annimon.stream.function.IntToDoubleFunction;
+import com.annimon.stream.function.IntToLongFunction;
 import com.annimon.stream.function.IntUnaryOperator;
-
+import com.annimon.stream.function.Supplier;
 import java.util.NoSuchElementException;
 
 /**
@@ -164,7 +165,10 @@ public final class OptionalInt {
      * Invokes mapping function on inner value if present.
      *
      * @param mapper  mapping function
-     * @return an {@code OptionalInt} with transformed value if present, otherwise an empty {@code OptionalInt}
+     * @return an {@code OptionalInt} with transformed value if present,
+     *         otherwise an empty {@code OptionalInt}
+     * @throws NullPointerException if value is present and
+     *         {@code mapper} is {@code null}
      * @since 1.1.3
      */
     public OptionalInt map(IntUnaryOperator mapper) {
@@ -177,12 +181,45 @@ public final class OptionalInt {
      *
      * @param <U> the type of result value
      * @param mapper  mapping function
-     * @return an {@code Optional} with transformed value if present, otherwise an empty {@code Optional}
+     * @return an {@code Optional} with transformed value if present,
+     *         otherwise an empty {@code Optional}
+     * @throws NullPointerException if value is present and
+     *         {@code mapper} is {@code null}
      * @since 1.1.3
      */
     public <U> Optional<U> mapToObj(IntFunction<U> mapper) {
         if (!isPresent()) return Optional.empty();
         return Optional.ofNullable(mapper.apply(value));
+    }
+
+    /**
+     * Invokes mapping function on inner value if present.
+     *
+     * @param mapper  mapping function
+     * @return an {@code OptionalLong} with transformed value if present,
+     *         otherwise an empty {@code OptionalLong}
+     * @throws NullPointerException if value is present and
+     *         {@code mapper} is {@code null}
+     * @since 1.1.4
+     */
+    public OptionalLong mapToLong(IntToLongFunction mapper) {
+        if (!isPresent()) return OptionalLong.empty();
+        return OptionalLong.of(mapper.applyAsLong(value));
+    }
+
+    /**
+     * Invokes mapping function on inner value if present.
+     *
+     * @param mapper  mapping function
+     * @return an {@code OptionalDouble} with transformed value if present,
+     *         otherwise an empty {@code OptionalDouble}
+     * @throws NullPointerException if value is present and
+     *         {@code mapper} is {@code null}
+     * @since 1.1.4
+     */
+    public OptionalDouble mapToDouble(IntToDoubleFunction mapper) {
+        if (!isPresent()) return OptionalDouble.empty();
+        return OptionalDouble.of(mapper.applyAsDouble(value));
     }
 
     /**
