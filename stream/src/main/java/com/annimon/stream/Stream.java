@@ -680,6 +680,31 @@ public final class Stream<T> {
     }
 
     /**
+     * Returns {@code LongStream} with elements that obtained by applying the given function.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @param mapper  the mapper function used to apply to each element
+     * @return the new {@code LongStream}
+     * @since 1.1.4
+     * @see #map(com.annimon.stream.function.Function)
+     */
+    public LongStream mapToLong(final ToLongFunction<? super T> mapper) {
+        return LongStream.of(new PrimitiveIterator.OfLong() {
+
+            @Override
+            public boolean hasNext() {
+                return iterator.hasNext();
+            }
+
+            @Override
+            public long nextLong() {
+                return mapper.applyAsLong(iterator.next());
+            }
+        });
+    }
+
+    /**
      * Returns {@code DoubleStream} with elements that obtained by applying the given function.
      *
      * <p>This is an intermediate operation.
