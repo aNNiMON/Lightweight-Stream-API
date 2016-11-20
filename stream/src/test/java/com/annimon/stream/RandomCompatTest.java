@@ -2,6 +2,7 @@ package com.annimon.stream;
 
 import com.annimon.stream.function.DoubleConsumer;
 import com.annimon.stream.function.IntConsumer;
+import com.annimon.stream.function.LongConsumer;
 import java.security.SecureRandom;
 import java.util.Random;
 import org.junit.Test;
@@ -31,6 +32,12 @@ public class RandomCompatTest {
     }
 
     @Test
+    public void testRandomLongsSized() {
+        assertEquals(10, new RandomCompat().longs(10).count());
+        assertEquals(0, new RandomCompat(1).longs(0).count());
+    }
+
+    @Test
     public void testRandomDoublesSized() {
         assertEquals(10, new RandomCompat().doubles(10).count());
         assertEquals(0, new RandomCompat(1).doubles(0).count());
@@ -43,6 +50,11 @@ public class RandomCompatTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
+    public void testRandimLongsSizedNegative() {
+        new RandomCompat().longs(-5);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void testRandimDoublesSizedNegative() {
         new RandomCompat().doubles(-5);
     }
@@ -51,6 +63,11 @@ public class RandomCompatTest {
     @Test
     public void testRandomInts() {
         assertEquals(15, new RandomCompat(1).ints().skip(20).limit(15).count());
+    }
+
+    @Test
+    public void testRandomLongs() {
+        assertEquals(15, new RandomCompat(1).longs().skip(20).limit(15).count());
     }
 
     @Test
@@ -101,6 +118,24 @@ public class RandomCompatTest {
     }
 
     @Test
+    public void testRandomLongsSizedBounded() {
+        assertEquals(20, new RandomCompat().longs(20, 5, 42).peek(new LongConsumer() {
+            @Override
+            public void accept(long value) {
+                if (value < 5 || value >= 42)
+                    fail();
+            }
+        }).count());
+
+        new RandomCompat(100).longs(0, 1, 20).forEach(new LongConsumer() {
+            @Override
+            public void accept(long value) {
+                fail();
+            }
+        });
+    }
+
+    @Test
     public void testRandomDoublesSizedBounded() {
         assertEquals(20, new RandomCompat().doubles(20, -0.5, 4.2).peek(new DoubleConsumer() {
             @Override
@@ -125,6 +160,11 @@ public class RandomCompatTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
+    public void testRandomLongsSizedBoundedNegative() {
+        new RandomCompat().longs(-1, 0, 1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void testRandomDoublesSizedBoundedNegative() {
         new RandomCompat().doubles(-1, 0d, 1d);
     }
@@ -139,6 +179,34 @@ public class RandomCompatTest {
                     fail();
             }
         }).limit(20).skip(10).count());
+    }
+
+    @Test
+    public void testRandomLongsBounded() {
+        assertEquals(10, new RandomCompat().longs(0, 100).peek(new LongConsumer() {
+            @Override
+            public void accept(long value) {
+                if (value < 0 || value > 99)
+                    fail();
+            }
+        }).limit(20).skip(10).count());
+
+        new RandomCompat().longs(Long.MIN_VALUE, Long.MIN_VALUE + 5).peek(new LongConsumer() {
+            @Override
+            public void accept(long value) {
+                if (value >= Long.MIN_VALUE + 5)
+                    fail();
+            }
+        }).limit(30).count();
+
+        new RandomCompat().longs(Long.MAX_VALUE - 5, Long.MAX_VALUE).peek(new LongConsumer() {
+            @Override
+            public void accept(long value) {
+                System.out.println(value);
+                if (value < Long.MAX_VALUE - 5 || value == Long.MAX_VALUE)
+                    fail();
+            }
+        }).limit(30).distinct().count();
     }
 
     @Test
@@ -177,6 +245,11 @@ public class RandomCompatTest {
     @Test(expected = IllegalArgumentException.class)
     public void testRandomIntsBoundedInvalid() {
         new RandomCompat(111).ints(100, 100);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testRandomLongsBoundedInvalid() {
+        new RandomCompat(111).longs(100, 100);
     }
 
     @Test(expected = IllegalArgumentException.class)
