@@ -6,6 +6,7 @@ import com.annimon.stream.function.DoublePredicate;
 import com.annimon.stream.function.Function;
 import com.annimon.stream.function.IntFunction;
 import com.annimon.stream.function.IntPredicate;
+import com.annimon.stream.function.LongPredicate;
 import com.annimon.stream.function.Predicate;
 import com.annimon.stream.function.Supplier;
 import com.annimon.stream.function.ToIntFunction;
@@ -161,6 +162,16 @@ public final class Functions {
 
             @Override
             public boolean test(int v) {
+                return (v % val == 0);
+            }
+        };
+    }
+
+    public static LongPredicate remainderLong(final long val) {
+        return new LongPredicate() {
+
+            @Override
+            public boolean test(long v) {
                 return (v % val == 0);
             }
         };
