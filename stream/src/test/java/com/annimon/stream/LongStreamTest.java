@@ -107,6 +107,12 @@ public class LongStreamTest {
         assertThat(LongStream.rangeClosed(1, 5).count(), is(5L));
     }
 
+    @Test
+    public void testStreamRangeClosedStartGreaterThanEnd() {
+        assertThat(LongStream.rangeClosed(5, 1), isEmpty());
+
+    }
+
     @Test(timeout = 1000)
     public void testStreamRangeClosedOnMinValue() {
         assertThat(LongStream.rangeClosed(Long.MIN_VALUE, Long.MIN_VALUE + 5).count(), is(6L));

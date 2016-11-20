@@ -3,8 +3,10 @@ package com.annimon.stream;
 import com.annimon.stream.function.LongConsumer;
 import com.annimon.stream.function.LongFunction;
 import com.annimon.stream.function.LongSupplier;
+import com.annimon.stream.function.LongToIntFunction;
 import com.annimon.stream.function.LongUnaryOperator;
 import com.annimon.stream.function.Supplier;
+import com.annimon.stream.test.hamcrest.OptionalIntMatcher;
 import com.annimon.stream.test.hamcrest.OptionalMatcher;
 import java.util.NoSuchElementException;
 import org.junit.Test;
@@ -209,6 +211,24 @@ public class OptionalLongTest {
 
         result = OptionalLong.of(10).map(negatorFunction);
         assertThat(result, hasValue(-10));
+    }
+
+    @Test
+    public void testMapToInt() {
+        final LongToIntFunction mapper = new LongToIntFunction() {
+
+            @Override
+            public int applyAsInt(long operand) {
+                return (int) (operand / 10000000000L);
+            }
+        };
+
+        OptionalInt result;
+        result = OptionalLong.empty().mapToInt(mapper);
+        assertThat(result, OptionalIntMatcher.isEmpty());
+
+        result = OptionalLong.of(100000000000L).mapToInt(mapper);
+        assertThat(result, OptionalIntMatcher.hasValue(10));
     }
 
     @Test

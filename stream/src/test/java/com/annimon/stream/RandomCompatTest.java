@@ -210,6 +210,66 @@ public class RandomCompatTest {
     }
 
     @Test
+    public void testRandomLongsBoundedPowerOfTwoRange() {
+        assertEquals(30, new RandomCompat().longs(32, 64).peek(new LongConsumer() {
+            @Override
+            public void accept(long value) {
+                if (value < 32 || value >= 128)
+                    fail();
+            }
+        }).limit(30).count());
+    }
+
+    @Test
+    public void testRandomLongsBoundedAlmostFullRange() {
+        assertEquals(30, new RandomCompat().longs(Long.MIN_VALUE + 5, Long.MAX_VALUE - 5).peek(new LongConsumer() {
+            @Override
+            public void accept(long value) {
+                if (value < (Long.MIN_VALUE + 5) || value >= (Long.MAX_VALUE - 5))
+                    fail();
+            }
+        }).limit(30).count());
+    }
+
+    @Test
+    public void testRandomLongsBoundedSpecialCases() {
+        final Random random1 = new Random() {
+            long index = 0;
+            @Override
+            public long nextLong() {
+                index++;
+                if (index % 15 == 0)
+                    return Long.MIN_VALUE;
+                if (index % 10 == 0)
+                    return Long.MAX_VALUE;
+                return super.nextLong();
+            }
+        };
+        // Case 1: when range not representable as long
+        new RandomCompat(random1).longs(Long.MIN_VALUE + 2, Long.MAX_VALUE).peek(new LongConsumer() {
+            @Override
+            public void accept(long value) {
+                if (value < (Long.MIN_VALUE + 2))
+                    fail();
+            }
+        }).limit(30).count();
+
+
+        final Random random2 = new Random() {
+            long index = 0;
+            @Override
+            public long nextLong() {
+                index++;
+                if (index < 5)
+                    return Long.MIN_VALUE >> 2;
+                return super.nextLong();
+            }
+        };
+        // Case 2: rejection on normal range
+        new RandomCompat(random2).longs(Long.MIN_VALUE >>> 4, Long.MIN_VALUE >>> 1).limit(30).count();
+    }
+
+    @Test
     public void testRandomDoublesBounded() {
         assertEquals(10, new RandomCompat().doubles(-1.19, -1.119).peek(new DoubleConsumer() {
             @Override

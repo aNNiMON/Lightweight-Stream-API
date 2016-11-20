@@ -288,7 +288,7 @@ public final class RandomCompat {
                     // reject over-represented candidates
                     long u = result >>> 1; // ensure nonnegative
                     while (u + boundMinus1 - (result = u % bound) < 0L) {
-                        u = random.nextLong();
+                        u = random.nextLong() >>> 1;
                     }
                     result += randomNumberOrigin;
                 } else {
