@@ -2,6 +2,7 @@ package com.annimon.stream;
 
 import com.annimon.stream.function.DoubleSupplier;
 import com.annimon.stream.function.IntSupplier;
+import com.annimon.stream.function.LongSupplier;
 import java.util.Random;
 
 /**
@@ -68,10 +69,31 @@ public final class RandomCompat {
 
     /**
      * Returns a stream producing the given {@code streamSize} number of
+     * pseudorandom {@code long} values, each between zero (inclusive)
+     * and one (exclusive).
+     *
+     * <p>A pseudorandom {@code long} value is generated as if it's the result of
+     * calling the method {@link Random#nextLong()}
+     *
+     * @param streamSize  the number of values to generate
+     * @return a stream of pseudorandom {@code long} values
+     * @throws IllegalArgumentException if {@code streamSize} is
+     *         less than zero
+     */
+    public LongStream longs(long streamSize) {
+        if (streamSize < 0L) throw new IllegalArgumentException();
+        if (streamSize == 0L) {
+            return LongStream.empty();
+        }
+        return longs().limit(streamSize);
+    }
+
+    /**
+     * Returns a stream producing the given {@code streamSize} number of
      * pseudorandom {@code double} values, each between zero (inclusive)
      * and one (exclusive).
      *
-     * <p>A pseudorandom {@code int} value is generated as if it's the result of
+     * <p>A pseudorandom {@code double} value is generated as if it's the result of
      * calling the method {@link Random#nextDouble()}
      *
      * @param streamSize  the number of values to generate
@@ -102,6 +124,24 @@ public final class RandomCompat {
             @Override
             public int getAsInt() {
                 return random.nextInt();
+            }
+        });
+    }
+
+    /**
+     * Returns an effectively unlimited stream of pseudorandom {@code long} values,
+     * each between zero (inclusive) and one (exclusive).
+     *
+     * <p>A pseudorandom {@code long} value is generated as if it's the result of
+     * calling the method {@link Random#nextLong()}.
+     *
+     * @return a stream of pseudorandom {@code long} values
+     */
+    public LongStream longs() {
+        return LongStream.generate(new LongSupplier() {
+            @Override
+            public long getAsLong() {
+                return random.nextLong();
             }
         });
     }
@@ -144,6 +184,29 @@ public final class RandomCompat {
             return IntStream.empty();
         }
         return ints(randomNumberOrigin, randomNumberBound).limit(streamSize);
+    }
+
+    /**
+     * Returns a stream producing the given {@code streamSize} number
+     * of pseudorandom {@code long} values, each conforming
+     * to the given origin (inclusive) and bound (exclusive).
+     *
+     * @param streamSize the number of values to generate
+     * @param randomNumberOrigin  the origin (inclusive) of each random value
+     * @param randomNumberBound  the bound (exclusive) if each random value
+     * @return a stream of pseudorandom {@code long} values,
+     *         each with the given origin (inclusive) and bound (exclusive)
+     * @throws IllegalArgumentException if {@code streamSize} is
+     *         less than zero, or {@code randomNumberOrigin} is
+     *         greater than or equal to {@code randomNumberBound}
+     */
+    public LongStream longs(long streamSize,
+            final long randomNumberOrigin, final long randomNumberBound) {
+        if (streamSize < 0L) throw new IllegalArgumentException();
+        if (streamSize == 0L) {
+            return LongStream.empty();
+        }
+        return longs(randomNumberOrigin, randomNumberBound).limit(streamSize);
     }
 
     /**
@@ -191,6 +254,50 @@ public final class RandomCompat {
             @Override
             public int getAsInt() {
                 return randomNumberOrigin + random.nextInt(bound);
+            }
+        });
+    }
+
+    /**
+     * Returns an effectively unlimited stream of pseudorandom {@code long}
+     * values, each conforming to the given origin (inclusive) and bound (exclusive)
+     *
+     * @param randomNumberOrigin  the origin (inclusive) of each random value
+     * @param randomNumberBound  the bound (exclusive) of each random value
+     * @return a stream of pseudorandom {@code long} values,
+     *         each with the given origin (inclusive) and bound (exclusive)
+     * @throws IllegalArgumentException if {@code randomNumberOrigin}
+     *         is greater than or equal to {@code randomNumberBound}
+     */
+    public LongStream longs(final long randomNumberOrigin, final long randomNumberBound) {
+        if (randomNumberOrigin >= randomNumberBound) {
+            throw new IllegalArgumentException();
+        }
+        return LongStream.generate(new LongSupplier() {
+
+            private final long bound = randomNumberBound - randomNumberOrigin;
+            private final long boundMinus1 = bound - 1;
+
+            @Override
+            public long getAsLong() {
+                long result = random.nextLong();
+                if ((bound & boundMinus1) == 0L) {
+                    // power of two
+                    result = (result & boundMinus1) + randomNumberOrigin;
+                } else if (bound > 0L) {
+                    // reject over-represented candidates
+                    long u = result >>> 1; // ensure nonnegative
+                    while (u + boundMinus1 - (result = u % bound) < 0L) {
+                        u = random.nextLong() >>> 1;
+                    }
+                    result += randomNumberOrigin;
+                } else {
+                    // range not representable as long
+                    while (randomNumberOrigin >= result || result >= randomNumberBound) {
+                        result = random.nextLong();
+                    }
+                }
+                return result;
             }
         });
     }

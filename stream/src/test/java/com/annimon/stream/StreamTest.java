@@ -6,10 +6,12 @@ import com.annimon.stream.function.BinaryOperator;
 import com.annimon.stream.function.Consumer;
 import com.annimon.stream.function.Function;
 import com.annimon.stream.function.IntUnaryOperator;
+import com.annimon.stream.function.LongUnaryOperator;
 import com.annimon.stream.function.Predicate;
 import com.annimon.stream.function.Supplier;
 import com.annimon.stream.function.ToDoubleFunction;
 import com.annimon.stream.function.ToIntFunction;
+import com.annimon.stream.function.ToLongFunction;
 import com.annimon.stream.function.UnaryOperator;
 import com.annimon.stream.test.hamcrest.DoubleStreamMatcher;
 import com.annimon.stream.test.hamcrest.OptionalMatcher;
@@ -489,6 +491,22 @@ public class StreamTest {
     }
 
     @Test
+    public void testMapToLong() {
+        final ToLongFunction<String> stringToSquareLong = new ToLongFunction<String>() {
+            @Override
+            public long applyAsLong(String t) {
+                final String str = t.substring(1, t.length() - 1);
+                final long value = Long.parseLong(str);
+                return value * value;
+            }
+        };
+        long[] expected = { 4, 9, 16, 64, 625 };
+        LongStream stream = Stream.of("[2]", "[3]", "[4]", "[8]", "[25]")
+                .mapToLong(stringToSquareLong);
+        assertThat(stream.toArray(), is(expected));
+    }
+
+    @Test
     public void testMapToDouble() {
         final ToDoubleFunction<String> stringToDouble = new ToDoubleFunction<String>() {
             @Override
@@ -547,6 +565,23 @@ public class StreamTest {
                 .toArray();
 
         int[] expected = { 2, 2, 3, 3, 3, 4, 4, 4, 4 };
+        assertThat(actual, is(expected));
+    }
+
+    @Test
+    public void testFlatMapToLong() {
+        long[] actual = Stream.rangeClosed(2L, 4L)
+                .flatMapToLong(new Function<Long, LongStream>() {
+                    @Override
+                    public LongStream apply(Long t) {
+                        return LongStream
+                                .iterate(t, LongUnaryOperator.Util.identity())
+                                .limit(t);
+                    }
+                })
+                .toArray();
+
+        long[] expected = { 2, 2, 3, 3, 3, 4, 4, 4, 4 };
         assertThat(actual, is(expected));
     }
 

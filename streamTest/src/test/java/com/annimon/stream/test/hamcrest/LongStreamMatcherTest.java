@@ -1,7 +1,7 @@
 package com.annimon.stream.test.hamcrest;
 
 import com.annimon.stream.Collectors;
-import com.annimon.stream.DoubleStream;
+import com.annimon.stream.LongStream;
 import com.annimon.stream.Stream;
 import com.annimon.stream.function.Function;
 import org.hamcrest.Matcher;
@@ -9,9 +9,9 @@ import org.hamcrest.StringDescription;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.description;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
-import static com.annimon.stream.test.hamcrest.DoubleStreamMatcher.elements;
-import static com.annimon.stream.test.hamcrest.DoubleStreamMatcher.hasElements;
-import static com.annimon.stream.test.hamcrest.DoubleStreamMatcher.isEmpty;
+import static com.annimon.stream.test.hamcrest.LongStreamMatcher.elements;
+import static com.annimon.stream.test.hamcrest.LongStreamMatcher.hasElements;
+import static com.annimon.stream.test.hamcrest.LongStreamMatcher.isEmpty;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
@@ -21,16 +21,16 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-public class DoubleStreamMatcherTest {
+public class LongStreamMatcherTest {
 
     @Test
     public void testPrivateConstructor() throws Exception {
-        assertThat(DoubleStreamMatcher.class, hasOnlyPrivateConstructors());
+        assertThat(LongStreamMatcher.class, hasOnlyPrivateConstructors());
     }
 
     @Test
     public void testIsEmpty() {
-        assertThat(DoubleStream.empty(), isEmpty());
+        assertThat(LongStream.empty(), isEmpty());
 
         StringDescription description = new StringDescription();
         isEmpty().describeTo(description);
@@ -39,8 +39,8 @@ public class DoubleStreamMatcherTest {
 
     @Test
     public void testHasElements() {
-        assertThat(DoubleStream.of(1, 2), hasElements());
-        assertThat(DoubleStream.empty(), not(hasElements()));
+        assertThat(LongStream.of(1, 2), hasElements());
+        assertThat(LongStream.empty(), not(hasElements()));
 
         StringDescription description = new StringDescription();
         hasElements().describeTo(description);
@@ -59,21 +59,21 @@ public class DoubleStreamMatcherTest {
 
     @Test
     public void testElements() {
-        final DoubleStream stream = DoubleStream.of(-0.987, 1.234, Math.PI, 1.618);
-        final Double[] expected = new Double[] {-0.987, 1.234, Math.PI, 1.618};
-        final Matcher<DoubleStream> matcher = elements(arrayContaining(expected));
+        final LongStream stream = LongStream.of(-813, 123456, Integer.MAX_VALUE);
+        final Long[] expected = new Long[] {-813L, 123456L, (long) Integer.MAX_VALUE};
+        final Matcher<LongStream> matcher = elements(arrayContaining(expected));
         assertThat(stream, matcher);
         assertTrue(matcher.matches(stream));
 
-        assertFalse(elements(arrayContaining(expected)).matches(DoubleStream.empty()));
+        assertFalse(elements(arrayContaining(expected)).matches(LongStream.empty()));
 
         assertThat(matcher, description(allOf(
-                containsString("DoubleStream elements"),
+                containsString("LongStream elements"),
                 containsString(Stream.of(expected)
-                        .map(new Function<Double, String>() {
+                        .map(new Function<Long, String>() {
                             @Override
-                            public String apply(Double t) {
-                                return String.format("<%s>", t.toString());
+                            public String apply(Long t) {
+                                return String.format("<%sL>", t.toString());
                             }
                         })
                         .collect(Collectors.joining(", ")))

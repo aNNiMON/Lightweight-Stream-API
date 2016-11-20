@@ -5,6 +5,7 @@ import com.annimon.stream.function.Consumer;
 import com.annimon.stream.function.DoubleBinaryOperator;
 import com.annimon.stream.function.Function;
 import com.annimon.stream.function.IntBinaryOperator;
+import com.annimon.stream.function.LongBinaryOperator;
 import java.util.ArrayDeque;
 import java.util.Iterator;
 
@@ -212,19 +213,66 @@ public final class CustomOperators {
     }
 
     /**
+     * Example of intermediate zip operator applying on two {@code LongStream}.
+     */
+    public static class ZipLong implements Function<LongStream, LongStream> {
+
+        private final LongStream secondStream;
+        private final LongBinaryOperator combiner;
+
+        public ZipLong(LongStream secondStream, LongBinaryOperator combiner) {
+            this.secondStream = secondStream;
+            this.combiner = combiner;
+        }
+
+        @Override
+        public LongStream apply(LongStream firstStream) {
+            final PrimitiveIterator.OfLong it1 = firstStream.iterator();
+            final PrimitiveIterator.OfLong it2 = secondStream.iterator();
+            return LongStream.of(new PrimitiveIterator.OfLong() {
+
+                @Override
+                public boolean hasNext() {
+                    return it1.hasNext() && it2.hasNext();
+                }
+
+                @Override
+                public long nextLong() {
+                    return combiner.applyAsLong(it1.nextLong(), it2.nextLong());
+                }
+            });
+        }
+    }
+
+    /**
      * Example of terminal operator that calculates arithmetic mean of values.
      */
     public static class Average implements Function<IntStream, Double> {
 
-        long count = 0;
-        long sum = 0;
-
         @Override
         public Double apply(IntStream stream) {
+            long count = 0, sum = 0;
             final PrimitiveIterator.OfInt it = stream.iterator();
             while (it.hasNext()) {
                 count++;
                 sum += it.nextInt();
+            }
+            return (count == 0) ? 0 : sum / (double) count;
+        }
+    }
+
+    /**
+     * Example of terminal operator that calculates arithmetic mean of values.
+     */
+    public static class AverageLong implements Function<LongStream, Double> {
+
+        @Override
+        public Double apply(LongStream stream) {
+            long count = 0, sum = 0;
+            final PrimitiveIterator.OfLong it = stream.iterator();
+            while (it.hasNext()) {
+                count++;
+                sum += it.nextLong();
             }
             return (count == 0) ? 0 : sum / (double) count;
         }

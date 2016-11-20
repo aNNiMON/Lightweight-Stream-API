@@ -2,6 +2,7 @@ package com.annimon.stream;
 
 import com.annimon.stream.function.DoubleConsumer;
 import com.annimon.stream.function.IntConsumer;
+import com.annimon.stream.function.LongConsumer;
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -191,6 +192,62 @@ final class SpinedBuffer {
 
                 @Override
                 public int nextInt() {
+                    return get(index++);
+                }
+
+                @Override
+                public boolean hasNext() {
+                    return index < count();
+                }
+            };
+        }
+    }
+
+    static class OfLong extends SpinedBuffer.OfPrimitive<Long, long[], LongConsumer>
+            implements LongConsumer {
+        OfLong() { }
+
+        OfLong(int initialCapacity) {
+            super(initialCapacity);
+        }
+
+        @Override
+        protected long[][] newArrayArray(int size) {
+            return new long[size][];
+        }
+
+        @Override
+        public long[] newArray(int size) {
+            return new long[size];
+        }
+
+        @Override
+        protected int arrayLength(long[] array) {
+            return array.length;
+        }
+
+        @Override
+        public void accept(long i) {
+            preAccept();
+            curChunk[elementIndex++] = i;
+        }
+
+        public long get(long index) {
+            int ch = chunkFor(index);
+            if (spineIndex == 0 && ch == 0)
+                return curChunk[(int) index];
+            else
+                return spine[ch][(int) (index - priorElementCount[ch])];
+        }
+
+        @Override
+        public PrimitiveIterator.OfLong iterator() {
+            return new PrimitiveIterator.OfLong() {
+
+                long index = 0;
+
+                @Override
+                public long nextLong() {
                     return get(index++);
                 }
 
