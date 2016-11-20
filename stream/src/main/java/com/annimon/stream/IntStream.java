@@ -108,24 +108,10 @@ public final class IntStream {
      *         elements
      */
     public static IntStream range(final int startInclusive, final int endExclusive) {
-
-        if(startInclusive >= endExclusive)
+        if (startInclusive >= endExclusive) {
             return empty();
-
-        return new IntStream(new PrimitiveIterator.OfInt() {
-
-            private int current = startInclusive;
-
-            @Override
-            public int nextInt() {
-                return current++;
-            }
-
-            @Override
-            public boolean hasNext() {
-                return current < endExclusive;
-            }
-        });
+        }
+        return rangeClosed(startInclusive, endExclusive - 1);
     }
 
     /**
@@ -138,8 +124,30 @@ public final class IntStream {
      * @return a sequential {@code IntStream} for the range of {@code int}
      *         elements
      */
-    public static IntStream rangeClosed(int startInclusive, int endInclusive) {
-        return range(startInclusive, endInclusive+1);
+    public static IntStream rangeClosed(final int startInclusive, final int endInclusive) {
+        if (startInclusive > endInclusive) {
+            return empty();
+        } else if (startInclusive == endInclusive) {
+            return of(startInclusive);
+        } else return new IntStream(new PrimitiveIterator.OfInt() {
+
+            private int current = startInclusive;
+            private boolean hasNext = current <= endInclusive;
+
+            @Override
+            public boolean hasNext() {
+                return hasNext;
+            }
+
+            @Override
+            public int nextInt() {
+                if (current >= endInclusive) {
+                    hasNext = false;
+                    return endInclusive;
+                }
+                return current++;
+            }
+        });
     }
 
     /**

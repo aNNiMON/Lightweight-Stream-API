@@ -110,7 +110,6 @@ public class LongStreamTest {
     @Test
     public void testStreamRangeClosedStartGreaterThanEnd() {
         assertThat(LongStream.rangeClosed(5, 1), isEmpty());
-
     }
 
     @Test(timeout = 1000)
