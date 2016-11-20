@@ -467,6 +467,32 @@ public final class IntStream {
     }
 
     /**
+     * Returns a {@code LongStream} consisting of the results of applying the given
+     * function to the elements of this stream.
+     *
+     * <p> This is an intermediate operation.
+     *
+     * @param mapper  the mapper function used to apply to each element
+     * @return the new {@code LongStream}
+     * @since 1.1.4
+     * @see #flatMap(com.annimon.stream.function.IntFunction)
+     */
+    public LongStream mapToLong(final IntToLongFunction mapper) {
+        return LongStream.of(new PrimitiveIterator.OfLong() {
+
+            @Override
+            public boolean hasNext() {
+                return iterator.hasNext();
+            }
+
+            @Override
+            public long nextLong() {
+                return mapper.applyAsLong(iterator.nextInt());
+            }
+        });
+    }
+
+    /**
      * Returns a {@code DoubleStream} consisting of the results of applying the given
      * function to the elements of this stream.
      *
