@@ -4,17 +4,22 @@ import com.annimon.stream.function.Consumer;
 import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Predicate;
 import com.annimon.stream.function.Supplier;
+import com.annimon.stream.function.ToDoubleFunction;
 import com.annimon.stream.function.ToIntFunction;
+import com.annimon.stream.function.ToLongFunction;
 import com.annimon.stream.function.UnaryOperator;
+import com.annimon.stream.test.hamcrest.OptionalDoubleMatcher;
 import com.annimon.stream.test.hamcrest.OptionalIntMatcher;
+import com.annimon.stream.test.hamcrest.OptionalLongMatcher;
+import java.util.NoSuchElementException;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.OptionalMatcher.hasValue;
 import static com.annimon.stream.test.hamcrest.OptionalMatcher.isEmpty;
 import static com.annimon.stream.test.hamcrest.OptionalMatcher.isPresent;
-import java.util.NoSuchElementException;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.closeTo;
 import static org.junit.Assert.*;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 /**
  * Tests {@code Optional}.
@@ -229,6 +234,40 @@ public final class OptionalTest {
         result = Optional.of("A")
                 .mapToInt(firstCharToIntFunction);
         assertThat(result, OptionalIntMatcher.hasValue(65));
+    }
+
+    @Test
+    public void testMapToLong() {
+        final ToLongFunction<String> mapper = new ToLongFunction<String>() {
+            @Override
+            public long applyAsLong(String value) {
+                return Long.parseLong(value) * 10000000000L;
+            }
+        };
+
+        OptionalLong result;
+        result = Optional.<String>empty().mapToLong(mapper);
+        assertThat(result, OptionalLongMatcher.isEmpty());
+
+        result = Optional.of("65").mapToLong(mapper);
+        assertThat(result, OptionalLongMatcher.hasValue(650000000000L));
+    }
+
+    @Test
+    public void testMapToDouble() {
+        final ToDoubleFunction<String> mapper = new ToDoubleFunction<String>() {
+            @Override
+            public double applyAsDouble(String t) {
+                return Double.parseDouble(t) / 100d;
+            }
+        };
+
+        OptionalDouble result;
+        result = Optional.<String>empty().mapToDouble(mapper);
+        assertThat(result, OptionalDoubleMatcher.isEmpty());
+
+        result = Optional.of("65").mapToDouble(mapper);
+        assertThat(result, OptionalDoubleMatcher.hasValueThat(closeTo(0.65, 0.0001)));
     }
 
     @Test
