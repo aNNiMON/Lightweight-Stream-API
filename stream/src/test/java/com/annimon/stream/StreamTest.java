@@ -10,6 +10,7 @@ import com.annimon.stream.function.Predicate;
 import com.annimon.stream.function.Supplier;
 import com.annimon.stream.function.ToDoubleFunction;
 import com.annimon.stream.function.ToIntFunction;
+import com.annimon.stream.function.ToLongFunction;
 import com.annimon.stream.function.UnaryOperator;
 import com.annimon.stream.test.hamcrest.DoubleStreamMatcher;
 import com.annimon.stream.test.hamcrest.OptionalMatcher;
@@ -485,6 +486,22 @@ public class StreamTest {
         int[] expected = { 4, 9, 16, 64, 625 };
         IntStream stream = Stream.of("[2]", "[3]", "[4]", "[8]", "[25]")
                 .mapToInt(stringToSquareInt);
+        assertThat(stream.toArray(), is(expected));
+    }
+
+    @Test
+    public void testMapToLong() {
+        final ToLongFunction<String> stringToSquareLong = new ToLongFunction<String>() {
+            @Override
+            public long applyAsLong(String t) {
+                final String str = t.substring(1, t.length() - 1);
+                final long value = Long.parseLong(str);
+                return value * value;
+            }
+        };
+        long[] expected = { 4, 9, 16, 64, 625 };
+        LongStream stream = Stream.of("[2]", "[3]", "[4]", "[8]", "[25]")
+                .mapToLong(stringToSquareLong);
         assertThat(stream.toArray(), is(expected));
     }
 
