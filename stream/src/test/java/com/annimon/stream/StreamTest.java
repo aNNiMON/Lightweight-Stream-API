@@ -586,6 +586,7 @@ public class StreamTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testFlatMapToDouble() {
         DoubleStream stream = Stream.of(2, 4)
                 .flatMapToDouble(new Function<Integer, DoubleStream>() {

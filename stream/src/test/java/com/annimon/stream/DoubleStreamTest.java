@@ -39,6 +39,7 @@ public class DoubleStreamTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testStreamOfPrimitiveIterator() {
         DoubleStream stream = DoubleStream.of(new PrimitiveIterator.OfDouble() {
 
@@ -99,6 +100,7 @@ public class DoubleStreamTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testStreamIterate() {
         DoubleUnaryOperator operator = new DoubleUnaryOperator() {
             @Override
@@ -675,6 +677,7 @@ public class DoubleStreamTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testCustomIntermediateOperator_Zip() {
         final DoubleBinaryOperator op = new DoubleBinaryOperator() {
             @Override

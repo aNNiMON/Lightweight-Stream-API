@@ -289,6 +289,7 @@ public class IntStreamTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testMapToDouble() {
         DoubleStream stream = IntStream.rangeClosed(2, 4)
                 .mapToDouble(new IntToDoubleFunction() {
