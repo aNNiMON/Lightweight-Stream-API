@@ -77,6 +77,59 @@ public class LongStreamTest {
     }
 
     @Test
+    public void testStreamRange() {
+        assertTrue(LongStream.range(1, 5).sum() == 10);
+        assertTrue(LongStream.range(2, 2).count() == 0);
+    }
+
+    @Test(timeout = 1000)
+    public void testStreamRangeOnMinValue() {
+        assertThat(LongStream.range(Long.MIN_VALUE, Long.MIN_VALUE + 5).count(), is(5L));
+    }
+
+    @Test(timeout = 1000)
+    public void testStreamRangeOnEqualValues() {
+        assertThat(LongStream.range(Long.MIN_VALUE, Long.MIN_VALUE), isEmpty());
+
+        assertThat(LongStream.range(0, 0), isEmpty());
+
+        assertThat(LongStream.range(Long.MAX_VALUE, Long.MAX_VALUE), isEmpty());
+    }
+
+    @Test(timeout = 1000)
+    public void testStreamRangeOnMaxValue() {
+        assertThat(LongStream.range(Long.MAX_VALUE - 5, Long.MAX_VALUE).count(), is(5L));
+    }
+
+    @Test
+    public void testStreamRangeClosed() {
+        assertThat(LongStream.rangeClosed(1, 5).sum(), is(15L));
+        assertThat(LongStream.rangeClosed(1, 5).count(), is(5L));
+    }
+
+    @Test(timeout = 1000)
+    public void testStreamRangeClosedOnMinValue() {
+        assertThat(LongStream.rangeClosed(Long.MIN_VALUE, Long.MIN_VALUE + 5).count(), is(6L));
+    }
+
+    @Test(timeout = 1000)
+    public void testStreamRangeClosedOnEqualValues() {
+        assertThat(LongStream.rangeClosed(Long.MIN_VALUE, Long.MIN_VALUE),
+                elements(arrayContaining(Long.MIN_VALUE)));
+
+        assertThat(LongStream.rangeClosed(0, 0),
+                elements(arrayContaining(0L)));
+
+        assertThat(LongStream.rangeClosed(Long.MAX_VALUE, Long.MAX_VALUE),
+                elements(arrayContaining(Long.MAX_VALUE)));
+    }
+
+    @Test(timeout = 1000)
+    public void testStreamRangeClosedOnMaxValue() {
+        assertThat(LongStream.rangeClosed(Long.MAX_VALUE - 5, Long.MAX_VALUE).count(), is(6L));
+    }
+
+    @Test
     public void testStreamGenerate() {
         LongStream stream = LongStream.generate(new LongSupplier() {
             @Override

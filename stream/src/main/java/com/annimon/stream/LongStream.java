@@ -1,5 +1,6 @@
 package com.annimon.stream;
 
+import com.annimon.stream.function.Function;
 import com.annimon.stream.function.LongBinaryOperator;
 import com.annimon.stream.function.LongConsumer;
 import com.annimon.stream.function.LongFunction;
@@ -7,7 +8,6 @@ import com.annimon.stream.function.LongPredicate;
 import com.annimon.stream.function.LongSupplier;
 import com.annimon.stream.function.LongToIntFunction;
 import com.annimon.stream.function.LongUnaryOperator;
-import com.annimon.stream.function.Function;
 import com.annimon.stream.function.ObjLongConsumer;
 import com.annimon.stream.function.Supplier;
 import com.annimon.stream.function.ToLongFunction;
@@ -106,6 +106,59 @@ public final class LongStream {
             public long nextLong() {
                 index++;
                 return t;
+            }
+        });
+    }
+
+    /**
+     * Returns a sequential ordered {@code LongStream} from {@code startInclusive}
+     * (inclusive) to {@code endExclusive} (exclusive) by an incremental step of
+     * {@code 1}.
+     *
+     * @param startInclusive the (inclusive) initial value
+     * @param endExclusive the exclusive upper bound
+     * @return a sequential {@code LongStream} for the range of {@code long}
+     *         elements
+     */
+    public static LongStream range(final long startInclusive, final long endExclusive) {
+        if (startInclusive >= endExclusive) {
+            return empty();
+        }
+        return rangeClosed(startInclusive, endExclusive - 1);
+    }
+
+    /**
+     * Returns a sequential ordered {@code LongStream} from {@code startInclusive}
+     * (inclusive) to {@code endInclusive} (inclusive) by an incremental step of
+     * {@code 1}.
+     *
+     * @param startInclusive the (inclusive) initial value
+     * @param endInclusive the inclusive upper bound
+     * @return a sequential {@code LongStream} for the range of {@code long}
+     *         elements
+     */
+    public static LongStream rangeClosed(final long startInclusive, final long endInclusive) {
+        if (startInclusive > endInclusive) {
+            return empty();
+        } else if (startInclusive == endInclusive) {
+            return of(startInclusive);
+        } else return new LongStream(new PrimitiveIterator.OfLong() {
+
+            private long current = startInclusive;
+            private boolean hasNext = current <= endInclusive;
+
+            @Override
+            public boolean hasNext() {
+                return hasNext;
+            }
+
+            @Override
+            public long nextLong() {
+                if (current >= endInclusive) {
+                    hasNext = false;
+                    return endInclusive;
+                }
+                return current++;
             }
         });
     }
