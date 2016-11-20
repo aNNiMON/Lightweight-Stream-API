@@ -105,20 +105,7 @@ public final class Stream<T> {
      * @see IntStream#range(int, int)
      */
     public static Stream<Integer> range(final int from, final int to) {
-        return new Stream<Integer>(new LsaIterator<Integer>() {
-
-            private int index = from;
-
-            @Override
-            public boolean hasNext() {
-                return index < to;
-            }
-
-            @Override
-            public Integer nextIteration() {
-                return index++;
-            }
-        });
+        return IntStream.range(from, to).boxed();
     }
 
     /**
@@ -144,20 +131,7 @@ public final class Stream<T> {
      * @return the new stream
      */
     public static Stream<Long> range(final long from, final long to) {
-        return new Stream<Long>(new LsaIterator<Long>() {
-
-            private long index = from;
-
-            @Override
-            public boolean hasNext() {
-                return index < to;
-            }
-
-            @Override
-            public Long nextIteration() {
-                return index++;
-            }
-        });
+        return LongStream.range(from, to).boxed();
     }
 
     /**
@@ -184,25 +158,7 @@ public final class Stream<T> {
      * @see IntStream#rangeClosed(int, int)
      */
     public static Stream<Integer> rangeClosed(final int from, final int to) {
-        return new Stream<Integer>(new LsaIterator<Integer>() {
-
-            private int index = from;
-            private boolean hasNext = (index <= to);
-
-            @Override
-            public boolean hasNext() {
-                return hasNext;
-            }
-
-            @Override
-            public Integer nextIteration() {
-                if (index >= to) {
-                    hasNext = false;
-                    return to;
-                }
-                return index++;
-            }
-        });
+        return IntStream.rangeClosed(from, to).boxed();
     }
 
     /**
@@ -228,25 +184,7 @@ public final class Stream<T> {
      * @return the new stream
      */
     public static Stream<Long> rangeClosed(final long from, final long to) {
-        return new Stream<Long>(new LsaIterator<Long>() {
-
-            private long index = from;
-            private boolean hasNext = (index <= to);
-
-            @Override
-            public boolean hasNext() {
-                return hasNext;
-            }
-
-            @Override
-            public Long nextIteration() {
-                if (index >= to) {
-                    hasNext = false;
-                    return to;
-                }
-                return index++;
-            }
-        });
+        return LongStream.rangeClosed(from, to).boxed();
     }
 
     /**
