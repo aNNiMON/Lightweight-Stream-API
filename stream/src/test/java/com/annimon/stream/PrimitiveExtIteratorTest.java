@@ -24,6 +24,12 @@ public class PrimitiveExtIteratorTest {
     }
 
     @Test
+    public void testOfLongHasNext() {
+        assertFalse(new EmptyPrimitiveExtIteratorOfLong().hasNext());
+        assertTrue(new PrimitiveExtIteratorOfLongImpl().hasNext());
+    }
+
+    @Test
     public void testOfDoubleHasNext() {
         assertFalse(new EmptyPrimitiveExtIteratorOfDouble().hasNext());
         assertTrue(new PrimitiveExtIteratorOfDoubleImpl().hasNext());
@@ -37,6 +43,15 @@ public class PrimitiveExtIteratorTest {
         assertEquals(iterator.nextInt(), 2);
 
         new EmptyPrimitiveExtIteratorOfInt().nextInt();
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testOfLongNext() {
+        final PrimitiveExtIteratorOfLongImpl iterator = new PrimitiveExtIteratorOfLongImpl();
+        assertEquals(iterator.nextLong(), 1);
+        assertEquals(iterator.nextLong(), 2);
+
+        new EmptyPrimitiveExtIteratorOfLong().nextLong();
     }
 
     @Test(expected = NoSuchElementException.class)
@@ -55,6 +70,11 @@ public class PrimitiveExtIteratorTest {
     }
 
     @Test(expected = UnsupportedOperationException.class)
+    public void testOfLongRemove() {
+        new EmptyPrimitiveExtIteratorOfLong().remove();
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
     public void testOfDoubleRemove() {
         new EmptyPrimitiveExtIteratorOfDouble().remove();
     }
@@ -70,6 +90,18 @@ public class PrimitiveExtIteratorTest {
         assertFalse(iterator.hasNext());
         assertFalse(iterator.hasNext());
         iterator.nextInt();
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testOfLong() {
+        final PrimitiveExtIteratorOfLongImpl iterator = new PrimitiveExtIteratorOfLongImpl();
+        assertTrue(iterator.hasNext());
+        assertTrue(iterator.hasNext());
+        assertEquals(iterator.nextLong(), 1L);
+        assertEquals(iterator.nextLong(), 2L);
+        assertFalse(iterator.hasNext());
+        assertFalse(iterator.hasNext());
+        iterator.nextLong();
     }
 
     @Test(expected = NoSuchElementException.class)
@@ -94,6 +126,23 @@ public class PrimitiveExtIteratorTest {
     }
 
     private class PrimitiveExtIteratorOfIntImpl extends PrimitiveExtIterator.OfInt {
+
+        @Override
+        protected void nextIteration() {
+            hasNext = next < 2;
+            next++;
+        }
+    }
+
+    private class EmptyPrimitiveExtIteratorOfLong extends PrimitiveExtIterator.OfLong {
+
+        @Override
+        protected void nextIteration() {
+            hasNext = false;
+        }
+    }
+
+    private class PrimitiveExtIteratorOfLongImpl extends PrimitiveExtIterator.OfLong {
 
         @Override
         protected void nextIteration() {
