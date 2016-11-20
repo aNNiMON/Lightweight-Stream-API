@@ -4,6 +4,7 @@ import com.annimon.stream.function.DoubleConsumer;
 import com.annimon.stream.function.DoubleFunction;
 import com.annimon.stream.function.DoubleSupplier;
 import com.annimon.stream.function.DoubleToIntFunction;
+import com.annimon.stream.function.DoubleToLongFunction;
 import com.annimon.stream.function.DoubleUnaryOperator;
 import com.annimon.stream.function.Supplier;
 import com.annimon.stream.test.hamcrest.OptionalMatcher;
@@ -251,6 +252,24 @@ public class OptionalDoubleTest {
         assertFalse(OptionalDouble.empty().mapToInt(new DoubleToIntFunction() {
             @Override
             public int applyAsInt(double value) {
+                fail();
+                return 0;
+            }
+        }).isPresent());
+    }
+
+    @Test
+    public void testMapToLong() {
+        assertThat(OptionalDouble.of(0.2).mapToLong(new DoubleToLongFunction() {
+            @Override
+            public long applyAsLong(double value) {
+                return (long) (value * 10);
+            }
+        }).getAsLong(), is(2L));
+
+        assertFalse(OptionalDouble.empty().mapToLong(new DoubleToLongFunction() {
+            @Override
+            public long applyAsLong(double value) {
                 fail();
                 return 0;
             }

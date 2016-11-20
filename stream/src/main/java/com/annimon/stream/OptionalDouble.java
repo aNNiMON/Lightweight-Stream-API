@@ -5,6 +5,7 @@ import com.annimon.stream.function.DoubleFunction;
 import com.annimon.stream.function.DoublePredicate;
 import com.annimon.stream.function.DoubleSupplier;
 import com.annimon.stream.function.DoubleToIntFunction;
+import com.annimon.stream.function.DoubleToLongFunction;
 import com.annimon.stream.function.DoubleUnaryOperator;
 import com.annimon.stream.function.Supplier;
 import java.util.NoSuchElementException;
@@ -193,6 +194,23 @@ public final class OptionalDouble {
         }
         Objects.requireNonNull(mapper);
         return OptionalInt.of(mapper.applyAsInt(value));
+    }
+
+    /**
+     * Invokes the given mapping function on inner value if present.
+     *
+     * @param mapper  mapping function
+     * @return an {@code OptionalLong} with transformed value if present,
+     *         otherwise an empty {@code OptionalLong}
+     * @throws NullPointerException if value is present and
+     *         {@code mapper} is {@code null}
+     */
+    public OptionalLong mapToLong(DoubleToLongFunction mapper) {
+        if (!isPresent()) {
+            return OptionalLong.empty();
+        }
+        Objects.requireNonNull(mapper);
+        return OptionalLong.of(mapper.applyAsLong(value));
     }
 
     /**
