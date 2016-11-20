@@ -270,7 +270,7 @@ public final class OptionalDouble {
 
         OptionalDouble other = (OptionalDouble) obj;
         return (isPresent && other.isPresent)
-                ? value == other.value
+                ? Double.compare(value, other.value) == 0
                 : isPresent == other.isPresent;
     }
 
