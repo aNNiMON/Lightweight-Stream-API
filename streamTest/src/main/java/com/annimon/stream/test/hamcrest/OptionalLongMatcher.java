@@ -18,7 +18,7 @@ public class OptionalLongMatcher {
         return new IsEmptyMatcher();
     }
 
-    public static <T> Matcher<OptionalLong> hasValue(long value) {
+    public static Matcher<OptionalLong> hasValue(long value) {
         return hasValueThat(is(value));
     }
 

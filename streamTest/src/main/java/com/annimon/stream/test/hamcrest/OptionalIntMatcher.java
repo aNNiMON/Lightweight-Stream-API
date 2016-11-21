@@ -18,7 +18,7 @@ public class OptionalIntMatcher {
         return new IsEmptyMatcher();
     }
 
-    public static <T> Matcher<OptionalInt> hasValue(int value) {
+    public static Matcher<OptionalInt> hasValue(int value) {
         return hasValueThat(is(value));
     }
 

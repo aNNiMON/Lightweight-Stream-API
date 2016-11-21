@@ -18,7 +18,7 @@ public class OptionalDoubleMatcher {
         return new IsEmptyMatcher();
     }
 
-    public static <T> Matcher<OptionalDouble> hasValue(double value) {
+    public static Matcher<OptionalDouble> hasValue(double value) {
         return hasValueThat(is(value));
     }
 
