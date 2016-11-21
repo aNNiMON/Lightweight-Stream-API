@@ -8,23 +8,78 @@ import java.util.Iterator;
 
 final class SpinedBuffer {
 
+    /**
+     * Minimum power-of-two for the first chunk.
+     */
+    static final int MIN_CHUNK_POWER = 4;
+
+    /**
+     * Minimum size for the first chunk.
+     */
+    static final int MIN_CHUNK_SIZE = 1 << MIN_CHUNK_POWER;
+
+    /**
+     * Max power-of-two for chunks.
+     */
+    private static final int MAX_CHUNK_POWER = 30;
+
+    /**
+     * Minimum array size for array-of-chunks.
+     */
+    static final int MIN_SPINE_SIZE = 8;
+
     private SpinedBuffer() {
     }
 
-    abstract static class OfPrimitive<E, T_ARR, T_CONS>
-            extends AbstractSpinedBuffer implements Iterable<E> {
+    /**
+     * Base class for a data structure for gathering elements into a buffer and then
+     * iterating them. Maintains an array of increasingly sized arrays, so there is
+     * no copying cost associated with growing the data structure.
+     */
+    abstract static class OfPrimitive<E, T_ARR, T_CONS> implements Iterable<E> {
+
+        /**
+         * log2 of the size of the first chunk.
+         */
+        final int initialChunkPower;
+
+        /**
+         * Index of the *next* element to write; may point into, or just outside of,
+         * the current chunk.
+         */
+        int elementIndex;
+
+        /**
+         * Index of the *current* chunk in the spine array, if the spine array is
+         * non-null.
+         */
+        int spineIndex;
+
+        /**
+         * Count of elements in all prior chunks.
+         */
+        long[] priorElementCount;
 
         T_ARR curChunk;
 
         T_ARR[] spine;
 
+        /**
+         * Construct with a specified initial capacity.
+         *
+         * @param initialCapacity The minimum expected number of elements
+         */
         OfPrimitive(int initialCapacity) {
-            super(initialCapacity);
+            if (initialCapacity < 0)
+                throw new IllegalArgumentException("Illegal Capacity: "+ initialCapacity);
+
+            this.initialChunkPower = Math.max(MIN_CHUNK_POWER,
+                    Integer.SIZE - Integer.numberOfLeadingZeros(initialCapacity - 1));
             curChunk = newArray(1 << initialChunkPower);
         }
 
         OfPrimitive() {
-            super();
+            this.initialChunkPower = MIN_CHUNK_POWER;
             curChunk = newArray(1 << initialChunkPower);
         }
 
@@ -36,6 +91,32 @@ final class SpinedBuffer {
         protected abstract T_ARR newArray(int size);
 
         protected abstract int arrayLength(T_ARR array);
+
+        /**
+         * Is the buffer currently empty?
+         */
+        public boolean isEmpty() {
+            return (spineIndex == 0) && (elementIndex == 0);
+        }
+
+        /**
+         * How many elements are currently in the buffer?
+         */
+        public long count() {
+            return (spineIndex == 0)
+                    ? elementIndex
+                    : priorElementCount[spineIndex] + elementIndex;
+        }
+
+        /**
+         * How big should the nth chunk be?
+         */
+        int chunkSize(int n) {
+            int power = (n == 0 || n == 1)
+                    ? initialChunkPower
+                    : Math.min(initialChunkPower + n - 1, MAX_CHUNK_POWER);
+            return 1 << power;
+        }
 
         long capacity() {
             return (spineIndex == 0)
@@ -133,7 +214,9 @@ final class SpinedBuffer {
             }
         }
 
-        @Override
+        /**
+         * Remove all data from the buffer
+         */
         public void clear() {
             if (spine != null) {
                 curChunk = spine[0];

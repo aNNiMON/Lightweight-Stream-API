@@ -16,53 +16,53 @@ public class SpinedBufferTest {
     @Test
     public void testOfIntEmptyConstructor() {
         SpinedBuffer.OfInt b = new SpinedBuffer.OfInt();
-        assertEquals(AbstractSpinedBuffer.MIN_CHUNK_SIZE, b.capacity());
+        assertEquals(SpinedBuffer.MIN_CHUNK_SIZE, b.capacity());
     }
 
     @Test
     public void testOfLongEmptyConstructor() {
         SpinedBuffer.OfLong b = new SpinedBuffer.OfLong();
-        assertEquals(AbstractSpinedBuffer.MIN_CHUNK_SIZE, b.capacity());
+        assertEquals(SpinedBuffer.MIN_CHUNK_SIZE, b.capacity());
     }
 
     @Test
     public void testOfDoubleEmptyConstructor() {
         SpinedBuffer.OfDouble b = new SpinedBuffer.OfDouble();
-        assertEquals(AbstractSpinedBuffer.MIN_CHUNK_SIZE, b.capacity());
+        assertEquals(SpinedBuffer.MIN_CHUNK_SIZE, b.capacity());
     }
 
 
     @Test
     public void testOfIntConstructorCapacity() {
         SpinedBuffer.OfInt b = new SpinedBuffer.OfInt(1);
-        assertEquals(AbstractSpinedBuffer.MIN_CHUNK_SIZE, b.capacity());
+        assertEquals(SpinedBuffer.MIN_CHUNK_SIZE, b.capacity());
         SpinedBuffer.OfInt b2 = new SpinedBuffer.OfInt(33);
         assertEquals(64, b2.capacity());
 
         SpinedBuffer.OfInt b3 = new SpinedBuffer.OfInt(1735);
-        assertTrue(b3.capacity() % AbstractSpinedBuffer.MIN_CHUNK_SIZE == 0);
+        assertTrue(b3.capacity() % SpinedBuffer.MIN_CHUNK_SIZE == 0);
     }
 
     @Test
     public void testOfLongConstructorCapacity() {
         SpinedBuffer.OfLong b = new SpinedBuffer.OfLong(1);
-        assertEquals(AbstractSpinedBuffer.MIN_CHUNK_SIZE, b.capacity());
+        assertEquals(SpinedBuffer.MIN_CHUNK_SIZE, b.capacity());
         SpinedBuffer.OfLong b2 = new SpinedBuffer.OfLong(33);
         assertEquals(64, b2.capacity());
 
         SpinedBuffer.OfLong b3 = new SpinedBuffer.OfLong(1735);
-        assertTrue(b3.capacity() % AbstractSpinedBuffer.MIN_CHUNK_SIZE == 0);
+        assertTrue(b3.capacity() % SpinedBuffer.MIN_CHUNK_SIZE == 0);
     }
 
     @Test
     public void testOfDoubleConstructorCapacity() {
         SpinedBuffer.OfDouble b = new SpinedBuffer.OfDouble(1);
-        assertEquals(AbstractSpinedBuffer.MIN_CHUNK_SIZE, b.capacity());
+        assertEquals(SpinedBuffer.MIN_CHUNK_SIZE, b.capacity());
         SpinedBuffer.OfDouble b2 = new SpinedBuffer.OfDouble(33);
         assertEquals(64, b2.capacity());
 
         SpinedBuffer.OfDouble b3 = new SpinedBuffer.OfDouble(1735);
-        assertTrue(b3.capacity() % AbstractSpinedBuffer.MIN_CHUNK_SIZE == 0);
+        assertTrue(b3.capacity() % SpinedBuffer.MIN_CHUNK_SIZE == 0);
     }
 
 
@@ -313,7 +313,7 @@ public class SpinedBufferTest {
     public void testIntEnsureCapacity() {
         SpinedBuffer.OfInt b = new SpinedBuffer.OfInt();
 
-        int m = AbstractSpinedBuffer.MIN_CHUNK_POWER;
+        int m = SpinedBuffer.MIN_CHUNK_POWER;
 
         int count = (1<<m)+ (1<<m) + (1<<m+1) + (1<<m+2) + (1<<m + 3) + (1<<m+4) + (1<<m+5) + (1<<m+6);
 
@@ -329,7 +329,7 @@ public class SpinedBufferTest {
     public void testLongEnsureCapacity() {
         SpinedBuffer.OfLong b = new SpinedBuffer.OfLong();
 
-        long m = AbstractSpinedBuffer.MIN_CHUNK_POWER;
+        long m = SpinedBuffer.MIN_CHUNK_POWER;
 
         long count = (1<<m)+ (1<<m) + (1<<m+1) + (1<<m+2) + (1<<m + 3) + (1<<m+4) + (1<<m+5) + (1<<m+6);
 
@@ -345,7 +345,7 @@ public class SpinedBufferTest {
     public void testDoubleEnsureCapacity() {
         SpinedBuffer.OfDouble b = new SpinedBuffer.OfDouble();
 
-        int m = AbstractSpinedBuffer.MIN_CHUNK_POWER;
+        int m = SpinedBuffer.MIN_CHUNK_POWER;
 
         int count = (1<<m)+ (1<<m) + (1<<m+1) + (1<<m+2) + (1<<m + 3) + (1<<m+4) + (1<<m+5) + (1<<m+6);
 
