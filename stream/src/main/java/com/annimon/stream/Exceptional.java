@@ -50,6 +50,7 @@ public class Exceptional<T> {
      * Returns an {@code Exceptional} with throwable already set.
      *
      * @param <T> the type of value
+     * @param throwable  throwable instance
      * @return an {@code Exceptional}
      */
     public static <T> Exceptional<T> of(Throwable throwable) {
