@@ -6,6 +6,7 @@ import com.annimon.stream.function.DoubleFunction;
 import com.annimon.stream.function.DoublePredicate;
 import com.annimon.stream.function.DoubleSupplier;
 import com.annimon.stream.function.DoubleToIntFunction;
+import com.annimon.stream.function.DoubleToLongFunction;
 import com.annimon.stream.function.DoubleUnaryOperator;
 import com.annimon.stream.function.ObjDoubleConsumer;
 import com.annimon.stream.test.hamcrest.OptionalDoubleMatcher;
@@ -230,6 +231,18 @@ public class DoubleStreamTest {
         };
         assertThat(DoubleStream.of(0.2, 0.3, 0.4).mapToInt(mapper).toArray(),
                 is(new int[] {2, 3, 4}));
+    }
+
+    @Test
+    public void testMapToLong() {
+        DoubleToLongFunction mapper = new DoubleToLongFunction() {
+            @Override
+            public long applyAsLong(double value) {
+                return (long) (value * 10000000000L);
+            }
+        };
+        assertThat(DoubleStream.of(0.2, 0.3, 0.004).mapToLong(mapper).toArray(),
+                is(new long[] {2000000000L, 3000000000L, 40000000L}));
     }
 
     @Test
