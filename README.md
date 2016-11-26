@@ -2,7 +2,6 @@ Lightweight-Stream-API
 ======================
 
 [![Join the chat at https://gitter.im/aNNiMON/Lightweight-Stream-API](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/aNNiMON/Lightweight-Stream-API?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.annimon/stream/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/com.annimon/stream)
 [![Build Status](https://travis-ci.org/aNNiMON/Lightweight-Stream-API.svg?branch=master)](https://travis-ci.org/aNNiMON/Lightweight-Stream-API)
 [![Coverage Status](https://coveralls.io/repos/aNNiMON/Lightweight-Stream-API/badge.svg?branch=master&service=github)](https://coveralls.io/github/aNNiMON/Lightweight-Stream-API?branch=master)
@@ -14,8 +13,8 @@ Stream API from Java 8 rewritten on iterators for Java 7 and below.
 ### Includes
 
  + Functional interfaces (`Supplier`, `Function`, `Consumer` etc);
- + `Stream`/`IntStream` (without parallel processing but with a variety of additional methods and with custom operators);
- + `Optional` class;
+ + `Stream`/`IntStream`/`LongStream`/`DoubleStream` (without parallel processing, but with a variety of additional methods and with custom operators);
+ + `Optional`/`OptionalInt`/`OptionalLong`/`OptionalDouble` classes;
  + `Exceptional` class - functional way to deal with exceptions;
  + `Objects` from Java 7.
 
@@ -165,7 +164,7 @@ Download [latest release](https://github.com/aNNiMON/Lightweight-Stream-API/rele
 <dependency>
   <groupId>com.annimon</groupId>
   <artifactId>stream</artifactId>
-  <version>1.1.3</version>
+  <version>1.1.4</version>
 </dependency>
 ```
 or Gradle:
@@ -173,7 +172,7 @@ or Gradle:
 ```groovy
 dependencies {
   ...
-  compile 'com.annimon:stream:1.1.3'
+  compile 'com.annimon:stream:1.1.4'
   ...
 }
 ```
