@@ -6,6 +6,7 @@ import com.annimon.stream.function.LongConsumer;
 import com.annimon.stream.function.LongFunction;
 import com.annimon.stream.function.LongPredicate;
 import com.annimon.stream.function.LongSupplier;
+import com.annimon.stream.function.LongToDoubleFunction;
 import com.annimon.stream.function.LongToIntFunction;
 import com.annimon.stream.function.LongUnaryOperator;
 import com.annimon.stream.function.ObjLongConsumer;
@@ -506,6 +507,30 @@ public final class LongStream {
             @Override
             public int nextInt() {
                 return mapper.applyAsInt(iterator.nextLong());
+            }
+        });
+    }
+
+    /**
+     * Returns an {@code DoubleStream} consisting of the results of applying the given
+     * function to the elements of this stream.
+     *
+     * <p> This is an intermediate operation.
+     *
+     * @param mapper  the mapper function used to apply to each element
+     * @return the new {@code DoubleStream}
+     */
+    public DoubleStream mapToDouble(final LongToDoubleFunction mapper) {
+        return DoubleStream.of(new PrimitiveIterator.OfDouble() {
+
+            @Override
+            public boolean hasNext() {
+                return iterator.hasNext();
+            }
+
+            @Override
+            public double nextDouble() {
+                return mapper.applyAsDouble(iterator.nextLong());
             }
         });
     }

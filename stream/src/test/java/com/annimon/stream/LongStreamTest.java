@@ -5,9 +5,11 @@ import com.annimon.stream.function.LongConsumer;
 import com.annimon.stream.function.LongFunction;
 import com.annimon.stream.function.LongPredicate;
 import com.annimon.stream.function.LongSupplier;
+import com.annimon.stream.function.LongToDoubleFunction;
 import com.annimon.stream.function.LongToIntFunction;
 import com.annimon.stream.function.LongUnaryOperator;
 import com.annimon.stream.function.ObjLongConsumer;
+import com.annimon.stream.test.hamcrest.DoubleStreamMatcher;
 import com.annimon.stream.test.hamcrest.OptionalLongMatcher;
 import com.annimon.stream.test.hamcrest.StreamMatcher;
 import java.util.Arrays;
@@ -17,6 +19,7 @@ import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.LongStreamMatcher.elements;
 import static com.annimon.stream.test.hamcrest.LongStreamMatcher.isEmpty;
 import static com.annimon.stream.test.hamcrest.OptionalLongMatcher.hasValue;
+import static org.hamcrest.Matchers.array;
 import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.is;
@@ -277,6 +280,23 @@ public class LongStreamTest {
         };
         assertThat(LongStream.of(10L, 20L, 30L, 40L).mapToInt(mapper).toArray(),
                 is(new int[] {1, 2, 3, 4}));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testMapToDouble() {
+        DoubleStream stream = LongStream.rangeClosed(2, 4)
+                .mapToDouble(new LongToDoubleFunction() {
+                    @Override
+                    public double applyAsDouble(long value) {
+                        return value / 10d;
+                    }
+                });
+        assertThat(stream, DoubleStreamMatcher.elements(array(
+                closeTo(0.2, 0.00001),
+                closeTo(0.3, 0.00001),
+                closeTo(0.4, 0.00001)
+        )));
     }
 
     @Test
