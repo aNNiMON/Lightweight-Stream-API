@@ -253,6 +253,14 @@ public final class RandomCompat {
 
             @Override
             public int getAsInt() {
+                if (bound < 0) {
+                    // range not representable as int
+                    int result;
+                    do {
+                        result = random.nextInt();
+                    } while (randomNumberOrigin >= result || result >= randomNumberBound);
+                    return result;
+                }
                 return randomNumberOrigin + random.nextInt(bound);
             }
         });

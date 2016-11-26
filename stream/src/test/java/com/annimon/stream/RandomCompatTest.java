@@ -182,6 +182,17 @@ public class RandomCompatTest {
     }
 
     @Test
+    public void testRandomIntsBoundedAlmostFullRange() {
+        assertEquals(30, new RandomCompat().ints(Integer.MIN_VALUE + 5, Integer.MAX_VALUE - 5).peek(new IntConsumer() {
+            @Override
+            public void accept(int value) {
+                if (value < (Integer.MIN_VALUE + 5) || value >= (Integer.MAX_VALUE - 5))
+                    fail();
+            }
+        }).limit(30).count());
+    }
+
+    @Test
     public void testRandomLongsBounded() {
         assertEquals(10, new RandomCompat().longs(0, 100).peek(new LongConsumer() {
             @Override
