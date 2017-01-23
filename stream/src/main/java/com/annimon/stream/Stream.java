@@ -96,6 +96,19 @@ public final class Stream<T> {
     }
 
     /**
+     * If specified element is null, returns an empty {@code Stream},
+     * otherwise returns a {@code Stream} containing a single element.
+     *
+     * @param <T> the type of the stream element
+     * @param element  the element to be passed to stream if it is non-null
+     * @return the new stream
+     * @since 1.1.5
+     */
+    public static <T> Stream<T> ofNullable(T element) {
+        return (element == null) ? Stream.<T>empty() : Stream.of(element);
+    }
+
+    /**
      * Creates a {@code Stream<Integer>} from not closed range
      * (from {@code from} inclusive to {@code to} exclusive and incremental step {@code 1}).
      *
@@ -1493,6 +1506,26 @@ public final class Stream<T> {
         //noinspection SuspiciousSystemArraycopy
         System.arraycopy(source, 0, boxed, 0, size);
         return boxed;
+    }
+
+    /**
+     * Collects elements to a new {@code List}.
+     * 
+     * <p>This implementation <strong>does not</strong> call {@code collect(Collectors.toList())}, so
+     * it can be faster by reducing method calls.
+     *
+     * <p>This is a terminal operation.
+     *
+     * @return a new {@code List}
+     * @since 1.1.5
+     * @see Collectors#toList()
+     */
+    public List<T> toList() {
+        final List<T> result = new ArrayList<T>();
+        while (iterator.hasNext()) {
+            result.add(iterator.next());
+        }
+        return result;
     }
 
     /**
