@@ -342,7 +342,7 @@ public class IntStreamTest {
         input.addAll(Arrays.asList(3, 2, 1, 1, -1));
 
 
-        List<Integer> actual = stream.boxed().collect(Collectors.<Integer>toList());
+        List<Integer> actual = stream.boxed().toList();
         assertThat(actual, Matchers.contains(expected));
     }
 

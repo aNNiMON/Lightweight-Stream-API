@@ -1509,6 +1509,26 @@ public final class Stream<T> {
     }
 
     /**
+     * Collects elements to a new {@code List}.
+     * 
+     * <p>This implementation <strong>does not</strong> call {@code collect(Collectors.toList())}, so
+     * it can be faster by reducing method calls.
+     *
+     * <p>This is a terminal operation.
+     *
+     * @return a new {@code List}
+     * @since 1.1.5
+     * @see Collectors#toList()
+     */
+    public List<T> toList() {
+        final List<T> result = new ArrayList<T>();
+        while (iterator.hasNext()) {
+            result.add(iterator.next());
+        }
+        return result;
+    }
+
+    /**
      * Collects elements to {@code supplier} provided container by applying the given accumulation function.
      *
      * <p>This is a terminal operation.

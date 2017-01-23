@@ -32,6 +32,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.array;
 import static org.hamcrest.Matchers.closeTo;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
@@ -1365,6 +1366,12 @@ public class StreamTest {
 
         assertTrue(numbers.length > 0);
         assertNotNull(numbers[100]);
+    }
+
+    @Test
+    public void testToList() {
+        assertThat(Stream.range(0, 5).toList(),
+                contains(0, 1, 2, 3, 4));
     }
 
     @Test(expected = NullPointerException.class)
