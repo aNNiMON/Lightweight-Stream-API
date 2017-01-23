@@ -96,6 +96,19 @@ public final class Stream<T> {
     }
 
     /**
+     * If specified element is null, returns an empty {@code Stream},
+     * otherwise returns a {@code Stream} containing a single element.
+     *
+     * @param <T> the type of the stream element
+     * @param element  the element to be passed to stream if it is non-null
+     * @return the new stream
+     * @since 1.1.5
+     */
+    public static <T> Stream<T> ofNullable(T element) {
+        return (element == null) ? Stream.<T>empty() : Stream.of(element);
+    }
+
+    /**
      * Creates a {@code Stream<Integer>} from not closed range
      * (from {@code from} inclusive to {@code to} exclusive and incremental step {@code 1}).
      *
