@@ -989,7 +989,7 @@ public final class Stream<T> {
             @Override
             protected void nextIteration() {
                 if (!isInit) {
-                    final List<T> list = collectToList();
+                    final List<T> list = toList();
                     Collections.sort(list, comparator);
                     sortedIterator = list.iterator();
                 }
@@ -1494,7 +1494,7 @@ public final class Stream<T> {
      */
     @SuppressWarnings("unchecked")
     public <R> R[] toArray(IntFunction<R[]> generator) {
-        final List<T> container = collectToList();
+        final List<T> container = toList();
         final int size = container.size();
 
         if (size >= MAX_ARRAY_SIZE) throw new IllegalArgumentException(BAD_SIZE);
@@ -1817,14 +1817,5 @@ public final class Stream<T> {
         // noneMatch -> true
         return !kindAny;
     }
-
-    private List<T> collectToList() {
-        final List<T> container = new ArrayList<T>();
-        while (iterator.hasNext()) {
-            container.add(iterator.next());
-        }
-        return container;
-    }
-
 //</editor-fold>
 }
