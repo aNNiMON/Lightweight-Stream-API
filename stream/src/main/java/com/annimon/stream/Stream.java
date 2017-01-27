@@ -109,6 +109,19 @@ public final class Stream<T> {
     }
 
     /**
+     * If specified iterable is null, returns an empty {@code Stream},
+     * otherwise returns a {@code Stream} containing elements of this iterable.
+     *
+     * @param <T> the type of the stream elements
+     * @param iterable  the {@code Iterable} with elements to be passed to stream
+     * @return the new stream
+     * @since 1.1.5
+     */
+    public static <T> Stream<T> ofNullable(Iterable<? extends T> iterable) {
+        return (iterable == null) ? Stream.<T>empty() : Stream.<T>of(iterable);
+    }
+
+    /**
      * Creates a {@code Stream<Integer>} from not closed range
      * (from {@code from} inclusive to {@code to} exclusive and incremental step {@code 1}).
      *

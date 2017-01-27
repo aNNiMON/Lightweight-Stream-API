@@ -137,6 +137,14 @@ public class StreamTest {
     }
 
     @Test
+    public void testStreamOfNullableWithIterable() {
+        assertThat(Stream.ofNullable((List<?>) null), isEmpty());
+
+        assertThat(Stream.ofNullable(Arrays.asList(5, 10, 15)),
+                elements(is(Arrays.asList(5, 10, 15))));
+    }
+
+    @Test
     public void testStreamRange() {
         final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
         Stream.range(0, 5)
