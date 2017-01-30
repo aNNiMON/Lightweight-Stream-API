@@ -579,6 +579,9 @@ public final class LongStream {
 
             @Override
             public long nextLong() {
+                if (inner == null) {
+                    throw new NoSuchElementException();
+                }
                 return inner.nextLong();
             }
         });

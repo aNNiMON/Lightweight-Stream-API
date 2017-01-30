@@ -324,6 +324,16 @@ public class IntStreamTest {
         }).count() == 10);
     }
 
+    @Test(expected = NoSuchElementException.class)
+    public void testFlatMapIterator() {
+        IntStream.empty().flatMap(new IntFunction<IntStream>() {
+            @Override
+            public IntStream apply(int value) {
+                return IntStream.of(value);
+            }
+        }).iterator().nextInt();
+    }
+
     @Test
     public void testDistinct() {
         assertTrue(IntStream.of(1, 2, -1, 10, 1, 1, -1, 5).distinct().count() == 5);

@@ -327,6 +327,16 @@ public class LongStreamTest {
         }), elements(arrayContaining(10L, 20L)));
     }
 
+    @Test(expected = NoSuchElementException.class)
+    public void testFlatMapIterator() {
+        LongStream.empty().flatMap(new LongFunction<LongStream>() {
+            @Override
+            public LongStream apply(long value) {
+                return LongStream.of(value);
+            }
+        }).iterator().nextLong();
+    }
+
     @Test
     public void testDistinct() {
         assertThat(LongStream.of(9, 12, 0, 22, 9, 12, 32, 9).distinct(),

@@ -527,6 +527,9 @@ public final class DoubleStream {
 
             @Override
             public double nextDouble() {
+                if (inner == null) {
+                    throw new NoSuchElementException();
+                }
                 return inner.nextDouble();
             }
         });

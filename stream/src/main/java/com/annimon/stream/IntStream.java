@@ -552,30 +552,28 @@ public final class IntStream {
 
             @Override
             public int nextInt() {
+                if (inner == null) {
+                    throw new NoSuchElementException();
+                }
                 return inner.nextInt();
             }
 
             @Override
             public boolean hasNext() {
-
-                if(inner != null && inner.hasNext()) {
+                if (inner != null && inner.hasNext()) {
                     return true;
                 }
-
-                while(iterator.hasNext()) {
-                    int arg = iterator.next();
-
-                    IntStream result = mapper.apply(arg);
-                    if(result == null) {
+                while (iterator.hasNext()) {
+                    final int arg = iterator.next();
+                    final IntStream result = mapper.apply(arg);
+                    if (result == null) {
                         continue;
                     }
-
-                    if(result.iterator.hasNext()) {
+                    if (result.iterator.hasNext()) {
                         inner = result.iterator;
                         return true;
                     }
                 }
-
                 return false;
             }
         });

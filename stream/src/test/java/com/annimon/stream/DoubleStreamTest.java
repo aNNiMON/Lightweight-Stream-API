@@ -273,6 +273,16 @@ public class DoubleStreamTest {
         }), elements(arrayContaining(0.012, 100d)));
     }
 
+    @Test(expected = NoSuchElementException.class)
+    public void testFlatMapIterator() {
+        DoubleStream.empty().flatMap(new DoubleFunction<DoubleStream>() {
+            @Override
+            public DoubleStream apply(double value) {
+                return DoubleStream.of(value);
+            }
+        }).iterator().nextDouble();
+    }
+
     @Test
     public void testDistinct() {
         assertThat(DoubleStream.of(0.09, 1.2, 0, 2.2, 0.09, 1.2, 3.2, 0.09).distinct(),
