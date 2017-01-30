@@ -270,6 +270,25 @@ public class StreamTest {
     }
 
     @Test
+    public void testIterateWithPredicate() {
+        Predicate<Integer> condition = new Predicate<Integer>() {
+            @Override
+            public boolean test(Integer value) {
+                return value < 20;
+            }
+        };
+        UnaryOperator<Integer> increment = new UnaryOperator<Integer>() {
+            @Override
+            public Integer apply(Integer t) {
+                return t + 5;
+            }
+        };
+        Stream<Integer> stream = Stream.iterate(0, condition, increment);
+
+        assertThat(stream, elements(is(Arrays.asList(0, 5, 10, 15))));
+    }
+
+    @Test
     public void testConcat() {
         final PrintConsumer<String> consumer = new PrintConsumer<String>();
         Stream<String> stream1 = Stream.of("a", "b", "c", "d");
