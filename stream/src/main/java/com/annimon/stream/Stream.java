@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -293,6 +292,32 @@ public final class Stream<T> {
                 return t;
             }
         });
+    }
+
+    /**
+     * Creates a {@code Stream} by iterative application {@code UnaryOperator} function
+     * to an initial element {@code seed}, conditioned on satisfying the supplied predicate.
+     *
+     * <p>Example:
+     * <pre>
+     * seed: 0
+     * predicate: (a) -&gt; a &lt; 20
+     * op: (a) -&gt; a + 5
+     * result: [0, 5, 10, 15]
+     * </pre>
+     *
+     * @param <T> the type of the stream elements
+     * @param seed  the initial value
+     * @param predicate  a predicate to determine when the stream must terminate
+     * @param op  operator to produce new element by previous one
+     * @return the new stream
+     * @throws NullPointerException if {@code op} is null
+     * @since 1.1.5
+     */
+    public static <T> Stream<T> iterate(final T seed,
+            final Predicate<? super T> predicate, final UnaryOperator<T> op) {
+        Objects.requireNonNull(predicate);
+        return iterate(seed, op).takeWhile(predicate);
     }
 
     /**

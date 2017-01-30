@@ -178,6 +178,25 @@ public class IntStreamTest {
     }
 
     @Test
+    public void testStreamIterateWithPredicate() {
+        IntPredicate condition = new IntPredicate() {
+            @Override
+            public boolean test(int value) {
+                return value < 20;
+            }
+        };
+        IntUnaryOperator increment = new IntUnaryOperator() {
+            @Override
+            public int applyAsInt(int t) {
+                return t + 5;
+            }
+        };
+        IntStream stream = IntStream.iterate(0, condition, increment);
+
+        assertThat(stream.toArray(), is(new int[] {0, 5, 10, 15}));
+    }
+
+    @Test
     public void testStreamConcat() {
         IntStream a1 = IntStream.empty();
         IntStream b1 = IntStream.empty();

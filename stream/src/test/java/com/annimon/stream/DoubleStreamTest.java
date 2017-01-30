@@ -125,6 +125,32 @@ public class DoubleStreamTest {
     }
 
     @Test
+    public void testStreamIterateWithPredicate() {
+        DoublePredicate condition = new DoublePredicate() {
+            @Override
+            public boolean test(double value) {
+                return value < 0.2;
+            }
+        };
+        DoubleUnaryOperator increment = new DoubleUnaryOperator() {
+            @Override
+            public double applyAsDouble(double t) {
+                return t + 0.05;
+            }
+        };
+        DoubleStream stream = DoubleStream.iterate(0, condition, increment);
+
+        assertThat(stream,
+                elements(array(
+                    closeTo(0.00, 0.00001),
+                    closeTo(0.05, 0.00001),
+                    closeTo(0.10, 0.00001),
+                    closeTo(0.15, 0.00001)
+                ))
+        );
+    }
+
+    @Test
     public void testStreamConcat() {
         DoubleStream a1 = DoubleStream.empty();
         DoubleStream b1 = DoubleStream.empty();
