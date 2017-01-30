@@ -293,7 +293,8 @@ public class DoubleStreamTest {
         assertThat(DoubleStream.of(1.2, 3.234, 0.09, 2.2).sorted(new Comparator<Double>() {
             @Override
             public int compare(Double o1, Double o2) {
-                return -Double.compare(o1, o2);
+                // reverse order
+                return Double.compare(o2, o1);
             }
         }), elements(arrayContaining(3.234, 2.2, 1.2, 0.09)));
     }

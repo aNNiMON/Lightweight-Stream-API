@@ -44,7 +44,7 @@ public class LongConsumerTest {
         assertThat(LongConsumer.Util.class, hasOnlyPrivateConstructors());
     }
 
-    private class Multiplier implements LongConsumer {
+    private static class Multiplier implements LongConsumer {
 
         private final long factor;
         private final List<Long> buffer;

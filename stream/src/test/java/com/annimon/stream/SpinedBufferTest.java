@@ -68,17 +68,17 @@ public class SpinedBufferTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testOfIntConstructorInvalidCapacity() {
-        SpinedBuffer.OfInt b = new SpinedBuffer.OfInt(-5);
+        new SpinedBuffer.OfInt(-5);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testOfLongConstructorInvalidCapacity() {
-        SpinedBuffer.OfLong b = new SpinedBuffer.OfLong(-5);
+        new SpinedBuffer.OfLong(-5);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testOfDoubleConstructorInvalidCapacity() {
-        SpinedBuffer.OfDouble b = new SpinedBuffer.OfDouble(-5);
+        new SpinedBuffer.OfDouble(-5);
     }
 
 
@@ -507,7 +507,7 @@ public class SpinedBufferTest {
             }
         };
 
-        int[] array = b.asPrimitiveArray();
+        b.asPrimitiveArray();
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -519,7 +519,7 @@ public class SpinedBufferTest {
             }
         };
 
-        long[] array = b.asPrimitiveArray();
+        b.asPrimitiveArray();
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -531,7 +531,7 @@ public class SpinedBufferTest {
             }
         };
 
-        double[] array = b.asPrimitiveArray();
+        b.asPrimitiveArray();
     }
 
 

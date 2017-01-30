@@ -350,7 +350,8 @@ public class LongStreamTest {
         assertThat(LongStream.of(12, 32, 9, 22).sorted(new Comparator<Long>() {
             @Override
             public int compare(Long o1, Long o2) {
-                return -Long.compare(o1, o2);
+                // reverse order
+                return Long.compare(o2, o1);
             }
         }), elements(arrayContaining(32L, 22L, 12L, 9L)));
     }

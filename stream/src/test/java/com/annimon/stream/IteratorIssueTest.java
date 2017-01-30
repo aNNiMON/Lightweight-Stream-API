@@ -60,7 +60,7 @@ public class IteratorIssueTest {
         assertEquals(count, stream.count());
     }
     
-    class CustomIterator<T> implements Iterator<T> {
+    static class CustomIterator<T> implements Iterator<T> {
         
         private final List<T> list;
         private int index;

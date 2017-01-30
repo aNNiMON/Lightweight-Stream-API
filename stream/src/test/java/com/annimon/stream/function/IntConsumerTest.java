@@ -41,7 +41,7 @@ public class IntConsumerTest {
         assertThat(IntConsumer.Util.class, hasOnlyPrivateConstructors());
     }
 
-    private class Increment implements IntConsumer {
+    private static class Increment implements IntConsumer {
 
         private final List<Integer> buffer;
 
@@ -56,7 +56,7 @@ public class IntConsumerTest {
         }
     }
 
-    private class Multiplier implements IntConsumer {
+    private static class Multiplier implements IntConsumer {
 
         private final int factor;
         private final List<Integer> buffer;

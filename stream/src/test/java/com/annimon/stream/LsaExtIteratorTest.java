@@ -38,7 +38,7 @@ public class LsaExtIteratorTest {
         iterator.next();
     }
 
-    public class EmptyLsaExtIterator extends LsaExtIterator<String> {
+    public static class EmptyLsaExtIterator extends LsaExtIterator<String> {
 
         @Override
         public void nextIteration() {
@@ -47,7 +47,7 @@ public class LsaExtIteratorTest {
         }
     }
 
-    public class LsaExtIteratorImpl extends LsaExtIterator<String> {
+    public static class LsaExtIteratorImpl extends LsaExtIterator<String> {
 
         int index = 0;
 

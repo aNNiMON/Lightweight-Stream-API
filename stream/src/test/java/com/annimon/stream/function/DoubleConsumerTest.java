@@ -54,7 +54,7 @@ public class DoubleConsumerTest {
         assertThat(DoubleConsumer.Util.class, hasOnlyPrivateConstructors());
     }
 
-    private class Multiplier implements DoubleConsumer {
+    private static class Multiplier implements DoubleConsumer {
 
         private final double factor;
         private final List<Double> buffer;

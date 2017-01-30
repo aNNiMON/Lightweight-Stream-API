@@ -38,7 +38,7 @@ public class LsaIteratorTest {
         iterator.next();
     }
 
-    public class EmptyLsaIterator extends LsaIterator<String> {
+    public static class EmptyLsaIterator extends LsaIterator<String> {
 
         @Override
         public boolean hasNext() {
@@ -51,7 +51,7 @@ public class LsaIteratorTest {
         }
     }
 
-    public class LsaIteratorImpl extends LsaIterator<String> {
+    public static class LsaIteratorImpl extends LsaIterator<String> {
 
         int index = 0;
 

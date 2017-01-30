@@ -65,7 +65,7 @@ public class BiConsumerTest {
         }
     };
     
-    class IntHolder {
+    static class IntHolder {
         int value;
 
         public IntHolder(int value) {

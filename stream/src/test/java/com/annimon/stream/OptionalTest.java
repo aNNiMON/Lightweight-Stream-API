@@ -328,9 +328,8 @@ public final class OptionalTest {
     }
 
     @Test
-    @SuppressWarnings("UnnecessaryBoxing")
     public void testSelectValidSubclassOnOptional() {
-        Number number = new Integer(42);
+        Number number = 42;
 
         Optional<Integer> result = Optional.of(number)
                 .select(Integer.class);
@@ -340,9 +339,8 @@ public final class OptionalTest {
     }
 
     @Test
-    @SuppressWarnings("UnnecessaryBoxing")
     public void testSelectInvalidSubclassOnOptional() {
-        Number number = new Integer(42);
+        Number number = 42;
 
         Optional<String> result = Optional.of(number)
                 .select(String.class);

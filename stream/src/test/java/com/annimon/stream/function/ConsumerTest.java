@@ -95,7 +95,7 @@ public class ConsumerTest {
         }
     };
     
-    class IntHolder {
+    static class IntHolder {
         int value;
 
         public IntHolder(int value) {
