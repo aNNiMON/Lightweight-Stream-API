@@ -221,6 +221,31 @@ public final class IntStream {
     }
 
     /**
+     * Creates an {@code IntStream} by iterative application {@code IntUnaryOperator} function
+     * to an initial element {@code seed}, conditioned on satisfying the supplied predicate.
+     *
+     * <p>Example:
+     * <pre>
+     * seed: 0
+     * predicate: (a) -&gt; a &lt; 20
+     * f: (a) -&gt; a + 5
+     * result: [0, 5, 10, 15]
+     * </pre>
+     *
+     * @param seed  the initial value
+     * @param predicate  a predicate to determine when the stream must terminate
+     * @param op  operator to produce new element by previous one
+     * @return the new stream
+     * @throws NullPointerException if {@code op} is null
+     * @since 1.1.5
+     */
+    public static IntStream iterate(final int seed,
+            final IntPredicate predicate, final IntUnaryOperator op) {
+        Objects.requireNonNull(predicate);
+        return iterate(seed, op).takeWhile(predicate);
+    }
+
+    /**
      * Creates a lazily concatenated stream whose elements are all the
      * elements of the first stream followed by all the elements of the
      * second stream.
