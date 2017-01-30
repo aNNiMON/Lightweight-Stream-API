@@ -173,6 +173,25 @@ public class LongStreamTest {
     }
 
     @Test
+    public void testStreamIterateWithPredicate() {
+        LongPredicate condition = new LongPredicate() {
+            @Override
+            public boolean test(long value) {
+                return value < 20;
+            }
+        };
+        LongUnaryOperator increment = new LongUnaryOperator() {
+            @Override
+            public long applyAsLong(long t) {
+                return t + 5;
+            }
+        };
+        LongStream stream = LongStream.iterate(0, condition, increment);
+
+        assertThat(stream.toArray(), is(new long[] {0, 5, 10, 15}));
+    }
+
+    @Test
     public void testStreamConcat() {
         LongStream a1 = LongStream.empty();
         LongStream b1 = LongStream.empty();
