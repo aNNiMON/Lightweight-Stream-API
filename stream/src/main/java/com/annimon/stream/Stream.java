@@ -4,6 +4,7 @@ import com.annimon.stream.function.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -932,20 +933,16 @@ public final class Stream<T> {
     public Stream<T> distinct() {
         return new Stream<T>(new LsaExtIterator<T>() {
 
-            private Iterator<T> distinctIterator;
+            private final Set<T> set = new HashSet<T>();
 
             @Override
             protected void nextIteration() {
-                if (!isInit) {
-                    final Set<T> set = new LinkedHashSet<T>();
-                    while (iterator.hasNext()) {
-                        set.add(iterator.next());
+                while (hasNext = iterator.hasNext()) {
+                    next = iterator.next();
+                    if (!set.contains(next)) {
+                        set.add(next);
+                        return;
                     }
-                    distinctIterator = set.iterator();
-                }
-                hasNext = distinctIterator.hasNext();
-                if (hasNext) {
-                    next = distinctIterator.next();
                 }
             }
         });
