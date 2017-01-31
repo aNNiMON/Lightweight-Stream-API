@@ -582,6 +582,15 @@ public final class Stream<T> {
         });
     }
 
+    public Stream<T> notNull() {
+        return filter(new Predicate<T>() {
+            @Override
+            public boolean test(T value) {
+                return value != null;
+            }
+        });
+    }
+
     /**
      * Returns {@code Stream} with elements that does not satisfy the given predicate.
      *
