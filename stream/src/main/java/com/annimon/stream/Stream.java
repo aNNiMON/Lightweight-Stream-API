@@ -590,12 +590,7 @@ public final class Stream<T> {
      * @return the new stream
      */
     public Stream<T> notNull() {
-        return filter(new Predicate<T>() {
-            @Override
-            public boolean test(T value) {
-                return value != null;
-            }
-        });
+        return filterNot(Predicate.Util.<T>nulls());
     }
 
     /**
@@ -606,12 +601,7 @@ public final class Stream<T> {
      * @return the new stream
      */
     public Stream<T> nullsOnly() {
-        return filter(new Predicate<T>() {
-            @Override
-            public boolean test(T value) {
-                return value == null;
-            }
-        });
+        return filter(Predicate.Util.<T>nulls());
     }
 
     /**
