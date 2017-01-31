@@ -582,11 +582,34 @@ public final class Stream<T> {
         });
     }
 
+    /**
+     * Returns {@code Stream} with elements that is not null only.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @return the new stream
+     */
     public Stream<T> notNull() {
         return filter(new Predicate<T>() {
             @Override
             public boolean test(T value) {
                 return value != null;
+            }
+        });
+    }
+
+    /**
+     * Returns {@code Stream} with elements that is null only.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @return the new stream
+     */
+    public Stream<T> nullsOnly() {
+        return filter(new Predicate<T>() {
+            @Override
+            public boolean test(T value) {
+                return value == null;
             }
         });
     }
