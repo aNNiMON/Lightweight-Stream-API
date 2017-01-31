@@ -397,6 +397,34 @@ public class StreamTest {
         assertEquals("13579", consumer.toString());
     }
 
+    @Test
+    public void testNotNull() {
+        final long notNullAmount = Stream.range(0, 10)
+                .map(new Function<Integer, String>() {
+                    @Override
+                    public String apply(Integer integer) {
+                        return integer % 3 == 0 ? null : "";
+                    }
+                })
+                .notNull()
+                .count();
+        assertEquals(6, notNullAmount);
+    }
+
+    @Test
+    public void testNullsOnly() {
+        final long nullsAmount = Stream.range(0, 10)
+                .map(new Function<Integer, String>() {
+                    @Override
+                    public String apply(Integer integer) {
+                        return integer % 3 == 0 ? null : "";
+                    }
+                })
+                .nullsOnly()
+                .count();
+        assertEquals(4, nullsAmount);
+    }
+
     @Test(expected = NoSuchElementException.class)
     public void testFilterIteratorNextOnEmpty() {
         Stream.<Integer>empty()
