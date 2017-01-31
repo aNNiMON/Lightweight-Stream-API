@@ -63,6 +63,14 @@ public class PredicateTest {
     }
 
     @Test
+    public void testNullsPredicate() {
+        Predicate<Object> predicate = Predicate.Util.nulls();
+
+        assertTrue(predicate.test(null));
+        assertFalse(predicate.test(new Object()));
+    }
+
+    @Test
     public void testSafe() {
         Predicate<Integer> predicate = Predicate.Util.safe(throwablePredicate);
 

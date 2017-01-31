@@ -583,6 +583,28 @@ public final class Stream<T> {
     }
 
     /**
+     * Returns {@code Stream} with elements that is not null only.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @return the new stream
+     */
+    public Stream<T> notNull() {
+        return filterNot(Predicate.Util.<T>nulls());
+    }
+
+    /**
+     * Returns {@code Stream} with elements that is null only.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @return the new stream
+     */
+    public Stream<T> nullsOnly() {
+        return filter(Predicate.Util.<T>nulls());
+    }
+
+    /**
      * Returns {@code Stream} with elements that does not satisfy the given predicate.
      *
      * <p>This is an intermediate operation.
