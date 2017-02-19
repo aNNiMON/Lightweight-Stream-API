@@ -14,6 +14,8 @@ import java.util.Comparator;
  */
 public final class ComparatorCompat {
 
+    private ComparatorCompat() { }
+
     /**
      * Returns a comparator with reverse order.
      *

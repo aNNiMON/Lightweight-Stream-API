@@ -8,11 +8,17 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import org.junit.Test;
+import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.elements;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 public class ComparatorCompatTest {
+
+    @Test
+    public void testPrivateConstructor() throws Exception {
+        assertThat(ComparatorCompat.class, hasOnlyPrivateConstructors());
+    }
 
     @Test
     public void testReversed() {
@@ -221,7 +227,7 @@ public class ComparatorCompatTest {
                         return student.getCourse() * 100000L;
                     }
                 })
-                .thenComparing(ComparatorCompat.comparing(Students.speciality, ComparatorCompat.reversed()))
+                .thenComparing(Students.speciality, ComparatorCompat.<String>reversed())
                 .reversed()
                 .comparator();
         testStudentComparator(comparator);
