@@ -3,7 +3,7 @@ package com.annimon.stream;
 /**
  * Sample data class for testing.
  */
-public final class Student {
+public final class Student implements Comparable<Student> {
 
     private String name;
     private String speciality;
@@ -37,6 +37,16 @@ public final class Student {
 
     public void setCourse(int course) {
         this.course = course;
+    }
+
+    @Override
+    public int compareTo(Student o) {
+        return ComparatorCompat
+                .chain(ComparatorCompat.comparing(Students.studentName))
+                .thenComparing(Students.speciality)
+                .thenComparing(Students.course)
+                .comparator()
+                .compare(this, o);
     }
 
     @Override
