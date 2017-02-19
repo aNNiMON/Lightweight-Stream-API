@@ -202,7 +202,7 @@ public final class Functions {
 
             @Override
             public int compare(Integer o1, Integer o2) {
-                return Integer.compare(o1, o2);
+                return Objects.compareInt(o1, o2);
             }
         };
     }
@@ -212,7 +212,7 @@ public final class Functions {
 
             @Override
             public int compare(Integer o1, Integer o2) {
-                return Integer.compare(Math.abs(o2), Math.abs(o1));
+                return Objects.compareInt(Math.abs(o2), Math.abs(o1));
             }
         };
     }
