@@ -188,6 +188,71 @@ public final class ComparatorCompat {
     }
 
     /**
+     * Returns a comparator that considers {@code null} to be
+     * less than non-null and all non-null values to be equal.
+     *
+     * @param <T> the type of the objects compared by the comparator
+     * @return a comparator
+     */
+    public static <T> Comparator<T> nullsFirst() {
+        return nullsComparator(true, null);
+    }
+
+    /**
+     * Returns a comparator that considers {@code null} to be less than non-null.
+     * If the specified comparator is {@code null}, then the returned
+     * comparator considers all non-null values to be equal.
+     *
+     * @param <T> the type of the objects compared by the comparator
+     * @param comparator  a comparator for comparing non-null values
+     * @return a comparator
+     */
+    public static <T> Comparator<T> nullsFirst(Comparator<? super T> comparator) {
+        return nullsComparator(true, comparator);
+    }
+
+    /**
+     * Returns a comparator that considers {@code null} to be
+     * greater than non-null and all non-null values to be equal.
+     *
+     * @param <T> the type of the objects compared by the comparator
+     * @return a comparator
+     */
+    public static <T> Comparator<T> nullsLast() {
+        return nullsComparator(false, null);
+    }
+
+    /**
+     * Returns a comparator that considers {@code null} to be greater than non-null.
+     * If the specified comparator is {@code null}, then the returned
+     * comparator considers all non-null values to be equal.
+     *
+     * @param <T> the type of the objects compared by the comparator
+     * @param comparator  a comparator for comparing non-null values
+     * @return a comparator
+     */
+    public static <T> Comparator<T> nullsLast(Comparator<? super T> comparator) {
+        return nullsComparator(false, comparator);
+    }
+
+    private static <T> Comparator<T> nullsComparator(
+            final boolean nullFirst, final Comparator<? super T> comparator) {
+        return new Comparator<T>() {
+
+            @Override
+            public int compare(T t1, T t2) {
+                if (t1 == null) {
+                    return (t2 == null) ? 0 : (nullFirst ? -1 : 1);
+                } else if (t2 == null) {
+                    return nullFirst ? 1 : -1;
+                } else {
+                    return (comparator == null) ? 0 : comparator.compare(t1, t2);
+                }
+            }
+        };
+    }
+
+    /**
      * Returns a {@link Chain} class instance for build comparators.
      *
      * @param <T> the type of the objects compared by the comparator

@@ -126,6 +126,38 @@ public class ComparatorCompatTest {
     }
 
     @Test
+    public void testNullsFirst() {
+        List<String> expected = Arrays.asList(null, null, "abc", "ab", "abcd", "a");
+        Stream<String> stream = Stream.of("abc", "ab", null, "abcd", null, "a")
+                .sorted(ComparatorCompat.nullsFirst());
+        assertThat(stream, elements(is(expected)));
+    }
+
+    @Test
+    public void testNullsFirstComparator() {
+        List<String> expected = Arrays.asList(null, null, "a", "ab", "abc", "abcd");
+        Stream<String> stream = Stream.of("abc", "ab", null, "abcd", null, "a")
+                .sorted(ComparatorCompat.nullsFirst(String.CASE_INSENSITIVE_ORDER));
+        assertThat(stream, elements(is(expected)));
+    }
+
+    @Test
+    public void testNullsLast() {
+        List<String> expected = Arrays.asList("abc", "ab", "abcd", "a", null, null);
+        Stream<String> stream = Stream.of("abc", "ab", null, "abcd", null, "a")
+                .sorted(ComparatorCompat.nullsLast());
+        assertThat(stream, elements(is(expected)));
+    }
+
+    @Test
+    public void testNullsLastComparator() {
+        List<String> expected = Arrays.asList("a", "ab", "abc", "abcd", null, null);
+        Stream<String> stream = Stream.of("abc", "ab", null, "abcd", null, "a")
+                .sorted(ComparatorCompat.nullsLast(String.CASE_INSENSITIVE_ORDER));
+        assertThat(stream, elements(is(expected)));
+    }
+
+    @Test
     public void testChain_CourseReversed() {
         Comparator<Student> comparator = ComparatorCompat
                 .chain(ComparatorCompat.comparing(Students.course))
