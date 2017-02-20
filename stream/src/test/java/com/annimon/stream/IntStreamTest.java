@@ -503,6 +503,32 @@ public class IntStreamTest {
     }
 
     @Test
+    public void testTakeUntil() {
+        int[] expected = {2, 4, 6, 7};
+        int[] actual = IntStream.of(2, 4, 6, 7, 8, 10, 11)
+                .takeUntil(IntPredicate.Util.negate(Functions.remainderInt(2)))
+                .toArray();
+        assertThat(actual, is(expected));
+    }
+
+    @Test
+    public void testTakeUntilFirstMatch() {
+        int[] expected = {2};
+        int[] actual = IntStream.of(2, 4, 6, 7, 8, 10, 11)
+                .takeUntil(Functions.remainderInt(2))
+                .toArray();
+        assertThat(actual, is(expected));
+    }
+
+    @Test
+    public void testTakeUntilNoneMatch() {
+        long count = IntStream.of(2, 4, 6, 7, 8, 10, 11)
+                .takeUntil(Functions.remainderInt(128))
+                .count();
+        assertEquals(7, count);
+    }
+
+    @Test
     public void testDropWhile() {
         int[] expected = {7, 8, 10, 11};
         int[] actual  = IntStream.of(2, 4, 6, 7, 8, 10, 11)

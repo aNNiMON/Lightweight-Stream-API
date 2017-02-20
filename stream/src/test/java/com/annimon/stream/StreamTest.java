@@ -941,6 +941,21 @@ public class StreamTest {
     }
 
     @Test
+    public void testTakeUntil() {
+        final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
+        long count = Stream.of(2, 4, 6, 7, 8, 10, 11)
+                .takeUntil(Predicate.Util.negate(Functions.remainder(2)))
+                .peek(consumer)
+                .count();
+        assertEquals(4, count);
+        assertEquals("2467", consumer.toString());
+
+        Stream<Integer> stream = Stream.<Integer>empty()
+                .takeUntil(Functions.remainder(2));
+        assertThat(stream, isEmpty());
+    }
+
+    @Test
     public void testTakeWhileNonFirstMatch() {
         assertThat(
                 Stream.of(2, 4, 6, 7, 8, 10, 11)
