@@ -21,6 +21,14 @@ public class ComparatorCompatTest {
     }
 
     @Test
+    public void testNaturalOrder() {
+        int[] expected = {1, 2, 3, 5, 8, 13};
+        IntStream stream = IntStream.of(1, 2, 3, 5, 8, 13)
+                .sorted(ComparatorCompat.<Integer>naturalOrder());
+        assertThat(stream.toArray(), is(expected));
+    }
+
+    @Test
     public void testReverseOrder() {
         int[] expected = {13, 8, 5, 3, 2, 1};
         IntStream stream = IntStream.of(1, 2, 3, 5, 8, 13)

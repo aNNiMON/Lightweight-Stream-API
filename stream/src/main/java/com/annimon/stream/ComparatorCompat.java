@@ -14,7 +14,25 @@ import java.util.Comparator;
  */
 public final class ComparatorCompat {
 
+    private static final Comparator<Comparable<Object>> NATURAL_ORDER = new Comparator<Comparable<Object>>() {
+        @Override
+        public int compare(Comparable<Object> o1, Comparable<Object> o2) {
+            return o1.compareTo(o2);
+        }
+    };
+
     private ComparatorCompat() { }
+
+    /**
+     * Returns a comparator with natural order.
+     *
+     * @param <T> the type of the objects compared by the comparator
+     * @return a comparator
+     */
+    @SuppressWarnings("unchecked")
+    public static <T extends Comparable<? super T>> Comparator<T> naturalOrder() {
+        return (Comparator<T>) NATURAL_ORDER;
+    }
 
     /**
      * Returns a comparator with reverse order.
