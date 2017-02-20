@@ -1306,7 +1306,7 @@ public final class Stream<T> {
     }
 
     /**
-     * Takes elements while the predicate is true.
+     * Takes elements while the predicate returns {@code true}.
      *
      * <p>This is an intermediate operation.
      *
@@ -1327,6 +1327,36 @@ public final class Stream<T> {
             protected void nextIteration() {
                 hasNext = iterator.hasNext()
                         && predicate.test(next = iterator.next());
+            }
+        });
+    }
+
+    /**
+     * Takes elements while the predicate returns {@code false}.
+     * Once predicate condition is satisfied by an element, the stream
+     * finishes with this element.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * stopPredicate: (a) -&gt; a &gt; 2
+     * stream: [1, 2, 3, 4, 1, 2, 3, 4]
+     * result: [1, 2, 3]
+     * </pre>
+     *
+     * @param stopPredicate  the predicate used to take elements
+     * @return the new stream
+     */
+    public Stream<T> takeUntil(final Predicate<? super T> stopPredicate) {
+        return new Stream<T>(new LsaExtIterator<T>() {
+
+            @Override
+            protected void nextIteration() {
+                hasNext = iterator.hasNext() && !(isInit && stopPredicate.test(next));
+                if (hasNext) {
+                    next = iterator.next();
+                }
             }
         });
     }
