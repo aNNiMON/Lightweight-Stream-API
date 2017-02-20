@@ -789,6 +789,7 @@ public final class LongStream {
      *
      * @param stopPredicate  the predicate used to take elements
      * @return the new {@code LongStream}
+     * @since 1.1.6
      */
     public LongStream takeUntil(final LongPredicate stopPredicate) {
         return new LongStream(new PrimitiveExtIterator.OfLong() {

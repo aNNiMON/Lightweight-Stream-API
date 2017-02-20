@@ -1347,6 +1347,7 @@ public final class Stream<T> {
      *
      * @param stopPredicate  the predicate used to take elements
      * @return the new stream
+     * @since 1.1.6
      */
     public Stream<T> takeUntil(final Predicate<? super T> stopPredicate) {
         return new Stream<T>(new LsaExtIterator<T>() {
@@ -1354,9 +1355,7 @@ public final class Stream<T> {
             @Override
             protected void nextIteration() {
                 hasNext = iterator.hasNext() && !(isInit && stopPredicate.test(next));
-                if (hasNext) {
-                    next = iterator.next();
-                }
+                next = hasNext ? iterator.next() : null;
             }
         });
     }

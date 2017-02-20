@@ -737,6 +737,7 @@ public final class DoubleStream {
      *
      * @param stopPredicate  the predicate used to take elements
      * @return the new {@code DoubleStream}
+     * @since 1.1.6
      */
     public DoubleStream takeUntil(final DoublePredicate stopPredicate) {
         return new DoubleStream(new PrimitiveExtIterator.OfDouble() {

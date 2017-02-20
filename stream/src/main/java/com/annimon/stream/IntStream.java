@@ -783,6 +783,7 @@ public final class IntStream {
      *
      * @param stopPredicate  the predicate used to take elements
      * @return the new {@code IntStream}
+     * @since 1.1.6
      */
     public IntStream takeUntil(final IntPredicate stopPredicate) {
         return new IntStream(new PrimitiveExtIterator.OfInt() {
