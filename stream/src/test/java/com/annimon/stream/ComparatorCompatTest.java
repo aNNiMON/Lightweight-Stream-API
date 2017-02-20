@@ -21,10 +21,10 @@ public class ComparatorCompatTest {
     }
 
     @Test
-    public void testReversed() {
+    public void testReverseOrder() {
         int[] expected = {13, 8, 5, 3, 2, 1};
         IntStream stream = IntStream.of(1, 2, 3, 5, 8, 13)
-                .sorted(ComparatorCompat.<Integer>reversed());
+                .sorted(ComparatorCompat.<Integer>reverseOrder());
         assertThat(stream.toArray(), is(expected));
     }
 
@@ -44,7 +44,7 @@ public class ComparatorCompatTest {
         IntStream stream = IntStream.of(-16, -4, -2, 1, 4, 16)
                 .sorted(ComparatorCompat.thenComparing(
                         Functions.descendingAbsoluteOrder(),
-                        ComparatorCompat.reversed()
+                        ComparatorCompat.<Integer>reverseOrder()
                 ));
         assertThat(stream.toArray(), is(expected));
     }
@@ -60,7 +60,7 @@ public class ComparatorCompatTest {
                                 return str.length();
                             }
                         },
-                        ComparatorCompat.reversed()
+                        ComparatorCompat.<Integer>reverseOrder()
                 ));
         assertThat(stream, elements(is(expected)));
     }
@@ -252,14 +252,14 @@ public class ComparatorCompatTest {
     public void testChain_NameReversedThenCourseThenSpecialityDoubleReversed() {
         Comparator<Student> comparator = ComparatorCompat
                 .chain(ComparatorCompat.comparing(Students.studentName))
-                .thenComparing(ComparatorCompat.reversed())
+                .thenComparing(ComparatorCompat.<Student>reverseOrder())
                 .thenComparingLong(new ToLongFunction<Student>() {
                     @Override
                     public long applyAsLong(Student student) {
                         return student.getCourse() * 100000L;
                     }
                 })
-                .thenComparing(Students.speciality, ComparatorCompat.<String>reversed())
+                .thenComparing(Students.speciality, ComparatorCompat.<String>reverseOrder())
                 .reversed()
                 .comparator();
         testStudentComparator(comparator);

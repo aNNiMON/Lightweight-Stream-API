@@ -23,14 +23,14 @@ public final class ComparatorCompat {
      * @return a comparator
      * @see Collections#reverseOrder()
      */
-    public static <T> Comparator<T> reversed() {
+    public static <T extends Comparable<? super T>> Comparator<T> reverseOrder() {
         return Collections.reverseOrder();
     }
 
     /**
      * Returns a comparator that reverses the order of the specified comparator.
      * If the specified comparator is {@code null}, this method is equivalent
-     * to {@link #reversed()}.
+     * to {@link #reverseOrder()}.
      *
      * @param <T> the type of the objects compared by the comparator
      * @param comparator  a comparator to be reversed
@@ -280,7 +280,7 @@ public final class ComparatorCompat {
          * Reverses the order of comparator.
          *
          * @return the new {@code Chain} instance
-         * @see ComparatorCompat#reversed()
+         * @see ComparatorCompat#reverseOrder()
          */
         public Chain<T> reversed() {
             return new Chain(ComparatorCompat.reversed(comparator));
