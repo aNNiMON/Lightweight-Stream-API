@@ -79,4 +79,37 @@ public class DoubleStreamMatcherTest {
                         .collect(Collectors.joining(", ")))
         )));
     }
+
+    @Test
+    public void testAssertIsEmptyOperator() {
+        DoubleStream.empty()
+                .custom(DoubleStreamMatcher.assertIsEmpty());
+    }
+
+    @Test(expected = AssertionError.class)
+    public void testAssertIsEmptyOperatorOnEmptyStream() {
+        DoubleStream.of(1, 2)
+                .custom(DoubleStreamMatcher.assertIsEmpty());
+    }
+
+    @Test
+    public void testAssertHasElementsOperator() {
+        DoubleStream.of(1, 2)
+                .custom(DoubleStreamMatcher.assertHasElements());
+    }
+
+    @Test(expected = AssertionError.class)
+    public void testAssertHasElementsOperatorOnEmptyStream() {
+        DoubleStream.empty()
+                .custom(DoubleStreamMatcher.assertHasElements());
+    }
+
+    @Test
+    public void testAssertElementsOperator() {
+        DoubleStream.of(-0.987, 1.234, Math.PI, 1.618)
+                .custom(DoubleStreamMatcher.assertElements(
+                        arrayContaining(new Double[] {
+                            -0.987, 1.234, Math.PI, 1.618
+                        })));
+    }
 }

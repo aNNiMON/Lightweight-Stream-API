@@ -79,4 +79,37 @@ public class IntStreamMatcherTest {
                         .collect(Collectors.joining(", ")))
         )));
     }
+
+    @Test
+    public void testAssertIsEmptyOperator() {
+        IntStream.empty()
+                .custom(IntStreamMatcher.assertIsEmpty());
+    }
+
+    @Test(expected = AssertionError.class)
+    public void testAssertIsEmptyOperatorOnEmptyStream() {
+        IntStream.of(1, 2)
+                .custom(IntStreamMatcher.assertIsEmpty());
+    }
+
+    @Test
+    public void testAssertHasElementsOperator() {
+        IntStream.of(1, 2)
+                .custom(IntStreamMatcher.assertHasElements());
+    }
+
+    @Test(expected = AssertionError.class)
+    public void testAssertHasElementsOperatorOnEmptyStream() {
+        IntStream.empty()
+                .custom(IntStreamMatcher.assertHasElements());
+    }
+
+    @Test
+    public void testAssertElementsOperator() {
+        IntStream.of(-813, 123456, Short.MAX_VALUE)
+                .custom(IntStreamMatcher.assertElements(
+                        arrayContaining(new Integer[] {
+                            -813, 123456, (int) Short.MAX_VALUE
+                        })));
+    }
 }

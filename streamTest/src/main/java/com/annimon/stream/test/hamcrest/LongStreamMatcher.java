@@ -1,10 +1,12 @@
 package com.annimon.stream.test.hamcrest;
 
 import com.annimon.stream.LongStream;
+import com.annimon.stream.function.Function;
 import com.annimon.stream.function.IntFunction;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class LongStreamMatcher {
 
@@ -20,6 +22,39 @@ public class LongStreamMatcher {
 
     public static Matcher<LongStream> elements(Matcher<Long[]> matcher) {
         return new ElementsMatcher(matcher);
+    }
+
+    public static Function<LongStream, Void> assertIsEmpty() {
+        return new Function<LongStream, Void>() {
+
+            @Override
+            public Void apply(LongStream t) {
+                assertThat(t, isEmpty());
+                return null;
+            }
+        };
+    }
+
+    public static Function<LongStream, Void> assertHasElements() {
+        return new Function<LongStream, Void>() {
+
+            @Override
+            public Void apply(LongStream t) {
+                assertThat(t, hasElements());
+                return null;
+            }
+        };
+    }
+
+    public static Function<LongStream, Void> assertElements(final Matcher<Long[]> matcher) {
+        return new Function<LongStream, Void>() {
+
+            @Override
+            public Void apply(LongStream t) {
+                assertThat(t, elements(matcher));
+                return null;
+            }
+        };
     }
 
     public static class IsEmptyMatcher extends TypeSafeDiagnosingMatcher<LongStream> {
