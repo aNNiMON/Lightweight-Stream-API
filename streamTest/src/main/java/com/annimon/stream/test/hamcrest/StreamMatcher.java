@@ -2,14 +2,13 @@ package com.annimon.stream.test.hamcrest;
 
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
-
+import com.annimon.stream.function.Function;
+import java.util.List;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
-
-import java.util.List;
-
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class StreamMatcher {
 
@@ -33,6 +32,39 @@ public class StreamMatcher {
 
     public static <T> Matcher<Stream<T>> elements(Matcher<List<T>> matcher) {
         return new ElementsMatcher<T>(matcher);
+    }
+
+    public static <T> Function<Stream<T>, Void> assertIsEmpty() {
+        return new Function<Stream<T>, Void>() {
+
+            @Override
+            public Void apply(Stream<T> t) {
+                assertThat(t, isEmpty());
+                return null;
+            }
+        };
+    }
+
+    public static <T> Function<Stream<T>, Void> assertHasElements() {
+        return new Function<Stream<T>, Void>() {
+
+            @Override
+            public Void apply(Stream<T> t) {
+                assertThat(t, hasElements());
+                return null;
+            }
+        };
+    }
+
+    public static <T> Function<Stream<T>, Void> assertElements(final Matcher<List<T>> matcher) {
+        return new Function<Stream<T>, Void>() {
+
+            @Override
+            public Void apply(Stream<T> t) {
+                assertThat(t, elements(matcher));
+                return null;
+            }
+        };
     }
 
     public static class IsEmptyMatcher extends TypeSafeDiagnosingMatcher<Stream<?>> {
