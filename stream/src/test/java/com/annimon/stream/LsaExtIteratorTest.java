@@ -2,8 +2,11 @@ package com.annimon.stream;
 
 import java.util.NoSuchElementException;
 import org.junit.Test;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class LsaExtIteratorTest {
@@ -41,6 +44,15 @@ public class LsaExtIteratorTest {
         assertFalse(iterator.hasNext());
         assertFalse(iterator.hasNext());
         iterator.next();
+    }
+
+    @Test
+    public void testReferenceToPreviousElement() {
+        final LsaExtIteratorImpl iterator = new LsaExtIteratorImpl();
+        assertEquals(iterator.next(), "1");
+        assertEquals(iterator.next(), "2");
+
+        assertThat(iterator.next, is(nullValue()));
     }
 
     public static class EmptyLsaExtIterator extends LsaExtIterator<String> {

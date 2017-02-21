@@ -34,6 +34,10 @@ public abstract class LsaExtIterator<T> implements Iterator<T> {
         }
         final T result = next;
         nextIteration();
+        if (!hasNext) {
+            // Clear reference to the previous element
+            next = null;
+        }
         return result;
     }
 
