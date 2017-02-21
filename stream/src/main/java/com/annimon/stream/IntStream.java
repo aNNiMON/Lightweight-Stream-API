@@ -772,7 +772,7 @@ public final class IntStream {
                 if (hasNext) {
                     final int current = iterator.next();
                     if (isInit) {
-                        next = accumulator.applyAsInt(current, next);
+                        next = accumulator.applyAsInt(next, current);
                     } else {
                         next = current;
                     }

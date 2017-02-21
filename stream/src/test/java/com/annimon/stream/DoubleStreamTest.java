@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 import org.junit.Test;
+import static com.annimon.stream.test.hamcrest.DoubleStreamMatcher.assertElements;
 import static com.annimon.stream.test.hamcrest.DoubleStreamMatcher.elements;
 import static com.annimon.stream.test.hamcrest.DoubleStreamMatcher.isEmpty;
 import static com.annimon.stream.test.hamcrest.OptionalDoubleMatcher.hasValue;
@@ -393,6 +394,24 @@ public class DoubleStreamTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
+    public void testScanNonAssociative() {
+        DoubleStream.of(1.0, 0.2, 0.3, 0.5)
+                .scan(new DoubleBinaryOperator() {
+                    @Override
+                    public double applyAsDouble(double value1, double value2) {
+                        return value1 / value2;
+                    }
+                })
+                .custom(assertElements(is(array(
+                        closeTo(1.0, 0.00001),
+                        closeTo(1.0 / 0.2, 0.00001),
+                        closeTo(1.0 / 0.2 / 0.3, 0.00001),
+                        closeTo(1.0 / 0.2 / 0.3 / 0.5, 0.00001)
+                ))));
+    }
+
+    @Test
     public void testScanOnEmptyStream() {
         DoubleStream stream;
         stream = DoubleStream.empty()
@@ -422,6 +441,24 @@ public class DoubleStreamTest {
                 closeTo(6.6, 0.00001),
                 closeTo(7.7, 0.00001)
         )));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testScanWithIdentityNonAssociative() {
+        DoubleStream.of(0.2, 0.3, 0.5)
+                .scan(1d, new DoubleBinaryOperator() {
+                    @Override
+                    public double applyAsDouble(double value1, double value2) {
+                        return value1 / value2;
+                    }
+                })
+                .custom(assertElements(is(array(
+                        closeTo(1.0, 0.00001),
+                        closeTo(1.0 / 0.2, 0.00001),
+                        closeTo(1.0 / 0.2 / 0.3, 0.00001),
+                        closeTo(1.0 / 0.2 / 0.3 / 0.5, 0.00001)
+                ))));
     }
 
     @Test

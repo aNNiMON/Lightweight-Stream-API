@@ -777,7 +777,7 @@ public final class LongStream {
                 if (hasNext) {
                     final long current = iterator.next();
                     if (isInit) {
-                        next = accumulator.applyAsLong(current, next);
+                        next = accumulator.applyAsLong(next, current);
                     } else {
                         next = current;
                     }

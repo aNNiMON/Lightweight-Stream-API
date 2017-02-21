@@ -725,7 +725,7 @@ public final class DoubleStream {
                 if (hasNext) {
                     final double current = iterator.next();
                     if (isInit) {
-                        next = accumulator.applyAsDouble(current, next);
+                        next = accumulator.applyAsDouble(next, current);
                     } else {
                         next = current;
                     }

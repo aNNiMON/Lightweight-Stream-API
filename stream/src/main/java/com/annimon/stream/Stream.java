@@ -1330,7 +1330,7 @@ public final class Stream<T> {
                 if (hasNext) {
                     final T value = iterator.next();
                     if (isInit) {
-                        next = accumulator.apply(value, next);
+                        next = accumulator.apply(next, value);
                     } else {
                         next = value;
                     }

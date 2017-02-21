@@ -26,6 +26,7 @@ import java.util.NoSuchElementException;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.OptionalMatcher.hasValue;
 import static com.annimon.stream.test.hamcrest.OptionalMatcher.isPresent;
+import static com.annimon.stream.test.hamcrest.StreamMatcher.assertElements;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.elements;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.isEmpty;
 import static org.hamcrest.CoreMatchers.not;
@@ -935,6 +936,23 @@ public class StreamTest {
         Stream<Integer> stream = Stream.of(1, 2, 3)
                 .scan(Functions.addition());
         assertThat(stream, elements(is(expected)));
+    }
+
+    @Test
+    public void testScanNonAssociative() {
+        Stream.of(1800, 2, 3, 5)
+                .scan(new BinaryOperator<Integer>() {
+                    @Override
+                    public Integer apply(Integer value1, Integer value2) {
+                        return value1 / value2;
+                    }
+                })
+                .custom(assertElements(is(Arrays.asList(
+                        1800,
+                        1800 / 2,
+                        1800 / 2 / 3,
+                        1800 / 2 / 3 / 5
+                ))));
     }
 
     @Test

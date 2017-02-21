@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 import org.junit.Test;
+import static com.annimon.stream.test.hamcrest.LongStreamMatcher.assertElements;
 import static com.annimon.stream.test.hamcrest.LongStreamMatcher.elements;
 import static com.annimon.stream.test.hamcrest.LongStreamMatcher.isEmpty;
 import static com.annimon.stream.test.hamcrest.OptionalLongMatcher.hasValue;
@@ -441,6 +442,23 @@ public class LongStreamTest {
     }
 
     @Test
+    public void testScanNonAssociative() {
+        LongStream.of(1800L, 2, 3, 5)
+                .scan(new LongBinaryOperator() {
+                    @Override
+                    public long applyAsLong(long value1, long value2) {
+                        return value1 / value2;
+                    }
+                })
+                .custom(assertElements(is(new Long[] {
+                        1800L,
+                        1800L / 2,
+                        1800L / 2 / 3,
+                        1800L / 2 / 3 / 5
+                })));
+    }
+
+    @Test
     public void testScanOnEmptyStream() {
         long[] actual = LongStream.empty()
                 .scan(new LongBinaryOperator() {
@@ -465,6 +483,23 @@ public class LongStreamTest {
                 })
                 .toArray();
         assertThat(actual, is(expected));
+    }
+
+    @Test
+    public void testScanWithIdentityNonAssociative() {
+        LongStream.of(2, 3, 5)
+                .scan(1800L, new LongBinaryOperator() {
+                    @Override
+                    public long applyAsLong(long value1, long value2) {
+                        return value1 / value2;
+                    }
+                })
+                .custom(assertElements(is(new Long[] {
+                        1800L,
+                        1800L / 2,
+                        1800L / 2 / 3,
+                        1800L / 2 / 3 / 5
+                })));
     }
 
     @Test

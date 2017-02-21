@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import org.hamcrest.Matchers;
 import org.junit.Test;
+import static com.annimon.stream.test.hamcrest.IntStreamMatcher.assertElements;
 import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.hasValue;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.elements;
 import static org.hamcrest.CoreMatchers.is;
@@ -491,6 +492,23 @@ public class IntStreamTest {
     }
 
     @Test
+    public void testScanNonAssociative() {
+        IntStream.of(1800, 2, 3, 5)
+                .scan(new IntBinaryOperator() {
+                    @Override
+                    public int applyAsInt(int value1, int value2) {
+                        return value1 / value2;
+                    }
+                })
+                .custom(assertElements(is(new Integer[] {
+                        1800,
+                        1800 / 2,
+                        1800 / 2 / 3,
+                        1800 / 2 / 3 / 5
+                })));
+    }
+
+    @Test
     public void testScanOnEmptyStream() {
         int[] actual = IntStream.empty()
                 .scan(new IntBinaryOperator() {
@@ -515,6 +533,23 @@ public class IntStreamTest {
                 })
                 .toArray();
         assertThat(actual, is(expected));
+    }
+
+    @Test
+    public void testScanWithIdentityNonAssociative() {
+        IntStream.of(2, 3, 5)
+                .scan(1800, new IntBinaryOperator() {
+                    @Override
+                    public int applyAsInt(int value1, int value2) {
+                        return value1 / value2;
+                    }
+                })
+                .custom(assertElements(is(new Integer[] {
+                        1800,
+                        1800 / 2,
+                        1800 / 2 / 3,
+                        1800 / 2 / 3 / 5
+                })));
     }
 
     @Test
