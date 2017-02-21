@@ -1324,13 +1324,11 @@ public final class Stream<T> {
         Objects.requireNonNull(accumulator);
         return new Stream<T>(new LsaExtIterator<T>() {
 
-            private T value;
-
             @Override
             protected void nextIteration() {
                 hasNext = iterator.hasNext();
                 if (hasNext) {
-                    value = iterator.next();
+                    final T value = iterator.next();
                     if (isInit) {
                         next = accumulator.apply(value, next);
                     } else {
@@ -1368,21 +1366,18 @@ public final class Stream<T> {
         Objects.requireNonNull(accumulator);
         return new Stream<R>(new LsaExtIterator<R>() {
 
-            private R value;
-
             @Override
             protected void nextIteration() {
                 if (!isInit) {
                     // Return identity
                     hasNext = true;
-                    next = value = identity;
+                    next = identity;
                     return;
                 }
                 hasNext = iterator.hasNext();
                 if (hasNext) {
                     final T t = iterator.next();
-                    next = accumulator.apply(value, t);
-                    value = next;
+                    next = accumulator.apply(next, t);
                 }
             }
         });

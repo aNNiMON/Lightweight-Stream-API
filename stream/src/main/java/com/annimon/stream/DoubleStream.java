@@ -719,17 +719,15 @@ public final class DoubleStream {
         Objects.requireNonNull(accumulator);
         return new DoubleStream(new PrimitiveExtIterator.OfDouble() {
 
-            private double value;
-
             @Override
             protected void nextIteration() {
                 hasNext = iterator.hasNext();
                 if (hasNext) {
-                    value = iterator.next();
+                    final double current = iterator.next();
                     if (isInit) {
-                        next = accumulator.applyAsDouble(value, next);
+                        next = accumulator.applyAsDouble(current, next);
                     } else {
-                        next = value;
+                        next = current;
                     }
                 }
             }
@@ -762,21 +760,18 @@ public final class DoubleStream {
         Objects.requireNonNull(accumulator);
         return new DoubleStream(new PrimitiveExtIterator.OfDouble() {
 
-            private double value;
-
             @Override
             protected void nextIteration() {
                 if (!isInit) {
                     // Return identity
                     hasNext = true;
-                    next = value = identity;
+                    next = identity;
                     return;
                 }
                 hasNext = iterator.hasNext();
                 if (hasNext) {
                     final double current = iterator.next();
-                    next = accumulator.applyAsDouble(value, current);
-                    value = next;
+                    next = accumulator.applyAsDouble(next, current);
                 }
             }
         });

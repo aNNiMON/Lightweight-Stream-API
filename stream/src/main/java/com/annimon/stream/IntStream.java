@@ -766,17 +766,15 @@ public final class IntStream {
         Objects.requireNonNull(accumulator);
         return new IntStream(new PrimitiveExtIterator.OfInt() {
 
-            private int value;
-
             @Override
             protected void nextIteration() {
                 hasNext = iterator.hasNext();
                 if (hasNext) {
-                    value = iterator.next();
+                    final int current = iterator.next();
                     if (isInit) {
-                        next = accumulator.applyAsInt(value, next);
+                        next = accumulator.applyAsInt(current, next);
                     } else {
-                        next = value;
+                        next = current;
                     }
                 }
             }
@@ -809,21 +807,18 @@ public final class IntStream {
         Objects.requireNonNull(accumulator);
         return new IntStream(new PrimitiveExtIterator.OfInt() {
 
-            private int value;
-
             @Override
             protected void nextIteration() {
                 if (!isInit) {
                     // Return identity
                     hasNext = true;
-                    next = value = identity;
+                    next = identity;
                     return;
                 }
                 hasNext = iterator.hasNext();
                 if (hasNext) {
                     final int current = iterator.next();
-                    next = accumulator.applyAsInt(value, current);
-                    value = next;
+                    next = accumulator.applyAsInt(next, current);
                 }
             }
         });

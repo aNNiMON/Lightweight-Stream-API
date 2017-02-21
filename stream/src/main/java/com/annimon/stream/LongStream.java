@@ -771,17 +771,15 @@ public final class LongStream {
         Objects.requireNonNull(accumulator);
         return new LongStream(new PrimitiveExtIterator.OfLong() {
 
-            private long value;
-
             @Override
             protected void nextIteration() {
                 hasNext = iterator.hasNext();
                 if (hasNext) {
-                    value = iterator.next();
+                    final long current = iterator.next();
                     if (isInit) {
-                        next = accumulator.applyAsLong(value, next);
+                        next = accumulator.applyAsLong(current, next);
                     } else {
-                        next = value;
+                        next = current;
                     }
                 }
             }
@@ -814,21 +812,18 @@ public final class LongStream {
         Objects.requireNonNull(accumulator);
         return new LongStream(new PrimitiveExtIterator.OfLong() {
 
-            private long value;
-
             @Override
             protected void nextIteration() {
                 if (!isInit) {
                     // Return identity
                     hasNext = true;
-                    next = value = identity;
+                    next = identity;
                     return;
                 }
                 hasNext = iterator.hasNext();
                 if (hasNext) {
                     final long current = iterator.next();
-                    next = accumulator.applyAsLong(value, current);
-                    value = next;
+                    next = accumulator.applyAsLong(next, current);
                 }
             }
         });
