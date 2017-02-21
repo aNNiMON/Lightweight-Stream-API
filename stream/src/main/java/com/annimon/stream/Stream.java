@@ -1306,6 +1306,94 @@ public final class Stream<T> {
     }
 
     /**
+     * Returns a {@code Stream} produced by iterative application of a accumulation function
+     * to reduction value and next element of the current stream.
+     * Produces a {@code Stream} consisting of {@code value1}, {@code acc(value1, value2)},
+     * {@code acc(acc(value1, value2), value3)}, etc.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * accumulator: (a, b) -&gt; a + b
+     * stream: [1, 2, 3, 4, 5]
+     * result: [1, 3, 6, 10, 15]
+     * </pre>
+     *
+     * @param accumulator  the accumulation function
+     * @return the new stream
+     * @throws NullPointerException if {@code accumulator} is null
+     * @since 1.1.6
+     */
+    public Stream<T> scan(final BiFunction<T, T, T> accumulator) {
+        Objects.requireNonNull(accumulator);
+        return new Stream<T>(new LsaExtIterator<T>() {
+
+            private T value;
+
+            @Override
+            protected void nextIteration() {
+                hasNext = iterator.hasNext();
+                if (hasNext) {
+                    value = iterator.next();
+                    if (isInit) {
+                        next = accumulator.apply(value, next);
+                    } else {
+                        next = value;
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * Returns a {@code Stream} produced by iterative application of a accumulation function
+     * to an initial element {@code identity} and next element of the current stream.
+     * Produces a {@code Stream} consisting of {@code identity}, {@code acc(identity, value1)},
+     * {@code acc(acc(identity, value1), value2)}, etc.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * identity: 0
+     * accumulator: (a, b) -&gt; a + b
+     * stream: [1, 2, 3, 4, 5]
+     * result: [0, 1, 3, 6, 10, 15]
+     * </pre>
+     *
+     * @param <R> the type of the result
+     * @param identity  the initial value
+     * @param accumulator  the accumulation function
+     * @return the new stream
+     * @throws NullPointerException if {@code accumulator} is null
+     * @since 1.1.6
+     */
+    public <R> Stream<R> scan(final R identity, final BiFunction<? super R, ? super T, ? extends R> accumulator) {
+        Objects.requireNonNull(accumulator);
+        return new Stream<R>(new LsaExtIterator<R>() {
+
+            private R value;
+
+            @Override
+            protected void nextIteration() {
+                if (!isInit) {
+                    // Return identity
+                    hasNext = true;
+                    next = value = identity;
+                    return;
+                }
+                hasNext = iterator.hasNext();
+                if (hasNext) {
+                    final T t = iterator.next();
+                    next = accumulator.apply(value, t);
+                    value = next;
+                }
+            }
+        });
+    }
+
+    /**
      * Takes elements while the predicate returns {@code true}.
      *
      * <p>This is an intermediate operation.
@@ -1596,7 +1684,7 @@ public final class Stream<T> {
 
     /**
      * Collects elements to a new {@code List}.
-     * 
+     *
      * <p>This implementation <strong>does not</strong> call {@code collect(Collectors.toList())}, so
      * it can be faster by reducing method calls.
      *

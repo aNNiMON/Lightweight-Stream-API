@@ -930,6 +930,42 @@ public class StreamTest {
     }
 
     @Test
+    public void testScan() {
+        List<Integer> expected = Arrays.asList(1, 3, 6);
+        Stream<Integer> stream = Stream.of(1, 2, 3)
+                .scan(Functions.addition());
+        assertThat(stream, elements(is(expected)));
+    }
+
+    @Test
+    public void testScanOnEmptyStream() {
+        Stream<Integer> stream = Stream.<Integer>empty()
+                .scan(Functions.addition());
+        assertThat(stream, isEmpty());
+    }
+
+    @Test
+    public void testScanWithIdentity() {
+        List<Integer> expected = Arrays.asList(0, 1, 3, 6, 10);
+        Stream<Integer> stream = Stream.of("a", "bb", "ccc", "dddd")
+                .scan(0, new BiFunction<Integer, String, Integer>() {
+                    @Override
+                    public Integer apply(Integer length, String s) {
+                        return length + s.length();
+                    }
+                });
+        assertThat(stream, elements(is(expected)));
+    }
+
+    @Test
+    public void testScanWithIdentityOnEmptyStream() {
+        List<Integer> expected = Arrays.asList(9);
+        Stream<Integer> stream = Stream.<Integer>empty()
+                .scan(9, Functions.addition());
+        assertThat(stream, elements(is(expected)));
+    }
+
+    @Test
     public void testTakeWhile() {
         final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
         long count = Stream.of(2, 4, 6, 7, 8, 10, 11)

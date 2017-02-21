@@ -477,6 +477,61 @@ public class IntStreamTest {
     }
 
     @Test
+    public void testScan() {
+        int[] expected = {1, 3, 6};
+        int[] actual = IntStream.of(1, 2, 3)
+                .scan(new IntBinaryOperator() {
+                    @Override
+                    public int applyAsInt(int left, int right) {
+                        return left + right;
+                    }
+                })
+                .toArray();
+        assertThat(actual, is(expected));
+    }
+
+    @Test
+    public void testScanOnEmptyStream() {
+        int[] actual = IntStream.empty()
+                .scan(new IntBinaryOperator() {
+                    @Override
+                    public int applyAsInt(int left, int right) {
+                        return left + right;
+                    }
+                })
+                .toArray();
+        assertThat(actual.length, is(0));
+    }
+
+    @Test
+    public void testScanWithIdentity() {
+        int[] expected = {0, 1, 3, 6};
+        int[] actual = IntStream.of(1, 2, 3)
+                .scan(0, new IntBinaryOperator() {
+                    @Override
+                    public int applyAsInt(int left, int right) {
+                        return left + right;
+                    }
+                })
+                .toArray();
+        assertThat(actual, is(expected));
+    }
+
+    @Test
+    public void testScanWithIdentityOnEmptyStream() {
+        int[] expected = {9};
+        int[] actual = IntStream.empty()
+                .scan(9, new IntBinaryOperator() {
+                    @Override
+                    public int applyAsInt(int left, int right) {
+                        return left + right;
+                    }
+                })
+                .toArray();
+        assertThat(actual, is(expected));
+    }
+
+    @Test
     public void testTakeWhile() {
         int[] expected = {2, 4, 6};
         int[] actual = IntStream.of(2, 4, 6, 7, 8, 10, 11)

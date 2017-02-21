@@ -427,6 +427,61 @@ public class LongStreamTest {
     }
 
     @Test
+    public void testScan() {
+        long[] expected = {1, 3, 6};
+        long[] actual = LongStream.of(1, 2, 3)
+                .scan(new LongBinaryOperator() {
+                    @Override
+                    public long applyAsLong(long left, long right) {
+                        return left + right;
+                    }
+                })
+                .toArray();
+        assertThat(actual, is(expected));
+    }
+
+    @Test
+    public void testScanOnEmptyStream() {
+        long[] actual = LongStream.empty()
+                .scan(new LongBinaryOperator() {
+                    @Override
+                    public long applyAsLong(long left, long right) {
+                        return left + right;
+                    }
+                })
+                .toArray();
+        assertThat(actual.length, is(0));
+    }
+
+    @Test
+    public void testScanWithIdentity() {
+        long[] expected = {0, 1, 3, 6};
+        long[] actual = LongStream.of(1, 2, 3)
+                .scan(0, new LongBinaryOperator() {
+                    @Override
+                    public long applyAsLong(long left, long right) {
+                        return left + right;
+                    }
+                })
+                .toArray();
+        assertThat(actual, is(expected));
+    }
+
+    @Test
+    public void testScanWithIdentityOnEmptyStream() {
+        long[] expected = {9};
+        long[] actual = LongStream.empty()
+                .scan(9, new LongBinaryOperator() {
+                    @Override
+                    public long applyAsLong(long left, long right) {
+                        return left + right;
+                    }
+                })
+                .toArray();
+        assertThat(actual, is(expected));
+    }
+
+    @Test
     public void testTakeWhile() {
         LongStream stream;
         stream = LongStream.of(12, 32, 22, 9, 30, 41, 42)

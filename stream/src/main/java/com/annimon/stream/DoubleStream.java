@@ -696,6 +696,93 @@ public final class DoubleStream {
     }
 
     /**
+     * Returns a {@code DoubleStream} produced by iterative application of a accumulation function
+     * to reduction value and next element of the current stream.
+     * Produces a {@code DoubleStream} consisting of {@code value1}, {@code acc(value1, value2)},
+     * {@code acc(acc(value1, value2), value3)}, etc.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * accumulator: (a, b) -&gt; a + b
+     * stream: [1, 2, 3, 4, 5]
+     * result: [1, 3, 6, 10, 15]
+     * </pre>
+     *
+     * @param accumulator  the accumulation function
+     * @return the new stream
+     * @throws NullPointerException if {@code accumulator} is null
+     * @since 1.1.6
+     */
+    public DoubleStream scan(final DoubleBinaryOperator accumulator) {
+        Objects.requireNonNull(accumulator);
+        return new DoubleStream(new PrimitiveExtIterator.OfDouble() {
+
+            private double value;
+
+            @Override
+            protected void nextIteration() {
+                hasNext = iterator.hasNext();
+                if (hasNext) {
+                    value = iterator.next();
+                    if (isInit) {
+                        next = accumulator.applyAsDouble(value, next);
+                    } else {
+                        next = value;
+                    }
+                }
+            }
+        });
+    }
+
+    /**
+     * Returns a {@code DoubleStream} produced by iterative application of a accumulation function
+     * to an initial element {@code identity} and next element of the current stream.
+     * Produces a {@code DoubleStream} consisting of {@code identity}, {@code acc(identity, value1)},
+     * {@code acc(acc(identity, value1), value2)}, etc.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * identity: 0
+     * accumulator: (a, b) -&gt; a + b
+     * stream: [1, 2, 3, 4, 5]
+     * result: [0, 1, 3, 6, 10, 15]
+     * </pre>
+     *
+     * @param identity  the initial value
+     * @param accumulator  the accumulation function
+     * @return the new stream
+     * @throws NullPointerException if {@code accumulator} is null
+     * @since 1.1.6
+     */
+    public DoubleStream scan(final double identity, final DoubleBinaryOperator accumulator) {
+        Objects.requireNonNull(accumulator);
+        return new DoubleStream(new PrimitiveExtIterator.OfDouble() {
+
+            private double value;
+
+            @Override
+            protected void nextIteration() {
+                if (!isInit) {
+                    // Return identity
+                    hasNext = true;
+                    next = value = identity;
+                    return;
+                }
+                hasNext = iterator.hasNext();
+                if (hasNext) {
+                    final double current = iterator.next();
+                    next = accumulator.applyAsDouble(value, current);
+                    value = next;
+                }
+            }
+        });
+    }
+
+    /**
      * Takes elements while the predicate returns {@code true}.
      *
      * <p>This is an intermediate operation.

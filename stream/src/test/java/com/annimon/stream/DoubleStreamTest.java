@@ -125,6 +125,7 @@ public class DoubleStreamTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testStreamIterateWithPredicate() {
         DoublePredicate condition = new DoublePredicate() {
             @Override
@@ -371,6 +372,69 @@ public class DoubleStreamTest {
                 assertThat(value, closeTo(expected[index++], 0.0001));
             }
         }).count(), is(2L));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testScan() {
+        DoubleStream stream;
+        stream = DoubleStream.of(1.1, 2.2, 3.3)
+                .scan(new DoubleBinaryOperator() {
+                    @Override
+                    public double applyAsDouble(double left, double right) {
+                        return left + right;
+                    }
+                });
+        assertThat(stream, elements(array(
+                closeTo(1.1, 0.00001),
+                closeTo(3.3, 0.00001),
+                closeTo(6.6, 0.00001)
+        )));
+    }
+
+    @Test
+    public void testScanOnEmptyStream() {
+        DoubleStream stream;
+        stream = DoubleStream.empty()
+                .scan(new DoubleBinaryOperator() {
+                    @Override
+                    public double applyAsDouble(double left, double right) {
+                        return left + right;
+                    }
+                });
+        assertThat(stream, isEmpty());
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testScanWithIdentity() {
+        DoubleStream stream;
+        stream = DoubleStream.of(2.2, 3.3, 1.1)
+                .scan(1.1, new DoubleBinaryOperator() {
+                    @Override
+                    public double applyAsDouble(double left, double right) {
+                        return left + right;
+                    }
+                });
+        assertThat(stream, elements(array(
+                closeTo(1.1, 0.00001),
+                closeTo(3.3, 0.00001),
+                closeTo(6.6, 0.00001),
+                closeTo(7.7, 0.00001)
+        )));
+    }
+
+    @Test
+    public void testScanWithIdentityOnEmptyStream() {
+        DoubleStream stream;
+        stream = DoubleStream.empty()
+                .scan(10.09, new DoubleBinaryOperator() {
+                    @Override
+                    public double applyAsDouble(double left, double right) {
+                        return left + right;
+                    }
+                });
+        assertThat(stream, elements(arrayContaining(10.09)));
     }
 
     @Test
