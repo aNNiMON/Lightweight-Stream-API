@@ -1076,12 +1076,7 @@ public final class Stream<T> {
      * @return the new stream
      */
     public <R extends Comparable<? super R>> Stream<T> sortBy(final Function<? super T, ? extends R> f) {
-        return sorted(new Comparator<T>() {
-            @Override
-            public int compare(T o1, T o2) {
-                return f.apply(o1).compareTo(f.apply(o2));
-            }
-        });
+        return sorted(ComparatorCompat.comparing(f));
     }
 
     /**
