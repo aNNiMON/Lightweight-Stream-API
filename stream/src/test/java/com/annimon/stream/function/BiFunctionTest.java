@@ -43,6 +43,13 @@ public class BiFunctionTest {
         assertEquals(0, (int) function.apply('0', IDENTITY));
         assertEquals(1, (int) function.apply('0', INCREMENT));
     }
+
+    @Test
+    public void testReverse() {
+        BiFunction<Boolean, String, String> function = BiFunction.Util.reverse(changeCase);
+        assertEquals("JAVA", function.apply(TO_UPPER, "JAva"));
+        assertEquals("java", function.apply(TO_LOWER, "JAva"));
+    }
     
     @Test
     public void testPrivateConstructor() throws Exception {

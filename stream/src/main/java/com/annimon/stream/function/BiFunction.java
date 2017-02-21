@@ -1,5 +1,7 @@
 package com.annimon.stream.function;
 
+import com.annimon.stream.Objects;
+
 /**
  * Represents a function which produces result from two input arguments.
  *
@@ -45,6 +47,32 @@ public interface BiFunction<T, U, R> {
                 @Override
                 public V apply(T t, U u) {
                     return f2.apply(f1.apply(t, u));
+                }
+            };
+        }
+
+        /**
+         * Returns a {@code BiFunction} that reverses the input arguments order
+         * of the specified {@code BiFunction}.
+         * 
+         * @param <T> the type of the first argument of the given function
+         *            and the second argument of the reversed function
+         * @param <U> the type of the second argument of the given function
+         *            and the first argument of the reversed function
+         * @param <R> the type of the result of the given function
+         *            and of the reversed function
+         * @param function  the {@code BiFunction} to reverse arguments
+         * @return the reversed function
+         * @throws NullPointerException if {@code function} is null
+         * @since 1.1.6
+         */
+        public static <T, U, R> BiFunction<U, T, R> reverse(
+                final BiFunction<? super T, ? super U, ? extends R> function) {
+            Objects.requireNonNull(function);
+            return new BiFunction<U, T, R>() {
+                @Override
+                public R apply(U u, T t) {
+                    return function.apply(t, u);
                 }
             };
         }
