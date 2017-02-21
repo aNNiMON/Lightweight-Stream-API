@@ -36,30 +36,39 @@ public class PrimitiveExtIteratorTest {
     }
 
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void testOfIntNext() {
         final PrimitiveExtIteratorOfIntImpl iterator = new PrimitiveExtIteratorOfIntImpl();
         assertEquals(iterator.nextInt(), 1);
         assertEquals(iterator.nextInt(), 2);
-
-        new EmptyPrimitiveExtIteratorOfInt().nextInt();
     }
 
     @Test(expected = NoSuchElementException.class)
+    public void testOfIntNextOnEmptyIterator() {
+        new EmptyPrimitiveExtIteratorOfInt().nextInt();
+    }
+
+    @Test
     public void testOfLongNext() {
         final PrimitiveExtIteratorOfLongImpl iterator = new PrimitiveExtIteratorOfLongImpl();
         assertEquals(iterator.nextLong(), 1);
         assertEquals(iterator.nextLong(), 2);
-
-        new EmptyPrimitiveExtIteratorOfLong().nextLong();
     }
 
     @Test(expected = NoSuchElementException.class)
+    public void testOfLongNextOnEmptyIterator() {
+        new EmptyPrimitiveExtIteratorOfLong().nextLong();
+    }
+
+    @Test
     public void testOfDoubleNext() {
         final PrimitiveExtIteratorOfDoubleImpl iterator = new PrimitiveExtIteratorOfDoubleImpl();
         assertThat(iterator.nextDouble(), closeTo(1.01, 0.00001));
         assertThat(iterator.nextDouble(), closeTo(2.02, 0.00001));
+    }
 
+    @Test(expected = NoSuchElementException.class)
+    public void testOfDoubleNextOnEmptyIterator() {
         new EmptyPrimitiveExtIteratorOfDouble().nextDouble();
     }
 

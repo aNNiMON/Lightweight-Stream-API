@@ -17,6 +17,7 @@ public final class PrimitiveExtIterator {
         @Override
         public boolean hasNext() {
             if (!isInit) {
+                // First call to hasNext() on new iterator
                 nextIteration();
                 isInit = true;
             }
@@ -25,6 +26,10 @@ public final class PrimitiveExtIterator {
 
         @Override
         public int nextInt() {
+            if (!isInit) {
+                // First call to next() or nextInt() on new iterator
+                hasNext();
+            }
             if (!hasNext) {
                 throw new NoSuchElementException();
             }
@@ -44,6 +49,7 @@ public final class PrimitiveExtIterator {
         @Override
         public boolean hasNext() {
             if (!isInit) {
+                // First call to hasNext() on new iterator
                 nextIteration();
                 isInit = true;
             }
@@ -52,6 +58,10 @@ public final class PrimitiveExtIterator {
 
         @Override
         public long nextLong() {
+            if (!isInit) {
+                // First call to next() or nextLong() on new iterator
+                hasNext();
+            }
             if (!hasNext) {
                 throw new NoSuchElementException();
             }
@@ -71,6 +81,7 @@ public final class PrimitiveExtIterator {
         @Override
         public boolean hasNext() {
             if (!isInit) {
+                // First call to hasNext() on new iterator
                 nextIteration();
                 isInit = true;
             }
@@ -79,6 +90,10 @@ public final class PrimitiveExtIterator {
 
         @Override
         public double nextDouble() {
+            if (!isInit) {
+                // First call to next() or nextDouble() on new iterator
+                hasNext();
+            }
             if (!hasNext) {
                 throw new NoSuchElementException();
             }

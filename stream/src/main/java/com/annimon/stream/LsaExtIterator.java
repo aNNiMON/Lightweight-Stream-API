@@ -16,6 +16,7 @@ public abstract class LsaExtIterator<T> implements Iterator<T> {
     @Override
     public boolean hasNext() {
         if (!isInit) {
+            // First call to hasNext() on new iterator
             nextIteration();
             isInit = true;
         }
@@ -24,6 +25,10 @@ public abstract class LsaExtIterator<T> implements Iterator<T> {
 
     @Override
     public T next() {
+        if (!isInit) {
+            // First call to next() on new iterator
+            hasNext();
+        }
         if (!hasNext) {
             throw new NoSuchElementException();
         }

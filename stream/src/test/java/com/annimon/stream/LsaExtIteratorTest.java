@@ -1,8 +1,10 @@
 package com.annimon.stream;
 
 import java.util.NoSuchElementException;
-import static org.junit.Assert.*;
 import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class LsaExtIteratorTest {
 
@@ -12,12 +14,15 @@ public class LsaExtIteratorTest {
         assertTrue(new LsaExtIteratorImpl().hasNext());
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void testNext() {
         final LsaExtIteratorImpl iterator = new LsaExtIteratorImpl();
-        assertEquals(iterator.next(), "1");
-        assertEquals(iterator.next(), "2");
+        assertEquals("1", iterator.next());
+        assertEquals("2", iterator.next());
+    }
 
+    @Test(expected = NoSuchElementException.class)
+    public void testNextOnEmptyIterator() {
         new EmptyLsaExtIterator().next();
     }
 
@@ -31,8 +36,8 @@ public class LsaExtIteratorTest {
         final LsaExtIteratorImpl iterator = new LsaExtIteratorImpl();
         assertTrue(iterator.hasNext());
         assertTrue(iterator.hasNext());
-        assertEquals(iterator.next(), "1");
-        assertEquals(iterator.next(), "2");
+        assertEquals("1", iterator.next());
+        assertEquals("2", iterator.next());
         assertFalse(iterator.hasNext());
         assertFalse(iterator.hasNext());
         iterator.next();
