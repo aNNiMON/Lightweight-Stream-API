@@ -1,5 +1,6 @@
-package com.annimon.stream;
+package com.annimon.stream.internal;
 
+import com.annimon.stream.PrimitiveIterator;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static org.hamcrest.Matchers.closeTo;
@@ -503,7 +504,7 @@ public class SpinedBufferTest {
         SpinedBuffer.OfInt b = new SpinedBuffer.OfInt() {
             @Override
             public long count() {
-                return Stream.MAX_ARRAY_SIZE;
+                return Compat.MAX_ARRAY_SIZE;
             }
         };
 
@@ -515,7 +516,7 @@ public class SpinedBufferTest {
         SpinedBuffer.OfLong b = new SpinedBuffer.OfLong() {
             @Override
             public long count() {
-                return Stream.MAX_ARRAY_SIZE;
+                return Compat.MAX_ARRAY_SIZE;
             }
         };
 
@@ -527,7 +528,7 @@ public class SpinedBufferTest {
         SpinedBuffer.OfDouble b = new SpinedBuffer.OfDouble() {
             @Override
             public long count() {
-                return Stream.MAX_ARRAY_SIZE;
+                return Compat.MAX_ARRAY_SIZE;
             }
         };
 

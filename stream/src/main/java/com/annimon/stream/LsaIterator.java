@@ -6,7 +6,7 @@ import java.util.NoSuchElementException;
 /**
  * Abstract iterator with implemented {@code remove} method.
  */
-abstract class LsaIterator<T> implements Iterator<T> {
+public abstract class LsaIterator<T> implements Iterator<T> {
  
     @Override
     public void remove() {

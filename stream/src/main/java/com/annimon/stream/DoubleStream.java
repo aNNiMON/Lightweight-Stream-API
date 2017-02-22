@@ -1,18 +1,8 @@
 package com.annimon.stream;
 
-import com.annimon.stream.function.DoubleBinaryOperator;
-import com.annimon.stream.function.DoubleConsumer;
-import com.annimon.stream.function.DoubleFunction;
-import com.annimon.stream.function.DoublePredicate;
-import com.annimon.stream.function.DoubleSupplier;
-import com.annimon.stream.function.DoubleToIntFunction;
-import com.annimon.stream.function.DoubleToLongFunction;
-import com.annimon.stream.function.DoubleUnaryOperator;
-import com.annimon.stream.function.Function;
-import com.annimon.stream.function.ObjDoubleConsumer;
-import com.annimon.stream.function.Supplier;
-import com.annimon.stream.function.ToDoubleFunction;
-import java.util.Arrays;
+import com.annimon.stream.operator.*;
+import com.annimon.stream.function.*;
+import com.annimon.stream.internal.Operators;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 
@@ -71,20 +61,7 @@ public final class DoubleStream {
      */
     public static DoubleStream of(final double... values) {
         Objects.requireNonNull(values);
-        return new DoubleStream(new PrimitiveIterator.OfDouble() {
-
-            private int index = 0;
-
-            @Override
-            public boolean hasNext() {
-                return index < values.length;
-            }
-
-            @Override
-            public double nextDouble() {
-                return values[index++];
-            }
-        });
+        return new DoubleStream(new DoubleArray(values));
     }
 
     /**
@@ -94,21 +71,7 @@ public final class DoubleStream {
      * @return the new stream
      */
     public static DoubleStream of(final double t) {
-        return new DoubleStream(new PrimitiveIterator.OfDouble() {
-
-            private int index = 0;
-
-            @Override
-            public boolean hasNext() {
-                return index == 0;
-            }
-
-            @Override
-            public double nextDouble() {
-                index++;
-                return t;
-            }
-        });
+        return new DoubleStream(new DoubleSingleElement(t));
     }
 
     /**
@@ -120,18 +83,7 @@ public final class DoubleStream {
      */
     public static DoubleStream generate(final DoubleSupplier s) {
         Objects.requireNonNull(s);
-        return new DoubleStream(new PrimitiveIterator.OfDouble() {
-
-            @Override
-            public boolean hasNext() {
-                return true;
-            }
-
-            @Override
-            public double nextDouble() {
-                return s.getAsDouble();
-            }
-        });
+        return new DoubleStream(new DoubleGenerate(s));
     }
 
     /**
@@ -158,22 +110,7 @@ public final class DoubleStream {
      */
     public static DoubleStream iterate(final double seed, final DoubleUnaryOperator f) {
         Objects.requireNonNull(f);
-        return new DoubleStream(new PrimitiveIterator.OfDouble() {
-
-            private double current = seed;
-
-            @Override
-            public boolean hasNext() {
-                return true;
-            }
-
-            @Override
-            public double nextDouble() {
-                final double old = current;
-                current = f.applyAsDouble(current);
-                return old;
-            }
-        });
+        return new DoubleStream(new DoubleIterate(seed, f));
     }
 
     /**
@@ -219,28 +156,7 @@ public final class DoubleStream {
     public static DoubleStream concat(final DoubleStream a, final DoubleStream b) {
         Objects.requireNonNull(a);
         Objects.requireNonNull(b);
-        final PrimitiveIterator.OfDouble it1 = a.iterator;
-        final PrimitiveIterator.OfDouble it2 = b.iterator;
-        return new DoubleStream(new PrimitiveIterator.OfDouble() {
-
-            private boolean firstStreamIsCurrent = true;
-
-            @Override
-            public boolean hasNext() {
-                if (firstStreamIsCurrent) {
-                    if (it1.hasNext())
-                        return true;
-
-                    firstStreamIsCurrent = false;
-                }
-                return it2.hasNext();
-            }
-
-            @Override
-            public double nextDouble() {
-                return firstStreamIsCurrent ? it1.nextDouble() : it2.nextDouble();
-            }
-        });
+        return new DoubleStream(new DoubleConcat(a.iterator, b.iterator));
     }
 
 
@@ -369,26 +285,7 @@ public final class DoubleStream {
      * @return the new stream
      */
     public DoubleStream filter(final DoublePredicate predicate) {
-        return new DoubleStream(new PrimitiveIterator.OfDouble() {
-
-            private double next;
-
-            @Override
-            public boolean hasNext() {
-                while (iterator.hasNext()) {
-                    next = iterator.next();
-                    if (predicate.test(next)) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            @Override
-            public double nextDouble() {
-                return next;
-            }
-        });
+        return new DoubleStream(new DoubleFilter(iterator, predicate));
     }
 
     /**
@@ -421,18 +318,7 @@ public final class DoubleStream {
      * @see Stream#map(com.annimon.stream.function.Function)
      */
     public DoubleStream map(final DoubleUnaryOperator mapper) {
-        return new DoubleStream(new PrimitiveIterator.OfDouble() {
-
-            @Override
-            public boolean hasNext() {
-                return iterator.hasNext();
-            }
-
-            @Override
-            public double nextDouble() {
-                return mapper.applyAsDouble(iterator.nextDouble());
-            }
-        });
+        return new DoubleStream(new DoubleMap(iterator, mapper));
     }
 
     /**
@@ -446,18 +332,7 @@ public final class DoubleStream {
      * @return the new {@code Stream}
      */
     public <R> Stream<R> mapToObj(final DoubleFunction<? extends R> mapper) {
-        return Stream.of(new LsaIterator<R>() {
-
-            @Override
-            public boolean hasNext() {
-                return iterator.hasNext();
-            }
-
-            @Override
-            public R nextIteration() {
-                return mapper.apply(iterator.nextDouble());
-            }
-        });
+        return Stream.of(new DoubleMapToObj<R>(iterator, mapper));
     }
 
     /**
@@ -470,18 +345,7 @@ public final class DoubleStream {
      * @return the new {@code IntStream}
      */
     public IntStream mapToInt(final DoubleToIntFunction mapper) {
-        return IntStream.of(new PrimitiveIterator.OfInt() {
-
-            @Override
-            public boolean hasNext() {
-                return iterator.hasNext();
-            }
-
-            @Override
-            public int nextInt() {
-                return mapper.applyAsInt(iterator.nextDouble());
-            }
-        });
+        return IntStream.of(new DoubleMapToInt(iterator, mapper));
     }
 
     /**
@@ -494,18 +358,7 @@ public final class DoubleStream {
      * @return the new {@code LongStream}
      */
     public LongStream mapToLong(final DoubleToLongFunction mapper) {
-        return LongStream.of(new PrimitiveIterator.OfLong() {
-
-            @Override
-            public boolean hasNext() {
-                return iterator.hasNext();
-            }
-
-            @Override
-            public long nextLong() {
-                return mapper.applyAsLong(iterator.nextDouble());
-            }
-        });
+        return LongStream.of(new DoubleMapToLong(iterator, mapper));
     }
 
     /**
@@ -527,37 +380,7 @@ public final class DoubleStream {
      * @see Stream#flatMap(com.annimon.stream.function.Function)
      */
     public DoubleStream flatMap(final DoubleFunction<? extends DoubleStream> mapper) {
-        return new DoubleStream(new PrimitiveIterator.OfDouble() {
-
-            private PrimitiveIterator.OfDouble inner;
-
-            @Override
-            public boolean hasNext() {
-                if (inner != null && inner.hasNext()) {
-                    return true;
-                }
-                while (iterator.hasNext()) {
-                    final double arg = iterator.next();
-                    final DoubleStream result = mapper.apply(arg);
-                    if (result == null) {
-                        continue;
-                    }
-                    if (result.iterator.hasNext()) {
-                        inner = result.iterator;
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            @Override
-            public double nextDouble() {
-                if (inner == null) {
-                    throw new NoSuchElementException();
-                }
-                return inner.nextDouble();
-            }
-        });
+        return new DoubleStream(new DoubleFlatMap(iterator, mapper));
     }
 
     /**
@@ -591,23 +414,7 @@ public final class DoubleStream {
      * @return the new stream
      */
     public DoubleStream sorted() {
-        return new DoubleStream(new PrimitiveExtIterator.OfDouble() {
-
-            private int index = 0;
-            private double[] array;
-
-            @Override
-            protected void nextIteration() {
-                if (!isInit) {
-                    array = toArray();
-                    Arrays.sort(array);
-                }
-                hasNext = index < array.length;
-                if (hasNext) {
-                    next = array[index++];
-                }
-            }
-        });
+        return new DoubleStream(new DoubleSorted(iterator));
     }
 
     /**
@@ -650,24 +457,7 @@ public final class DoubleStream {
     public DoubleStream sample(final int stepWidth) {
         if (stepWidth <= 0) throw new IllegalArgumentException("stepWidth cannot be zero or negative");
         if (stepWidth == 1) return this;
-        return new DoubleStream(new PrimitiveIterator.OfDouble() {
-
-            @Override
-            public boolean hasNext() {
-                return iterator.hasNext();
-            }
-
-            @Override
-            public double nextDouble() {
-                final double result = iterator.nextDouble();
-                int skip = 1;
-                while (skip < stepWidth && iterator.hasNext()) {
-                    iterator.nextDouble();
-                    skip++;
-                }
-                return result;
-            }
-        });
+        return new DoubleStream(new DoubleSample(iterator, stepWidth));
     }
 
     /**
@@ -679,20 +469,7 @@ public final class DoubleStream {
      * @return the new stream
      */
     public DoubleStream peek(final DoubleConsumer action) {
-        return new DoubleStream(new PrimitiveIterator.OfDouble() {
-
-            @Override
-            public boolean hasNext() {
-                return iterator.hasNext();
-            }
-
-            @Override
-            public double nextDouble() {
-                double value = iterator.nextDouble();
-                action.accept(value);
-                return value;
-            }
-        });
+        return new DoubleStream(new DoublePeek(iterator, action));
     }
 
     /**
@@ -717,21 +494,7 @@ public final class DoubleStream {
      */
     public DoubleStream scan(final DoubleBinaryOperator accumulator) {
         Objects.requireNonNull(accumulator);
-        return new DoubleStream(new PrimitiveExtIterator.OfDouble() {
-
-            @Override
-            protected void nextIteration() {
-                hasNext = iterator.hasNext();
-                if (hasNext) {
-                    final double current = iterator.next();
-                    if (isInit) {
-                        next = accumulator.applyAsDouble(next, current);
-                    } else {
-                        next = current;
-                    }
-                }
-            }
-        });
+        return new DoubleStream(new DoubleScan(iterator, accumulator));
     }
 
     /**
@@ -758,23 +521,7 @@ public final class DoubleStream {
      */
     public DoubleStream scan(final double identity, final DoubleBinaryOperator accumulator) {
         Objects.requireNonNull(accumulator);
-        return new DoubleStream(new PrimitiveExtIterator.OfDouble() {
-
-            @Override
-            protected void nextIteration() {
-                if (!isInit) {
-                    // Return identity
-                    hasNext = true;
-                    next = identity;
-                    return;
-                }
-                hasNext = iterator.hasNext();
-                if (hasNext) {
-                    final double current = iterator.next();
-                    next = accumulator.applyAsDouble(next, current);
-                }
-            }
-        });
+        return new DoubleStream(new DoubleScanIdentity(iterator, identity, accumulator));
     }
 
     /**
@@ -793,14 +540,7 @@ public final class DoubleStream {
      * @return the new {@code DoubleStream}
      */
     public DoubleStream takeWhile(final DoublePredicate predicate) {
-        return new DoubleStream(new PrimitiveExtIterator.OfDouble() {
-
-            @Override
-            protected void nextIteration() {
-                hasNext = iterator.hasNext()
-                        && predicate.test(next = iterator.next());
-            }
-        });
+        return new DoubleStream(new DoubleTakeWhile(iterator, predicate));
     }
 
     /**
@@ -822,16 +562,7 @@ public final class DoubleStream {
      * @since 1.1.6
      */
     public DoubleStream takeUntil(final DoublePredicate stopPredicate) {
-        return new DoubleStream(new PrimitiveExtIterator.OfDouble() {
-
-            @Override
-            protected void nextIteration() {
-                hasNext = iterator.hasNext() && !(isInit && stopPredicate.test(next));
-                if (hasNext) {
-                    next = iterator.next();
-                }
-            }
-        });
+        return new DoubleStream(new DoubleTakeUntil(iterator, stopPredicate));
     }
 
     /**
@@ -850,26 +581,7 @@ public final class DoubleStream {
      * @return the new {@code DoubleStream}
      */
     public DoubleStream dropWhile(final DoublePredicate predicate) {
-        return new DoubleStream(new PrimitiveExtIterator.OfDouble() {
-
-            @Override
-            protected void nextIteration() {
-                if (!isInit) {
-                    // Skip first time
-                    while (hasNext = iterator.hasNext()) {
-                        next = iterator.next();
-                        if (!predicate.test(next)) {
-                            return;
-                        }
-                    }
-                }
-
-                hasNext = hasNext && iterator.hasNext();
-                if (!hasNext) return;
-
-                next = iterator.next();
-            }
-        });
+        return new DoubleStream(new DoubleDropWhile(iterator, predicate));
     }
 
     /**
@@ -896,21 +608,7 @@ public final class DoubleStream {
     public DoubleStream limit(final long maxSize) {
         if (maxSize < 0) throw new IllegalArgumentException("maxSize cannot be negative");
         if (maxSize == 0) return DoubleStream.empty();
-        return new DoubleStream(new PrimitiveIterator.OfDouble() {
-
-            private long index = 0;
-
-            @Override
-            public boolean hasNext() {
-                return (index < maxSize) && iterator.hasNext();
-            }
-
-            @Override
-            public double nextDouble() {
-                index++;
-                return iterator.nextDouble();
-            }
-        });
+        return new DoubleStream(new DoubleLimit(iterator, maxSize));
     }
 
     /**
@@ -938,25 +636,7 @@ public final class DoubleStream {
     public DoubleStream skip(final long n) {
         if (n < 0) throw new IllegalArgumentException("n cannot be negative");
         if (n == 0) return this;
-        return new DoubleStream(new PrimitiveIterator.OfDouble() {
-
-            private long skippedCount = 0;
-
-            @Override
-            public boolean hasNext() {
-                while (iterator.hasNext()) {
-                    if (skippedCount == n) break;
-                    iterator.nextDouble();
-                    skippedCount++;
-                }
-                return iterator.hasNext();
-            }
-
-            @Override
-            public double nextDouble() {
-                return iterator.nextDouble();
-            }
-        });
+        return new DoubleStream(new DoubleSkip(iterator, n));
     }
 
     /**
@@ -1044,9 +724,7 @@ public final class DoubleStream {
      * @return an array containing the elements of this stream
      */
     public double[] toArray() {
-        SpinedBuffer.OfDouble b = new SpinedBuffer.OfDouble();
-        forEach(b);
-        return b.asPrimitiveArray();
+        return Operators.toDoubleArray(iterator);
     }
 
     /**

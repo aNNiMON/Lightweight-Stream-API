@@ -1555,28 +1555,6 @@ public class StreamTest {
     }
 
     @Test
-    public void testNewArrayCompat() {
-        String[] strings = new String[] {"abc", "def", "fff"};
-
-        String[] copy = Compat.newArrayCompat(strings, 5);
-
-        assertEquals(5, copy.length);
-        assertEquals("abc", copy[0]);
-        assertEquals(null, copy[3]);
-
-        String[] empty = new String[0];
-
-        String[] emptyCopy = Compat.newArrayCompat(empty, 3);
-
-        assertEquals(3, emptyCopy.length);
-
-        emptyCopy = Compat.newArrayCompat(empty, 0);
-
-        assertEquals(0, emptyCopy.length);
-    }
-
-
-    @Test
     public void testCustomTerminalOperator_ForEach() {
         PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
         Stream.range(0, 10)
