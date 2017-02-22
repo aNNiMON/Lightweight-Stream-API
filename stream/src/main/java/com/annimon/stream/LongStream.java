@@ -61,6 +61,9 @@ public final class LongStream {
      */
     public static LongStream of(final long... values) {
         Objects.requireNonNull(values);
+        if (values.length == 0) {
+            return LongStream.empty();
+        }
         return new LongStream(new LongArray(values));
     }
 

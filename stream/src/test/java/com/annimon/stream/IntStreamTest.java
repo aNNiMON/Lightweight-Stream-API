@@ -20,6 +20,7 @@ import java.util.NoSuchElementException;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.IntStreamMatcher.assertElements;
+import static com.annimon.stream.test.hamcrest.IntStreamMatcher.assertIsEmpty;
 import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.hasValue;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.elements;
 import static org.hamcrest.CoreMatchers.is;
@@ -74,12 +75,18 @@ public class IntStreamTest {
 
         assertTrue(IntStream.of(data1).count() == 5);
         assertTrue(IntStream.of(data2).findFirst().getAsInt() == 42);
-        assertTrue(!IntStream.of(data3).findFirst().isPresent());
+        assertFalse(IntStream.of(data3).findFirst().isPresent());
     }
 
     @Test(expected = NullPointerException.class)
     public void testStreamOfIntsNull() {
         IntStream.of((int[]) null);
+    }
+
+    @Test
+    public void testStreamOfEmptyArray() {
+        IntStream.of(new int[0])
+                .custom(assertIsEmpty());
     }
 
     @Test

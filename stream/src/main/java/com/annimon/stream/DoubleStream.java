@@ -61,6 +61,9 @@ public final class DoubleStream {
      */
     public static DoubleStream of(final double... values) {
         Objects.requireNonNull(values);
+        if (values.length == 0) {
+            return DoubleStream.empty();
+        }
         return new DoubleStream(new DoubleArray(values));
     }
 

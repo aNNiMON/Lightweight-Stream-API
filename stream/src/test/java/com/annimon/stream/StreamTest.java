@@ -15,6 +15,7 @@ import com.annimon.stream.function.ToLongFunction;
 import com.annimon.stream.function.UnaryOperator;
 import com.annimon.stream.test.hamcrest.DoubleStreamMatcher;
 import com.annimon.stream.test.hamcrest.OptionalMatcher;
+import com.annimon.stream.test.hamcrest.StreamMatcher;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -89,6 +90,12 @@ public class StreamTest {
     @Test(expected = NullPointerException.class)
     public void testStreamOfMapNull() {
         Stream.of((Map<?, ?>)null);
+    }
+
+    @Test
+    public void testStreamOfEmptyArray() {
+        Stream.of(new String[0])
+                .custom(StreamMatcher.<String>assertIsEmpty());
     }
 
     @Test

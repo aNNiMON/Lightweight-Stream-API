@@ -16,6 +16,7 @@ import java.util.Comparator;
 import java.util.NoSuchElementException;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.DoubleStreamMatcher.assertElements;
+import static com.annimon.stream.test.hamcrest.DoubleStreamMatcher.assertIsEmpty;
 import static com.annimon.stream.test.hamcrest.DoubleStreamMatcher.elements;
 import static com.annimon.stream.test.hamcrest.DoubleStreamMatcher.isEmpty;
 import static com.annimon.stream.test.hamcrest.OptionalDoubleMatcher.hasValue;
@@ -78,6 +79,12 @@ public class DoubleStreamTest {
     @Test(expected = NullPointerException.class)
     public void testStreamOfDoublesNull() {
         DoubleStream.of((double[]) null);
+    }
+
+    @Test
+    public void testStreamOfEmptyArray() {
+        DoubleStream.of(new double[0])
+                .custom(assertIsEmpty());
     }
 
     @Test

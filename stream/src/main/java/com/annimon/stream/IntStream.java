@@ -58,6 +58,9 @@ public final class IntStream {
      */
     public static IntStream of(final int... values) {
         Objects.requireNonNull(values);
+        if (values.length == 0) {
+            return IntStream.empty();
+        }
         return new IntStream(new IntArray(values));
     }
 

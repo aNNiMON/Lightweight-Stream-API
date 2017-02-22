@@ -78,6 +78,9 @@ public final class Stream<T> {
      */
     public static <T> Stream<T> of(final T... elements) {
         Objects.requireNonNull(elements);
+        if (elements.length == 0) {
+            return Stream.<T>empty();
+        }
         return new Stream<T>(new ObjArray<T>(elements));
     }
 
