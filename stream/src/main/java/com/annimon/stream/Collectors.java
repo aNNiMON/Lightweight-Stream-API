@@ -117,7 +117,7 @@ public final class Collectors {
      */
     public static <T, K> Collector<T, ?, Map<K, T>> toMap(
             final Function<? super T, ? extends K> keyMapper) {
-        return toMap(keyMapper, UnaryOperator.Util.<T>identity(), Collectors.<K, T>hashMapSupplier());
+        return Collectors.<T, K, T>toMap(keyMapper, UnaryOperator.Util.<T>identity());
     }
 
     /**
@@ -133,7 +133,8 @@ public final class Collectors {
     public static <T, K, V> Collector<T, ?, Map<K, V>> toMap(
             final Function<? super T, ? extends K> keyMapper,
             final Function<? super T, ? extends V> valueMapper) {
-        return toMap(keyMapper, valueMapper, Collectors.<K, V>hashMapSupplier());
+        return Collectors.<T, K, V, Map<K, V>>toMap(keyMapper, valueMapper,
+                Collectors.<K, V>hashMapSupplier());
     }
     
     /**
@@ -693,7 +694,8 @@ public final class Collectors {
     public static <T, K, A, D> Collector<T, ?, Map<K, D>> groupingBy(
             Function<? super T, ? extends K> classifier,
             Collector<? super T, A, D> downstream) {
-        return groupingBy(classifier, Collectors.<K, D>hashMapSupplier(), downstream);
+        return Collectors.<T, K, D, A, Map<K, D>>groupingBy(classifier,
+                Collectors.<K, D>hashMapSupplier(), downstream);
     }
     
     /**

@@ -213,7 +213,6 @@ public class RandomCompatTest {
         new RandomCompat().longs(Long.MAX_VALUE - 5, Long.MAX_VALUE).peek(new LongConsumer() {
             @Override
             public void accept(long value) {
-                System.out.println(value);
                 if (value < Long.MAX_VALUE - 5 || value == Long.MAX_VALUE)
                     fail();
             }
