@@ -1008,7 +1008,7 @@ public final class IntStream {
      */
     public int single() {
         if (iterator.hasNext()) {
-            int singleCandidate = iterator.next();
+            int singleCandidate = iterator.nextInt();
             if (iterator.hasNext()) {
                 throw new IllegalStateException("IntStream contains more than one element");
             } else {
@@ -1044,7 +1044,7 @@ public final class IntStream {
      */
     public OptionalInt findSingle() {
         if (iterator.hasNext()) {
-            int singleCandidate = iterator.next();
+            int singleCandidate = iterator.nextInt();
             if (iterator.hasNext()) {
                 throw new IllegalStateException("IntStream contains more than one element");
             } else {

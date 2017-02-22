@@ -18,8 +18,7 @@ public class LongScan extends PrimitiveExtIterator.OfLong {
     protected void nextIteration() {
         hasNext = iterator.hasNext();
         if (hasNext) {
-            // TODO nextLong
-            final long current = iterator.next();
+            final long current = iterator.nextLong();
             if (isInit) {
                 next = accumulator.applyAsLong(next, current);
             } else {

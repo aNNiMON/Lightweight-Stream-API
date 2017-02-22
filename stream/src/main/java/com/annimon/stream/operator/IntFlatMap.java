@@ -22,8 +22,7 @@ public class IntFlatMap extends PrimitiveIterator.OfInt {
             return true;
         }
         while (iterator.hasNext()) {
-            // TODO nextInt
-            final int arg = iterator.next();
+            final int arg = iterator.nextInt();
             final IntStream result = mapper.apply(arg);
             if (result == null) {
                 continue;

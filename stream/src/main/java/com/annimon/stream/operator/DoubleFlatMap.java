@@ -22,8 +22,7 @@ public class DoubleFlatMap extends PrimitiveIterator.OfDouble {
             return true;
         }
         while (iterator.hasNext()) {
-            // TODO nextDouble
-            final double arg = iterator.next();
+            final double arg = iterator.nextDouble();
             final DoubleStream result = mapper.apply(arg);
             if (result == null) {
                 continue;

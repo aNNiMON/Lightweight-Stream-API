@@ -17,8 +17,7 @@ public class LongFilter extends PrimitiveIterator.OfLong {
     @Override
     public boolean hasNext() {
         while (iterator.hasNext()) {
-            // TODO nextLong
-            next = iterator.next();
+            next = iterator.nextLong();
             if (predicate.test(next)) {
                 return true;
             }

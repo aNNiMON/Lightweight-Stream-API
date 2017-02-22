@@ -22,8 +22,7 @@ public class LongFlatMap extends PrimitiveIterator.OfLong {
             return true;
         }
         while (iterator.hasNext()) {
-            // TODO nextLong
-            final long arg = iterator.next();
+            final long arg = iterator.nextLong();
             final LongStream result = mapper.apply(arg);
             if (result == null) {
                 continue;

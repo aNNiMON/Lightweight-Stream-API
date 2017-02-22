@@ -17,8 +17,7 @@ public class DoubleFilter extends PrimitiveIterator.OfDouble {
     @Override
     public boolean hasNext() {
         while (iterator.hasNext()) {
-            // TODO nextDouble
-            next = iterator.next();
+            next = iterator.nextDouble();
             if (predicate.test(next)) {
                 return true;
             }

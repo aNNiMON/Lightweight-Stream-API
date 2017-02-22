@@ -981,7 +981,7 @@ public final class LongStream {
             throw new NoSuchElementException("LongStream contains no element");
         }
 
-        final long singleCandidate = iterator.next();
+        final long singleCandidate = iterator.nextLong();
         if (iterator.hasNext()) {
             throw new IllegalStateException("LongStream contains more than one element");
         }
@@ -1016,7 +1016,7 @@ public final class LongStream {
             return OptionalLong.empty();
         }
 
-        final long singleCandidate = iterator.next();
+        final long singleCandidate = iterator.nextLong();
         if (iterator.hasNext()) {
             throw new IllegalStateException("LongStream contains more than one element");
         }

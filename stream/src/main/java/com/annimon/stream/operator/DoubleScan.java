@@ -18,8 +18,7 @@ public class DoubleScan extends PrimitiveExtIterator.OfDouble {
     protected void nextIteration() {
         hasNext = iterator.hasNext();
         if (hasNext) {
-            // TODO nextDouble
-            final double current = iterator.next();
+            final double current = iterator.nextDouble();
             if (isInit) {
                 next = accumulator.applyAsDouble(next, current);
             } else {

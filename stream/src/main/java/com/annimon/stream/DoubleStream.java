@@ -965,7 +965,7 @@ public final class DoubleStream {
             throw new NoSuchElementException("DoubleStream contains no element");
         }
 
-        final double singleCandidate = iterator.next();
+        final double singleCandidate = iterator.nextDouble();
         if (iterator.hasNext()) {
             throw new IllegalStateException("DoubleStream contains more than one element");
         }
@@ -1000,7 +1000,7 @@ public final class DoubleStream {
             return OptionalDouble.empty();
         }
 
-        final double singleCandidate = iterator.next();
+        final double singleCandidate = iterator.nextDouble();
         if (iterator.hasNext()) {
             throw new IllegalStateException("DoubleStream contains more than one element");
         }

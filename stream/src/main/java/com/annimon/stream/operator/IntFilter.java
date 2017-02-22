@@ -17,8 +17,7 @@ public class IntFilter extends PrimitiveIterator.OfInt {
     @Override
     public boolean hasNext() {
         while (iterator.hasNext()) {
-            // TODO nextInt
-            next = iterator.next();
+            next = iterator.nextInt();
             if (predicate.test(next)) {
                 return true;
             }
