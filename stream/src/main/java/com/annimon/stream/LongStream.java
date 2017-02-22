@@ -71,7 +71,7 @@ public final class LongStream {
      * @return the new stream
      */
     public static LongStream of(final long t) {
-        return new LongStream(new LongSingleElement(t));
+        return new LongStream(new LongArray(new long[] { t }));
     }
 
     /**

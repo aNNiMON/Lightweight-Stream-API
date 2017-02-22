@@ -71,7 +71,7 @@ public final class DoubleStream {
      * @return the new stream
      */
     public static DoubleStream of(final double t) {
-        return new DoubleStream(new DoubleSingleElement(t));
+        return new DoubleStream(new DoubleArray(new double[] { t }));
     }
 
     /**

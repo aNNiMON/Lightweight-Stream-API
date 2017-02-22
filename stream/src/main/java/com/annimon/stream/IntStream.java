@@ -68,7 +68,7 @@ public final class IntStream {
      * @return the new stream
      */
     public static IntStream of(final int t) {
-        return new IntStream(new IntSingleElement(t));
+        return new IntStream(new IntArray(new int[] { t }));
     }
 
     /**
