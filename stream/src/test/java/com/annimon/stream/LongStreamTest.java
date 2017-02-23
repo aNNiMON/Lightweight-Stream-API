@@ -17,6 +17,7 @@ import java.util.Comparator;
 import java.util.NoSuchElementException;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.LongStreamMatcher.assertElements;
+import static com.annimon.stream.test.hamcrest.LongStreamMatcher.assertIsEmpty;
 import static com.annimon.stream.test.hamcrest.LongStreamMatcher.elements;
 import static com.annimon.stream.test.hamcrest.LongStreamMatcher.isEmpty;
 import static com.annimon.stream.test.hamcrest.OptionalLongMatcher.hasValue;
@@ -73,6 +74,12 @@ public class LongStreamTest {
     @Test(expected = NullPointerException.class)
     public void testStreamOfLongsNull() {
         LongStream.of((long[]) null);
+    }
+
+    @Test
+    public void testStreamOfEmptyArray() {
+        LongStream.of(new long[0])
+                .custom(assertIsEmpty());
     }
 
     @Test

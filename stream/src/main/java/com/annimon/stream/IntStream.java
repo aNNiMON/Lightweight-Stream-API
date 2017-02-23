@@ -1,7 +1,8 @@
 package com.annimon.stream;
 
+import com.annimon.stream.operator.*;
 import com.annimon.stream.function.*;
-import java.util.Arrays;
+import com.annimon.stream.internal.Operators;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 
@@ -57,44 +58,20 @@ public final class IntStream {
      */
     public static IntStream of(final int... values) {
         Objects.requireNonNull(values);
-        return new IntStream(new PrimitiveIterator.OfInt() {
-
-            private int index = 0;
-
-            @Override
-            public int nextInt() {
-                return values[index++];
-            }
-
-            @Override
-            public boolean hasNext() {
-                return index < values.length;
-            }
-        });
+        if (values.length == 0) {
+            return IntStream.empty();
+        }
+        return new IntStream(new IntArray(values));
     }
 
     /**
-     * Returns stream which contains single element passed as param
+     * Returns stream which contains single element passed as parameter.
      *
      * @param t element of the stream
      * @return the new stream
      */
     public static IntStream of(final int t) {
-        return new IntStream(new PrimitiveIterator.OfInt() {
-
-            private int index = 0;
-
-            @Override
-            public int nextInt() {
-                index++;
-                return t;
-            }
-
-            @Override
-            public boolean hasNext() {
-                return index == 0;
-            }
-        });
+        return new IntStream(new IntArray(new int[] { t }));
     }
 
     /**
@@ -129,25 +106,9 @@ public final class IntStream {
             return empty();
         } else if (startInclusive == endInclusive) {
             return of(startInclusive);
-        } else return new IntStream(new PrimitiveIterator.OfInt() {
-
-            private int current = startInclusive;
-            private boolean hasNext = current <= endInclusive;
-
-            @Override
-            public boolean hasNext() {
-                return hasNext;
-            }
-
-            @Override
-            public int nextInt() {
-                if (current >= endInclusive) {
-                    hasNext = false;
-                    return endInclusive;
-                }
-                return current++;
-            }
-        });
+        } else {
+            return new IntStream(new IntRangeClosed(startInclusive, endInclusive));
+        }
     }
 
     /**
@@ -161,17 +122,7 @@ public final class IntStream {
      */
     public static IntStream generate(final IntSupplier s) {
         Objects.requireNonNull(s);
-        return new IntStream(new PrimitiveIterator.OfInt() {
-            @Override
-            public int nextInt() {
-                return s.getAsInt();
-            }
-
-            @Override
-            public boolean hasNext() {
-                return true;
-            }
-        });
+        return new IntStream(new IntGenerate(s));
     }
 
     /**
@@ -200,24 +151,7 @@ public final class IntStream {
      */
     public static IntStream iterate(final int seed, final IntUnaryOperator f) {
         Objects.requireNonNull(f);
-        return new IntStream(new PrimitiveIterator.OfInt() {
-
-            private int current = seed;
-
-            @Override
-            public int nextInt() {
-
-                int old = current;
-                current = f.applyAsInt(current);
-
-                return old;
-            }
-
-            @Override
-            public boolean hasNext() {
-                return true;
-            }
-        });
+        return new IntStream(new IntIterate(seed, f));
     }
 
     /**
@@ -265,28 +199,7 @@ public final class IntStream {
     public static IntStream concat(final IntStream a, final IntStream b) {
         Objects.requireNonNull(a);
         Objects.requireNonNull(b);
-
-        return new IntStream(new PrimitiveIterator.OfInt() {
-
-            private boolean firstStreamIsCurrent = true;
-
-            @Override
-            public int nextInt() {
-                return firstStreamIsCurrent ? a.iterator.nextInt() : b.iterator.nextInt();
-            }
-
-            @Override
-            public boolean hasNext() {
-                if(firstStreamIsCurrent) {
-                    if(a.iterator.hasNext())
-                        return true;
-
-                    firstStreamIsCurrent = false;
-                }
-
-                return b.iterator.hasNext();
-            }
-        });
+        return new IntStream(new IntConcat(a.iterator, b.iterator));
     }
 
     private final PrimitiveIterator.OfInt iterator;
@@ -406,27 +319,7 @@ public final class IntStream {
      * @return the new stream
      */
     public IntStream filter(final IntPredicate predicate) {
-        return new IntStream(new PrimitiveIterator.OfInt() {
-
-            private int next;
-
-            @Override
-            public int nextInt() {
-                return next;
-            }
-
-            @Override
-            public boolean hasNext() {
-                while(iterator.hasNext()) {
-                    next = iterator.next();
-                    if(predicate.test(next)) {
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-        });
+        return new IntStream(new IntFilter(iterator, predicate));
     }
 
     /**
@@ -461,17 +354,7 @@ public final class IntStream {
      * @return the new {@code IntStream}
      */
     public IntStream map(final IntUnaryOperator mapper) {
-        return new IntStream(new PrimitiveIterator.OfInt() {
-            @Override
-            public int nextInt() {
-                return mapper.applyAsInt(iterator.nextInt());
-            }
-
-            @Override
-            public boolean hasNext() {
-                return iterator.hasNext();
-            }
-        });
+        return new IntStream(new IntMap(iterator, mapper));
     }
 
     /**
@@ -485,18 +368,7 @@ public final class IntStream {
      * @return the new {@code Stream}
      */
     public <R> Stream<R> mapToObj(final IntFunction<? extends R> mapper) {
-        return Stream.of(new LsaIterator<R>() {
-
-            @Override
-            public boolean hasNext() {
-                return iterator.hasNext();
-            }
-
-            @Override
-            public R nextIteration() {
-                return mapper.apply(iterator.nextInt());
-            }
-        });
+        return Stream.of(new IntMapToObj<R>(iterator, mapper));
     }
 
     /**
@@ -511,18 +383,7 @@ public final class IntStream {
      * @see #flatMap(com.annimon.stream.function.IntFunction)
      */
     public LongStream mapToLong(final IntToLongFunction mapper) {
-        return LongStream.of(new PrimitiveIterator.OfLong() {
-
-            @Override
-            public boolean hasNext() {
-                return iterator.hasNext();
-            }
-
-            @Override
-            public long nextLong() {
-                return mapper.applyAsLong(iterator.nextInt());
-            }
-        });
+        return LongStream.of(new IntMapToLong(iterator, mapper));
     }
 
     /**
@@ -537,18 +398,7 @@ public final class IntStream {
      * @see #flatMap(com.annimon.stream.function.IntFunction)
      */
     public DoubleStream mapToDouble(final IntToDoubleFunction mapper) {
-        return DoubleStream.of(new PrimitiveIterator.OfDouble() {
-
-            @Override
-            public boolean hasNext() {
-                return iterator.hasNext();
-            }
-
-            @Override
-            public double nextDouble() {
-                return mapper.applyAsDouble(iterator.nextInt());
-            }
-        });
+        return DoubleStream.of(new IntMapToDouble(iterator, mapper));
     }
 
     /**
@@ -571,37 +421,7 @@ public final class IntStream {
      * @see Stream#flatMap(Function)
      */
     public IntStream flatMap(final IntFunction<? extends IntStream> mapper) {
-        return new IntStream(new PrimitiveIterator.OfInt() {
-
-            private PrimitiveIterator.OfInt inner;
-
-            @Override
-            public int nextInt() {
-                if (inner == null) {
-                    throw new NoSuchElementException();
-                }
-                return inner.nextInt();
-            }
-
-            @Override
-            public boolean hasNext() {
-                if (inner != null && inner.hasNext()) {
-                    return true;
-                }
-                while (iterator.hasNext()) {
-                    final int arg = iterator.next();
-                    final IntStream result = mapper.apply(arg);
-                    if (result == null) {
-                        continue;
-                    }
-                    if (result.iterator.hasNext()) {
-                        inner = result.iterator;
-                        return true;
-                    }
-                }
-                return false;
-            }
-        });
+        return new IntStream(new IntFlatMap(iterator, mapper));
     }
 
     /**
@@ -638,23 +458,7 @@ public final class IntStream {
      * @return the new stream
      */
     public IntStream sorted() {
-        return new IntStream(new PrimitiveExtIterator.OfInt() {
-
-            private int index = 0;
-            private int[] array;
-
-            @Override
-            protected void nextIteration() {
-                if (!isInit) {
-                    array = toArray();
-                    Arrays.sort(array);
-                }
-                hasNext = index < array.length;
-                if (hasNext) {
-                    next = array[index++];
-                }
-            }
-        });
+        return new IntStream(new IntSorted(iterator));
     }
 
     /**
@@ -696,24 +500,7 @@ public final class IntStream {
     public IntStream sample(final int stepWidth) {
         if (stepWidth <= 0) throw new IllegalArgumentException("stepWidth cannot be zero or negative");
         if (stepWidth == 1) return this;
-        return new IntStream(new PrimitiveIterator.OfInt() {
-
-            @Override
-            public boolean hasNext() {
-                return iterator.hasNext();
-            }
-
-            @Override
-            public int nextInt() {
-                final int result = iterator.nextInt();
-                int skip = 1;
-                while (skip < stepWidth && iterator.hasNext()) {
-                    iterator.nextInt();
-                    skip++;
-                }
-                return result;
-            }
-        });
+        return new IntStream(new IntSample(iterator, stepWidth));
     }
 
     /**
@@ -727,19 +514,7 @@ public final class IntStream {
      * @return the new stream
      */
     public IntStream peek(final IntConsumer action) {
-        return new IntStream(new PrimitiveIterator.OfInt() {
-            @Override
-            public int nextInt() {
-                int value = iterator.nextInt();
-                action.accept(value);
-                return value;
-            }
-
-            @Override
-            public boolean hasNext() {
-                return iterator.hasNext();
-            }
-        });
+        return new IntStream(new IntPeek(iterator, action));
     }
 
     /**
@@ -764,21 +539,7 @@ public final class IntStream {
      */
     public IntStream scan(final IntBinaryOperator accumulator) {
         Objects.requireNonNull(accumulator);
-        return new IntStream(new PrimitiveExtIterator.OfInt() {
-
-            @Override
-            protected void nextIteration() {
-                hasNext = iterator.hasNext();
-                if (hasNext) {
-                    final int current = iterator.next();
-                    if (isInit) {
-                        next = accumulator.applyAsInt(next, current);
-                    } else {
-                        next = current;
-                    }
-                }
-            }
-        });
+        return new IntStream(new IntScan(iterator, accumulator));
     }
 
     /**
@@ -805,23 +566,7 @@ public final class IntStream {
      */
     public IntStream scan(final int identity, final IntBinaryOperator accumulator) {
         Objects.requireNonNull(accumulator);
-        return new IntStream(new PrimitiveExtIterator.OfInt() {
-
-            @Override
-            protected void nextIteration() {
-                if (!isInit) {
-                    // Return identity
-                    hasNext = true;
-                    next = identity;
-                    return;
-                }
-                hasNext = iterator.hasNext();
-                if (hasNext) {
-                    final int current = iterator.next();
-                    next = accumulator.applyAsInt(next, current);
-                }
-            }
-        });
+        return new IntStream(new IntScanIdentity(iterator, identity, accumulator));
     }
 
     /**
@@ -840,13 +585,7 @@ public final class IntStream {
      * @return the new {@code IntStream}
      */
     public IntStream takeWhile(final IntPredicate predicate) {
-        return new IntStream(new PrimitiveExtIterator.OfInt() {
-
-            @Override
-            protected void nextIteration() {
-                hasNext = iterator.hasNext() && predicate.test(next = iterator.next());
-            }
-        });
+        return new IntStream(new IntTakeWhile(iterator, predicate));
     }
 
     /**
@@ -868,16 +607,7 @@ public final class IntStream {
      * @since 1.1.6
      */
     public IntStream takeUntil(final IntPredicate stopPredicate) {
-        return new IntStream(new PrimitiveExtIterator.OfInt() {
-
-            @Override
-            protected void nextIteration() {
-                hasNext = iterator.hasNext() && !(isInit && stopPredicate.test(next));
-                if (hasNext) {
-                    next = iterator.next();
-                }
-            }
-        });
+        return new IntStream(new IntTakeUntil(iterator, stopPredicate));
     }
 
     /**
@@ -896,26 +626,7 @@ public final class IntStream {
      * @return the new {@code IntStream}
      */
     public IntStream dropWhile(final IntPredicate predicate) {
-        return new IntStream(new PrimitiveExtIterator.OfInt() {
-
-            @Override
-            protected void nextIteration() {
-                if (!isInit) {
-                    // Skip first time
-                    while (hasNext = iterator.hasNext()) {
-                        next = iterator.next();
-                        if (!predicate.test(next)) {
-                            return;
-                        }
-                    }
-                }
-
-                hasNext = hasNext && iterator.hasNext();
-                if (!hasNext) return;
-
-                next = iterator.next();
-            }
-        });
+        return new IntStream(new IntDropWhile(iterator, predicate));
     }
 
     /**
@@ -946,21 +657,7 @@ public final class IntStream {
         if (maxSize == 0) {
             return IntStream.empty();
         }
-        return new IntStream(new PrimitiveIterator.OfInt() {
-
-            private long index = 0;
-
-            @Override
-            public int nextInt() {
-                index++;
-                return iterator.nextInt();
-            }
-
-            @Override
-            public boolean hasNext() {
-                return (index < maxSize) && iterator.hasNext();
-            }
-        });
+        return new IntStream(new IntLimit(iterator, maxSize));
     }
 
     /**
@@ -987,33 +684,13 @@ public final class IntStream {
      * @throws IllegalArgumentException if {@code n} is negative
      */
     public IntStream skip(final long n) {
-        if(n < 0)
+        if (n < 0) {
             throw new IllegalArgumentException("n cannot be negative");
-
-        if(n == 0)
+        } else if (n == 0) {
             return this;
-        else
-            return new IntStream(new PrimitiveIterator.OfInt() {
-                long skipped = 0;
-                @Override
-                public int nextInt() {
-                    return iterator.nextInt();
-                }
-
-                @Override
-                public boolean hasNext() {
-
-                    while(iterator.hasNext()) {
-
-                        if(skipped == n) break;
-
-                        skipped++;
-                        iterator.nextInt();
-                    }
-
-                    return iterator.hasNext();
-                }
-            });
+        } else {
+            return new IntStream(new IntSkip(iterator, n));
+        }
     }
 
     /**
@@ -1104,11 +781,7 @@ public final class IntStream {
      * @return an array containing the elements of this stream
      */
     public int[] toArray() {
-        SpinedBuffer.OfInt b = new SpinedBuffer.OfInt();
-
-        forEach(b);
-
-        return b.asPrimitiveArray();
+        return Operators.toIntArray(iterator);
     }
 
     /**
@@ -1338,7 +1011,7 @@ public final class IntStream {
      */
     public int single() {
         if (iterator.hasNext()) {
-            int singleCandidate = iterator.next();
+            int singleCandidate = iterator.nextInt();
             if (iterator.hasNext()) {
                 throw new IllegalStateException("IntStream contains more than one element");
             } else {
@@ -1374,7 +1047,7 @@ public final class IntStream {
      */
     public OptionalInt findSingle() {
         if (iterator.hasNext()) {
-            int singleCandidate = iterator.next();
+            int singleCandidate = iterator.nextInt();
             if (iterator.hasNext()) {
                 throw new IllegalStateException("IntStream contains more than one element");
             } else {

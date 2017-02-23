@@ -1,16 +1,15 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.*;
+import com.annimon.stream.internal.Operators;
+import com.annimon.stream.operator.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Queue;
-import java.util.Set;
 
 /**
  * A sequence of elements supporting aggregate operations.
@@ -79,20 +78,10 @@ public final class Stream<T> {
      */
     public static <T> Stream<T> of(final T... elements) {
         Objects.requireNonNull(elements);
-        return new Stream<T>(new LsaIterator<T>() {
-
-            private int index = 0;
-
-            @Override
-            public boolean hasNext() {
-                return index < elements.length;
-            }
-
-            @Override
-            public T nextIteration() {
-                return elements[index++];
-            }
-        });
+        if (elements.length == 0) {
+            return Stream.<T>empty();
+        }
+        return new Stream<T>(new ObjArray<T>(elements));
     }
 
     /**
@@ -237,18 +226,7 @@ public final class Stream<T> {
      */
     public static <T> Stream<T> generate(final Supplier<T> supplier) {
         Objects.requireNonNull(supplier);
-        return new Stream<T>(new LsaIterator<T>() {
-
-            @Override
-            public boolean hasNext() {
-                return true;
-            }
-
-            @Override
-            public T nextIteration() {
-                return supplier.get();
-            }
-        });
+        return new Stream<T>(new ObjGenerate<T>(supplier));
     }
 
     /**
@@ -271,27 +249,7 @@ public final class Stream<T> {
      */
     public static <T> Stream<T> iterate(final T seed, final UnaryOperator<T> op) {
         Objects.requireNonNull(op);
-        return new Stream<T>(new LsaIterator<T>() {
-
-            private boolean firstRun = true;
-            private T t;
-
-            @Override
-            public boolean hasNext() {
-                return true;
-            }
-
-            @Override
-            public T nextIteration() {
-                if (firstRun) {
-                    firstRun = false;
-                    t = seed;
-                } else {
-                    t = op.apply(t);
-                }
-                return t;
-            }
-        });
+        return new Stream<T>(new ObjIterate<T>(seed, op));
     }
 
     /**
@@ -339,25 +297,7 @@ public final class Stream<T> {
     public static <T> Stream<T> concat(Stream<? extends T> stream1, Stream<? extends T> stream2) {
         Objects.requireNonNull(stream1);
         Objects.requireNonNull(stream2);
-        final Iterator<? extends T> it1 = stream1.iterator;
-        final Iterator<? extends T> it2 = stream2.iterator;
-        return new Stream<T>(new LsaExtIterator<T>() {
-
-            @Override
-            protected void nextIteration() {
-                if (it1.hasNext()) {
-                    next = it1.next();
-                    hasNext = true;
-                    return;
-                }
-                if (it2.hasNext()) {
-                    next = it2.next();
-                    hasNext = true;
-                    return;
-                }
-                hasNext = false;
-            }
-        });
+        return new Stream<T>(new ObjConcat<T>(stream1.iterator, stream2.iterator));
     }
 
     /**
@@ -384,7 +324,7 @@ public final class Stream<T> {
             final BiFunction<? super F, ? super S, ? extends R> combiner) {
         Objects.requireNonNull(stream1);
         Objects.requireNonNull(stream2);
-        return zip(stream1.iterator, stream2.iterator, combiner);
+        return Stream.<F, S, R>zip(stream1.iterator, stream2.iterator, combiner);
     }
 
     /**
@@ -413,24 +353,11 @@ public final class Stream<T> {
             final BiFunction<? super F, ? super S, ? extends R> combiner) {
         Objects.requireNonNull(iterator1);
         Objects.requireNonNull(iterator2);
-        return new Stream<R>(new LsaIterator<R>() {
-            @Override
-            public boolean hasNext() {
-                return iterator1.hasNext() && iterator2.hasNext();
-            }
-
-            @Override
-            public R nextIteration() {
-                return combiner.apply(iterator1.next(), iterator2.next());
-            }
-        });
+        return new Stream<R>(new ObjZip<F, S, R>(iterator1, iterator2, combiner));
     }
 
 
 //<editor-fold defaultstate="collapsed" desc="Implementation">
-    static final long MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
-    static final String BAD_SIZE = "Stream size exceeds max array size";
-
     private final Iterator<? extends T> iterator;
 
     private Stream(Iterator<? extends T> iterator) {
@@ -538,48 +465,7 @@ public final class Stream<T> {
      * @return the new stream
      */
     public Stream<T> filter(final Predicate<? super T> predicate) {
-        return new Stream<T>(new Iterator<T>() {
-
-            private boolean hasNext, hasNextEvaluated;
-            private T next;
-
-            @Override
-            public boolean hasNext() {
-                if (!hasNextEvaluated) {
-                    nextIteration();
-                    hasNextEvaluated = true;
-                }
-                return hasNext;
-            }
-
-            @Override
-            public T next() {
-                if (!hasNextEvaluated) {
-                    hasNext = hasNext();
-                }
-                if (!hasNext) {
-                    throw new NoSuchElementException();
-                }
-                hasNextEvaluated = false;
-                return next;
-            }
-
-            private void nextIteration() {
-                while (iterator.hasNext()) {
-                    next = iterator.next();
-                    if (predicate.test(next)) {
-                        hasNext = true;
-                        return;
-                    }
-                }
-                hasNext = false;
-            }
-
-            @Override
-            public void remove() {
-                throw new UnsupportedOperationException("remove not supported");
-            }
-        });
+        return new Stream<T>(new ObjFilter<T>(iterator, predicate));
     }
 
     /**
@@ -653,18 +539,7 @@ public final class Stream<T> {
      * @return the new stream
      */
     public <R> Stream<R> map(final Function<? super T, ? extends R> mapper) {
-        return new Stream<R>(new LsaIterator<R>() {
-
-            @Override
-            public boolean hasNext() {
-                return iterator.hasNext();
-            }
-
-            @Override
-            public R nextIteration() {
-                return mapper.apply(iterator.next());
-            }
-        });
+        return new Stream<R>(new ObjMap<T, R>(iterator, mapper));
     }
 
     /**
@@ -677,18 +552,7 @@ public final class Stream<T> {
      * @see #map(com.annimon.stream.function.Function)
      */
     public IntStream mapToInt(final ToIntFunction<? super T> mapper) {
-        return IntStream.of(new PrimitiveIterator.OfInt() {
-
-            @Override
-            public boolean hasNext() {
-                return iterator.hasNext();
-            }
-
-            @Override
-            public int nextInt() {
-                return mapper.applyAsInt(iterator.next());
-            }
-        });
+        return IntStream.of(new ObjMapToInt<T>(iterator, mapper));
     }
 
     /**
@@ -702,18 +566,7 @@ public final class Stream<T> {
      * @see #map(com.annimon.stream.function.Function)
      */
     public LongStream mapToLong(final ToLongFunction<? super T> mapper) {
-        return LongStream.of(new PrimitiveIterator.OfLong() {
-
-            @Override
-            public boolean hasNext() {
-                return iterator.hasNext();
-            }
-
-            @Override
-            public long nextLong() {
-                return mapper.applyAsLong(iterator.next());
-            }
-        });
+        return LongStream.of(new ObjMapToLong<T>(iterator, mapper));
     }
 
     /**
@@ -727,18 +580,7 @@ public final class Stream<T> {
      * @see #map(com.annimon.stream.function.Function)
      */
     public DoubleStream mapToDouble(final ToDoubleFunction<? super T> mapper) {
-        return DoubleStream.of(new PrimitiveIterator.OfDouble() {
-
-            @Override
-            public boolean hasNext() {
-                return iterator.hasNext();
-            }
-
-            @Override
-            public double nextDouble() {
-                return mapper.applyAsDouble(iterator.next());
-            }
-        });
+        return DoubleStream.of(new ObjMapToDouble<T>(iterator, mapper));
     }
 
     /**
@@ -760,34 +602,7 @@ public final class Stream<T> {
      * @return the new stream
      */
     public <R> Stream<R> flatMap(final Function<? super T, ? extends Stream<? extends R>> mapper) {
-        return new Stream<R>(new LsaExtIterator<R>() {
-
-            private Iterator<? extends R> inner;
-
-            @Override
-            protected void nextIteration() {
-                if ((inner != null) && inner.hasNext()) {
-                    next = inner.next();
-                    hasNext = true;
-                    return;
-                }
-                while (iterator.hasNext()) {
-                    if (inner == null || !inner.hasNext()) {
-                        final T arg = iterator.next();
-                        final Stream <? extends R> result = mapper.apply(arg);
-                        if (result != null) {
-                            inner = result.iterator;
-                        }
-                    }
-                    if ((inner != null) && inner.hasNext()) {
-                        next = inner.next();
-                        hasNext = true;
-                        return;
-                    }
-                }
-                hasNext = false;
-            }
-        });
+        return new Stream<R>(new ObjFlatMap<T, R>(iterator, mapper));
     }
 
     /**
@@ -802,34 +617,7 @@ public final class Stream<T> {
      * @see #flatMap(com.annimon.stream.function.Function)
      */
     public IntStream flatMapToInt(final Function<? super T, ? extends IntStream> mapper) {
-        return IntStream.of(new PrimitiveExtIterator.OfInt() {
-
-            private PrimitiveIterator.OfInt inner;
-
-            @Override
-            protected void nextIteration() {
-                if ((inner != null) && inner.hasNext()) {
-                    next = inner.next();
-                    hasNext = true;
-                    return;
-                }
-                while (iterator.hasNext()) {
-                    if (inner == null || !inner.hasNext()) {
-                        final T arg = iterator.next();
-                        final IntStream result = mapper.apply(arg);
-                        if (result != null) {
-                            inner = result.iterator();
-                        }
-                    }
-                    if ((inner != null) && inner.hasNext()) {
-                        next = inner.next();
-                        hasNext = true;
-                        return;
-                    }
-                }
-                hasNext = false;
-            }
-        });
+        return IntStream.of(new ObjFlatMapToInt<T>(iterator, mapper));
     }
 
     /**
@@ -844,34 +632,7 @@ public final class Stream<T> {
      * @see #flatMap(com.annimon.stream.function.Function)
      */
     public LongStream flatMapToLong(final Function<? super T, ? extends LongStream> mapper) {
-        return LongStream.of(new PrimitiveExtIterator.OfLong() {
-
-            private PrimitiveIterator.OfLong inner;
-
-            @Override
-            protected void nextIteration() {
-                if ((inner != null) && inner.hasNext()) {
-                    next = inner.next();
-                    hasNext = true;
-                    return;
-                }
-                while (iterator.hasNext()) {
-                    if (inner == null || !inner.hasNext()) {
-                        final T arg = iterator.next();
-                        final LongStream result = mapper.apply(arg);
-                        if (result != null) {
-                            inner = result.iterator();
-                        }
-                    }
-                    if ((inner != null) && inner.hasNext()) {
-                        next = inner.next();
-                        hasNext = true;
-                        return;
-                    }
-                }
-                hasNext = false;
-            }
-        });
+        return LongStream.of(new ObjFlatMapToLong<T>(iterator, mapper));
     }
 
     /**
@@ -886,34 +647,7 @@ public final class Stream<T> {
      * @see #flatMap(com.annimon.stream.function.Function)
      */
     public DoubleStream flatMapToDouble(final Function<? super T, ? extends DoubleStream> mapper) {
-        return DoubleStream.of(new PrimitiveExtIterator.OfDouble() {
-
-            private PrimitiveIterator.OfDouble inner;
-
-            @Override
-            protected void nextIteration() {
-                if ((inner != null) && inner.hasNext()) {
-                    next = inner.next();
-                    hasNext = true;
-                    return;
-                }
-                while (iterator.hasNext()) {
-                    if (inner == null || !inner.hasNext()) {
-                        final T arg = iterator.next();
-                        final DoubleStream result = mapper.apply(arg);
-                        if (result != null) {
-                            inner = result.iterator();
-                        }
-                    }
-                    if ((inner != null) && inner.hasNext()) {
-                        next = inner.next();
-                        hasNext = true;
-                        return;
-                    }
-                }
-                hasNext = false;
-            }
-        });
+        return DoubleStream.of(new ObjFlatMapToDouble<T>(iterator, mapper));
     }
 
     /**
@@ -978,21 +712,7 @@ public final class Stream<T> {
      * @return the new stream
      */
     public Stream<T> distinct() {
-        return new Stream<T>(new LsaExtIterator<T>() {
-
-            private final Set<T> set = new HashSet<T>();
-
-            @Override
-            protected void nextIteration() {
-                while (hasNext = iterator.hasNext()) {
-                    next = iterator.next();
-                    if (!set.contains(next)) {
-                        set.add(next);
-                        return;
-                    }
-                }
-            }
-        });
+        return new Stream<T>(new ObjDistinct<T>(iterator));
     }
 
     /**
@@ -1039,23 +759,7 @@ public final class Stream<T> {
      * @return the new stream
      */
     public Stream<T> sorted(final Comparator<? super T> comparator) {
-        return new Stream<T>(new LsaExtIterator<T>() {
-
-            private Iterator<T> sortedIterator;
-
-            @Override
-            protected void nextIteration() {
-                if (!isInit) {
-                    final List<T> list = toList();
-                    Collections.sort(list, comparator);
-                    sortedIterator = list.iterator();
-                }
-                hasNext = sortedIterator.hasNext();
-                if (hasNext) {
-                    next = sortedIterator.next();
-                }
-            }
-        });
+        return new Stream<T>(new ObjSorted<T>(iterator, comparator));
     }
 
     /**
@@ -1120,42 +824,7 @@ public final class Stream<T> {
      * @return the new stream
      */
     public <K> Stream<List<T>> chunkBy(final Function<? super T, ? extends K> classifier) {
-        return new Stream<List<T>>(new LsaIterator<List<T>>() {
-            private T next;
-            private boolean peekedNext;
-
-            @Override
-            public boolean hasNext() {
-                return peekedNext || iterator.hasNext();
-            }
-
-            @Override
-            public List<T> nextIteration() {
-                K key = classifier.apply(peek());
-
-                List<T> list = new ArrayList<T>();
-                do {
-                    list.add(takeNext());
-                }
-                while (iterator.hasNext() && key.equals(classifier.apply(peek())));
-
-                return list;
-            }
-
-            private T takeNext() {
-                T element = peek();
-                peekedNext = false;
-                return element;
-            }
-
-            private T peek() {
-                if (!peekedNext) {
-                    next = iterator.next();
-                    peekedNext = true;
-                }
-                return next;
-            }
-        });
+        return new Stream<List<T>>(new ObjChunkBy<T, K>(iterator, classifier));
     }
 
     /**
@@ -1240,39 +909,7 @@ public final class Stream<T> {
     public Stream<List<T>> slidingWindow(final int windowSize, final int stepWidth) {
         if (windowSize <= 0) throw new IllegalArgumentException("windowSize cannot be zero or negative");
         if (stepWidth <= 0) throw new IllegalArgumentException("stepWidth cannot be zero or negative");
-        return new Stream<List<T>>(new LsaIterator<List<T>>() {
-            private final Queue<T> queue = Compat.queue();
-
-            @Override
-            public boolean hasNext() {
-                return iterator.hasNext();
-            }
-
-            @Override
-            public List<T> nextIteration() {
-                int i = queue.size();
-                while (i < windowSize && iterator.hasNext()) {
-                    queue.offer(iterator.next());
-                    i++;
-                }
-
-                // the elements that are currently in the queue are the elements of our current window
-                List<T> list = new ArrayList<T>(queue);
-
-                // remove stepWidth elements from the queue
-                final int pollCount = Math.min(queue.size(), stepWidth);
-                for (int j = 0; j < pollCount; j++) {
-                    queue.poll();
-                }
-
-                // if the stepWidth is greater than the windowSize, skip (stepWidth - windowSize) elements
-                for (int j = windowSize; j < stepWidth && iterator.hasNext(); j++) {
-                    iterator.next();
-                }
-
-                return list;
-            }
-        });
+        return new Stream<List<T>>(new ObjSlidingWindow<T>(iterator, windowSize, stepWidth));
     }
 
     /**
@@ -1284,20 +921,7 @@ public final class Stream<T> {
      * @return the new stream
      */
     public Stream<T> peek(final Consumer<? super T> action) {
-        return new Stream<T>(new LsaIterator<T>() {
-
-            @Override
-            public boolean hasNext() {
-                return iterator.hasNext();
-            }
-
-            @Override
-            public T nextIteration() {
-                final T value = iterator.next();
-                action.accept(value);
-                return value;
-            }
-        });
+        return new Stream<T>(new ObjPeek<T>(iterator, action));
     }
 
     /**
@@ -1322,21 +946,7 @@ public final class Stream<T> {
      */
     public Stream<T> scan(final BiFunction<T, T, T> accumulator) {
         Objects.requireNonNull(accumulator);
-        return new Stream<T>(new LsaExtIterator<T>() {
-
-            @Override
-            protected void nextIteration() {
-                hasNext = iterator.hasNext();
-                if (hasNext) {
-                    final T value = iterator.next();
-                    if (isInit) {
-                        next = accumulator.apply(next, value);
-                    } else {
-                        next = value;
-                    }
-                }
-            }
-        });
+        return new Stream<T>(new ObjScan<T>(iterator, accumulator));
     }
 
     /**
@@ -1364,23 +974,7 @@ public final class Stream<T> {
      */
     public <R> Stream<R> scan(final R identity, final BiFunction<? super R, ? super T, ? extends R> accumulator) {
         Objects.requireNonNull(accumulator);
-        return new Stream<R>(new LsaExtIterator<R>() {
-
-            @Override
-            protected void nextIteration() {
-                if (!isInit) {
-                    // Return identity
-                    hasNext = true;
-                    next = identity;
-                    return;
-                }
-                hasNext = iterator.hasNext();
-                if (hasNext) {
-                    final T t = iterator.next();
-                    next = accumulator.apply(next, t);
-                }
-            }
-        });
+        return new Stream<R>(new ObjScanIdentity<T, R>(iterator, identity, accumulator));
     }
 
     /**
@@ -1399,14 +993,7 @@ public final class Stream<T> {
      * @return the new stream
      */
     public Stream<T> takeWhile(final Predicate<? super T> predicate) {
-        return new Stream<T>(new LsaExtIterator<T>() {
-
-            @Override
-            protected void nextIteration() {
-                hasNext = iterator.hasNext()
-                        && predicate.test(next = iterator.next());
-            }
-        });
+        return new Stream<T>(new ObjTakeWhile<T>(iterator, predicate));
     }
 
     /**
@@ -1428,14 +1015,7 @@ public final class Stream<T> {
      * @since 1.1.6
      */
     public Stream<T> takeUntil(final Predicate<? super T> stopPredicate) {
-        return new Stream<T>(new LsaExtIterator<T>() {
-
-            @Override
-            protected void nextIteration() {
-                hasNext = iterator.hasNext() && !(isInit && stopPredicate.test(next));
-                next = hasNext ? iterator.next() : null;
-            }
-        });
+        return new Stream<T>(new ObjTakeUntil<T>(iterator, stopPredicate));
     }
 
     /**
@@ -1454,26 +1034,7 @@ public final class Stream<T> {
      * @return the new stream
      */
     public Stream<T> dropWhile(final Predicate<? super T> predicate) {
-        return new Stream<T>(new LsaExtIterator<T>() {
-
-            @Override
-            protected void nextIteration() {
-                if (!isInit) {
-                    // Skip first time
-                    while (hasNext = iterator.hasNext()) {
-                        next = iterator.next();
-                        if (!predicate.test(next)) {
-                            return;
-                        }
-                    }
-                }
-
-                hasNext = hasNext && iterator.hasNext();
-                if (!hasNext) return;
-
-                next = iterator.next();
-            }
-        });
+        return new Stream<T>(new ObjDropWhile<T>(iterator, predicate));
     }
 
     /**
@@ -1503,21 +1064,7 @@ public final class Stream<T> {
         if (maxSize == 0) {
             return Stream.empty();
         }
-        return new Stream<T>(new LsaIterator<T>() {
-
-            private long index = 0;
-
-            @Override
-            public boolean hasNext() {
-                return (index < maxSize) && iterator.hasNext();
-            }
-
-            @Override
-            public T nextIteration() {
-                index++;
-                return iterator.next();
-            }
-        });
+        return new Stream<T>(new ObjLimit<T>(iterator, maxSize));
     }
 
     /**
@@ -1544,25 +1091,7 @@ public final class Stream<T> {
     public Stream<T> skip(final long n) {
         if (n < 0) throw new IllegalArgumentException("n cannot be negative");
         if (n == 0) return this;
-        return new Stream<T>(new LsaIterator<T>() {
-
-            private long skippedCount;
-
-            @Override
-            public boolean hasNext() {
-                while (skippedCount < n) {
-                    if (!iterator.hasNext()) return false;
-                    iterator.next();
-                    skippedCount++;
-                }
-                return iterator.hasNext();
-            }
-
-            @Override
-            public T nextIteration() {
-                return iterator.next();
-            }
-        });
+        return new Stream<T>(new ObjSkip<T>(iterator, n));
     }
 
     /**
@@ -1656,20 +1185,8 @@ public final class Stream<T> {
      * @param generator  the array constructor reference that accommodates future array of assigned size
      * @return the result of collect elements
      */
-    @SuppressWarnings("unchecked")
     public <R> R[] toArray(IntFunction<R[]> generator) {
-        final List<T> container = toList();
-        final int size = container.size();
-
-        if (size >= MAX_ARRAY_SIZE) throw new IllegalArgumentException(BAD_SIZE);
-
-        //noinspection unchecked
-        T[] source = container.toArray(Compat.<T>newArray(size));
-        R[] boxed = generator.apply(size);
-
-        //noinspection SuspiciousSystemArraycopy
-        System.arraycopy(source, 0, boxed, 0, size);
-        return boxed;
+        return Operators.toArray(iterator, generator);
     }
 
     /**

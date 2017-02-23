@@ -1,5 +1,6 @@
-package com.annimon.stream;
+package com.annimon.stream.internal;
 
+import com.annimon.stream.PrimitiveIterator;
 import com.annimon.stream.function.DoubleConsumer;
 import com.annimon.stream.function.IntConsumer;
 import com.annimon.stream.function.LongConsumer;
@@ -192,11 +193,10 @@ final class SpinedBuffer {
             }
         }
 
-        T_ARR asPrimitiveArray() {
+        public T_ARR asPrimitiveArray() {
             long size = count();
 
-            if (size >= Stream.MAX_ARRAY_SIZE)
-                throw new IllegalArgumentException(Stream.BAD_SIZE);
+            Compat.checkMaxArraySize(size);
 
             T_ARR result = newArray((int) size);
             copyInto(result, 0);

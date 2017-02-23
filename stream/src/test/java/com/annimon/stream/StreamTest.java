@@ -15,6 +15,7 @@ import com.annimon.stream.function.ToLongFunction;
 import com.annimon.stream.function.UnaryOperator;
 import com.annimon.stream.test.hamcrest.DoubleStreamMatcher;
 import com.annimon.stream.test.hamcrest.OptionalMatcher;
+import com.annimon.stream.test.hamcrest.StreamMatcher;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -89,6 +90,12 @@ public class StreamTest {
     @Test(expected = NullPointerException.class)
     public void testStreamOfMapNull() {
         Stream.of((Map<?, ?>)null);
+    }
+
+    @Test
+    public void testStreamOfEmptyArray() {
+        Stream.of(new String[0])
+                .custom(StreamMatcher.<String>assertIsEmpty());
     }
 
     @Test
@@ -1553,28 +1560,6 @@ public class StreamTest {
                 .custom(new CustomOperators.Sum());
         assertEquals(15, sum);
     }
-
-    @Test
-    public void testNewArrayCompat() {
-        String[] strings = new String[] {"abc", "def", "fff"};
-
-        String[] copy = Compat.newArrayCompat(strings, 5);
-
-        assertEquals(5, copy.length);
-        assertEquals("abc", copy[0]);
-        assertEquals(null, copy[3]);
-
-        String[] empty = new String[0];
-
-        String[] emptyCopy = Compat.newArrayCompat(empty, 3);
-
-        assertEquals(3, emptyCopy.length);
-
-        emptyCopy = Compat.newArrayCompat(empty, 0);
-
-        assertEquals(0, emptyCopy.length);
-    }
-
 
     @Test
     public void testCustomTerminalOperator_ForEach() {

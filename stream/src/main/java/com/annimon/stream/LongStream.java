@@ -1,18 +1,8 @@
 package com.annimon.stream;
 
-import com.annimon.stream.function.Function;
-import com.annimon.stream.function.LongBinaryOperator;
-import com.annimon.stream.function.LongConsumer;
-import com.annimon.stream.function.LongFunction;
-import com.annimon.stream.function.LongPredicate;
-import com.annimon.stream.function.LongSupplier;
-import com.annimon.stream.function.LongToDoubleFunction;
-import com.annimon.stream.function.LongToIntFunction;
-import com.annimon.stream.function.LongUnaryOperator;
-import com.annimon.stream.function.ObjLongConsumer;
-import com.annimon.stream.function.Supplier;
-import com.annimon.stream.function.ToLongFunction;
-import java.util.Arrays;
+import com.annimon.stream.operator.*;
+import com.annimon.stream.function.*;
+import com.annimon.stream.internal.Operators;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 
@@ -71,20 +61,10 @@ public final class LongStream {
      */
     public static LongStream of(final long... values) {
         Objects.requireNonNull(values);
-        return new LongStream(new PrimitiveIterator.OfLong() {
-
-            private int index = 0;
-
-            @Override
-            public boolean hasNext() {
-                return index < values.length;
-            }
-
-            @Override
-            public long nextLong() {
-                return values[index++];
-            }
-        });
+        if (values.length == 0) {
+            return LongStream.empty();
+        }
+        return new LongStream(new LongArray(values));
     }
 
     /**
@@ -94,21 +74,7 @@ public final class LongStream {
      * @return the new stream
      */
     public static LongStream of(final long t) {
-        return new LongStream(new PrimitiveIterator.OfLong() {
-
-            private int index = 0;
-
-            @Override
-            public boolean hasNext() {
-                return index == 0;
-            }
-
-            @Override
-            public long nextLong() {
-                index++;
-                return t;
-            }
-        });
+        return new LongStream(new LongArray(new long[] { t }));
     }
 
     /**
@@ -143,25 +109,7 @@ public final class LongStream {
             return empty();
         } else if (startInclusive == endInclusive) {
             return of(startInclusive);
-        } else return new LongStream(new PrimitiveIterator.OfLong() {
-
-            private long current = startInclusive;
-            private boolean hasNext = current <= endInclusive;
-
-            @Override
-            public boolean hasNext() {
-                return hasNext;
-            }
-
-            @Override
-            public long nextLong() {
-                if (current >= endInclusive) {
-                    hasNext = false;
-                    return endInclusive;
-                }
-                return current++;
-            }
-        });
+        } else return new LongStream(new LongRangeClosed(startInclusive, endInclusive));
     }
 
     /**
@@ -173,18 +121,7 @@ public final class LongStream {
      */
     public static LongStream generate(final LongSupplier s) {
         Objects.requireNonNull(s);
-        return new LongStream(new PrimitiveIterator.OfLong() {
-
-            @Override
-            public boolean hasNext() {
-                return true;
-            }
-
-            @Override
-            public long nextLong() {
-                return s.getAsLong();
-            }
-        });
+        return new LongStream(new LongGenerate(s));
     }
 
     /**
@@ -211,22 +148,7 @@ public final class LongStream {
      */
     public static LongStream iterate(final long seed, final LongUnaryOperator f) {
         Objects.requireNonNull(f);
-        return new LongStream(new PrimitiveIterator.OfLong() {
-
-            private long current = seed;
-
-            @Override
-            public boolean hasNext() {
-                return true;
-            }
-
-            @Override
-            public long nextLong() {
-                final long old = current;
-                current = f.applyAsLong(current);
-                return old;
-            }
-        });
+        return new LongStream(new LongIterate(seed, f));
     }
 
     /**
@@ -272,28 +194,7 @@ public final class LongStream {
     public static LongStream concat(final LongStream a, final LongStream b) {
         Objects.requireNonNull(a);
         Objects.requireNonNull(b);
-        final PrimitiveIterator.OfLong it1 = a.iterator;
-        final PrimitiveIterator.OfLong it2 = b.iterator;
-        return new LongStream(new PrimitiveIterator.OfLong() {
-
-            private boolean firstStreamIsCurrent = true;
-
-            @Override
-            public boolean hasNext() {
-                if (firstStreamIsCurrent) {
-                    if (it1.hasNext())
-                        return true;
-
-                    firstStreamIsCurrent = false;
-                }
-                return it2.hasNext();
-            }
-
-            @Override
-            public long nextLong() {
-                return firstStreamIsCurrent ? it1.nextLong() : it2.nextLong();
-            }
-        });
+        return new LongStream(new LongConcat(a.iterator, b.iterator));
     }
 
 
@@ -421,26 +322,7 @@ public final class LongStream {
      * @return the new stream
      */
     public LongStream filter(final LongPredicate predicate) {
-        return new LongStream(new PrimitiveIterator.OfLong() {
-
-            private long next;
-
-            @Override
-            public boolean hasNext() {
-                while (iterator.hasNext()) {
-                    next = iterator.next();
-                    if (predicate.test(next)) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            @Override
-            public long nextLong() {
-                return next;
-            }
-        });
+        return new LongStream(new LongFilter(iterator, predicate));
     }
 
     /**
@@ -473,18 +355,7 @@ public final class LongStream {
      * @see Stream#map(com.annimon.stream.function.Function)
      */
     public LongStream map(final LongUnaryOperator mapper) {
-        return new LongStream(new PrimitiveIterator.OfLong() {
-
-            @Override
-            public boolean hasNext() {
-                return iterator.hasNext();
-            }
-
-            @Override
-            public long nextLong() {
-                return mapper.applyAsLong(iterator.nextLong());
-            }
-        });
+        return new LongStream(new LongMap(iterator, mapper));
     }
 
     /**
@@ -498,18 +369,7 @@ public final class LongStream {
      * @return the new {@code Stream}
      */
     public <R> Stream<R> mapToObj(final LongFunction<? extends R> mapper) {
-        return Stream.of(new LsaIterator<R>() {
-
-            @Override
-            public boolean hasNext() {
-                return iterator.hasNext();
-            }
-
-            @Override
-            public R nextIteration() {
-                return mapper.apply(iterator.nextLong());
-            }
-        });
+        return Stream.of(new LongMapToObj<R>(iterator, mapper));
     }
 
     /**
@@ -522,18 +382,7 @@ public final class LongStream {
      * @return the new {@code IntStream}
      */
     public IntStream mapToInt(final LongToIntFunction mapper) {
-        return IntStream.of(new PrimitiveIterator.OfInt() {
-
-            @Override
-            public boolean hasNext() {
-                return iterator.hasNext();
-            }
-
-            @Override
-            public int nextInt() {
-                return mapper.applyAsInt(iterator.nextLong());
-            }
-        });
+        return IntStream.of(new LongMapToInt(iterator, mapper));
     }
 
     /**
@@ -546,18 +395,7 @@ public final class LongStream {
      * @return the new {@code DoubleStream}
      */
     public DoubleStream mapToDouble(final LongToDoubleFunction mapper) {
-        return DoubleStream.of(new PrimitiveIterator.OfDouble() {
-
-            @Override
-            public boolean hasNext() {
-                return iterator.hasNext();
-            }
-
-            @Override
-            public double nextDouble() {
-                return mapper.applyAsDouble(iterator.nextLong());
-            }
-        });
+        return DoubleStream.of(new LongMapToDouble(iterator, mapper));
     }
 
     /**
@@ -579,37 +417,7 @@ public final class LongStream {
      * @see Stream#flatMap(com.annimon.stream.function.Function)
      */
     public LongStream flatMap(final LongFunction<? extends LongStream> mapper) {
-        return new LongStream(new PrimitiveIterator.OfLong() {
-
-            private PrimitiveIterator.OfLong inner;
-
-            @Override
-            public boolean hasNext() {
-                if (inner != null && inner.hasNext()) {
-                    return true;
-                }
-                while (iterator.hasNext()) {
-                    final long arg = iterator.next();
-                    final LongStream result = mapper.apply(arg);
-                    if (result == null) {
-                        continue;
-                    }
-                    if (result.iterator.hasNext()) {
-                        inner = result.iterator;
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            @Override
-            public long nextLong() {
-                if (inner == null) {
-                    throw new NoSuchElementException();
-                }
-                return inner.nextLong();
-            }
-        });
+        return new LongStream(new LongFlatMap(iterator, mapper));
     }
 
     /**
@@ -643,23 +451,7 @@ public final class LongStream {
      * @return the new stream
      */
     public LongStream sorted() {
-        return new LongStream(new PrimitiveExtIterator.OfLong() {
-
-            private int index = 0;
-            private long[] array;
-
-            @Override
-            protected void nextIteration() {
-                if (!isInit) {
-                    array = toArray();
-                    Arrays.sort(array);
-                }
-                hasNext = index < array.length;
-                if (hasNext) {
-                    next = array[index++];
-                }
-            }
-        });
+        return new LongStream(new LongSorted(iterator));
     }
 
     /**
@@ -702,24 +494,7 @@ public final class LongStream {
     public LongStream sample(final int stepWidth) {
         if (stepWidth <= 0) throw new IllegalArgumentException("stepWidth cannot be zero or negative");
         if (stepWidth == 1) return this;
-        return new LongStream(new PrimitiveIterator.OfLong() {
-
-            @Override
-            public boolean hasNext() {
-                return iterator.hasNext();
-            }
-
-            @Override
-            public long nextLong() {
-                final long result = iterator.nextLong();
-                int skip = 1;
-                while (skip < stepWidth && iterator.hasNext()) {
-                    iterator.nextLong();
-                    skip++;
-                }
-                return result;
-            }
-        });
+        return new LongStream(new LongSample(iterator, stepWidth));
     }
 
     /**
@@ -731,20 +506,7 @@ public final class LongStream {
      * @return the new stream
      */
     public LongStream peek(final LongConsumer action) {
-        return new LongStream(new PrimitiveIterator.OfLong() {
-
-            @Override
-            public boolean hasNext() {
-                return iterator.hasNext();
-            }
-
-            @Override
-            public long nextLong() {
-                long value = iterator.nextLong();
-                action.accept(value);
-                return value;
-            }
-        });
+        return new LongStream(new LongPeek(iterator, action));
     }
 
     /**
@@ -769,21 +531,7 @@ public final class LongStream {
      */
     public LongStream scan(final LongBinaryOperator accumulator) {
         Objects.requireNonNull(accumulator);
-        return new LongStream(new PrimitiveExtIterator.OfLong() {
-
-            @Override
-            protected void nextIteration() {
-                hasNext = iterator.hasNext();
-                if (hasNext) {
-                    final long current = iterator.next();
-                    if (isInit) {
-                        next = accumulator.applyAsLong(next, current);
-                    } else {
-                        next = current;
-                    }
-                }
-            }
-        });
+        return new LongStream(new LongScan(iterator, accumulator));
     }
 
     /**
@@ -810,23 +558,7 @@ public final class LongStream {
      */
     public LongStream scan(final long identity, final LongBinaryOperator accumulator) {
         Objects.requireNonNull(accumulator);
-        return new LongStream(new PrimitiveExtIterator.OfLong() {
-
-            @Override
-            protected void nextIteration() {
-                if (!isInit) {
-                    // Return identity
-                    hasNext = true;
-                    next = identity;
-                    return;
-                }
-                hasNext = iterator.hasNext();
-                if (hasNext) {
-                    final long current = iterator.next();
-                    next = accumulator.applyAsLong(next, current);
-                }
-            }
-        });
+        return new LongStream(new LongScanIdentity(iterator, identity, accumulator));
     }
 
     /**
@@ -845,14 +577,7 @@ public final class LongStream {
      * @return the new {@code LongStream}
      */
     public LongStream takeWhile(final LongPredicate predicate) {
-        return new LongStream(new PrimitiveExtIterator.OfLong() {
-
-            @Override
-            protected void nextIteration() {
-                hasNext = iterator.hasNext()
-                        && predicate.test(next = iterator.next());
-            }
-        });
+        return new LongStream(new LongTakeWhile(iterator, predicate));
     }
 
     /**
@@ -874,16 +599,7 @@ public final class LongStream {
      * @since 1.1.6
      */
     public LongStream takeUntil(final LongPredicate stopPredicate) {
-        return new LongStream(new PrimitiveExtIterator.OfLong() {
-
-            @Override
-            protected void nextIteration() {
-                hasNext = iterator.hasNext() && !(isInit && stopPredicate.test(next));
-                if (hasNext) {
-                    next = iterator.next();
-                }
-            }
-        });
+        return new LongStream(new LongTakeUntil(iterator, stopPredicate));
     }
 
     /**
@@ -902,26 +618,7 @@ public final class LongStream {
      * @return the new {@code LongStream}
      */
     public LongStream dropWhile(final LongPredicate predicate) {
-        return new LongStream(new PrimitiveExtIterator.OfLong() {
-
-            @Override
-            protected void nextIteration() {
-                if (!isInit) {
-                    // Skip first time
-                    while (hasNext = iterator.hasNext()) {
-                        next = iterator.next();
-                        if (!predicate.test(next)) {
-                            return;
-                        }
-                    }
-                }
-
-                hasNext = hasNext && iterator.hasNext();
-                if (!hasNext) return;
-
-                next = iterator.next();
-            }
-        });
+        return new LongStream(new LongDropWhile(iterator, predicate));
     }
 
     /**
@@ -948,21 +645,7 @@ public final class LongStream {
     public LongStream limit(final long maxSize) {
         if (maxSize < 0) throw new IllegalArgumentException("maxSize cannot be negative");
         if (maxSize == 0) return LongStream.empty();
-        return new LongStream(new PrimitiveIterator.OfLong() {
-
-            private long index = 0;
-
-            @Override
-            public boolean hasNext() {
-                return (index < maxSize) && iterator.hasNext();
-            }
-
-            @Override
-            public long nextLong() {
-                index++;
-                return iterator.nextLong();
-            }
-        });
+        return new LongStream(new LongLimit(iterator, maxSize));
     }
 
     /**
@@ -990,25 +673,7 @@ public final class LongStream {
     public LongStream skip(final long n) {
         if (n < 0) throw new IllegalArgumentException("n cannot be negative");
         if (n == 0) return this;
-        return new LongStream(new PrimitiveIterator.OfLong() {
-
-            private long skippedCount = 0;
-
-            @Override
-            public boolean hasNext() {
-                while (iterator.hasNext()) {
-                    if (skippedCount == n) break;
-                    iterator.nextLong();
-                    skippedCount++;
-                }
-                return iterator.hasNext();
-            }
-
-            @Override
-            public long nextLong() {
-                return iterator.nextLong();
-            }
-        });
+        return new LongStream(new LongSkip(iterator, n));
     }
 
     /**
@@ -1096,9 +761,7 @@ public final class LongStream {
      * @return an array containing the elements of this stream
      */
     public long[] toArray() {
-        SpinedBuffer.OfLong b = new SpinedBuffer.OfLong();
-        forEach(b);
-        return b.asPrimitiveArray();
+        return Operators.toLongArray(iterator);
     }
 
     /**
@@ -1321,7 +984,7 @@ public final class LongStream {
             throw new NoSuchElementException("LongStream contains no element");
         }
 
-        final long singleCandidate = iterator.next();
+        final long singleCandidate = iterator.nextLong();
         if (iterator.hasNext()) {
             throw new IllegalStateException("LongStream contains more than one element");
         }
@@ -1356,7 +1019,7 @@ public final class LongStream {
             return OptionalLong.empty();
         }
 
-        final long singleCandidate = iterator.next();
+        final long singleCandidate = iterator.nextLong();
         if (iterator.hasNext()) {
             throw new IllegalStateException("LongStream contains more than one element");
         }
