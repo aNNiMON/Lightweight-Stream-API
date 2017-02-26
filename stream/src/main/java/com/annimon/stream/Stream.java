@@ -1100,6 +1100,56 @@ public final class Stream<T> {
     }
 
     /**
+     * Takes elements while the {@code IndexedPredicate} returns {@code true}.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * predicate: (index, value) -&gt; (index + value) &lt; 5
+     * stream: [1, 2, 3,  4, -5, -6, -7]
+     * index:  [0, 1, 2,  3,  4,  5,  6]
+     * sum:    [1, 3, 5,  7, -1, -1, -1]
+     * result: [1, 2]
+     * </pre>
+     *
+     * @param predicate  the {@code IndexedPredicate} used to take elements
+     * @return the new stream
+     * @since 1.1.6
+     */
+    public Stream<T> takeWhileIndexed(IndexedPredicate<? super T> predicate) {
+        return takeWhileIndexed(0, 1, predicate);
+    }
+
+    /**
+     * Takes elements while the {@code IndexedPredicate} returns {@code true}.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * from: 2
+     * step: 2
+     * predicate: (index, value) -&gt; (index + value) &lt; 8
+     * stream: [1, 2, 3,  4, -5, -6, -7]
+     * index:  [2, 4, 6,  8, 10, 12, 14]
+     * sum:    [3, 6, 9, 12,  5,  6,  7]
+     * result: [1, 2]
+     * </pre>
+     *
+     * @param from  the initial value of the index (inclusive)
+     * @param step  the step of the index
+     * @param predicate  the {@code IndexedPredicate} used to take elements
+     * @return the new stream
+     * @since 1.1.6
+     */
+    public Stream<T> takeWhileIndexed(int from, int step, IndexedPredicate<? super T> predicate) {
+        return new Stream<T>(new ObjTakeWhileIndexed<T>(
+                new IndexedIterator<T>(from, step, iterator),
+                predicate));
+    }
+
+    /**
      * Takes elements while the predicate returns {@code false}.
      * Once predicate condition is satisfied by an element, the stream
      * finishes with this element.

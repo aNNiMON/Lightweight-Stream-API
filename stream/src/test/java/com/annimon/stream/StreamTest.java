@@ -1077,6 +1077,34 @@ public class StreamTest {
     }
 
     @Test
+    public void testTakeWhileIndexed() {
+        Stream.of(1, 2, 3,  4, -5, -6, -7)
+                .takeWhileIndexed(new IndexedPredicate<Integer>() {
+                    @Override
+                    public boolean test(int index, Integer value) {
+                        return index + value < 5;
+                    }
+                })
+                .custom(assertElements(is(Arrays.asList(
+                        1, 2
+                ))));
+    }
+
+    @Test
+    public void testTakeWhileIndexedWithStartAndStep() {
+        Stream.of(1, 2, 3,  4, -5, -6, -7)
+                .takeWhileIndexed(2, 2, new IndexedPredicate<Integer>() {
+                    @Override
+                    public boolean test(int index, Integer value) {
+                        return index + value < 8;
+                    }
+                })
+                .custom(assertElements(is(Arrays.asList(
+                        1, 2
+                ))));
+    }
+
+    @Test
     public void testTakeUntil() {
         final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
         long count = Stream.of(2, 4, 6, 7, 8, 10, 11)
