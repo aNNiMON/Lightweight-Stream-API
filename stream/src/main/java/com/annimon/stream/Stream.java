@@ -2,6 +2,7 @@ package com.annimon.stream;
 
 import com.annimon.stream.function.*;
 import com.annimon.stream.internal.Operators;
+import com.annimon.stream.iterator.IndexedIterator;
 import com.annimon.stream.operator.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -466,6 +467,58 @@ public final class Stream<T> {
      */
     public Stream<T> filter(final Predicate<? super T> predicate) {
         return new Stream<T>(new ObjFilter<T>(iterator, predicate));
+    }
+
+    /**
+     * Returns a {@code Stream} with elements that satisfy the given {@code IndexedPredicate}.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * predicate: (index, value) -&gt; (index + value) &gt; 6
+     * stream: [1, 2, 3, 4, 0, 11]
+     * index:  [0, 1, 2, 3, 4,  5]
+     * sum:    [1, 3, 5, 7, 4, 16]
+     * filter: [         7,    16]
+     * result: [4, 11]
+     * </pre>
+     *
+     * @param predicate  the {@code IndexedPredicate} used to filter elements
+     * @return the new stream
+     * @since 1.1.6
+     */
+    public Stream<T> filterIndexed(IndexedPredicate<? super T> predicate) {
+        return filterIndexed(0, 1, predicate);
+    }
+    
+    /**
+     * Returns a {@code Stream} with elements that satisfy the given {@code IndexedPredicate}.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * from: 4
+     * step: 3
+     * predicate: (index, value) -&gt; (index + value) &gt; 15
+     * stream: [1, 2,  3,  4,  0, 11]
+     * index:  [4, 7, 10, 13, 16, 19]
+     * sum:    [5, 9, 13, 17, 16, 30]
+     * filter: [          17, 16, 30]
+     * result: [4, 0, 11]
+     * </pre>
+     *
+     * @param from  the initial value of the index (inclusive)
+     * @param step  the step of the index
+     * @param predicate  the {@code IndexedPredicate} used to filter elements
+     * @return the new stream
+     * @since 1.1.6
+     */
+    public Stream<T> filterIndexed(int from, int step, IndexedPredicate<? super T> predicate) {
+        return new Stream<T>(new ObjFilterIndexed<T>(
+                new IndexedIterator<T>(from, step, iterator),
+                predicate));
     }
 
     /**

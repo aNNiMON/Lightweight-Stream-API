@@ -5,6 +5,8 @@ import com.annimon.stream.function.BiFunction;
 import com.annimon.stream.function.BinaryOperator;
 import com.annimon.stream.function.Consumer;
 import com.annimon.stream.function.Function;
+import com.annimon.stream.function.IndexedFunction;
+import com.annimon.stream.function.IndexedPredicate;
 import com.annimon.stream.function.IntUnaryOperator;
 import com.annimon.stream.function.LongUnaryOperator;
 import com.annimon.stream.function.Predicate;
@@ -394,6 +396,42 @@ public class StreamTest {
                 .filter(Functions.remainder(2))
                 .forEach(consumer);
         assertEquals("02468", consumer.toString());
+    }
+
+    @Test
+    public void testFilterIndexed() {
+        Stream.rangeClosed(4, 8)
+                .filterIndexed(new IndexedPredicate<Integer>() {
+                    @Override
+                    public boolean test(int index, Integer value) {
+                        return (index * value) % 2 == 0;
+                    }
+                })
+                .custom(assertElements(is(Arrays.asList(
+                       4, // (0 * 4)
+                          // (1 * 5)
+                       6, // (2 * 6)
+                          // (3 * 7)
+                       8  // (4 * 8)
+                ))));
+    }
+
+    @Test
+    public void testFilterIndexedWithStartAndStep() {
+        Stream.rangeClosed(4, 8)
+                .filterIndexed(20, -5, new IndexedPredicate<Integer>() {
+                    @Override
+                    public boolean test(int index, Integer value) {
+                        return (index * value) % 2 == 0;
+                    }
+                })
+                .custom(assertElements(is(Arrays.asList(
+                       4, // (20 * 4)
+                          // (15 * 5)
+                       6, // (10 * 6)
+                          // (5  * 7)
+                       8  // (0  * 8)
+                ))));
     }
 
     @Test
