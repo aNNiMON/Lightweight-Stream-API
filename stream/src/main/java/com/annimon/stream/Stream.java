@@ -596,6 +596,56 @@ public final class Stream<T> {
     }
 
     /**
+     * Returns a {@code Stream} with elements that obtained by applying the given {@code IndexedFunction}.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * predicate: (index, value) -&gt; (index * value)
+     * stream: [1, 2, 3,  4]
+     * index:  [0, 1, 2,  3]
+     * result: [0, 2, 6, 12]
+     * </pre>
+     *
+     * @param <R> the type of elements in resulting stream
+     * @param mapper  the mapper function used to apply to each element
+     * @return the new stream
+     * @since 1.1.6
+     */
+    public <R> Stream<R> mapIndexed(IndexedFunction<? super T, ? extends R> mapper) {
+        return this.<R>mapIndexed(0, 1, mapper);
+    }
+
+    /**
+     * Returns a {@code Stream} with elements that obtained by applying the given {@code IndexedFunction}.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * from: -2
+     * step: 2
+     * predicate: (index, value) -&gt; (index * value)
+     * stream: [ 1, 2, 3,  4]
+     * index:  [-2, 0, 2,  4]
+     * result: [-2, 0, 6, 16]
+     * </pre>
+     *
+     * @param <R> the type of elements in resulting stream
+     * @param from  the initial value of the index (inclusive)
+     * @param step  the step of the index
+     * @param mapper  the mapper function used to apply to each element
+     * @return the new stream
+     * @since 1.1.6
+     */
+    public <R> Stream<R> mapIndexed(int from, int step, IndexedFunction<? super T, ? extends R> mapper) {
+        return new Stream<R>(new ObjMapIndexed<T, R>(
+                new IndexedIterator<T>(from, step, iterator),
+                mapper));
+    }
+
+    /**
      * Returns {@code IntStream} with elements that obtained by applying the given function.
      *
      * <p>This is an intermediate operation.
