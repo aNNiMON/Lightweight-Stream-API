@@ -1226,7 +1226,7 @@ public final class Stream<T> {
     }
 
     /**
-     * Drops elements while the predicate is true and returns the rest.
+     * Drops elements while the predicate is true, then returns the rest.
      *
      * <p>This is an intermediate operation.
      *
@@ -1242,6 +1242,56 @@ public final class Stream<T> {
      */
     public Stream<T> dropWhile(final Predicate<? super T> predicate) {
         return new Stream<T>(new ObjDropWhile<T>(iterator, predicate));
+    }
+
+    /**
+     * Drops elements while the {@code IndexedPredicate} is true, then returns the rest.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * predicate: (index, value) -&gt; (index + value) &lt; 5
+     * stream: [1, 2, 3, 4, 0, 1, 2]
+     * index:  [0, 1, 2, 3, 4, 5, 6]
+     * sum:    [1, 3, 5, 7, 4, 6, 8]
+     * result: [3, 4, 0, 1, 2]
+     * </pre>
+     *
+     * @param predicate  the {@code IndexedPredicate} used to drop elements
+     * @return the new stream
+     * @since 1.1.6
+     */
+    public Stream<T> dropWhileIndexed(IndexedPredicate<? super T> predicate) {
+        return dropWhileIndexed(0, 1, predicate);
+    }
+
+    /**
+     * Drops elements while the {@code IndexedPredicate} is true, then returns the rest.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * from: 2
+     * step: 2
+     * predicate: (index, value) -&gt; (index + value) &lt; 10
+     * stream: [1, 2, 3,  4, -5, -6, -7]
+     * index:  [2, 4, 6,  8, 10, 12, 14]
+     * sum:    [3, 6, 9, 12,  5,  6,  7]
+     * result: [4, -5, -6, -7]
+     * </pre>
+     *
+     * @param from  the initial value of the index (inclusive)
+     * @param step  the step of the index
+     * @param predicate  the {@code IndexedPredicate} used to drop elements
+     * @return the new stream
+     * @since 1.1.6
+     */
+    public Stream<T> dropWhileIndexed(int from, int step, IndexedPredicate<? super T> predicate) {
+        return new Stream<T>(new ObjDropWhileIndexed<T>(
+                new IndexedIterator<T>(from, step, iterator),
+                predicate));
     }
 
     /**
