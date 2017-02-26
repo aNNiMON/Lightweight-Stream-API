@@ -1105,6 +1105,22 @@ public class StreamTest {
     }
 
     @Test
+    public void testTakeWhileNonFirstMatch() {
+        assertThat(
+                Stream.of(2, 4, 6, 7, 8, 10, 11)
+                        .takeWhile(Functions.remainder(3)),
+                isEmpty());
+    }
+
+    @Test
+    public void testTakeWhileAllMatch() {
+        long count = Stream.of(2, 4, 6, 7, 8, 10, 11)
+                .takeWhile(Functions.remainder(1))
+                .count();
+        assertEquals(7, count);
+    }
+
+    @Test
     public void testTakeUntil() {
         final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
         long count = Stream.of(2, 4, 6, 7, 8, 10, 11)
@@ -1120,19 +1136,31 @@ public class StreamTest {
     }
 
     @Test
-    public void testTakeWhileNonFirstMatch() {
-        assertThat(
-                Stream.of(2, 4, 6, 7, 8, 10, 11)
-                        .takeWhile(Functions.remainder(3)),
-                isEmpty());
+    public void testTakeUntilIndexed() {
+        Stream.of(1, 2, 3, 4, 0, 1, 2)
+                .takeUntilIndexed(new IndexedPredicate<Integer>() {
+                    @Override
+                    public boolean test(int index, Integer value) {
+                        return (index + value) > 4;
+                    }
+                })
+                .custom(assertElements(is(Arrays.asList(
+                        1, 2, 3
+                ))));
     }
 
     @Test
-    public void testTakeWhileAllMatch() {
-        long count = Stream.of(2, 4, 6, 7, 8, 10, 11)
-                .takeWhile(Functions.remainder(1))
-                .count();
-        assertEquals(7, count);
+    public void testTakeUntilIndexedWithStartAndStep() {
+        Stream.of(1, 2, 3, 4, 0, 1, 2)
+                .takeUntilIndexed(2, 2, new IndexedPredicate<Integer>() {
+                    @Override
+                    public boolean test(int index, Integer value) {
+                        return (index + value) > 8;
+                    }
+                })
+                .custom(assertElements(is(Arrays.asList(
+                        1, 2, 3
+                ))));
     }
 
     @Test

@@ -1172,6 +1172,60 @@ public final class Stream<T> {
     }
 
     /**
+     * Takes elements while the {@code IndexedPredicate} returns {@code false}.
+     * Once predicate condition is satisfied by an element, the stream
+     * finishes with this element.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * stopPredicate: (index, value) -&gt; (index + value) &gt; 4
+     * stream: [1, 2, 3, 4, 0, 1, 2]
+     * index:  [0, 1, 2, 3, 4, 5, 6]
+     * sum:    [1, 3, 5, 7, 4, 6, 8]
+     * result: [1, 2, 3]
+     * </pre>
+     *
+     * @param stopPredicate  the {@code IndexedPredicate} used to take elements
+     * @return the new stream
+     * @since 1.1.6
+     */
+    public Stream<T> takeUntilIndexed(IndexedPredicate<? super T> stopPredicate) {
+        return takeUntilIndexed(0, 1, stopPredicate);
+    }
+
+    /**
+     * Takes elements while the {@code IndexedPredicate} returns {@code false}.
+     * Once predicate condition is satisfied by an element, the stream
+     * finishes with this element.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * from: 2
+     * step: 2
+     * stopPredicate: (index, value) -&gt; (index + value) &gt; 8
+     * stream: [1, 2, 3,  4,  0,  1,  2]
+     * index:  [2, 4, 6,  8, 10, 11, 14]
+     * sum:    [3, 6, 9, 12, 10, 12, 16]
+     * result: [1, 2, 3]
+     * </pre>
+     *
+     * @param from  the initial value of the index (inclusive)
+     * @param step  the step of the index
+     * @param stopPredicate  the {@code IndexedPredicate} used to take elements
+     * @return the new stream
+     * @since 1.1.6
+     */
+    public Stream<T> takeUntilIndexed(int from, int step, IndexedPredicate<? super T> stopPredicate) {
+        return new Stream<T>(new ObjTakeUntilIndexed<T>(
+                new IndexedIterator<T>(from, step, iterator),
+                stopPredicate));
+    }
+
+    /**
      * Drops elements while the predicate is true and returns the rest.
      *
      * <p>This is an intermediate operation.
