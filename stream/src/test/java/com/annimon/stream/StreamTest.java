@@ -5,6 +5,8 @@ import com.annimon.stream.function.BiFunction;
 import com.annimon.stream.function.BinaryOperator;
 import com.annimon.stream.function.Consumer;
 import com.annimon.stream.function.Function;
+import com.annimon.stream.function.IndexedBiFunction;
+import com.annimon.stream.function.IndexedConsumer;
 import com.annimon.stream.function.IndexedFunction;
 import com.annimon.stream.function.IndexedPredicate;
 import com.annimon.stream.function.IntUnaryOperator;
@@ -1257,6 +1259,40 @@ public class StreamTest {
     }
 
     @Test
+    public void testForEachIndexed() {
+        final List<IntPair<String>> result = new ArrayList<IntPair<String>>();
+        Stream.of("a", "b", "c")
+                .forEachIndexed(new IndexedConsumer<String>() {
+                    @Override
+                    public void accept(int index, String t) {
+                        result.add(new IntPair<String>(index, t));
+                    }
+                });
+        assertThat(result, is(Arrays.asList(
+                new IntPair<String>(0, "a"),
+                new IntPair<String>(1, "b"),
+                new IntPair<String>(2, "c")
+        )));
+    }
+
+    @Test
+    public void testForEachIndexedWithStartAndStep() {
+        final List<IntPair<String>> result = new ArrayList<IntPair<String>>();
+        Stream.of("a", "b", "c")
+                .forEachIndexed(50, -10, new IndexedConsumer<String>() {
+                    @Override
+                    public void accept(int index, String t) {
+                        result.add(new IntPair<String>(index, t));
+                    }
+                });
+        assertThat(result, is(Arrays.asList(
+                new IntPair<String>(50, "a"),
+                new IntPair<String>(40, "b"),
+                new IntPair<String>(30, "c")
+        )));
+    }
+
+    @Test
     public void testReduceSumFromZero() {
         int result = Stream.range(0, 10)
                 .reduce(0, Functions.addition());
@@ -1291,7 +1327,7 @@ public class StreamTest {
         assertNotNull(result.get());
         assertEquals(45, (int) result.get());
     }
-
+    
     @Test
     public void testReduceOptionalOnEmptyStream() {
         Optional<Integer> result = Stream.<Integer>empty()

@@ -1209,6 +1209,36 @@ public final class Stream<T> {
             action.accept(iterator.next());
         }
     }
+    
+    /**
+     * Performs the given indexed action on each element.
+     *
+     * <p>This is a terminal operation.
+     *
+     * @param action  the action to be performed on each element
+     * @since 1.1.6
+     */
+    public void forEachIndexed(IndexedConsumer<? super T> action) {
+        forEachIndexed(0, 1, action);
+    }
+    
+    /**
+     * Performs the given indexed action on each element.
+     *
+     * <p>This is a terminal operation.
+     *
+     * @param from  the initial value of the index (inclusive)
+     * @param step  the step of the index
+     * @param action  the action to be performed on each element
+     * @since 1.1.6
+     */
+    public void forEachIndexed(int from, int step, IndexedConsumer<? super T> action) {
+        int index = from;
+        while (iterator.hasNext()) {
+            action.accept(index, iterator.next());
+            index += step;
+        }
+    }
 
     /**
      * Reduces the elements using provided identity value and the associative accumulation function.
