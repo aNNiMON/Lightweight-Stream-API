@@ -491,7 +491,7 @@ public final class Stream<T> {
     public Stream<T> filterIndexed(IndexedPredicate<? super T> predicate) {
         return filterIndexed(0, 1, predicate);
     }
-    
+
     /**
      * Returns a {@code Stream} with elements that satisfy the given {@code IndexedPredicate}.
      *
@@ -790,13 +790,11 @@ public final class Stream<T> {
      * @since 1.1.2
      */
     public Stream<IntPair<T>> indexed(final int from, final int step) {
-        return map(new Function<T, IntPair<T>>() {
-
-            private int index = from - step;
+        return mapIndexed(from, step, new IndexedFunction<T, IntPair<T>>() {
 
             @Override
-            public IntPair<T> apply(T value) {
-                return new IntPair<T>(index += step, value);
+            public IntPair<T> apply(int index, T t) {
+                return new IntPair<T>(index, t);
             }
         });
     }
@@ -1363,7 +1361,7 @@ public final class Stream<T> {
             action.accept(iterator.next());
         }
     }
-    
+
     /**
      * Performs the given indexed action on each element.
      *
@@ -1375,7 +1373,7 @@ public final class Stream<T> {
     public void forEachIndexed(IndexedConsumer<? super T> action) {
         forEachIndexed(0, 1, action);
     }
-    
+
     /**
      * Performs the given indexed action on each element.
      *
@@ -1447,7 +1445,7 @@ public final class Stream<T> {
     }
 
     /**
-     * Reduces the elements using provided identity value and 
+     * Reduces the elements using provided identity value and
      * the associative accumulation indexed function.
      *
      * <p>This is a terminal operation.
