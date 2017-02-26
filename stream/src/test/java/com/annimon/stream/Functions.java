@@ -4,6 +4,7 @@ import com.annimon.stream.function.BiConsumer;
 import com.annimon.stream.function.BiFunction;
 import com.annimon.stream.function.DoublePredicate;
 import com.annimon.stream.function.Function;
+import com.annimon.stream.function.IndexedBiFunction;
 import com.annimon.stream.function.IntFunction;
 import com.annimon.stream.function.IntPredicate;
 import com.annimon.stream.function.LongPredicate;
@@ -193,6 +194,15 @@ public final class Functions {
             @Override
             public Integer apply(Integer value1, Integer value2) {
                 return value1 + value2;
+            }
+        };
+    }
+
+    public static IndexedBiFunction<Integer, Integer, Integer> indexedAddition() {
+        return new IndexedBiFunction<Integer, Integer, Integer>() {
+            @Override
+            public Integer apply(int index, Integer value1, Integer value2) {
+                return index + value1 + value2;
             }
         };
     }

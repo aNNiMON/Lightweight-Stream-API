@@ -1268,6 +1268,68 @@ public final class Stream<T> {
     }
 
     /**
+     * Reduces the elements using provided identity value and
+     * the associative accumulation indexed function.
+     *
+     * <p>This is a terminal operation.
+     *
+     * <p>Example:
+     * <pre>
+     * identity: 10
+     * accumulator: (index, a, b) -&gt; index + a + b
+     * stream: [1, 2, 3, 4, 5]
+     * index:  [0, 1, 2, 3, 4]
+     * result: 10 + 1 + 3 + 5 + 7 + 9 = 35
+     * </pre>
+     *
+     * @param <R> the type of the result
+     * @param identity  the initial value
+     * @param accumulator  the accumulation function
+     * @return the result of the reduction
+     * @since 1.1.6
+     */
+    public <R> R reduceIndexed(R identity, IndexedBiFunction<? super R, ? super T, ? extends R> accumulator) {
+        return reduceIndexed(0, 1, identity, accumulator);
+    }
+
+    /**
+     * Reduces the elements using provided identity value and 
+     * the associative accumulation indexed function.
+     *
+     * <p>This is a terminal operation.
+     *
+     * <p>Example:
+     * <pre>
+     * from: 1
+     * step: 2
+     * identity: 10
+     * accumulator: (index, a, b) -&gt; index + a + b
+     * stream: [1, 2, 3, 4, 5]
+     * index:  [1, 3, 5, 7, 9]
+     * result: 10 + 2 + 5 + 8 + 11 + 14 = 50
+     * </pre>
+     *
+     * @param <R> the type of the result
+     * @param from  the initial value of the index (inclusive)
+     * @param step  the step of the index
+     * @param identity  the initial value
+     * @param accumulator  the accumulation function
+     * @return the result of the reduction
+     * @since 1.1.6
+     */
+    public <R> R reduceIndexed(int from, int step, R identity,
+            IndexedBiFunction<? super R, ? super T, ? extends R> accumulator) {
+        R result = identity;
+        int index = from;
+        while (iterator.hasNext()) {
+            final T value = iterator.next();
+            result = accumulator.apply(index, result, value);
+            index += step;
+        }
+        return result;
+    }
+
+    /**
      * Reduces the elements using provided associative accumulation function.
      *
      * <p>This is a terminal operation.
