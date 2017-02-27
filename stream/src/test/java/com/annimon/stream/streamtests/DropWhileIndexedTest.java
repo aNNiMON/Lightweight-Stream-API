@@ -2,10 +2,9 @@ package com.annimon.stream.streamtests;
 
 import com.annimon.stream.Stream;
 import com.annimon.stream.function.IndexedPredicate;
-import java.util.Arrays;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.assertElements;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.contains;
 
 public final class DropWhileIndexedTest {
 
@@ -18,9 +17,9 @@ public final class DropWhileIndexedTest {
                         return (index + value) < 5;
                     }
                 })
-                .custom(assertElements(is(Arrays.asList(
+                .custom(assertElements(contains(
                         3, 4, 0, 1, 2
-                ))));
+                )));
     }
 
     @Test
@@ -32,8 +31,8 @@ public final class DropWhileIndexedTest {
                         return (index + value) < 10;
                     }
                 })
-                .custom(assertElements(is(Arrays.asList(
+                .custom(assertElements(contains(
                         4, -5, -6, -7
-                ))));
+                )));
     }
 }

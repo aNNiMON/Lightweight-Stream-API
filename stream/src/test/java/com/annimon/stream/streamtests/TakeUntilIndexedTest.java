@@ -2,10 +2,9 @@ package com.annimon.stream.streamtests;
 
 import com.annimon.stream.Stream;
 import com.annimon.stream.function.IndexedPredicate;
-import java.util.Arrays;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.assertElements;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.contains;
 
 public final class TakeUntilIndexedTest {
     
@@ -18,9 +17,9 @@ public final class TakeUntilIndexedTest {
                         return (index + value) > 4;
                     }
                 })
-                .custom(assertElements(is(Arrays.asList(
+                .custom(assertElements(contains(
                         1, 2, 3
-                ))));
+                )));
     }
 
     @Test
@@ -32,8 +31,8 @@ public final class TakeUntilIndexedTest {
                         return (index + value) > 8;
                     }
                 })
-                .custom(assertElements(is(Arrays.asList(
+                .custom(assertElements(contains(
                         1, 2, 3
-                ))));
+                )));
     }
 }

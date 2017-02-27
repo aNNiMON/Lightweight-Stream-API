@@ -2,10 +2,9 @@ package com.annimon.stream.streamtests;
 
 import com.annimon.stream.Stream;
 import com.annimon.stream.function.Function;
-import java.util.Arrays;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.assertElements;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.contains;
 
 public final class MapTest {
 
@@ -19,9 +18,9 @@ public final class MapTest {
         };
         Stream.of(4, 9, 16, 64, 625)
                 .map(intToSqrtString)
-                .custom(assertElements(is(Arrays.asList(
+                .custom(assertElements(contains(
                       "[2]", "[3]", "[4]", "[8]", "[25]"
-                ))));
+                )));
     }
 
     @Test
@@ -36,9 +35,9 @@ public final class MapTest {
         };
         Stream.of("[2]", "[3]", "[4]", "[8]", "[25]")
                 .map(stringToSquareInt)
-                .custom(assertElements(is(Arrays.asList(
+                .custom(assertElements(contains(
                       4, 9, 16, 64, 625
-                ))));
+                )));
     }
 
     @Test
@@ -57,8 +56,8 @@ public final class MapTest {
                 .map(mapPlus2)
                 .map(mapPlus2)
                 .map(mapPlus2)
-                .custom(assertElements(is(Arrays.asList(
+                .custom(assertElements(contains(
                       0, 1, 2, 3, 4, 5, 6, 7, 8, 9
-                ))));
+                )));
     }
 }

@@ -2,10 +2,9 @@ package com.annimon.stream.streamtests;
 
 import com.annimon.stream.Stream;
 import com.annimon.stream.function.IndexedFunction;
-import java.util.Arrays;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.assertElements;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.contains;
 
 public final class MapIndexedTest {
 
@@ -18,13 +17,13 @@ public final class MapIndexedTest {
                         return index * t;
                     }
                 })
-                .custom(assertElements(is(Arrays.asList(
+                .custom(assertElements(contains(
                        0,  // (0 * 4)
                        5,  // (1 * 5)
                        12, // (2 * 6)
                        21, // (3 * 7)
                        32  // (4 * 8)
-                ))));
+                )));
     }
 
     @Test
@@ -36,12 +35,12 @@ public final class MapIndexedTest {
                         return index * t;
                     }
                 })
-                .custom(assertElements(is(Arrays.asList(
+                .custom(assertElements(contains(
                        80, // (20 * 4)
                        75, // (15 * 5)
                        60, // (10 * 6)
                        35, // (5  * 7)
                        0   // (0  * 8)
-                ))));
+                )));
     }
 }

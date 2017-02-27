@@ -10,6 +10,7 @@ import java.util.List;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.assertElements;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.elements;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -25,18 +26,18 @@ public final class CustomTest {
     public void testCustomIntermediateOperator_Reverse() {
         Stream.range(0, 10)
                 .custom(new CustomOperators.Reverse<Integer>())
-                .custom(assertElements(is(Arrays.asList(
+                .custom(assertElements(contains(
                       9, 8, 7, 6, 5, 4, 3, 2, 1, 0
-                ))));
+                )));
     }
 
     @Test
     public void testCustomIntermediateOperator_SkipAndLimit() {
         Stream.range(0, 10)
                 .custom(new CustomOperators.SkipAndLimit<Integer>(5, 2))
-                .custom(assertElements(is(Arrays.asList(
+                .custom(assertElements(contains(
                         5, 6
-                ))));
+                )));
     }
 
     @Test
@@ -77,6 +78,6 @@ public final class CustomTest {
                     }
                 }));
 
-        assertThat(list, is(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)));
+        assertThat(list, contains(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
     }
 }

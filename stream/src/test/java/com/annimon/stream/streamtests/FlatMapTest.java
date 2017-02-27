@@ -3,10 +3,9 @@ package com.annimon.stream.streamtests;
 import com.annimon.stream.Functions;
 import com.annimon.stream.Stream;
 import com.annimon.stream.function.Function;
-import java.util.Arrays;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.assertElements;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.contains;
 
 public final class FlatMapTest {
 
@@ -28,13 +27,13 @@ public final class FlatMapTest {
                                 });
                     }
                 })
-                .custom(assertElements(is(Arrays.asList(
+                .custom(assertElements(contains(
                         "2 * 2 = 4",
                         "2 * 4 = 8",
                         "3 * 2 = 6",
                         "3 * 4 = 12",
                         "4 * 2 = 8",
                         "4 * 4 = 16"
-                ))));
+                )));
     }
 }

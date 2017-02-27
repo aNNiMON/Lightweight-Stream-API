@@ -5,10 +5,9 @@ import com.annimon.stream.Stream;
 import com.annimon.stream.function.BiFunction;
 import com.annimon.stream.function.BinaryOperator;
 import com.annimon.stream.test.hamcrest.StreamMatcher;
-import java.util.Arrays;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.assertElements;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.contains;
 
 public final class ScanTest {
 
@@ -16,9 +15,9 @@ public final class ScanTest {
     public void testScan() {
         Stream.of(1, 2, 3)
                 .scan(Functions.addition())
-                .custom(assertElements(is(Arrays.asList(
+                .custom(assertElements(contains(
                         1, 3, 6
-                ))));
+                )));
     }
 
     @Test
@@ -30,12 +29,12 @@ public final class ScanTest {
                         return value1 / value2;
                     }
                 })
-                .custom(assertElements(is(Arrays.asList(
+                .custom(assertElements(contains(
                         1800,
                         1800 / 2,
                         1800 / 2 / 3,
                         1800 / 2 / 3 / 5
-                ))));
+                )));
     }
 
     @Test
@@ -54,17 +53,17 @@ public final class ScanTest {
                         return length + s.length();
                     }
                 })
-                .custom(assertElements(is(Arrays.asList(
+                .custom(assertElements(contains(
                         0, 1, 3, 6, 10
-                ))));
+                )));
     }
 
     @Test
     public void testScanWithIdentityOnEmptyStream() {
         Stream.<Integer>empty()
                 .scan(9, Functions.addition())
-                .custom(assertElements(is(Arrays.asList(
+                .custom(assertElements(contains(
                         9
-                ))));
+                )));
     }
 }

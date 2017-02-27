@@ -1,11 +1,10 @@
 package com.annimon.stream.streamtests;
 
 import com.annimon.stream.Stream;
-import java.util.Arrays;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.assertElements;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.isEmpty;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertThat;
 
 public final class LimitTest {
@@ -14,9 +13,9 @@ public final class LimitTest {
     public void testLimit() {
         Stream.range(0, 10)
                 .limit(2)
-                .custom(assertElements(is(Arrays.asList(
+                .custom(assertElements(contains(
                         0, 1
-                ))));
+                )));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -34,8 +33,8 @@ public final class LimitTest {
     public void testLimitMoreThanCount() {
         Stream.range(0, 5)
                 .limit(15)
-                .custom(assertElements(is(Arrays.asList(
+                .custom(assertElements(contains(
                         0, 1, 2, 3, 4
-                ))));
+                )));
     }
 }

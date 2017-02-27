@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.assertElements;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.contains;
 
 public final class ZipTest {
 
@@ -23,9 +23,9 @@ public final class ZipTest {
                         return value1 + value2;
                     }
                 })
-                .custom(assertElements(is(Arrays.asList(
+                .custom(assertElements(contains(
                       2, 4, 6, 8, 10
-                ))));
+                )));
     }
 
     @Test(expected = NullPointerException.class)
@@ -50,8 +50,8 @@ public final class ZipTest {
                         return value1 + value2;
                     }
                 })
-                .custom(assertElements(is(Arrays.asList(
+                .custom(assertElements(contains(
                       2, 4, 6, 8, 10
-                ))));
+                )));
     }
 }
