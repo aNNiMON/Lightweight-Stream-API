@@ -445,7 +445,7 @@ public class StreamTest {
     }
 
     @Test
-    public void testNotNull() {
+    public void testWithoutNulls() {
         final long notNullAmount = Stream.range(0, 10)
                 .map(new Function<Integer, String>() {
                     @Override
@@ -453,7 +453,7 @@ public class StreamTest {
                         return integer % 3 == 0 ? null : "";
                     }
                 })
-                .notNull()
+                .withoutNulls()
                 .count();
         assertEquals(6, notNullAmount);
     }

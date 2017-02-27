@@ -554,13 +554,13 @@ public final class Stream<T> {
     }
 
     /**
-     * Returns {@code Stream} with elements that is not null only.
+     * Returns {@code Stream} without null elements.
      *
      * <p>This is an intermediate operation.
      *
      * @return the new stream
      */
-    public Stream<T> notNull() {
+    public Stream<T> withoutNulls() {
         return filter(Predicate.Util.<T>notNull());
     }
 
