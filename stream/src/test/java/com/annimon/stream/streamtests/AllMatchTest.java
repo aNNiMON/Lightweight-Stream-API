@@ -18,7 +18,7 @@ public final class AllMatchTest {
     @Test
     public void testAllMatchWithTrueResult() {
         boolean match = Stream.of(2, 4, 6, 8, 10)
-                .anyMatch(Functions.remainder(2));
+                .allMatch(Functions.remainder(2));
         assertTrue(match);
     }
 }
