@@ -63,11 +63,11 @@ public class PredicateTest {
     }
 
     @Test
-    public void testNullsPredicate() {
-        Predicate<Object> predicate = Predicate.Util.nulls();
+    public void testNotNullPredicate() {
+        Predicate<Object> predicate = Predicate.Util.notNull();
 
-        assertTrue(predicate.test(null));
-        assertFalse(predicate.test(new Object()));
+        assertFalse(predicate.test(null));
+        assertTrue(predicate.test(new Object()));
     }
 
     @Test

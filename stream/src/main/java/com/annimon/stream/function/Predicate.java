@@ -92,16 +92,16 @@ public interface Predicate<T> {
         }
 
         /**
-         * Checks value for null.
+         * Checks that input value is not null.
          *
          * @param <T> the type of the input to the function
-         * @return {@code Predicate} that checks value for null
+         * @return {@code Predicate} that checks value to be not null
          */
-        public static <T> Predicate<T> nulls() {
+        public static <T> Predicate<T> notNull() {
             return new Predicate<T>() {
                 @Override
                 public boolean test(T value) {
-                    return value == null;
+                    return value != null;
                 }
             };
         }
