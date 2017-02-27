@@ -480,10 +480,26 @@ public class StreamTest {
                 .next();
     }
 
+    @Test(expected = NoSuchElementException.class)
+    public void testFilterIndexedIteratorNextOnEmpty() {
+        Stream.<Integer>empty()
+                .filterIndexed(IndexedPredicate.Util.wrap(Functions.remainder(2)))
+                .iterator()
+                .next();
+    }
+
     @Test(expected = UnsupportedOperationException.class)
     public void testFilterIteratorRemove() {
         Stream.range(0, 10)
                 .filter(Functions.remainder(2))
+                .iterator()
+                .remove();
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testFilterIndexedIteratorRemove() {
+        Stream.range(0, 10)
+                .filterIndexed(IndexedPredicate.Util.wrap(Functions.remainder(2)))
                 .iterator()
                 .remove();
     }
