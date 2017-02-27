@@ -2,6 +2,7 @@ package com.annimon.stream;
 
 import com.annimon.stream.function.*;
 import com.annimon.stream.internal.Operators;
+import com.annimon.stream.iterator.IndexedIterator;
 import com.annimon.stream.operator.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -469,6 +470,58 @@ public final class Stream<T> {
     }
 
     /**
+     * Returns a {@code Stream} with elements that satisfy the given {@code IndexedPredicate}.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * predicate: (index, value) -&gt; (index + value) &gt; 6
+     * stream: [1, 2, 3, 4, 0, 11]
+     * index:  [0, 1, 2, 3, 4,  5]
+     * sum:    [1, 3, 5, 7, 4, 16]
+     * filter: [         7,    16]
+     * result: [4, 11]
+     * </pre>
+     *
+     * @param predicate  the {@code IndexedPredicate} used to filter elements
+     * @return the new stream
+     * @since 1.1.6
+     */
+    public Stream<T> filterIndexed(IndexedPredicate<? super T> predicate) {
+        return filterIndexed(0, 1, predicate);
+    }
+
+    /**
+     * Returns a {@code Stream} with elements that satisfy the given {@code IndexedPredicate}.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * from: 4
+     * step: 3
+     * predicate: (index, value) -&gt; (index + value) &gt; 15
+     * stream: [1, 2,  3,  4,  0, 11]
+     * index:  [4, 7, 10, 13, 16, 19]
+     * sum:    [5, 9, 13, 17, 16, 30]
+     * filter: [          17, 16, 30]
+     * result: [4, 0, 11]
+     * </pre>
+     *
+     * @param from  the initial value of the index (inclusive)
+     * @param step  the step of the index
+     * @param predicate  the {@code IndexedPredicate} used to filter elements
+     * @return the new stream
+     * @since 1.1.6
+     */
+    public Stream<T> filterIndexed(int from, int step, IndexedPredicate<? super T> predicate) {
+        return new Stream<T>(new ObjFilterIndexed<T>(
+                new IndexedIterator<T>(from, step, iterator),
+                predicate));
+    }
+
+    /**
      * Returns {@code Stream} with elements that is not null only.
      *
      * <p>This is an intermediate operation.
@@ -540,6 +593,56 @@ public final class Stream<T> {
      */
     public <R> Stream<R> map(final Function<? super T, ? extends R> mapper) {
         return new Stream<R>(new ObjMap<T, R>(iterator, mapper));
+    }
+
+    /**
+     * Returns a {@code Stream} with elements that obtained by applying the given {@code IndexedFunction}.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * predicate: (index, value) -&gt; (index * value)
+     * stream: [1, 2, 3,  4]
+     * index:  [0, 1, 2,  3]
+     * result: [0, 2, 6, 12]
+     * </pre>
+     *
+     * @param <R> the type of elements in resulting stream
+     * @param mapper  the mapper function used to apply to each element
+     * @return the new stream
+     * @since 1.1.6
+     */
+    public <R> Stream<R> mapIndexed(IndexedFunction<? super T, ? extends R> mapper) {
+        return this.<R>mapIndexed(0, 1, mapper);
+    }
+
+    /**
+     * Returns a {@code Stream} with elements that obtained by applying the given {@code IndexedFunction}.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * from: -2
+     * step: 2
+     * predicate: (index, value) -&gt; (index * value)
+     * stream: [ 1, 2, 3,  4]
+     * index:  [-2, 0, 2,  4]
+     * result: [-2, 0, 6, 16]
+     * </pre>
+     *
+     * @param <R> the type of elements in resulting stream
+     * @param from  the initial value of the index (inclusive)
+     * @param step  the step of the index
+     * @param mapper  the mapper function used to apply to each element
+     * @return the new stream
+     * @since 1.1.6
+     */
+    public <R> Stream<R> mapIndexed(int from, int step, IndexedFunction<? super T, ? extends R> mapper) {
+        return new Stream<R>(new ObjMapIndexed<T, R>(
+                new IndexedIterator<T>(from, step, iterator),
+                mapper));
     }
 
     /**
@@ -687,13 +790,11 @@ public final class Stream<T> {
      * @since 1.1.2
      */
     public Stream<IntPair<T>> indexed(final int from, final int step) {
-        return map(new Function<T, IntPair<T>>() {
-
-            private int index = from - step;
+        return mapIndexed(from, step, new IndexedFunction<T, IntPair<T>>() {
 
             @Override
-            public IntPair<T> apply(T value) {
-                return new IntPair<T>(index += step, value);
+            public IntPair<T> apply(int index, T t) {
+                return new IntPair<T>(index, t);
             }
         });
     }
@@ -997,6 +1098,56 @@ public final class Stream<T> {
     }
 
     /**
+     * Takes elements while the {@code IndexedPredicate} returns {@code true}.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * predicate: (index, value) -&gt; (index + value) &lt; 5
+     * stream: [1, 2, 3,  4, -5, -6, -7]
+     * index:  [0, 1, 2,  3,  4,  5,  6]
+     * sum:    [1, 3, 5,  7, -1, -1, -1]
+     * result: [1, 2]
+     * </pre>
+     *
+     * @param predicate  the {@code IndexedPredicate} used to take elements
+     * @return the new stream
+     * @since 1.1.6
+     */
+    public Stream<T> takeWhileIndexed(IndexedPredicate<? super T> predicate) {
+        return takeWhileIndexed(0, 1, predicate);
+    }
+
+    /**
+     * Takes elements while the {@code IndexedPredicate} returns {@code true}.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * from: 2
+     * step: 2
+     * predicate: (index, value) -&gt; (index + value) &lt; 8
+     * stream: [1, 2, 3,  4, -5, -6, -7]
+     * index:  [2, 4, 6,  8, 10, 12, 14]
+     * sum:    [3, 6, 9, 12,  5,  6,  7]
+     * result: [1, 2]
+     * </pre>
+     *
+     * @param from  the initial value of the index (inclusive)
+     * @param step  the step of the index
+     * @param predicate  the {@code IndexedPredicate} used to take elements
+     * @return the new stream
+     * @since 1.1.6
+     */
+    public Stream<T> takeWhileIndexed(int from, int step, IndexedPredicate<? super T> predicate) {
+        return new Stream<T>(new ObjTakeWhileIndexed<T>(
+                new IndexedIterator<T>(from, step, iterator),
+                predicate));
+    }
+
+    /**
      * Takes elements while the predicate returns {@code false}.
      * Once predicate condition is satisfied by an element, the stream
      * finishes with this element.
@@ -1019,7 +1170,61 @@ public final class Stream<T> {
     }
 
     /**
-     * Drops elements while the predicate is true and returns the rest.
+     * Takes elements while the {@code IndexedPredicate} returns {@code false}.
+     * Once predicate condition is satisfied by an element, the stream
+     * finishes with this element.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * stopPredicate: (index, value) -&gt; (index + value) &gt; 4
+     * stream: [1, 2, 3, 4, 0, 1, 2]
+     * index:  [0, 1, 2, 3, 4, 5, 6]
+     * sum:    [1, 3, 5, 7, 4, 6, 8]
+     * result: [1, 2, 3]
+     * </pre>
+     *
+     * @param stopPredicate  the {@code IndexedPredicate} used to take elements
+     * @return the new stream
+     * @since 1.1.6
+     */
+    public Stream<T> takeUntilIndexed(IndexedPredicate<? super T> stopPredicate) {
+        return takeUntilIndexed(0, 1, stopPredicate);
+    }
+
+    /**
+     * Takes elements while the {@code IndexedPredicate} returns {@code false}.
+     * Once predicate condition is satisfied by an element, the stream
+     * finishes with this element.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * from: 2
+     * step: 2
+     * stopPredicate: (index, value) -&gt; (index + value) &gt; 8
+     * stream: [1, 2, 3,  4,  0,  1,  2]
+     * index:  [2, 4, 6,  8, 10, 11, 14]
+     * sum:    [3, 6, 9, 12, 10, 12, 16]
+     * result: [1, 2, 3]
+     * </pre>
+     *
+     * @param from  the initial value of the index (inclusive)
+     * @param step  the step of the index
+     * @param stopPredicate  the {@code IndexedPredicate} used to take elements
+     * @return the new stream
+     * @since 1.1.6
+     */
+    public Stream<T> takeUntilIndexed(int from, int step, IndexedPredicate<? super T> stopPredicate) {
+        return new Stream<T>(new ObjTakeUntilIndexed<T>(
+                new IndexedIterator<T>(from, step, iterator),
+                stopPredicate));
+    }
+
+    /**
+     * Drops elements while the predicate is true, then returns the rest.
      *
      * <p>This is an intermediate operation.
      *
@@ -1035,6 +1240,56 @@ public final class Stream<T> {
      */
     public Stream<T> dropWhile(final Predicate<? super T> predicate) {
         return new Stream<T>(new ObjDropWhile<T>(iterator, predicate));
+    }
+
+    /**
+     * Drops elements while the {@code IndexedPredicate} is true, then returns the rest.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * predicate: (index, value) -&gt; (index + value) &lt; 5
+     * stream: [1, 2, 3, 4, 0, 1, 2]
+     * index:  [0, 1, 2, 3, 4, 5, 6]
+     * sum:    [1, 3, 5, 7, 4, 6, 8]
+     * result: [3, 4, 0, 1, 2]
+     * </pre>
+     *
+     * @param predicate  the {@code IndexedPredicate} used to drop elements
+     * @return the new stream
+     * @since 1.1.6
+     */
+    public Stream<T> dropWhileIndexed(IndexedPredicate<? super T> predicate) {
+        return dropWhileIndexed(0, 1, predicate);
+    }
+
+    /**
+     * Drops elements while the {@code IndexedPredicate} is true, then returns the rest.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * from: 2
+     * step: 2
+     * predicate: (index, value) -&gt; (index + value) &lt; 10
+     * stream: [1, 2, 3,  4, -5, -6, -7]
+     * index:  [2, 4, 6,  8, 10, 12, 14]
+     * sum:    [3, 6, 9, 12,  5,  6,  7]
+     * result: [4, -5, -6, -7]
+     * </pre>
+     *
+     * @param from  the initial value of the index (inclusive)
+     * @param step  the step of the index
+     * @param predicate  the {@code IndexedPredicate} used to drop elements
+     * @return the new stream
+     * @since 1.1.6
+     */
+    public Stream<T> dropWhileIndexed(int from, int step, IndexedPredicate<? super T> predicate) {
+        return new Stream<T>(new ObjDropWhileIndexed<T>(
+                new IndexedIterator<T>(from, step, iterator),
+                predicate));
     }
 
     /**
@@ -1108,6 +1363,36 @@ public final class Stream<T> {
     }
 
     /**
+     * Performs the given indexed action on each element.
+     *
+     * <p>This is a terminal operation.
+     *
+     * @param action  the action to be performed on each element
+     * @since 1.1.6
+     */
+    public void forEachIndexed(IndexedConsumer<? super T> action) {
+        forEachIndexed(0, 1, action);
+    }
+
+    /**
+     * Performs the given indexed action on each element.
+     *
+     * <p>This is a terminal operation.
+     *
+     * @param from  the initial value of the index (inclusive)
+     * @param step  the step of the index
+     * @param action  the action to be performed on each element
+     * @since 1.1.6
+     */
+    public void forEachIndexed(int from, int step, IndexedConsumer<? super T> action) {
+        int index = from;
+        while (iterator.hasNext()) {
+            action.accept(index, iterator.next());
+            index += step;
+        }
+    }
+
+    /**
      * Reduces the elements using provided identity value and the associative accumulation function.
      *
      * <p>This is a terminal operation.
@@ -1130,6 +1415,68 @@ public final class Stream<T> {
         while (iterator.hasNext()) {
             final T value = iterator.next();
             result = accumulator.apply(result, value);
+        }
+        return result;
+    }
+
+    /**
+     * Reduces the elements using provided identity value and
+     * the associative accumulation indexed function.
+     *
+     * <p>This is a terminal operation.
+     *
+     * <p>Example:
+     * <pre>
+     * identity: 10
+     * accumulator: (index, a, b) -&gt; index + a + b
+     * stream: [1, 2, 3, 4, 5]
+     * index:  [0, 1, 2, 3, 4]
+     * result: 10 + 1 + 3 + 5 + 7 + 9 = 35
+     * </pre>
+     *
+     * @param <R> the type of the result
+     * @param identity  the initial value
+     * @param accumulator  the accumulation function
+     * @return the result of the reduction
+     * @since 1.1.6
+     */
+    public <R> R reduceIndexed(R identity, IndexedBiFunction<? super R, ? super T, ? extends R> accumulator) {
+        return reduceIndexed(0, 1, identity, accumulator);
+    }
+
+    /**
+     * Reduces the elements using provided identity value and
+     * the associative accumulation indexed function.
+     *
+     * <p>This is a terminal operation.
+     *
+     * <p>Example:
+     * <pre>
+     * from: 1
+     * step: 2
+     * identity: 10
+     * accumulator: (index, a, b) -&gt; index + a + b
+     * stream: [1, 2, 3, 4, 5]
+     * index:  [1, 3, 5, 7, 9]
+     * result: 10 + 2 + 5 + 8 + 11 + 14 = 50
+     * </pre>
+     *
+     * @param <R> the type of the result
+     * @param from  the initial value of the index (inclusive)
+     * @param step  the step of the index
+     * @param identity  the initial value
+     * @param accumulator  the accumulation function
+     * @return the result of the reduction
+     * @since 1.1.6
+     */
+    public <R> R reduceIndexed(int from, int step, R identity,
+            IndexedBiFunction<? super R, ? super T, ? extends R> accumulator) {
+        R result = identity;
+        int index = from;
+        while (iterator.hasNext()) {
+            final T value = iterator.next();
+            result = accumulator.apply(index, result, value);
+            index += step;
         }
         return result;
     }

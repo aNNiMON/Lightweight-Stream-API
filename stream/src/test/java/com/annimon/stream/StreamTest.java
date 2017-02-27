@@ -5,6 +5,9 @@ import com.annimon.stream.function.BiFunction;
 import com.annimon.stream.function.BinaryOperator;
 import com.annimon.stream.function.Consumer;
 import com.annimon.stream.function.Function;
+import com.annimon.stream.function.IndexedConsumer;
+import com.annimon.stream.function.IndexedFunction;
+import com.annimon.stream.function.IndexedPredicate;
 import com.annimon.stream.function.IntUnaryOperator;
 import com.annimon.stream.function.LongUnaryOperator;
 import com.annimon.stream.function.Predicate;
@@ -397,6 +400,42 @@ public class StreamTest {
     }
 
     @Test
+    public void testFilterIndexed() {
+        Stream.rangeClosed(4, 8)
+                .filterIndexed(new IndexedPredicate<Integer>() {
+                    @Override
+                    public boolean test(int index, Integer value) {
+                        return (index * value) % 2 == 0;
+                    }
+                })
+                .custom(assertElements(is(Arrays.asList(
+                       4, // (0 * 4)
+                          // (1 * 5)
+                       6, // (2 * 6)
+                          // (3 * 7)
+                       8  // (4 * 8)
+                ))));
+    }
+
+    @Test
+    public void testFilterIndexedWithStartAndStep() {
+        Stream.rangeClosed(4, 8)
+                .filterIndexed(20, -5, new IndexedPredicate<Integer>() {
+                    @Override
+                    public boolean test(int index, Integer value) {
+                        return (index * value) % 2 == 0;
+                    }
+                })
+                .custom(assertElements(is(Arrays.asList(
+                       4, // (20 * 4)
+                          // (15 * 5)
+                       6, // (10 * 6)
+                          // (5  * 7)
+                       8  // (0  * 8)
+                ))));
+    }
+
+    @Test
     public void testFilterNot() {
         final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
         Stream.range(0, 10)
@@ -441,10 +480,26 @@ public class StreamTest {
                 .next();
     }
 
+    @Test(expected = NoSuchElementException.class)
+    public void testFilterIndexedIteratorNextOnEmpty() {
+        Stream.<Integer>empty()
+                .filterIndexed(IndexedPredicate.Util.wrap(Functions.remainder(2)))
+                .iterator()
+                .next();
+    }
+
     @Test(expected = UnsupportedOperationException.class)
     public void testFilterIteratorRemove() {
         Stream.range(0, 10)
                 .filter(Functions.remainder(2))
+                .iterator()
+                .remove();
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testFilterIndexedIteratorRemove() {
+        Stream.range(0, 10)
+                .filterIndexed(IndexedPredicate.Util.wrap(Functions.remainder(2)))
                 .iterator()
                 .remove();
     }
@@ -493,6 +548,42 @@ public class StreamTest {
                 .filter(predicate)
                 .forEach(consumer);
         assertEquals("23489", consumer.toString());
+    }
+
+    @Test
+    public void testMapIndexed() {
+        Stream.rangeClosed(4, 8)
+                .mapIndexed(new IndexedFunction<Integer, Integer>() {
+                    @Override
+                    public Integer apply(int index, Integer t) {
+                        return index * t;
+                    }
+                })
+                .custom(assertElements(is(Arrays.asList(
+                       0,  // (0 * 4)
+                       5,  // (1 * 5)
+                       12, // (2 * 6)
+                       21, // (3 * 7)
+                       32  // (4 * 8)
+                ))));
+    }
+
+    @Test
+    public void testMapIndexedWithStartAndStep() {
+        Stream.rangeClosed(4, 8)
+                .mapIndexed(20, -5, new IndexedFunction<Integer, Integer>() {
+                    @Override
+                    public Integer apply(int index, Integer t) {
+                        return index * t;
+                    }
+                })
+                .custom(assertElements(is(Arrays.asList(
+                       80, // (20 * 4)
+                       75, // (15 * 5)
+                       60, // (10 * 6)
+                       35, // (5  * 7)
+                       0   // (0  * 8)
+                ))));
     }
 
     @Test
@@ -1002,18 +1093,31 @@ public class StreamTest {
     }
 
     @Test
-    public void testTakeUntil() {
-        final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
-        long count = Stream.of(2, 4, 6, 7, 8, 10, 11)
-                .takeUntil(Predicate.Util.negate(Functions.remainder(2)))
-                .peek(consumer)
-                .count();
-        assertEquals(4, count);
-        assertEquals("2467", consumer.toString());
+    public void testTakeWhileIndexed() {
+        Stream.of(1, 2, 3,  4, -5, -6, -7)
+                .takeWhileIndexed(new IndexedPredicate<Integer>() {
+                    @Override
+                    public boolean test(int index, Integer value) {
+                        return index + value < 5;
+                    }
+                })
+                .custom(assertElements(is(Arrays.asList(
+                        1, 2
+                ))));
+    }
 
-        Stream<Integer> stream = Stream.<Integer>empty()
-                .takeUntil(Functions.remainder(2));
-        assertThat(stream, isEmpty());
+    @Test
+    public void testTakeWhileIndexedWithStartAndStep() {
+        Stream.of(1, 2, 3,  4, -5, -6, -7)
+                .takeWhileIndexed(2, 2, new IndexedPredicate<Integer>() {
+                    @Override
+                    public boolean test(int index, Integer value) {
+                        return index + value < 8;
+                    }
+                })
+                .custom(assertElements(is(Arrays.asList(
+                        1, 2
+                ))));
     }
 
     @Test
@@ -1030,6 +1134,49 @@ public class StreamTest {
                 .takeWhile(Functions.remainder(1))
                 .count();
         assertEquals(7, count);
+    }
+
+    @Test
+    public void testTakeUntil() {
+        final PrintConsumer<Integer> consumer = new PrintConsumer<Integer>();
+        long count = Stream.of(2, 4, 6, 7, 8, 10, 11)
+                .takeUntil(Predicate.Util.negate(Functions.remainder(2)))
+                .peek(consumer)
+                .count();
+        assertEquals(4, count);
+        assertEquals("2467", consumer.toString());
+
+        Stream<Integer> stream = Stream.<Integer>empty()
+                .takeUntil(Functions.remainder(2));
+        assertThat(stream, isEmpty());
+    }
+
+    @Test
+    public void testTakeUntilIndexed() {
+        Stream.of(1, 2, 3, 4, 0, 1, 2)
+                .takeUntilIndexed(new IndexedPredicate<Integer>() {
+                    @Override
+                    public boolean test(int index, Integer value) {
+                        return (index + value) > 4;
+                    }
+                })
+                .custom(assertElements(is(Arrays.asList(
+                        1, 2, 3
+                ))));
+    }
+
+    @Test
+    public void testTakeUntilIndexedWithStartAndStep() {
+        Stream.of(1, 2, 3, 4, 0, 1, 2)
+                .takeUntilIndexed(2, 2, new IndexedPredicate<Integer>() {
+                    @Override
+                    public boolean test(int index, Integer value) {
+                        return (index + value) > 8;
+                    }
+                })
+                .custom(assertElements(is(Arrays.asList(
+                        1, 2, 3
+                ))));
     }
 
     @Test
@@ -1057,6 +1204,34 @@ public class StreamTest {
                 Stream.of(2, 4, 6, 7, 8, 10, 11)
                         .dropWhile(Functions.remainder(1)),
                 isEmpty());
+    }
+
+    @Test
+    public void testDropWhileIndexed() {
+        Stream.of(1, 2, 3, 4, 0, 1, 2)
+                .dropWhileIndexed(new IndexedPredicate<Integer>() {
+                    @Override
+                    public boolean test(int index, Integer value) {
+                        return (index + value) < 5;
+                    }
+                })
+                .custom(assertElements(is(Arrays.asList(
+                        3, 4, 0, 1, 2
+                ))));
+    }
+
+    @Test
+    public void testDropWhileIndexedWithStartAndStep() {
+        Stream.of(1, 2, 3, 4, -5, -6, -7)
+                .dropWhileIndexed(2, 2, new IndexedPredicate<Integer>() {
+                    @Override
+                    public boolean test(int index, Integer value) {
+                        return (index + value) < 10;
+                    }
+                })
+                .custom(assertElements(is(Arrays.asList(
+                        4, -5, -6, -7
+                ))));
     }
 
     @Test
@@ -1183,6 +1358,40 @@ public class StreamTest {
     }
 
     @Test
+    public void testForEachIndexed() {
+        final List<IntPair<String>> result = new ArrayList<IntPair<String>>();
+        Stream.of("a", "b", "c")
+                .forEachIndexed(new IndexedConsumer<String>() {
+                    @Override
+                    public void accept(int index, String t) {
+                        result.add(new IntPair<String>(index, t));
+                    }
+                });
+        assertThat(result, is(Arrays.asList(
+                new IntPair<String>(0, "a"),
+                new IntPair<String>(1, "b"),
+                new IntPair<String>(2, "c")
+        )));
+    }
+
+    @Test
+    public void testForEachIndexedWithStartAndStep() {
+        final List<IntPair<String>> result = new ArrayList<IntPair<String>>();
+        Stream.of("a", "b", "c")
+                .forEachIndexed(50, -10, new IndexedConsumer<String>() {
+                    @Override
+                    public void accept(int index, String t) {
+                        result.add(new IntPair<String>(index, t));
+                    }
+                });
+        assertThat(result, is(Arrays.asList(
+                new IntPair<String>(50, "a"),
+                new IntPair<String>(40, "b"),
+                new IntPair<String>(30, "c")
+        )));
+    }
+
+    @Test
     public void testReduceSumFromZero() {
         int result = Stream.range(0, 10)
                 .reduce(0, Functions.addition());
@@ -1209,6 +1418,20 @@ public class StreamTest {
     }
 
     @Test
+    public void testReduceIndexed() {
+        int result = Stream.rangeClosed(1, 5)
+                .reduceIndexed(10, Functions.indexedAddition());
+        assertEquals(35, result);
+    }
+
+    @Test
+    public void testReduceIndexedWithStartAndStep() {
+        int result = Stream.rangeClosed(1, 5)
+                .reduceIndexed(1, 2, 0, Functions.indexedAddition());
+        assertEquals(40, result);
+    }
+
+    @Test
     public void testReduceOptional() {
         Optional<Integer> result = Stream.range(0, 10)
                 .reduce(Functions.addition());
@@ -1217,7 +1440,7 @@ public class StreamTest {
         assertNotNull(result.get());
         assertEquals(45, (int) result.get());
     }
-
+    
     @Test
     public void testReduceOptionalOnEmptyStream() {
         Optional<Integer> result = Stream.<Integer>empty()
