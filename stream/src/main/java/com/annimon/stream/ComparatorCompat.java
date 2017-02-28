@@ -301,7 +301,7 @@ public final class ComparatorCompat {
          * @see ComparatorCompat#reverseOrder()
          */
         public Chain<T> reversed() {
-            return new Chain(ComparatorCompat.reversed(comparator));
+            return new Chain<T>(ComparatorCompat.<T>reversed(comparator));
         }
 
         /**
@@ -313,7 +313,7 @@ public final class ComparatorCompat {
          * @see ComparatorCompat#thenComparing(java.util.Comparator, java.util.Comparator)
          */
         public Chain<T> thenComparing(Comparator<? super T> other) {
-            return new Chain(ComparatorCompat.thenComparing(comparator, other));
+            return new Chain<T>(ComparatorCompat.<T>thenComparing(comparator, other));
         }
 
         /**

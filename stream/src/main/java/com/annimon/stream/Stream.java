@@ -94,6 +94,7 @@ public final class Stream<T> {
      * @return the new stream
      * @since 1.1.5
      */
+    @SuppressWarnings("unchecked")
     public static <T> Stream<T> ofNullable(T element) {
         return (element == null) ? Stream.<T>empty() : Stream.of(element);
     }
