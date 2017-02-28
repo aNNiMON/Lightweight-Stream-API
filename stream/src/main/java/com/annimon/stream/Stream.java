@@ -560,6 +560,7 @@ public final class Stream<T> {
      * <p>This is an intermediate operation.
      *
      * @return the new stream
+     * @since 1.1.6
      */
     public Stream<T> withoutNulls() {
         return filter(Predicate.Util.<T>notNull());
@@ -571,6 +572,7 @@ public final class Stream<T> {
      * <p>This is an intermediate operation.
      *
      * @return the new stream
+     * @since 1.1.6
      */
     public Stream<T> nullsOnly() {
         return filterNot(Predicate.Util.<T>notNull());
