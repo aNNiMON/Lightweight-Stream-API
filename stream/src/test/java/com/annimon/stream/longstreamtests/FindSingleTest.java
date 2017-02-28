@@ -3,9 +3,9 @@ package com.annimon.stream.longstreamtests;
 import com.annimon.stream.Functions;
 import com.annimon.stream.LongStream;
 import com.annimon.stream.OptionalLong;
-import com.annimon.stream.test.hamcrest.OptionalLongMatcher;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.OptionalLongMatcher.hasValue;
+import static com.annimon.stream.test.hamcrest.OptionalLongMatcher.isEmpty;
 import static org.junit.Assert.assertThat;
 
 public final class FindSingleTest {
@@ -13,7 +13,7 @@ public final class FindSingleTest {
     @Test
     public void testFindSingleOnEmptyStream() {
         assertThat(LongStream.empty().findSingle(),
-                OptionalLongMatcher.isEmpty());
+                isEmpty());
     }
 
     @Test
@@ -32,7 +32,7 @@ public final class FindSingleTest {
                 .filter(Functions.remainderLong(2))
                 .findSingle();
 
-        assertThat(result, OptionalLongMatcher.isEmpty());
+        assertThat(result, isEmpty());
     }
 
     @Test

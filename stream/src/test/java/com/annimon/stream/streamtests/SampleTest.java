@@ -9,21 +9,19 @@ public final class SampleTest {
 
     @Test
     public void testSample() {
-        Stream.of(1, 2, 3, 1, 2, 3, 1, 2, 3)
+        Stream.of(      1, 2, 3, 1, 2, 3, 1, 2, 3)
                 .sample(3)
                 .custom(assertElements(contains(
-                        1, 1, 1
+                        1,       1,       1
                 )));
     }
 
     @Test
     public void testSampleWithStep1() {
-        Stream.of(1, 2, 3, 1, 2, 3, 1, 2, 3)
+        Stream.of(      1, 2, 3, 1, 2, 3, 1, 2, 3)
                 .sample(1)
                 .custom(assertElements(contains(
-                        1, 2, 3,
-                        1, 2, 3,
-                        1, 2, 3
+                        1, 2, 3, 1, 2, 3, 1, 2, 3
                 )));
     }
 

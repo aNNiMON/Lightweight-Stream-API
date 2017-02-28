@@ -2,8 +2,8 @@ package com.annimon.stream.intstreamtests;
 
 import com.annimon.stream.IntStream;
 import org.junit.Test;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static com.annimon.stream.test.hamcrest.IntStreamMatcher.assertElements;
+import static org.hamcrest.Matchers.arrayContaining;
 import static org.junit.Assert.assertTrue;
 
 public final class SkipTest {
@@ -24,16 +24,20 @@ public final class SkipTest {
 
     @Test
     public void testSkipZero() {
-         assertTrue(IntStream.of(1,2).skip(0).count() == 2);
+        IntStream.of(1,2)
+                .skip(0)
+                .custom(assertElements(arrayContaining(
+                        1, 2
+                )));
     }
 
     @Test
     public void testSkipMoreThanCount() {
-        int[] expected = {2, 3, 4, 5, 6};
-        int[] actual = IntStream.range(0, 10)
+        IntStream.range(0, 10)
                 .skip(2)
                 .limit(5)
-                .toArray();
-        assertThat(actual, is(expected));
+                .custom(assertElements(arrayContaining(
+                        2, 3, 4, 5, 6
+                )));
     }
 }

@@ -1,11 +1,10 @@
 package com.annimon.stream.streamtests;
 
-import com.annimon.stream.IntStream;
 import com.annimon.stream.Stream;
 import com.annimon.stream.function.ToIntFunction;
 import org.junit.Test;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static com.annimon.stream.test.hamcrest.IntStreamMatcher.assertElements;
+import static org.hamcrest.Matchers.arrayContaining;
 
 public final class MapToIntTest {
 
@@ -20,9 +19,10 @@ public final class MapToIntTest {
             }
         };
 
-        final int[] expected = { 4, 9, 16, 64, 625 };
-        IntStream stream = Stream.of("[2]", "[3]", "[4]", "[8]", "[25]")
-                .mapToInt(stringToSquareInt);
-        assertThat(stream.toArray(), is(expected));
+        Stream.of("[2]", "[3]", "[4]", "[8]", "[25]")
+                .mapToInt(stringToSquareInt)
+                .custom(assertElements(arrayContaining(
+                        4, 9, 16, 64, 625
+                )));
     }
 }

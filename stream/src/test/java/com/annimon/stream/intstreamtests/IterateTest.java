@@ -4,8 +4,8 @@ import com.annimon.stream.IntStream;
 import com.annimon.stream.function.IntPredicate;
 import com.annimon.stream.function.IntUnaryOperator;
 import org.junit.Test;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static com.annimon.stream.test.hamcrest.IntStreamMatcher.assertElements;
+import static org.hamcrest.Matchers.arrayContaining;
 import static org.junit.Assert.assertTrue;
 
 public final class IterateTest {
@@ -42,8 +42,9 @@ public final class IterateTest {
                 return t + 5;
             }
         };
-        IntStream stream = IntStream.iterate(0, condition, increment);
-
-        assertThat(stream.toArray(), is(new int[] {0, 5, 10, 15}));
+        IntStream.iterate(0, condition, increment)
+                .custom(assertElements(arrayContaining(
+                        0, 5, 10, 15
+                )));
     }
 }

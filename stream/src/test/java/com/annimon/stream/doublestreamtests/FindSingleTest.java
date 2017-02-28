@@ -3,9 +3,9 @@ package com.annimon.stream.doublestreamtests;
 import com.annimon.stream.DoubleStream;
 import com.annimon.stream.Functions;
 import com.annimon.stream.OptionalDouble;
-import com.annimon.stream.test.hamcrest.OptionalDoubleMatcher;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.OptionalDoubleMatcher.hasValue;
+import static com.annimon.stream.test.hamcrest.OptionalDoubleMatcher.isEmpty;
 import static org.junit.Assert.assertThat;
 
 public final class FindSingleTest {
@@ -13,7 +13,7 @@ public final class FindSingleTest {
     @Test
     public void testFindSingleOnEmptyStream() {
         assertThat(DoubleStream.empty().findSingle(),
-                OptionalDoubleMatcher.isEmpty());
+                isEmpty());
     }
 
     @Test
@@ -32,7 +32,7 @@ public final class FindSingleTest {
                 .filter(Functions.greaterThan(Math.PI))
                 .findSingle();
 
-        assertThat(result, OptionalDoubleMatcher.isEmpty());
+        assertThat(result, isEmpty());
     }
 
     @Test

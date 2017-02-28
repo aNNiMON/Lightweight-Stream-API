@@ -2,17 +2,19 @@ package com.annimon.stream.doublestreamtests;
 
 import com.annimon.stream.DoubleStream;
 import org.junit.Test;
-import static com.annimon.stream.test.hamcrest.DoubleStreamMatcher.elements;
-import static com.annimon.stream.test.hamcrest.DoubleStreamMatcher.isEmpty;
+import static com.annimon.stream.test.hamcrest.DoubleStreamMatcher.assertElements;
+import static com.annimon.stream.test.hamcrest.DoubleStreamMatcher.assertIsEmpty;
 import static org.hamcrest.Matchers.arrayContaining;
-import static org.junit.Assert.assertThat;
 
 public final class LimitTest {
 
     @Test
     public void testLimit() {
-        assertThat(DoubleStream.of(0.1, 0.2, 0.3).limit(2),
-                elements(arrayContaining(0.1, 0.2)));
+        DoubleStream.of(0.1, 0.2, 0.3)
+                .limit(2)
+                .custom(assertElements(arrayContaining(
+                        0.1, 0.2
+                )));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -22,13 +24,17 @@ public final class LimitTest {
 
     @Test
     public void testLimitZero() {
-        assertThat(DoubleStream.of(0.1, 0.2, 0.3).limit(0),
-                isEmpty());
+        DoubleStream.of(0.1, 0.2, 0.3)
+                .limit(0)
+                .custom(assertIsEmpty());
     }
 
     @Test
     public void testLimitMoreThanCount() {
-        assertThat(DoubleStream.of(0.1, 0.2, 0.3).limit(5),
-                elements(arrayContaining(0.1, 0.2, 0.3)));
+        DoubleStream.of(0.1, 0.2, 0.3)
+                .limit(5)
+                .custom(assertElements(arrayContaining(
+                        0.1, 0.2, 0.3
+                )));
     }
 }

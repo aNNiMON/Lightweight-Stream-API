@@ -4,7 +4,7 @@ import com.annimon.stream.DoubleStream;
 import com.annimon.stream.PrimitiveIterator;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.DoubleStreamMatcher.elements;
-import static org.hamcrest.Matchers.array;
+import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.Matchers.closeTo;
 import static org.junit.Assert.assertThat;
 
@@ -28,7 +28,7 @@ public final class OfPrimitiveIteratorTest {
                 return index + 0.0021;
             }
         });
-        assertThat(stream, elements(array(
+        assertThat(stream, elements(arrayContaining(
                 closeTo(1.0021, 0.00001),
                 closeTo(2.0021, 0.00001),
                 closeTo(3.0021, 0.00001)

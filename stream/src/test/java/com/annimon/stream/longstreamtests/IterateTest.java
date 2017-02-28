@@ -4,10 +4,8 @@ import com.annimon.stream.LongStream;
 import com.annimon.stream.function.LongPredicate;
 import com.annimon.stream.function.LongUnaryOperator;
 import org.junit.Test;
-import static com.annimon.stream.test.hamcrest.LongStreamMatcher.elements;
+import static com.annimon.stream.test.hamcrest.LongStreamMatcher.assertElements;
 import static org.hamcrest.Matchers.arrayContaining;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 
 public final class IterateTest {
 
@@ -20,9 +18,11 @@ public final class IterateTest {
             }
         };
 
-        assertThat(LongStream.iterate(0L, operator).limit(4),
-                elements(arrayContaining(0L, 1000000L, 2000000L, 3000000L))
-        );
+        LongStream.iterate(0L, operator)
+                .limit(4)
+                .custom(assertElements(arrayContaining(
+                        0L, 1000000L, 2000000L, 3000000L
+                )));
     }
 
     @Test(expected = NullPointerException.class)
@@ -44,8 +44,9 @@ public final class IterateTest {
                 return t + 5;
             }
         };
-        LongStream stream = LongStream.iterate(0, condition, increment);
-
-        assertThat(stream.toArray(), is(new long[] {0, 5, 10, 15}));
+        LongStream.iterate(0, condition, increment)
+                .custom(assertElements(arrayContaining(
+                        0L, 5L, 10L, 15L
+                )));
     }
 }

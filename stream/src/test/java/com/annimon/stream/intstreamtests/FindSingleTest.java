@@ -3,16 +3,16 @@ package com.annimon.stream.intstreamtests;
 import com.annimon.stream.Functions;
 import com.annimon.stream.IntStream;
 import com.annimon.stream.OptionalInt;
-import com.annimon.stream.test.hamcrest.OptionalIntMatcher;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.hasValue;
+import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.isEmpty;
 import static org.junit.Assert.assertThat;
 
 public final class FindSingleTest {
 
     @Test
     public void testFindSingleOnEmptyStream() {
-        assertThat(IntStream.empty().findSingle(), OptionalIntMatcher.isEmpty());
+        assertThat(IntStream.empty().findSingle(), isEmpty());
     }
 
     @Test
@@ -33,7 +33,7 @@ public final class FindSingleTest {
                 .filter(Functions.remainderInt(6))
                 .findSingle();
 
-        assertThat(result, OptionalIntMatcher.isEmpty());
+        assertThat(result, isEmpty());
     }
 
     @Test

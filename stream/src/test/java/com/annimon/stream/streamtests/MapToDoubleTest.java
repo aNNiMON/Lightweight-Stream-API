@@ -1,15 +1,16 @@
 package com.annimon.stream.streamtests;
 
-import com.annimon.stream.DoubleStream;
 import com.annimon.stream.Stream;
 import com.annimon.stream.function.ToDoubleFunction;
 import org.junit.Test;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static com.annimon.stream.test.hamcrest.DoubleStreamMatcher.assertElements;
+import static org.hamcrest.Matchers.arrayContaining;
+import static org.hamcrest.Matchers.closeTo;
 
 public final class MapToDoubleTest {
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testMapToDouble() {
         final ToDoubleFunction<String> stringToDouble = new ToDoubleFunction<String>() {
             @Override
@@ -17,9 +18,12 @@ public final class MapToDoubleTest {
                 return Double.parseDouble(t);
             }
         };
-        double[] expected = { 1.23, 4.56789, 10.1112 };
-        DoubleStream stream = Stream.of("1.23", "4.56789", "10.1112")
-                .mapToDouble(stringToDouble);
-        assertThat(stream.toArray(), is(expected));
+        Stream.of("1.23", "4.56789", "10.1112")
+                .mapToDouble(stringToDouble)
+                .custom(assertElements(arrayContaining(
+                        closeTo(1.23, 0.000001),
+                        closeTo(4.56789, 0.000001),
+                        closeTo(10.1112, 0.000001)
+                )));
     }
 }

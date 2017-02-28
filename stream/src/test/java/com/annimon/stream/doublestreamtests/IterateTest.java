@@ -4,10 +4,9 @@ import com.annimon.stream.DoubleStream;
 import com.annimon.stream.function.DoublePredicate;
 import com.annimon.stream.function.DoubleUnaryOperator;
 import org.junit.Test;
-import static com.annimon.stream.test.hamcrest.DoubleStreamMatcher.elements;
-import static org.hamcrest.Matchers.array;
+import static com.annimon.stream.test.hamcrest.DoubleStreamMatcher.assertElements;
+import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.Matchers.closeTo;
-import static org.junit.Assert.assertThat;
 
 public final class IterateTest {
 
@@ -21,11 +20,12 @@ public final class IterateTest {
             }
         };
 
-        assertThat(DoubleStream.iterate(0.0, operator).limit(3),
-                elements(array(
-                    closeTo(0.00, 0.00001),
-                    closeTo(0.01, 0.00001),
-                    closeTo(0.02, 0.00001)
+        DoubleStream.iterate(0.0, operator)
+                .limit(3)
+                .custom(assertElements(arrayContaining(
+                        closeTo(0.00, 0.00001),
+                        closeTo(0.01, 0.00001),
+                        closeTo(0.02, 0.00001)
                 ))
         );
     }
@@ -50,14 +50,13 @@ public final class IterateTest {
                 return t + 0.05;
             }
         };
-        DoubleStream stream = DoubleStream.iterate(0, condition, increment);
 
-        assertThat(stream,
-                elements(array(
-                    closeTo(0.00, 0.00001),
-                    closeTo(0.05, 0.00001),
-                    closeTo(0.10, 0.00001),
-                    closeTo(0.15, 0.00001)
+        DoubleStream.iterate(0, condition, increment)
+                .custom(assertElements(arrayContaining(
+                        closeTo(0.00, 0.00001),
+                        closeTo(0.05, 0.00001),
+                        closeTo(0.10, 0.00001),
+                        closeTo(0.15, 0.00001)
                 ))
         );
     }

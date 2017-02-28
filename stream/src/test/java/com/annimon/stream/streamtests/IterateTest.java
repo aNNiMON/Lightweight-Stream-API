@@ -6,10 +6,10 @@ import com.annimon.stream.function.BinaryOperator;
 import com.annimon.stream.function.Predicate;
 import com.annimon.stream.function.UnaryOperator;
 import java.math.BigInteger;
-import java.util.Arrays;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.OptionalMatcher.isPresent;
-import static com.annimon.stream.test.hamcrest.StreamMatcher.elements;
+import static com.annimon.stream.test.hamcrest.StreamMatcher.assertElements;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -75,8 +75,9 @@ public final class IterateTest {
                 return t + 5;
             }
         };
-        Stream<Integer> stream = Stream.iterate(0, condition, increment);
-
-        assertThat(stream, elements(is(Arrays.asList(0, 5, 10, 15))));
+        Stream.iterate(0, condition, increment)
+                .custom(assertElements(contains(
+                        0, 5, 10, 15
+                )));
     }
 }

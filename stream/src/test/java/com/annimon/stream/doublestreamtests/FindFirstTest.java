@@ -1,9 +1,9 @@
 package com.annimon.stream.doublestreamtests;
 
 import com.annimon.stream.DoubleStream;
-import com.annimon.stream.test.hamcrest.OptionalDoubleMatcher;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.OptionalDoubleMatcher.hasValue;
+import static com.annimon.stream.test.hamcrest.OptionalDoubleMatcher.isEmpty;
 import static org.junit.Assert.assertThat;
 
 public final class FindFirstTest {
@@ -14,6 +14,6 @@ public final class FindFirstTest {
                 hasValue(0.012));
 
         assertThat(DoubleStream.empty().findFirst(),
-                OptionalDoubleMatcher.isEmpty());
+                isEmpty());
     }
 }

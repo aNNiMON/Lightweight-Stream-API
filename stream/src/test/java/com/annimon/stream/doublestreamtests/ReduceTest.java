@@ -2,8 +2,9 @@ package com.annimon.stream.doublestreamtests;
 
 import com.annimon.stream.DoubleStream;
 import com.annimon.stream.function.DoubleBinaryOperator;
-import com.annimon.stream.test.hamcrest.OptionalDoubleMatcher;
 import org.junit.Test;
+import static com.annimon.stream.test.hamcrest.OptionalDoubleMatcher.hasValueThat;
+import static com.annimon.stream.test.hamcrest.OptionalDoubleMatcher.isEmpty;
 import static org.hamcrest.Matchers.closeTo;
 import static org.junit.Assert.assertThat;
 
@@ -40,7 +41,7 @@ public final class ReduceTest {
             public double applyAsDouble(double left, double right) {
                 return left + right;
             }
-        }), OptionalDoubleMatcher.hasValueThat(closeTo(119.119, 0.0001)));
+        }), hasValueThat(closeTo(119.119, 0.0001)));
     }
 
     @Test
@@ -50,6 +51,6 @@ public final class ReduceTest {
             public double applyAsDouble(double left, double right) {
                 return left + right;
             }
-        }), OptionalDoubleMatcher.isEmpty());
+        }), isEmpty());
     }
 }

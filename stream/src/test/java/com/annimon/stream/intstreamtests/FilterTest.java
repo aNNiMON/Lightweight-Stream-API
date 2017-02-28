@@ -5,15 +5,19 @@ import com.annimon.stream.IntStream;
 import com.annimon.stream.function.IntPredicate;
 import com.annimon.stream.function.IntUnaryOperator;
 import org.junit.Test;
+import static com.annimon.stream.test.hamcrest.IntStreamMatcher.assertElements;
+import static org.hamcrest.Matchers.arrayContaining;
 import static org.junit.Assert.assertTrue;
 
 public final class FilterTest {
 
     @Test
     public void testFilter() {
-        assertTrue(IntStream.rangeClosed(1, 10).filter(Functions.remainderInt(2)).count() == 5);
-
-        assertTrue(IntStream.rangeClosed(1, 10).filter(Functions.remainderInt(2)).sum() == 30);
+        IntStream.rangeClosed(1, 10)
+                .filter(Functions.remainderInt(2))
+                .custom(assertElements(arrayContaining(
+                        2, 4, 6, 8, 10
+                )));
 
         assertTrue(IntStream.iterate(0, new IntUnaryOperator() {
             @Override

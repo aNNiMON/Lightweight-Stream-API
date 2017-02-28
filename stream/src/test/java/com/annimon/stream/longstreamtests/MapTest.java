@@ -3,10 +3,9 @@ package com.annimon.stream.longstreamtests;
 import com.annimon.stream.LongStream;
 import com.annimon.stream.function.LongUnaryOperator;
 import org.junit.Test;
-import static com.annimon.stream.test.hamcrest.LongStreamMatcher.elements;
-import static com.annimon.stream.test.hamcrest.LongStreamMatcher.isEmpty;
+import static com.annimon.stream.test.hamcrest.LongStreamMatcher.assertElements;
+import static com.annimon.stream.test.hamcrest.LongStreamMatcher.assertIsEmpty;
 import static org.hamcrest.Matchers.arrayContaining;
-import static org.junit.Assert.assertThat;
 
 public final class MapTest {
 
@@ -18,10 +17,14 @@ public final class MapTest {
                 return -operand;
             }
         };
-        assertThat(LongStream.of(10L, 20L, 30L).map(negator),
-                elements(arrayContaining(-10L, -20L, -30L)));
+        LongStream.of(10L, 20L, 30L)
+                .map(negator)
+                .custom(assertElements(arrayContaining(
+                        -10L, -20L, -30L
+                )));
 
-        assertThat(LongStream.empty().map(negator),
-                isEmpty());
+        LongStream.empty()
+                .map(negator)
+                .custom(assertIsEmpty());
     }
 }

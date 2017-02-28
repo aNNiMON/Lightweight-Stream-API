@@ -4,9 +4,8 @@ import com.annimon.stream.LongStream;
 import com.annimon.stream.function.LongFunction;
 import java.util.NoSuchElementException;
 import org.junit.Test;
-import static com.annimon.stream.test.hamcrest.LongStreamMatcher.elements;
+import static com.annimon.stream.test.hamcrest.LongStreamMatcher.assertElements;
 import static org.hamcrest.Matchers.arrayContaining;
-import static org.junit.Assert.assertThat;
 
 public final class FlatMapTest {
 
@@ -18,24 +17,37 @@ public final class FlatMapTest {
                 return LongStream.of(value, value);
             }
         };
-        assertThat(LongStream.of(10L, 20L, 30L).flatMap(twicer),
-                elements(arrayContaining(10L, 10L, 20L, 20L, 30L, 30L)));
+        LongStream.of(10L, 20L, 30L)
+                .flatMap(twicer)
+                .custom(assertElements(arrayContaining(
+                        10L, 10L,
+                        20L, 20L,
+                        30L, 30L
+                )));
 
-        assertThat(LongStream.of(10L, 20L, -30L).flatMap(new LongFunction<LongStream>() {
-            @Override
-            public LongStream apply(long value) {
-                if (value < 0) return LongStream.of(value);
-                return null;
-            }
-        }), elements(arrayContaining(-30L)));
+        LongStream.of(10L, 20L, -30L)
+                .flatMap(new LongFunction<LongStream>() {
+                    @Override
+                    public LongStream apply(long value) {
+                        if (value < 0) return LongStream.of(value);
+                        return null;
+                    }
+                })
+                .custom(assertElements(arrayContaining(
+                        -30L
+                )));
 
-        assertThat(LongStream.of(10L, 20L, -30L).flatMap(new LongFunction<LongStream>() {
-            @Override
-            public LongStream apply(long value) {
-                if (value < 0) return LongStream.empty();
-                return LongStream.of(value);
-            }
-        }), elements(arrayContaining(10L, 20L)));
+        LongStream.of(10L, 20L, -30L)
+                .flatMap(new LongFunction<LongStream>() {
+                    @Override
+                    public LongStream apply(long value) {
+                        if (value < 0) return LongStream.empty();
+                        return LongStream.of(value);
+                    }
+                })
+                .custom(assertElements(arrayContaining(
+                        10L, 20L
+                )));
     }
 
     @Test(expected = NoSuchElementException.class)

@@ -5,14 +5,14 @@ import com.annimon.stream.Stream;
 import com.annimon.stream.function.Function;
 import com.annimon.stream.function.LongUnaryOperator;
 import org.junit.Test;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static com.annimon.stream.test.hamcrest.LongStreamMatcher.assertElements;
+import static org.hamcrest.Matchers.arrayContaining;
 
 public final class FlatMapToLongTest {
 
     @Test
     public void testFlatMapToLong() {
-        long[] actual = Stream.rangeClosed(2L, 4L)
+        Stream.rangeClosed(2L, 4L)
                 .flatMapToLong(new Function<Long, LongStream>() {
                     @Override
                     public LongStream apply(Long t) {
@@ -21,9 +21,10 @@ public final class FlatMapToLongTest {
                                 .limit(t);
                     }
                 })
-                .toArray();
-
-        long[] expected = { 2, 2, 3, 3, 3, 4, 4, 4, 4 };
-        assertThat(actual, is(expected));
+                .custom(assertElements(arrayContaining(
+                        2L, 2L,
+                        3L, 3L, 3L,
+                        4L, 4L, 4L, 4L
+                )));
     }
 }

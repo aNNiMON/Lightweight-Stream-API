@@ -4,8 +4,8 @@ import com.annimon.stream.Functions;
 import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
 import com.annimon.stream.function.BiFunction;
-import com.annimon.stream.test.hamcrest.OptionalMatcher;
 import org.junit.Test;
+import static com.annimon.stream.test.hamcrest.OptionalMatcher.isEmpty;
 import static com.annimon.stream.test.hamcrest.OptionalMatcher.isPresent;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -54,7 +54,7 @@ public final class ReduceTest {
         Optional<Integer> result = Stream.<Integer>empty()
                 .reduce(Functions.addition());
 
-        assertThat(result, OptionalMatcher.isEmpty());
+        assertThat(result, isEmpty());
         assertEquals(119, (int) result.orElse(119));
     }
 }
