@@ -1,17 +1,8 @@
 // Plugins
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath 'net.saliman:gradle-cobertura-plugin:2.2.6'
-        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.6.3'
-    }
+plugins {
+    id "net.saliman.cobertura" version "2.2.6"
+    id "com.github.kt3k.coveralls" version "2.8.1"
 }
-
-apply plugin: 'com.github.kt3k.coveralls'
-apply plugin: 'net.saliman.cobertura'
 
 allprojects {
     repositories {
