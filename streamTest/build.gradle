@@ -1,4 +1,4 @@
-apply plugin: 'java'
+apply plugin: 'java-library'
 apply plugin: 'maven'
 
 archivesBaseName = 'stream-test'
@@ -18,9 +18,9 @@ repositories {
 }
 
 dependencies {
-    compile project(':stream')
-    compile 'org.hamcrest:hamcrest-core:1.3'
-    compile 'org.mockito:mockito-core:2.2.17'
+    api project(':stream')
+    api 'org.hamcrest:hamcrest-core:1.3'
+    api 'org.mockito:mockito-core:2.2.17'
     testCompile 'org.hamcrest:hamcrest-library:1.3'
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
