@@ -5,7 +5,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
-import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
@@ -89,28 +88,6 @@ public class ObjectsTest {
         assertEquals(0, Objects.compareLong(2000L, 2000L));
 
         assertEquals(1, Objects.compareLong(200000L, 10L));
-    }
-
-    @Test
-    public void testCompareDouble() {
-        assertEquals(-1, Objects.compareDouble(0.01d, 0.1d));
-
-        assertEquals(0, Objects.compareDouble(0.0d, 0.0d));
-
-        assertEquals(1, Objects.compareDouble(0.2d, 0.1d));
-    }
-
-    @Test
-    public void testCompareDouble_Specific() {
-        assertThat(Objects.compareDouble(-0.0, 0.0), is(-1));
-
-        assertThat(Objects.compareDouble(Double.NaN, Double.NaN), is(0));
-
-        assertThat(Objects.compareDouble(Double.NaN, 80d), is(1));
-
-        assertThat(Objects.compareDouble(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY), is(-1));
-
-        assertThat(Objects.compareDouble(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY), is(0));
     }
 
     @Test

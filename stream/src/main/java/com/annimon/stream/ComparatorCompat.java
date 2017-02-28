@@ -200,7 +200,7 @@ public final class ComparatorCompat {
             public int compare(T t1, T t2) {
                 final double d1 = keyExtractor.applyAsDouble(t1);
                 final double d2 = keyExtractor.applyAsDouble(t2);
-                return Objects.compareDouble(d1, d2);
+                return Double.compare(d1, d2);
             }
         };
     }

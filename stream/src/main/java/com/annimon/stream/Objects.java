@@ -94,26 +94,6 @@ public final class Objects {
     }
 
     /**
-     * Compares two {@code double} values.
-     *
-     * @param x  the first {@code double} value
-     * @param y  the second {@code double} value
-     * @return comparing result
-     * @since 1.1.6
-     */
-    public static int compareDouble(double x, double y) {
-        if (x < y) {
-            return -1;
-        }
-        if (x > y) {
-            return 1;
-        }
-        final long xBits = Double.doubleToLongBits(x);
-        final long yBits = Double.doubleToLongBits(y);
-        return (xBits == yBits ? 0 : (xBits < yBits ? -1 : 1));
-    }
-
-    /**
      * Checks that object reference is not null.
      *
      * @param <T> the type of the object
