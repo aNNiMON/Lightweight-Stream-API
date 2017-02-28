@@ -1,14 +1,11 @@
 package com.annimon.stream.test.hamcrest;
 
 import com.annimon.stream.Stream;
-
+import java.util.Arrays;
+import java.util.List;
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
 import org.junit.Test;
-
-import java.util.Arrays;
-import java.util.List;
-
 import static com.annimon.stream.test.hamcrest.CommonMatcher.description;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.elements;
@@ -19,6 +16,7 @@ import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -111,6 +109,6 @@ public class StreamMatcherTest {
     public void testAssertElementsOperator() {
         Stream.range(0, 5)
                 .custom(StreamMatcher.assertElements(
-                        is(Arrays.asList(0, 1, 2, 3, 4))));
+                        contains(0, 1, 2, 3, 4)));
     }
 }

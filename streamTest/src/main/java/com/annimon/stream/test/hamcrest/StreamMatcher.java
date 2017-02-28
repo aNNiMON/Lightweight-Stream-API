@@ -33,7 +33,7 @@ public class StreamMatcher {
     public static <T> Matcher<Stream<T>> elements(Matcher<List<T>> matcher) {
         return new ElementsMatcher<T>(matcher);
     }
-
+    
     public static <T> Function<Stream<T>, Void> assertIsEmpty() {
         return new Function<Stream<T>, Void>() {
 
@@ -56,12 +56,12 @@ public class StreamMatcher {
         };
     }
 
-    public static <T> Function<Stream<T>, Void> assertElements(final Matcher<List<T>> matcher) {
+    public static <T> Function<Stream<T>, Void> assertElements(final Matcher<Iterable<? extends T>> matcher) {
         return new Function<Stream<T>, Void>() {
 
             @Override
             public Void apply(Stream<T> t) {
-                assertThat(t, elements(matcher));
+                assertThat(t, new ElementsMatcherAsIterable<T>(matcher));
                 return null;
             }
         };
@@ -109,6 +109,38 @@ public class StreamMatcher {
             final List<T> elements;
             if (streamElements == null) {
                 elements = stream.collect(Collectors.<T>toList());
+                streamElements = elements;
+            } else {
+                elements = streamElements;
+            }
+            if (!matcher.matches(elements)) {
+                mismatchDescription.appendText("Stream elements ");
+                matcher.describeMismatch(elements, mismatchDescription);
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        public void describeTo(Description description) {
+            description.appendText("Stream elements ").appendDescriptionOf(matcher);
+        }
+    }
+
+    private static class ElementsMatcherAsIterable<T> extends TypeSafeDiagnosingMatcher<Stream<T>> {
+
+        private final Matcher<Iterable<? extends T>> matcher;
+        private List<T> streamElements;
+
+        ElementsMatcherAsIterable(Matcher<Iterable<? extends T>> matcher) {
+            this.matcher = matcher;
+        }
+
+        @Override
+        protected boolean matchesSafely(Stream<T> stream, Description mismatchDescription) {
+            final List<T> elements;
+            if (streamElements == null) {
+                elements = stream.toList();
                 streamElements = elements;
             } else {
                 elements = streamElements;
