@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.annimon</groupId>
   <artifactId>stream</artifactId>
-  <version>1.1.5</version>
+  <version>1.1.6</version>
   <packaging>jar</packaging>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -33,7 +33,7 @@
     <connection>scm:git:git@github.com:aNNiMON/Lightweight-Stream-API.git</connection>
     <developerConnection>scm:git:git@github.com:aNNiMON/Lightweight-Stream-API.git</developerConnection>
     <url>git@github.com:aNNiMON/Lightweight-Stream-API.git</url>
-    <tag>v1.1.5</tag>
+    <tag>v1.1.6</tag>
   </scm>
 
   <distributionManagement>

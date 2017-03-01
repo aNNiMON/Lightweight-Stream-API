@@ -83,6 +83,13 @@ In addition to backported Java 8 Stream operators, the library provides:
   stream.select(Integer.class)
   ```
 
+- `withoutNulls` - filters only not null elements
+
+  ```java
+  Stream.of("a", null, "c", "d", null)
+      .withoutNulls() // [a, c, d]
+  ```
+
 - `sortBy` - sorts by extractor function
 
   ```java
@@ -131,12 +138,27 @@ In addition to backported Java 8 Stream operators, the library provides:
       .dropWhile(s -> s.length() == 1) // [cd, ef, g]
   ```
 
-- `indexed` - add index to every element, result is `IntPair`
+- `scan` - iteratively applies accumulation function and returns Stream
+
+  ```java
+  IntStream.range(1, 6)
+      .scan((a, b) -> a + b) // [1, 3, 6, 10, 15]
+  ```
+
+- `indexed` - adds an index to every element, result is `IntPair`
 
   ```java
   Stream.of("a", "b", "c")
       .indexed() // [(0 : "a"), (1 : "b"), (2 : "c")]
   ```
+
+- `filterIndexed` / `mapIndexed` / `takeWhileIndexed` / `takeUntilIndexed` / `dropWhileIndexed` / `reduceIndexed` / `forEachIndexed` - indexed specialization of operators
+
+  ```java
+  Stream.of("a", "b", "c")
+      .mapIndexed((i, s) -> s + Integer.toString(i)) // [a0, b1, c2]
+  ```
+
 
 ### Throwable functions
 
@@ -164,7 +186,7 @@ Download [latest release](https://github.com/aNNiMON/Lightweight-Stream-API/rele
 <dependency>
   <groupId>com.annimon</groupId>
   <artifactId>stream</artifactId>
-  <version>1.1.5</version>
+  <version>1.1.6</version>
 </dependency>
 ```
 or Gradle:
@@ -172,7 +194,7 @@ or Gradle:
 ```groovy
 dependencies {
   ...
-  compile 'com.annimon:stream:1.1.5'
+  compile 'com.annimon:stream:1.1.6'
   ...
 }
 ```
