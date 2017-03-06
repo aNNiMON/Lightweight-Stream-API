@@ -9,7 +9,8 @@ import java.util.Comparator;
 import java.util.List;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
-import static com.annimon.stream.test.hamcrest.StreamMatcher.elements;
+import static com.annimon.stream.test.hamcrest.StreamMatcher.assertElements;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -59,8 +60,7 @@ public class ComparatorCompatTest {
 
     @Test
     public void testComparing() {
-        List<String> expected = Arrays.asList("abcd", "abc", "ab", "a");
-        Stream<String> stream = Stream.of("abc", "ab", "abcd", "a")
+        Stream.of("abc", "ab", "abcd", "a")
                 .sorted(ComparatorCompat.comparing(
                         new Function<String, Integer>() {
                             @Override
@@ -69,14 +69,15 @@ public class ComparatorCompatTest {
                             }
                         },
                         ComparatorCompat.<Integer>reverseOrder()
-                ));
-        assertThat(stream, elements(is(expected)));
+                ))
+                .custom(assertElements(contains(
+                        "abcd", "abc", "ab", "a"
+                )));
     }
 
     @Test
     public void testComparingComparable() {
-        List<String> expected = Arrays.asList("a", "ab", "abc", "abcd");
-        Stream<String> stream = Stream.of("abc", "ab", "abcd", "a")
+        Stream.of("abc", "ab", "abcd", "a")
                 .sorted(ComparatorCompat.comparing(
                         new Function<String, Integer>() {
                             @Override
@@ -84,14 +85,15 @@ public class ComparatorCompatTest {
                                 return str.length();
                             }
                         }
-                ));
-        assertThat(stream, elements(is(expected)));
+                ))
+                .custom(assertElements(contains(
+                        "a", "ab", "abc", "abcd"
+                )));
     }
 
     @Test
     public void testComparingInt() {
-        List<String> expected = Arrays.asList("a", "ab", "abc", "abcd");
-        Stream<String> stream = Stream.of("abc", "ab", "abcd", "a")
+        Stream.of("abc", "ab", "abcd", "a")
                 .sorted(ComparatorCompat.comparingInt(
                         new ToIntFunction<String>() {
                             @Override
@@ -99,14 +101,15 @@ public class ComparatorCompatTest {
                                 return str.length();
                             }
                         }
-                ));
-        assertThat(stream, elements(is(expected)));
+                ))
+                .custom(assertElements(contains(
+                        "a", "ab", "abc", "abcd"
+                )));
     }
 
     @Test
     public void testComparingLong() {
-        List<String> expected = Arrays.asList("a", "ab", "abc", "abcd");
-        Stream<String> stream = Stream.of("abc", "ab", "abcd", "a")
+        Stream.of("abc", "ab", "abcd", "a")
                 .sorted(ComparatorCompat.comparingLong(
                         new ToLongFunction<String>() {
                             @Override
@@ -114,14 +117,15 @@ public class ComparatorCompatTest {
                                 return str.length() * 10000000L;
                             }
                         }
-                ));
-        assertThat(stream, elements(is(expected)));
+                ))
+                .custom(assertElements(contains(
+                        "a", "ab", "abc", "abcd"
+                )));
     }
 
     @Test
     public void testComparingDouble() {
-        String[] expected = {"a", "ab", "abc", "abcd"};
-        Stream<String> stream = Stream.of("abc", "ab", "abcd", "a")
+        Stream.of("abc", "ab", "abcd", "a")
                 .sorted(ComparatorCompat.comparingDouble(
                         new ToDoubleFunction<String>() {
                             @Override
@@ -129,40 +133,46 @@ public class ComparatorCompatTest {
                                 return str.length() / 0.01d;
                             }
                         }
-                ));
-        assertThat(stream, elements(is(Arrays.asList(expected))));
+                ))
+                .custom(assertElements(contains(
+                        "a", "ab", "abc", "abcd"
+                )));
     }
 
     @Test
     public void testNullsFirst() {
-        List<String> expected = Arrays.asList(null, null, "abc", "ab", "abcd", "a");
-        Stream<String> stream = Stream.of("abc", "ab", null, "abcd", null, "a")
-                .sorted(ComparatorCompat.nullsFirst());
-        assertThat(stream, elements(is(expected)));
+        Stream.of("abc", "ab", null, "abcd", null, "a")
+                .sorted(ComparatorCompat.nullsFirst())
+                .custom(assertElements(contains(
+                        null, null, "abc", "ab", "abcd", "a"
+                )));
     }
 
     @Test
     public void testNullsFirstComparator() {
-        List<String> expected = Arrays.asList(null, null, "a", "ab", "abc", "abcd");
-        Stream<String> stream = Stream.of("abc", "ab", null, "abcd", null, "a")
-                .sorted(ComparatorCompat.nullsFirst(String.CASE_INSENSITIVE_ORDER));
-        assertThat(stream, elements(is(expected)));
+        Stream.of("abc", "ab", null, "abcd", null, "a")
+                .sorted(ComparatorCompat.nullsFirst(String.CASE_INSENSITIVE_ORDER))
+                .custom(assertElements(contains(
+                        null, null, "a", "ab", "abc", "abcd"
+                )));
     }
 
     @Test
     public void testNullsLast() {
-        List<String> expected = Arrays.asList("abc", "ab", "abcd", "a", null, null);
-        Stream<String> stream = Stream.of("abc", "ab", null, "abcd", null, "a")
-                .sorted(ComparatorCompat.nullsLast());
-        assertThat(stream, elements(is(expected)));
+        Stream.of("abc", "ab", null, "abcd", null, "a")
+                .sorted(ComparatorCompat.nullsLast())
+                .custom(assertElements(contains(
+                        "abc", "ab", "abcd", "a", null, null
+                )));
     }
 
     @Test
     public void testNullsLastComparator() {
-        List<String> expected = Arrays.asList("a", "ab", "abc", "abcd", null, null);
-        Stream<String> stream = Stream.of("abc", "ab", null, "abcd", null, "a")
-                .sorted(ComparatorCompat.nullsLast(String.CASE_INSENSITIVE_ORDER));
-        assertThat(stream, elements(is(expected)));
+        Stream.of("abc", "ab", null, "abcd", null, "a")
+                .sorted(ComparatorCompat.nullsLast(String.CASE_INSENSITIVE_ORDER))
+                .custom(assertElements(contains(
+                        "a", "ab", "abc", "abcd", null, null
+                )));
     }
 
     @Test
@@ -177,14 +187,13 @@ public class ComparatorCompatTest {
                 Students.STEVE_CS_4,
                 Students.VICTORIA_CS_3
         );
-        List<Student> expected = Arrays.asList(
-                Students.STEVE_CS_4,
-                Students.VICTORIA_CS_3,
-                Students.MARIA_CS_1
-        );
-        Stream<Student> stream = Stream.of(input)
-                .sorted(comparator);
-        assertThat(stream, elements(is(expected)));
+        Stream.of(input)
+                .sorted(comparator)
+                .custom(assertElements(contains(
+                        Students.STEVE_CS_4,
+                        Students.VICTORIA_CS_3,
+                        Students.MARIA_CS_1
+                )));
     }
 
     @Test
@@ -200,15 +209,14 @@ public class ComparatorCompatTest {
                 Students.VICTORIA_CS_3,
                 Students.SERGEY_LAW_1
         );
-        List<Student> expected = Arrays.asList(
-                Students.MARIA_CS_1,
-                Students.SERGEY_LAW_1,
-                Students.VICTORIA_CS_3,
-                Students.STEVE_CS_4
-        );
-        Stream<Student> stream = Stream.of(input)
-                .sorted(comparator);
-        assertThat(stream, elements(is(expected)));
+        Stream.of(input)
+                .sorted(comparator)
+                .custom(assertElements(contains(
+                        Students.MARIA_CS_1,
+                        Students.SERGEY_LAW_1,
+                        Students.VICTORIA_CS_3,
+                        Students.STEVE_CS_4
+                )));
     }
 
     @Test
@@ -232,17 +240,16 @@ public class ComparatorCompatTest {
                 Students.GEORGE_LAW_3,
                 Students.VICTORIA_CS_3
         );
-        List<Student> expected = Arrays.asList(
-                Students.MARIA_CS_1,
-                Students.VICTORIA_CS_3,
-                Students.STEVE_CS_4,
-                Students.SOPHIA_ECONOMICS_2,
-                Students.SERGEY_LAW_1,
-                Students.GEORGE_LAW_3
-        );
-        Stream<Student> stream = Stream.of(input)
-                .sorted(comparator);
-        assertThat(stream, elements(is(expected)));
+        Stream.of(input)
+                .sorted(comparator)
+                .custom(assertElements(contains(
+                        Students.MARIA_CS_1,
+                        Students.VICTORIA_CS_3,
+                        Students.STEVE_CS_4,
+                        Students.SOPHIA_ECONOMICS_2,
+                        Students.SERGEY_LAW_1,
+                        Students.GEORGE_LAW_3
+                )));
     }
 
     @Test
@@ -297,16 +304,15 @@ public class ComparatorCompatTest {
                 Students.SOPHIA_ECONOMICS_2,
                 Students.MARIA_ECONOMICS_1
         );
-        List<Student> expected = Arrays.asList(
-                Students.STEVE_CS_4,
-                Students.SOPHIA_ECONOMICS_2,
-                Students.SERGEY_LAW_1,
-                Students.MARIA_CS_1,
-                Students.MARIA_ECONOMICS_1
-        );
-        Stream<Student> stream = Stream.of(input)
-                .sorted(comparator);
-        assertThat(stream, elements(is(expected)));
+        Stream.of(input)
+                .sorted(comparator)
+                .custom(assertElements(contains(
+                        Students.STEVE_CS_4,
+                        Students.SOPHIA_ECONOMICS_2,
+                        Students.SERGEY_LAW_1,
+                        Students.MARIA_CS_1,
+                        Students.MARIA_ECONOMICS_1
+                )));
     }
 }
 

@@ -1,8 +1,6 @@
 package com.annimon.stream.test.hamcrest;
 
 import com.annimon.stream.Stream;
-import java.util.Arrays;
-import java.util.List;
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
 import org.junit.Test;
@@ -68,16 +66,16 @@ public class StreamMatcherTest {
     @Test
     public void testElements() {
         final Stream<Integer> stream = Stream.range(0, 5);
-        final List<Integer> expected = Arrays.asList(0, 1, 2, 3, 4);
-        final Matcher<Stream<Integer>> matcher = elements(is(expected));
+        final Integer[] expected = {0, 1, 2, 3, 4};
+        final Matcher<Stream<Integer>> matcher = elements(contains(expected));
         assertThat(stream, matcher);
         assertTrue(matcher.matches(stream));
 
-        assertFalse(elements(is(expected)).matches(Stream.<Integer>empty()));
+        assertFalse(elements(contains(expected)).matches(Stream.<Integer>empty()));
 
         assertThat(matcher, description(allOf(
-                containsString("Stream elements is "),
-                containsString(expected.toString())
+                containsString("Stream elements iterable "),
+                containsString("<0>, <1>, <2>, <3>, <4>")
         )));
     }
 

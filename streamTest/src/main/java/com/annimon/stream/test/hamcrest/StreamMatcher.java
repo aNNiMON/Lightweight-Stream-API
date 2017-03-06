@@ -30,7 +30,7 @@ public class StreamMatcher {
         return new HasElementsMatcher();
     }
 
-    public static <T> Matcher<Stream<T>> elements(Matcher<List<T>> matcher) {
+    public static <T> Matcher<Stream<T>> elements(Matcher<Iterable<? extends T>> matcher) {
         return new ElementsMatcher<T>(matcher);
     }
     
@@ -61,7 +61,7 @@ public class StreamMatcher {
 
             @Override
             public Void apply(Stream<T> t) {
-                assertThat(t, new ElementsMatcherAsIterable<T>(matcher));
+                assertThat(t, elements(matcher));
                 return null;
             }
         };
@@ -97,42 +97,10 @@ public class StreamMatcher {
 
     public static class ElementsMatcher<T> extends TypeSafeDiagnosingMatcher<Stream<T>> {
 
-        private final Matcher<List<T>> matcher;
-        private List<T> streamElements;
-
-        public ElementsMatcher(Matcher<List<T>> matcher) {
-            this.matcher = matcher;
-        }
-
-        @Override
-        protected boolean matchesSafely(Stream<T> stream, Description mismatchDescription) {
-            final List<T> elements;
-            if (streamElements == null) {
-                elements = stream.collect(Collectors.<T>toList());
-                streamElements = elements;
-            } else {
-                elements = streamElements;
-            }
-            if (!matcher.matches(elements)) {
-                mismatchDescription.appendText("Stream elements ");
-                matcher.describeMismatch(elements, mismatchDescription);
-                return false;
-            }
-            return true;
-        }
-
-        @Override
-        public void describeTo(Description description) {
-            description.appendText("Stream elements ").appendDescriptionOf(matcher);
-        }
-    }
-
-    private static class ElementsMatcherAsIterable<T> extends TypeSafeDiagnosingMatcher<Stream<T>> {
-
         private final Matcher<Iterable<? extends T>> matcher;
         private List<T> streamElements;
 
-        ElementsMatcherAsIterable(Matcher<Iterable<? extends T>> matcher) {
+        public ElementsMatcher(Matcher<Iterable<? extends T>> matcher) {
             this.matcher = matcher;
         }
 

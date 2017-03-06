@@ -9,9 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.assertElements;
-import static com.annimon.stream.test.hamcrest.StreamMatcher.elements;
 import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
@@ -42,13 +40,11 @@ public final class CustomTest {
 
     @Test
     public void testCustomIntermediateOperator_FlatMapAndCast() {
-        List<Character> expected = Arrays.asList('a', 'b', 'c', 'd', 'e', 'f');
-
         List<List> lists = new ArrayList<List>();
         for (char ch = 'a'; ch <= 'f'; ch++) {
             lists.add( new ArrayList<Character>(Arrays.asList(ch)) );
         }
-        Stream<Character> chars = Stream.of(lists)
+        Stream.of(lists)
                 .custom(new CustomOperators.FlatMap<List, Object>(new Function<List, Stream<Object>>() {
                     @SuppressWarnings("unchecked")
                     @Override
@@ -56,8 +52,8 @@ public final class CustomTest {
                         return Stream.of(value);
                     }
                 }))
-                .custom(new CustomOperators.Cast<Object, Character>(Character.class));
-        assertThat(chars, elements(is(expected)));
+                .custom(new CustomOperators.Cast<Object, Character>(Character.class))
+                .custom(assertElements(contains('a', 'b', 'c', 'd', 'e', 'f')));
     }
 
     @Test

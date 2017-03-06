@@ -9,7 +9,6 @@ import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.assertElements;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.elements;
 import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 public final class DistinctTest {
@@ -42,13 +41,11 @@ public final class DistinctTest {
 
     @Test
     public void testDistinctLazy() {
-        List<Integer> expected = Arrays.asList(1, 2, 3, 5, -1);
-
         List<Integer> input = new ArrayList<Integer>(10);
         input.addAll(Arrays.asList(1, 1, 2, 3, 5));
         Stream<Integer> stream = Stream.of(input).distinct();
         input.addAll(Arrays.asList(3, 2, 1, 1, -1));
 
-        assertThat(stream, elements(is(expected)));
+        assertThat(stream, elements(contains(1, 2, 3, 5, -1)));
     }
 }

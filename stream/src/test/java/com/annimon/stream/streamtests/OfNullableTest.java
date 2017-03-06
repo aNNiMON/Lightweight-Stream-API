@@ -6,7 +6,7 @@ import java.util.List;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.elements;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.isEmpty;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertThat;
 
 public final class OfNullableTest {
@@ -15,7 +15,7 @@ public final class OfNullableTest {
     public void testStreamOfNullable() {
         assertThat(Stream.ofNullable(null), isEmpty());
 
-        assertThat(Stream.ofNullable(5), elements(is(Arrays.asList(5))));
+        assertThat(Stream.ofNullable(5), elements(contains(5)));
     }
 
     @Test
@@ -23,6 +23,6 @@ public final class OfNullableTest {
         assertThat(Stream.ofNullable((List<?>) null), isEmpty());
 
         assertThat(Stream.ofNullable(Arrays.asList(5, 10, 15)),
-                elements(is(Arrays.asList(5, 10, 15))));
+                elements(contains(5, 10, 15)));
     }
 }
