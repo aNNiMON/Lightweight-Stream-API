@@ -43,5 +43,47 @@ public interface IntConsumer {
                 }
             };
         }
+
+        /**
+         * Creates a safe {@code IntConsumer}.
+         *
+         * @param throwableConsumer  the consumer that may throw an exception
+         * @return an {@code IntConsumer}
+         * @throws NullPointerException if {@code throwableConsumer} is null
+         * @since 1.1.7
+         * @see #safe(com.annimon.stream.function.ThrowableIntConsumer, com.annimon.stream.function.IntConsumer)
+         */
+        public static IntConsumer safe(ThrowableIntConsumer<Throwable> throwableConsumer) {
+            return safe(throwableConsumer, null);
+        }
+
+        /**
+         * Creates a safe {@code IntConsumer}.
+         *
+         * @param throwableConsumer  the consumer that may throw an exception
+         * @param onFailedConsumer  the consumer which applies if exception was thrown
+         * @return an {@code IntConsumer}
+         * @throws NullPointerException if {@code throwableConsumer} is null
+         * @since 1.1.7
+         * @see #safe(com.annimon.stream.function.ThrowableConsumer)
+         */
+        public static IntConsumer safe(
+                final ThrowableIntConsumer<Throwable> throwableConsumer,
+                final IntConsumer onFailedConsumer) {
+            return new IntConsumer() {
+
+                @Override
+                public void accept(int value) {
+                    try {
+                        throwableConsumer.accept(value);
+                    } catch (Throwable ex) {
+                        if (onFailedConsumer != null) {
+                            onFailedConsumer.accept(value);
+                        }
+                    }
+                }
+            };
+        }
+
     }
 }

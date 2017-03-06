@@ -39,5 +39,47 @@ public interface LongConsumer {
                 }
             };
         }
+
+        /**
+         * Creates a safe {@code LongConsumer}.
+         *
+         * @param throwableConsumer  the consumer that may throw an exception
+         * @return a {@code LongConsumer}
+         * @throws NullPointerException if {@code throwableConsumer} is null
+         * @since 1.1.7
+         * @see #safe(com.annimon.stream.function.ThrowableLongConsumer, com.annimon.stream.function.LongConsumer)
+         */
+        public static LongConsumer safe(ThrowableLongConsumer<Throwable> throwableConsumer) {
+            return safe(throwableConsumer, null);
+        }
+
+        /**
+         * Creates a safe {@code LongConsumer}.
+         *
+         * @param throwableConsumer  the consumer that may throw an exception
+         * @param onFailedConsumer  the consumer which applies if exception was thrown
+         * @return a {@code LongConsumer}
+         * @throws NullPointerException if {@code throwableConsumer} is null
+         * @since 1.1.7
+         * @see #safe(com.annimon.stream.function.ThrowableConsumer)
+         */
+        public static LongConsumer safe(
+                final ThrowableLongConsumer<Throwable> throwableConsumer,
+                final LongConsumer onFailedConsumer) {
+            return new LongConsumer() {
+
+                @Override
+                public void accept(long value) {
+                    try {
+                        throwableConsumer.accept(value);
+                    } catch (Throwable ex) {
+                        if (onFailedConsumer != null) {
+                            onFailedConsumer.accept(value);
+                        }
+                    }
+                }
+            };
+        }
+
     }
 }
