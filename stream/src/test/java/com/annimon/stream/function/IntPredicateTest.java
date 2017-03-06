@@ -1,10 +1,13 @@
 package com.annimon.stream.function;
 
 import com.annimon.stream.IntStream;
+import java.io.IOException;
 import org.junit.Test;
-
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests {@link IntPredicate}
@@ -139,7 +142,36 @@ public class IntPredicateTest {
     }
 
     @Test
+    public void testSafe() {
+        IntPredicate predicate = IntPredicate.Util.safe(new UnsafePredicate());
+
+        assertTrue(predicate.test(40));
+        assertFalse(predicate.test(15));
+        assertFalse(predicate.test(-5));
+    }
+
+    @Test
+    public void testSafeWithResultIfFailed() {
+        IntPredicate predicate = IntPredicate.Util.safe(new UnsafePredicate(), true);
+
+        assertTrue(predicate.test(40));
+        assertFalse(predicate.test(15));
+        assertTrue(predicate.test(-5));
+    }
+
+    @Test
     public void testPrivateUtilConstructor() {
         assertThat(IntPredicate.Util.class, hasOnlyPrivateConstructors());
+    }
+
+    private static class UnsafePredicate implements ThrowableIntPredicate<Throwable> {
+
+        @Override
+        public boolean test(int value) throws IOException {
+            if (value < 0) {
+                throw new IOException();
+            }
+            return value % 2 == 0;
+        }
     }
 }

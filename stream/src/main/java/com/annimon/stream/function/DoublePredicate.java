@@ -87,5 +87,43 @@ public interface DoublePredicate {
                 }
             };
         }
+
+        /**
+         * Creates a safe {@code DoublePredicate}.
+         *
+         * @param throwablePredicate  the predicate that may throw an exception
+         * @return a {@code DoublePredicate} or {@code false} if exception was thrown
+         * @since 1.1.7
+         * @see #safe(com.annimon.stream.function.ThrowableDoublePredicate, boolean)
+         */
+        public static DoublePredicate safe(ThrowableDoublePredicate<Throwable> throwablePredicate) {
+            return safe(throwablePredicate, false);
+        }
+
+        /**
+         * Creates a safe {@code DoublePredicate}.
+         *
+         * @param throwablePredicate  the predicate that may throw an exception
+         * @param resultIfFailed  the result which returned if exception was thrown
+         * @return a {@code DoublePredicate} or {@code resultIfFailed}
+         * @throws NullPointerException if {@code throwablePredicate} is null
+         * @since 1.1.7
+         */
+        public static DoublePredicate safe(
+                final ThrowableDoublePredicate<Throwable> throwablePredicate,
+                final boolean resultIfFailed) {
+            return new DoublePredicate() {
+
+                @Override
+                public boolean test(double value) {
+                    try {
+                        return throwablePredicate.test(value);
+                    } catch (Throwable throwable) {
+                        return resultIfFailed;
+                    }
+                }
+            };
+        }
+
     }
 }
