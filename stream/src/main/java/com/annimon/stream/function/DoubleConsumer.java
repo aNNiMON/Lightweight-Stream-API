@@ -39,5 +39,47 @@ public interface DoubleConsumer {
                 }
             };
         }
+
+        /**
+         * Creates a safe {@code DoubleConsumer}.
+         *
+         * @param throwableConsumer  the consumer that may throw an exception
+         * @return a {@code DoubleConsumer}
+         * @throws NullPointerException if {@code throwableConsumer} is null
+         * @since 1.1.7
+         * @see #safe(com.annimon.stream.function.ThrowableDoubleConsumer, com.annimon.stream.function.DoubleConsumer)
+         */
+        public static DoubleConsumer safe(ThrowableDoubleConsumer<Throwable> throwableConsumer) {
+            return safe(throwableConsumer, null);
+        }
+
+        /**
+         * Creates a safe {@code DoubleConsumer}.
+         *
+         * @param throwableConsumer  the consumer that may throw an exception
+         * @param onFailedConsumer  the consumer which applies if exception was thrown
+         * @return a {@code DoubleConsumer}
+         * @throws NullPointerException if {@code throwableConsumer} is null
+         * @since 1.1.7
+         * @see #safe(com.annimon.stream.function.ThrowableConsumer)
+         */
+        public static DoubleConsumer safe(
+                final ThrowableDoubleConsumer<Throwable> throwableConsumer,
+                final DoubleConsumer onFailedConsumer) {
+            return new DoubleConsumer() {
+
+                @Override
+                public void accept(double value) {
+                    try {
+                        throwableConsumer.accept(value);
+                    } catch (Throwable ex) {
+                        if (onFailedConsumer != null) {
+                            onFailedConsumer.accept(value);
+                        }
+                    }
+                }
+            };
+        }
+
     }
 }

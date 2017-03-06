@@ -1,6 +1,7 @@
 package com.annimon.stream.function;
 
 import com.annimon.stream.Functions;
+import java.io.IOException;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static org.junit.Assert.assertFalse;
@@ -60,6 +61,24 @@ public class LongPredicateTest {
         assertTrue(isOdd.test(55));
         assertFalse(isOdd.test(56));
     }
+    
+    @Test
+    public void testSafe() {
+        LongPredicate predicate = LongPredicate.Util.safe(new UnsafePredicate());
+
+        assertTrue(predicate.test(40L));
+        assertFalse(predicate.test(15L));
+        assertFalse(predicate.test(-5L));
+    }
+
+    @Test
+    public void testSafeWithResultIfFailed() {
+        LongPredicate predicate = LongPredicate.Util.safe(new UnsafePredicate(), true);
+
+        assertTrue(predicate.test(40L));
+        assertFalse(predicate.test(15L));
+        assertTrue(predicate.test(-5L));
+    }
 
     @Test
     public void testPrivateConstructor() throws Exception {
@@ -75,4 +94,15 @@ public class LongPredicateTest {
             return value < 100;
         }
     };
+
+    private static class UnsafePredicate implements ThrowableLongPredicate<Throwable> {
+
+        @Override
+        public boolean test(long value) throws IOException {
+            if (value < 0) {
+                throw new IOException();
+            }
+            return value % 2 == 0;
+        }
+    }
 }

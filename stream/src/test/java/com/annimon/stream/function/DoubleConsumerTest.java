@@ -1,11 +1,17 @@
 package com.annimon.stream.function;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -50,6 +56,51 @@ public class DoubleConsumerTest {
     }
 
     @Test
+    public void testSafe() throws IOException {
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream(15);
+        final DataOutputStream dos = new DataOutputStream(baos);
+        DoubleConsumer consumer = DoubleConsumer.Util.safe(new UnsafeConsumer(dos));
+
+        consumer.accept(0.16);
+        consumer.accept(3.20);
+        consumer.accept(-5);
+        consumer.accept(-8);
+        consumer.accept(500);
+
+        final byte[] result = baos.toByteArray();
+        DataInputStream dis = new DataInputStream(new ByteArrayInputStream(result));
+        assertThat(dis.readDouble(), closeTo(0.16, 0.0001));
+        assertThat(dis.readDouble(), closeTo(3.20, 0.0001));
+        assertThat(dis.readDouble(), closeTo(500, 0.0001));
+    }
+
+    @Test
+    public void testSafeWithOnFailedConsumer() throws IOException {
+        final ByteArrayOutputStream baos = new ByteArrayOutputStream(15);
+        final DataOutputStream dos = new DataOutputStream(baos);
+        DoubleConsumer consumer = DoubleConsumer.Util.safe(new UnsafeConsumer(dos), new DoubleConsumer() {
+            @Override
+            public void accept(double value) {
+                baos.write(0);
+            }
+        });
+
+        consumer.accept(0.16);
+        consumer.accept(3.20);
+        consumer.accept(-5);
+        consumer.accept(-8);
+        consumer.accept(500);
+
+        final byte[] result = baos.toByteArray();
+        DataInputStream dis = new DataInputStream(new ByteArrayInputStream(result));
+        assertThat(dis.readDouble(), closeTo(0.16, 0.0001));
+        assertThat(dis.readDouble(), closeTo(3.20, 0.0001));
+        assertThat(dis.readByte(), is((byte) 0));
+        assertThat(dis.readByte(), is((byte) 0));
+        assertThat(dis.readDouble(), closeTo(500, 0.0001));
+    }
+
+    @Test
     public void testPrivateConstructor() throws Exception {
         assertThat(DoubleConsumer.Util.class, hasOnlyPrivateConstructors());
     }
@@ -68,6 +119,23 @@ public class DoubleConsumerTest {
         public void accept(double value) {
             value *= factor;
             buffer.add(value);
+        }
+    }
+
+    private static class UnsafeConsumer implements ThrowableDoubleConsumer<Throwable> {
+
+        private final DataOutputStream os;
+
+        public UnsafeConsumer(DataOutputStream os) {
+            this.os = os;
+        }
+
+        @Override
+        public void accept(double value) throws IOException {
+            if (value < 0) {
+                throw new IOException();
+            }
+            os.writeDouble(value);
         }
     }
 

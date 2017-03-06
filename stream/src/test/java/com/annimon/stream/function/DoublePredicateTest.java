@@ -1,8 +1,11 @@
 package com.annimon.stream.function;
 
-import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
-import static org.junit.Assert.*;
+import java.io.IOException;
 import org.junit.Test;
+import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests {@code DoublePredicate}.
@@ -58,6 +61,24 @@ public class DoublePredicateTest {
         assertTrue(greaterOrEqualsThanPI.test(8.8005353535));
         assertFalse(greaterOrEqualsThanPI.test(2.11));
     }
+    
+    @Test
+    public void testSafe() {
+        DoublePredicate predicate = DoublePredicate.Util.safe(new UnsafePredicate());
+
+        assertTrue(predicate.test(40d));
+        assertFalse(predicate.test(3d));
+        assertFalse(predicate.test(-5d));
+    }
+
+    @Test
+    public void testSafeWithResultIfFailed() {
+        DoublePredicate predicate = DoublePredicate.Util.safe(new UnsafePredicate(), true);
+
+        assertTrue(predicate.test(40d));
+        assertFalse(predicate.test(3d));
+        assertTrue(predicate.test(-5d));
+    }
 
     @Test
     public void testPrivateConstructor() throws Exception {
@@ -79,4 +100,15 @@ public class DoublePredicateTest {
             return Math.abs(Math.PI - value) < 0.0001;
         }
     };
+
+    private static class UnsafePredicate implements ThrowableDoublePredicate<Throwable> {
+
+        @Override
+        public boolean test(double value) throws IOException {
+            if (value < 0) {
+                throw new IOException();
+            }
+            return value > Math.PI;
+        }
+    }
 }

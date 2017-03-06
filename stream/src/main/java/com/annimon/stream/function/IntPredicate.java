@@ -84,5 +84,43 @@ public interface IntPredicate {
                 }
             };
         }
+
+        /**
+         * Creates a safe {@code IntPredicate}.
+         *
+         * @param throwablePredicate  the predicate that may throw an exception
+         * @return an {@code IntPredicate} or {@code false} if exception was thrown
+         * @since 1.1.7
+         * @see #safe(com.annimon.stream.function.ThrowableIntPredicate, boolean)
+         */
+        public static IntPredicate safe(ThrowableIntPredicate<Throwable> throwablePredicate) {
+            return safe(throwablePredicate, false);
+        }
+
+        /**
+         * Creates a safe {@code IntPredicate}.
+         *
+         * @param throwablePredicate  the predicate that may throw an exception
+         * @param resultIfFailed  the result which returned if exception was thrown
+         * @return an {@code IntPredicate} or {@code resultIfFailed}
+         * @throws NullPointerException if {@code throwablePredicate} is null
+         * @since 1.1.7
+         */
+        public static IntPredicate safe(
+                final ThrowableIntPredicate<Throwable> throwablePredicate,
+                final boolean resultIfFailed) {
+            return new IntPredicate() {
+
+                @Override
+                public boolean test(int value) {
+                    try {
+                        return throwablePredicate.test(value);
+                    } catch (Throwable throwable) {
+                        return resultIfFailed;
+                    }
+                }
+            };
+        }
+
     }
 }

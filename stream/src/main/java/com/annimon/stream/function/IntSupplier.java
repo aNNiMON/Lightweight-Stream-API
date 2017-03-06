@@ -16,4 +16,48 @@ public interface IntSupplier {
      * @return a result
      */
     int getAsInt();
+
+    class Util {
+
+        private Util() { }
+
+        /**
+         * Creates a safe {@code IntSupplier}.
+         *
+         * @param throwableSupplier  the consumer that may throw an exception
+         * @return an {@code IntSupplier}
+         * @throws NullPointerException if {@code throwableSupplier} is null
+         * @since 1.1.7
+         * @see #safe(com.annimon.stream.function.ThrowableIntSupplier, int)
+         */
+        public static IntSupplier safe(ThrowableIntSupplier<Throwable> throwableSupplier) {
+            return safe(throwableSupplier, 0);
+        }
+
+        /**
+         * Creates a safe {@code IntSupplier}.
+         *
+         * @param throwableSupplier  the consumer that may throw an exception
+         * @param resultIfFailed  the result which returned if exception was thrown
+         * @return an {@code IntSupplier}
+         * @throws NullPointerException if {@code throwableSupplier} is null
+         * @since 1.1.7
+         */
+        public static IntSupplier safe(
+                final ThrowableIntSupplier<Throwable> throwableSupplier,
+                final int resultIfFailed) {
+            return new IntSupplier() {
+
+                @Override
+                public int getAsInt() {
+                    try {
+                        return throwableSupplier.getAsInt();
+                    } catch (Throwable ex) {
+                        return resultIfFailed;
+                    }
+                }
+            };
+        }
+
+    }
 }
