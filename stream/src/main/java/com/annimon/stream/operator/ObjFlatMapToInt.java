@@ -1,9 +1,9 @@
 package com.annimon.stream.operator;
 
 import com.annimon.stream.IntStream;
-import com.annimon.stream.PrimitiveExtIterator;
-import com.annimon.stream.PrimitiveIterator;
 import com.annimon.stream.function.Function;
+import com.annimon.stream.iterator.PrimitiveExtIterator;
+import com.annimon.stream.iterator.PrimitiveIterator;
 import java.util.Iterator;
 
 public class ObjFlatMapToInt<T> extends PrimitiveExtIterator.OfInt {

@@ -1,8 +1,9 @@
 package com.annimon.stream;
 
-import com.annimon.stream.operator.*;
 import com.annimon.stream.function.*;
 import com.annimon.stream.internal.Operators;
+import com.annimon.stream.iterator.PrimitiveIterator;
+import com.annimon.stream.operator.*;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 

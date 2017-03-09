@@ -1,8 +1,8 @@
 package com.annimon.stream.operator;
 
-import com.annimon.stream.LsaIterator;
 import com.annimon.stream.function.IndexedFunction;
 import com.annimon.stream.iterator.IndexedIterator;
+import com.annimon.stream.iterator.LsaIterator;
 
 public class ObjMapIndexed<T, R> extends LsaIterator<R> {
 

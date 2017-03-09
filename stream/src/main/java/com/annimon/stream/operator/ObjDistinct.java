@@ -1,6 +1,6 @@
 package com.annimon.stream.operator;
 
-import com.annimon.stream.LsaExtIterator;
+import com.annimon.stream.iterator.LsaExtIterator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;

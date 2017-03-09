@@ -1,8 +1,8 @@
 package com.annimon.stream.operator;
 
 import com.annimon.stream.LongStream;
-import com.annimon.stream.PrimitiveIterator;
 import com.annimon.stream.function.LongFunction;
+import com.annimon.stream.iterator.PrimitiveIterator;
 import java.util.NoSuchElementException;
 
 public class LongFlatMap extends PrimitiveIterator.OfLong {

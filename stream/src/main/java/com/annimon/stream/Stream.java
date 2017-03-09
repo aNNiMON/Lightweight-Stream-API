@@ -3,6 +3,7 @@ package com.annimon.stream;
 import com.annimon.stream.function.*;
 import com.annimon.stream.internal.Operators;
 import com.annimon.stream.iterator.IndexedIterator;
+import com.annimon.stream.iterator.LazyIterator;
 import com.annimon.stream.operator.*;
 import java.util.ArrayList;
 import java.util.Collections;

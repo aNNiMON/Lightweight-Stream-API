@@ -1,7 +1,7 @@
 package com.annimon.stream.longstreamtests;
 
 import com.annimon.stream.LongStream;
-import com.annimon.stream.PrimitiveIterator;
+import com.annimon.stream.iterator.PrimitiveIterator;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.LongStreamMatcher.elements;
 import static org.hamcrest.Matchers.arrayContaining;

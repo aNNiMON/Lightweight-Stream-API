@@ -1,9 +1,9 @@
 package com.annimon.stream.operator;
 
 import com.annimon.stream.LongStream;
-import com.annimon.stream.PrimitiveExtIterator;
-import com.annimon.stream.PrimitiveIterator;
 import com.annimon.stream.function.Function;
+import com.annimon.stream.iterator.PrimitiveExtIterator;
+import com.annimon.stream.iterator.PrimitiveIterator;
 import java.util.Iterator;
 
 public class ObjFlatMapToLong<T> extends PrimitiveExtIterator.OfLong {

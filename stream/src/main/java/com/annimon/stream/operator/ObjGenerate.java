@@ -1,7 +1,7 @@
 package com.annimon.stream.operator;
 
-import com.annimon.stream.LsaIterator;
 import com.annimon.stream.function.Supplier;
+import com.annimon.stream.iterator.LsaIterator;
 
 public class ObjGenerate<T> extends LsaIterator<T> {
 

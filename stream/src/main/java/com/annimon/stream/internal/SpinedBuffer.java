@@ -1,9 +1,9 @@
 package com.annimon.stream.internal;
 
-import com.annimon.stream.PrimitiveIterator;
 import com.annimon.stream.function.DoubleConsumer;
 import com.annimon.stream.function.IntConsumer;
 import com.annimon.stream.function.LongConsumer;
+import com.annimon.stream.iterator.PrimitiveIterator;
 import java.util.Arrays;
 import java.util.Iterator;
 

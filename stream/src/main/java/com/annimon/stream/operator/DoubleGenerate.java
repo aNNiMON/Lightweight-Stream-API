@@ -1,7 +1,7 @@
 package com.annimon.stream.operator;
 
-import com.annimon.stream.PrimitiveIterator;
 import com.annimon.stream.function.DoubleSupplier;
+import com.annimon.stream.iterator.PrimitiveIterator;
 
 public class DoubleGenerate extends PrimitiveIterator.OfDouble {
 

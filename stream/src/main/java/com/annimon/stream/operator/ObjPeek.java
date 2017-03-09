@@ -1,7 +1,7 @@
 package com.annimon.stream.operator;
 
-import com.annimon.stream.LsaIterator;
 import com.annimon.stream.function.Consumer;
+import com.annimon.stream.iterator.LsaIterator;
 import java.util.Iterator;
 
 public class ObjPeek<T> extends LsaIterator<T> {

@@ -1,8 +1,8 @@
 package com.annimon.stream.operator;
 
-import com.annimon.stream.LsaExtIterator;
 import com.annimon.stream.function.IndexedPredicate;
 import com.annimon.stream.iterator.IndexedIterator;
+import com.annimon.stream.iterator.LsaExtIterator;
 
 public class ObjTakeUntilIndexed<T> extends LsaExtIterator<T> {
 

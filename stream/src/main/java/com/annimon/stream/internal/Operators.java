@@ -1,7 +1,7 @@
 package com.annimon.stream.internal;
 
-import com.annimon.stream.PrimitiveIterator;
 import com.annimon.stream.function.IntFunction;
+import com.annimon.stream.iterator.PrimitiveIterator;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

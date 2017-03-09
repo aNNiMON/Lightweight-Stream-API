@@ -1,7 +1,7 @@
 package com.annimon.stream.operator;
 
-import com.annimon.stream.PrimitiveIterator;
 import com.annimon.stream.function.DoubleToIntFunction;
+import com.annimon.stream.iterator.PrimitiveIterator;
 
 public class DoubleMapToInt extends PrimitiveIterator.OfInt {
 

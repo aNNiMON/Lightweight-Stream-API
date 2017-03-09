@@ -6,6 +6,8 @@ import com.annimon.stream.function.DoubleBinaryOperator;
 import com.annimon.stream.function.Function;
 import com.annimon.stream.function.IntBinaryOperator;
 import com.annimon.stream.function.LongBinaryOperator;
+import com.annimon.stream.iterator.LsaIterator;
+import com.annimon.stream.iterator.PrimitiveIterator;
 import java.util.ArrayDeque;
 import java.util.Iterator;
 

@@ -1,6 +1,6 @@
 package com.annimon.stream.internal;
 
-import com.annimon.stream.PrimitiveIterator;
+import com.annimon.stream.iterator.PrimitiveIterator;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static org.hamcrest.Matchers.closeTo;

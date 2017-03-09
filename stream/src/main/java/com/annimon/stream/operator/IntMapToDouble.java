@@ -1,7 +1,7 @@
 package com.annimon.stream.operator;
 
-import com.annimon.stream.PrimitiveIterator;
 import com.annimon.stream.function.IntToDoubleFunction;
+import com.annimon.stream.iterator.PrimitiveIterator;
 
 public class IntMapToDouble extends PrimitiveIterator.OfDouble {
 

@@ -1,7 +1,7 @@
 package com.annimon.stream.operator;
 
-import com.annimon.stream.LsaIterator;
 import com.annimon.stream.function.BiFunction;
+import com.annimon.stream.iterator.LsaIterator;
 import java.util.Iterator;
 
 public class ObjZip<F, S, R> extends LsaIterator<R> {

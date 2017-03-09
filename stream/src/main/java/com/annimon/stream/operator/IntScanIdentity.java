@@ -1,8 +1,8 @@
 package com.annimon.stream.operator;
 
-import com.annimon.stream.PrimitiveExtIterator;
-import com.annimon.stream.PrimitiveIterator;
 import com.annimon.stream.function.IntBinaryOperator;
+import com.annimon.stream.iterator.PrimitiveExtIterator;
+import com.annimon.stream.iterator.PrimitiveIterator;
 
 public class IntScanIdentity extends PrimitiveExtIterator.OfInt {
 

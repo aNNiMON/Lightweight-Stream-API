@@ -1,8 +1,8 @@
 package com.annimon.stream.operator;
 
 import com.annimon.stream.IntStream;
-import com.annimon.stream.PrimitiveIterator;
 import com.annimon.stream.function.IntFunction;
+import com.annimon.stream.iterator.PrimitiveIterator;
 import java.util.NoSuchElementException;
 
 public class IntFlatMap extends PrimitiveIterator.OfInt {

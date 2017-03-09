@@ -1,7 +1,7 @@
 package com.annimon.stream.operator;
 
-import com.annimon.stream.PrimitiveIterator;
 import com.annimon.stream.function.ToLongFunction;
+import com.annimon.stream.iterator.PrimitiveIterator;
 import java.util.Iterator;
 
 public class ObjMapToLong<T> extends PrimitiveIterator.OfLong {

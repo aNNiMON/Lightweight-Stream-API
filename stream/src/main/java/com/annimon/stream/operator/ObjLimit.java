@@ -1,6 +1,6 @@
 package com.annimon.stream.operator;
 
-import com.annimon.stream.LsaIterator;
+import com.annimon.stream.iterator.LsaIterator;
 import java.util.Iterator;
 
 public class ObjLimit<T> extends LsaIterator<T> {

@@ -1,8 +1,13 @@
-package com.annimon.stream;
+package com.annimon.stream.iterator;
 
 import java.util.Iterator;
 
-class LazyIterator<T> implements Iterator<T> {
+/**
+ * Lazily gets {@code Iterator} from the given {@code Iterable}.
+ * 
+ * @param <T> the type of the elements
+ */
+public class LazyIterator<T> implements Iterator<T> {
     private final Iterable<? extends T> iterable;
     private Iterator<? extends T> iterator;
 

@@ -1,7 +1,7 @@
 package com.annimon.stream.operator;
 
 import com.annimon.stream.internal.Compat;
-import com.annimon.stream.LsaIterator;
+import com.annimon.stream.iterator.LsaIterator;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

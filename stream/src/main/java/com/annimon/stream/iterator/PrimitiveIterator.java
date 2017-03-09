@@ -1,4 +1,4 @@
-package com.annimon.stream;
+package com.annimon.stream.iterator;
 
 import java.util.Iterator;
 

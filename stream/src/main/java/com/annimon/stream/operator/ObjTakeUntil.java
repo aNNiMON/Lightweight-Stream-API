@@ -1,7 +1,7 @@
 package com.annimon.stream.operator;
 
-import com.annimon.stream.LsaExtIterator;
 import com.annimon.stream.function.Predicate;
+import com.annimon.stream.iterator.LsaExtIterator;
 import java.util.Iterator;
 
 public class ObjTakeUntil<T> extends LsaExtIterator<T> {

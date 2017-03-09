@@ -1,8 +1,8 @@
 package com.annimon.stream.operator;
 
 import com.annimon.stream.DoubleStream;
-import com.annimon.stream.PrimitiveIterator;
 import com.annimon.stream.function.DoubleFunction;
+import com.annimon.stream.iterator.PrimitiveIterator;
 import java.util.NoSuchElementException;
 
 public class DoubleFlatMap extends PrimitiveIterator.OfDouble {

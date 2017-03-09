@@ -1,7 +1,7 @@
 package com.annimon.stream.operator;
 
-import com.annimon.stream.LsaExtIterator;
 import com.annimon.stream.function.BiFunction;
+import com.annimon.stream.iterator.LsaExtIterator;
 import java.util.Iterator;
 
 public class ObjScan<T> extends LsaExtIterator<T> {

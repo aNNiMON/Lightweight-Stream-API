@@ -1,6 +1,6 @@
 package com.annimon.stream.operator;
 
-import com.annimon.stream.LsaExtIterator;
+import com.annimon.stream.iterator.LsaExtIterator;
 import java.util.Iterator;
 
 public class ObjConcat<T> extends LsaExtIterator<T> {

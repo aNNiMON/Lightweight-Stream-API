@@ -1,7 +1,7 @@
 package com.annimon.stream.operator;
 
-import com.annimon.stream.PrimitiveIterator;
 import com.annimon.stream.function.IntSupplier;
+import com.annimon.stream.iterator.PrimitiveIterator;
 
 public class IntGenerate extends PrimitiveIterator.OfInt {
 
