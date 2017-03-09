@@ -23,7 +23,7 @@ public interface LongSupplier {
         /**
          * Creates a safe {@code LongSupplier}.
          *
-         * @param throwableSupplier  the consumer that may throw an exception
+         * @param throwableSupplier  the supplier that may throw an exception
          * @return a {@code LongSupplier}
          * @throws NullPointerException if {@code throwableSupplier} is null
          * @since 1.1.7
@@ -36,7 +36,7 @@ public interface LongSupplier {
         /**
          * Creates a safe {@code LongSupplier}.
          *
-         * @param throwableSupplier  the consumer that may throw an exception
+         * @param throwableSupplier  the supplier that may throw an exception
          * @param resultIfFailed  the result which returned if exception was thrown
          * @return a {@code LongSupplier}
          * @throws NullPointerException if {@code throwableSupplier} is null

@@ -39,24 +39,24 @@ public class DoubleSupplierTest {
     public void testSafe() throws IOException {
         DataInputStream dis = new DataInputStream(new ByteArrayInputStream(input));
 
-        DoubleSupplier consumer = DoubleSupplier.Util.safe(new UnsafeSupplier(dis));
-        assertThat(consumer.getAsDouble(), closeTo(0.16, 0.0001));
-        assertThat(consumer.getAsDouble(), closeTo(3.20, 0.0001));
-        assertThat(consumer.getAsDouble(), closeTo(5000, 0.0001));
-        assertThat(consumer.getAsDouble(), closeTo(0.0, 0.0001));
-        assertThat(consumer.getAsDouble(), closeTo(0.0, 0.0001));
+        DoubleSupplier supplier = DoubleSupplier.Util.safe(new UnsafeSupplier(dis));
+        assertThat(supplier.getAsDouble(), closeTo(0.16, 0.0001));
+        assertThat(supplier.getAsDouble(), closeTo(3.20, 0.0001));
+        assertThat(supplier.getAsDouble(), closeTo(5000, 0.0001));
+        assertThat(supplier.getAsDouble(), closeTo(0.0, 0.0001));
+        assertThat(supplier.getAsDouble(), closeTo(0.0, 0.0001));
     }
 
     @Test
     public void testSafeWithOnFailedSupplier() throws IOException {
         DataInputStream dis = new DataInputStream(new ByteArrayInputStream(input));
 
-        DoubleSupplier consumer = DoubleSupplier.Util.safe(new UnsafeSupplier(dis), 5000);
-        assertThat(consumer.getAsDouble(), closeTo(0.16, 0.0001));
-        assertThat(consumer.getAsDouble(), closeTo(3.20, 0.0001));
-        assertThat(consumer.getAsDouble(), closeTo(5000, 0.0001));
-        assertThat(consumer.getAsDouble(), closeTo(5000, 0.0001));
-        assertThat(consumer.getAsDouble(), closeTo(5000, 0.0001));
+        DoubleSupplier supplier = DoubleSupplier.Util.safe(new UnsafeSupplier(dis), 5000);
+        assertThat(supplier.getAsDouble(), closeTo(0.16, 0.0001));
+        assertThat(supplier.getAsDouble(), closeTo(3.20, 0.0001));
+        assertThat(supplier.getAsDouble(), closeTo(5000, 0.0001));
+        assertThat(supplier.getAsDouble(), closeTo(5000, 0.0001));
+        assertThat(supplier.getAsDouble(), closeTo(5000, 0.0001));
     }
 
     private static class UnsafeSupplier implements ThrowableDoubleSupplier<Throwable> {

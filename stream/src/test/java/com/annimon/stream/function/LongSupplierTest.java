@@ -39,24 +39,24 @@ public class LongSupplierTest {
     public void testSafe() throws IOException {
         DataInputStream dis = new DataInputStream(new ByteArrayInputStream(input));
 
-        LongSupplier consumer = LongSupplier.Util.safe(new UnsafeSupplier(dis));
-        assertThat(consumer.getAsLong(), is(10L));
-        assertThat(consumer.getAsLong(), is(15L));
-        assertThat(consumer.getAsLong(), is(20L));
-        assertThat(consumer.getAsLong(), is(0L));
-        assertThat(consumer.getAsLong(), is(0L));
+        LongSupplier supplier = LongSupplier.Util.safe(new UnsafeSupplier(dis));
+        assertThat(supplier.getAsLong(), is(10L));
+        assertThat(supplier.getAsLong(), is(15L));
+        assertThat(supplier.getAsLong(), is(20L));
+        assertThat(supplier.getAsLong(), is(0L));
+        assertThat(supplier.getAsLong(), is(0L));
     }
 
     @Test
     public void testSafeWithOnFailedSupplier() throws IOException {
         DataInputStream dis = new DataInputStream(new ByteArrayInputStream(input));
 
-        LongSupplier consumer = LongSupplier.Util.safe(new UnsafeSupplier(dis), 500L);
-        assertThat(consumer.getAsLong(), is(10L));
-        assertThat(consumer.getAsLong(), is(15L));
-        assertThat(consumer.getAsLong(), is(20L));
-        assertThat(consumer.getAsLong(), is(500L));
-        assertThat(consumer.getAsLong(), is(500L));
+        LongSupplier supplier = LongSupplier.Util.safe(new UnsafeSupplier(dis), 500L);
+        assertThat(supplier.getAsLong(), is(10L));
+        assertThat(supplier.getAsLong(), is(15L));
+        assertThat(supplier.getAsLong(), is(20L));
+        assertThat(supplier.getAsLong(), is(500L));
+        assertThat(supplier.getAsLong(), is(500L));
     }
 
     private static class UnsafeSupplier implements ThrowableLongSupplier<Throwable> {

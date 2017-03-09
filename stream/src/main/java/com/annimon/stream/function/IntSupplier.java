@@ -24,7 +24,7 @@ public interface IntSupplier {
         /**
          * Creates a safe {@code IntSupplier}.
          *
-         * @param throwableSupplier  the consumer that may throw an exception
+         * @param throwableSupplier  the supplier that may throw an exception
          * @return an {@code IntSupplier}
          * @throws NullPointerException if {@code throwableSupplier} is null
          * @since 1.1.7
@@ -37,7 +37,7 @@ public interface IntSupplier {
         /**
          * Creates a safe {@code IntSupplier}.
          *
-         * @param throwableSupplier  the consumer that may throw an exception
+         * @param throwableSupplier  the supplier that may throw an exception
          * @param resultIfFailed  the result which returned if exception was thrown
          * @return an {@code IntSupplier}
          * @throws NullPointerException if {@code throwableSupplier} is null

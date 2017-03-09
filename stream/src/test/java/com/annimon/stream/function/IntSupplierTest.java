@@ -39,24 +39,24 @@ public class IntSupplierTest {
     public void testSafe() throws IOException {
         DataInputStream dis = new DataInputStream(new ByteArrayInputStream(input));
 
-        IntSupplier consumer = IntSupplier.Util.safe(new UnsafeSupplier(dis));
-        assertThat(consumer.getAsInt(), is(10));
-        assertThat(consumer.getAsInt(), is(15));
-        assertThat(consumer.getAsInt(), is(20));
-        assertThat(consumer.getAsInt(), is(0));
-        assertThat(consumer.getAsInt(), is(0));
+        IntSupplier supplier = IntSupplier.Util.safe(new UnsafeSupplier(dis));
+        assertThat(supplier.getAsInt(), is(10));
+        assertThat(supplier.getAsInt(), is(15));
+        assertThat(supplier.getAsInt(), is(20));
+        assertThat(supplier.getAsInt(), is(0));
+        assertThat(supplier.getAsInt(), is(0));
     }
 
     @Test
     public void testSafeWithOnFailedSupplier() throws IOException {
         DataInputStream dis = new DataInputStream(new ByteArrayInputStream(input));
 
-        IntSupplier consumer = IntSupplier.Util.safe(new UnsafeSupplier(dis), 500);
-        assertThat(consumer.getAsInt(), is(10));
-        assertThat(consumer.getAsInt(), is(15));
-        assertThat(consumer.getAsInt(), is(20));
-        assertThat(consumer.getAsInt(), is(500));
-        assertThat(consumer.getAsInt(), is(500));
+        IntSupplier supplier = IntSupplier.Util.safe(new UnsafeSupplier(dis), 500);
+        assertThat(supplier.getAsInt(), is(10));
+        assertThat(supplier.getAsInt(), is(15));
+        assertThat(supplier.getAsInt(), is(20));
+        assertThat(supplier.getAsInt(), is(500));
+        assertThat(supplier.getAsInt(), is(500));
     }
 
     private static class UnsafeSupplier implements ThrowableIntSupplier<Throwable> {
