@@ -47,32 +47,4 @@ public final class RangeTest {
         long count = Stream.rangeClosed(Long.MAX_VALUE - 10, Long.MAX_VALUE).count();
         assertEquals(11L, count);
     }
-
-    @Test
-    @SuppressWarnings("deprecation")
-    public void testStreamOfRange() {
-        long count = Stream.ofRange(0, 5).count();
-        assertEquals(5, count);
-    }
-
-    @Test
-    @SuppressWarnings("deprecation")
-    public void testStreamOfRangeLong() {
-        long count = Stream.ofRange(Long.MAX_VALUE - 10, Long.MAX_VALUE).count();
-        assertEquals(10L, count);
-    }
-
-    @Test
-    @SuppressWarnings("deprecation")
-    public void testStreamOfRangeClosed() {
-        long count = Stream.ofRangeClosed(0, 5).count();
-        assertEquals(6, count);
-    }
-
-    @Test
-    @SuppressWarnings("deprecation")
-    public void testStreamOfRangeClosedLong() {
-        long count = Stream.ofRangeClosed(Long.MAX_VALUE - 10, Long.MAX_VALUE).count();
-        assertEquals(11L, count);
-    }
 }

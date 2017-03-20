@@ -18,7 +18,7 @@ import java.util.NoSuchElementException;
  *
  * @param <T> the type of the stream elements
  */
-public final class Stream<T> {
+public class Stream<T> {
 
     /**
      * Returns an empty stream.
@@ -127,20 +127,6 @@ public final class Stream<T> {
     }
 
     /**
-     * Creates a {@code Stream<Integer>} from not closed range
-     * (from {@code from} inclusive to {@code to} exclusive and incremental step {@code 1}).
-     *
-     * @param from  the initial value (inclusive)
-     * @param to  the upper bound (exclusive)
-     * @deprecated  As of release 1.0.7, replaced by {@link #range(int, int)}
-     * @return the new stream
-     */
-    @Deprecated
-    public static Stream<Integer> ofRange(final int from, final int to) {
-        return range(from, to);
-    }
-
-    /**
      * Creates a {@code Stream<Long>} from not closed range
      * (from {@code from} inclusive to {@code to} exclusive and incremental step {@code 1}).
      *
@@ -150,20 +136,6 @@ public final class Stream<T> {
      */
     public static Stream<Long> range(final long from, final long to) {
         return LongStream.range(from, to).boxed();
-    }
-
-    /**
-     * Creates a {@code Stream<Long>} from not closed range
-     * (from {@code from} inclusive to {@code to} exclusive and incremental step {@code 1}).
-     *
-     * @param from  the initial value (inclusive)
-     * @param to  the upper bound (exclusive)
-     * @deprecated  As of release 1.0.7, replaced by {@link #range(long, long)}
-     * @return the new stream
-     */
-    @Deprecated
-    public static Stream<Long> ofRange(final long from, final long to) {
-        return range(from, to);
     }
 
     /**
@@ -180,20 +152,6 @@ public final class Stream<T> {
     }
 
     /**
-     * Creates a {@code Stream<Integer>} from closed range
-     * (from {@code from} inclusive to {@code to} inclusive and incremental step {@code 1}).
-     *
-     * @param from  the initial value (inclusive)
-     * @param to  the upper bound (inclusive)
-     * @deprecated  As of release 1.0.7, replaced by {@link #rangeClosed(int, int)}
-     * @return the new stream
-     */
-    @Deprecated
-    public static Stream<Integer> ofRangeClosed(final int from, final int to) {
-        return rangeClosed(from, to);
-    }
-
-    /**
      * Creates a {@code Stream<Long>} from closed range
      * (from {@code from} inclusive to {@code to} inclusive and incremental step {@code 1}).
      *
@@ -203,20 +161,6 @@ public final class Stream<T> {
      */
     public static Stream<Long> rangeClosed(final long from, final long to) {
         return LongStream.rangeClosed(from, to).boxed();
-    }
-
-    /**
-     * Creates a {@code Stream<Long>} from closed range
-     * (from {@code from} inclusive to {@code to} inclusive and incremental step {@code 1}).
-     *
-     * @param from  the initial value (inclusive)
-     * @param to  the upper bound (inclusive)
-     * @deprecated  As of release 1.0.7, replaced by {@link #rangeClosed(long, long)}
-     * @return the new stream
-     */
-    @Deprecated
-    public static Stream<Long> ofRangeClosed(final long from, final long to) {
-        return rangeClosed(from, to);
     }
 
     /**
