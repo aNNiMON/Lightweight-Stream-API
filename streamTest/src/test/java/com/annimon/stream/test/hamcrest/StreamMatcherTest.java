@@ -9,7 +9,6 @@ import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConst
 import static com.annimon.stream.test.hamcrest.StreamMatcher.elements;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.hasElements;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.isEmpty;
-import static com.annimon.stream.test.hamcrest.StreamMatcher.isNotEmpty;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
@@ -27,10 +26,8 @@ public class StreamMatcherTest {
     }
 
     @Test
-    @SuppressWarnings("deprecation")
     public void testIsEmpty() {
         assertThat(Stream.empty(), isEmpty());
-        assertThat(Stream.of(1, 2), isNotEmpty());
 
         StringDescription description = new StringDescription();
         isEmpty().describeTo(description);
@@ -50,12 +47,6 @@ public class StreamMatcherTest {
     @Test(expected = AssertionError.class)
     public void testIsEmptyOnNullValue() {
         assertThat(null, isEmpty());
-    }
-
-    @Test
-    @SuppressWarnings("deprecation")
-    public void testIsNotEmptyOnNullValue() {
-        assertThat(null, isNotEmpty());
     }
 
     @Test(expected = AssertionError.class)

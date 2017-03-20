@@ -1,13 +1,11 @@
 package com.annimon.stream.test.hamcrest;
 
-import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import com.annimon.stream.function.Function;
 import java.util.List;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class StreamMatcher {
@@ -16,14 +14,6 @@ public class StreamMatcher {
 
     public static Matcher<Stream<?>> isEmpty() {
         return new IsEmptyMatcher();
-    }
-
-    /**
-     * @deprecated Use not({@link StreamMatcher#isEmpty()}) or {@link StreamMatcher#hasElements()} instead
-     */
-    @Deprecated
-    public static Matcher<Stream<?>> isNotEmpty() {
-        return not(isEmpty());
     }
 
     public static Matcher<Stream<?>> hasElements() {
