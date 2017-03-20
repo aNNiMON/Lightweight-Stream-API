@@ -124,17 +124,17 @@ public class RatingsTest {
         
         /* Scala analogue
         .flatMap(filename => Source.fromFile(filename, "UTF-8").getLines)
-  	.map(s => s.split("\\s+"))
-  	.map { arr => (arr(0), arr
-  	    .drop(1)
-  	    .map(_.toInt)
-  	    .sum) }
-  	.groupBy(_._1)
-  	.map { case (name, ratings) => (name, ratings.map(_._2).sum)  }
-  	.toSeq
-  	.sortBy(- _._2)
-  	.map { case (name, rating) => "%12s: %d".format(name, rating) }
-  	.foreach(println);
+        .map(s => s.split("\\s+"))
+        .map { arr => (arr(0), arr
+            .drop(1)
+            .map(_.toInt)
+            .sum) }
+        .groupBy(_._1)
+        .map { case (name, ratings) => (name, ratings.map(_._2).sum)  }
+        .toSeq
+        .sortBy(- _._2)
+        .map { case (name, rating) => "%12s: %d".format(name, rating) }
+        .foreach(println);
         */
         
         Assert.assertEquals(
