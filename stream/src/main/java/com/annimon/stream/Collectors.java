@@ -186,7 +186,7 @@ public final class Collectors {
     /**
      * Returns a {@code Collector} that concatenates input elements into new string.
      * 
-     * @param delimiter  the delimeter between each element
+     * @param delimiter  the delimiter between each element
      * @return a {@code Collector}
      */
     public static Collector<CharSequence, ?, String> joining(CharSequence delimiter) {
@@ -196,7 +196,7 @@ public final class Collectors {
     /**
      * Returns a {@code Collector} that concatenates input elements into new string.
      * 
-     * @param delimiter  the delimeter between each element
+     * @param delimiter  the delimiter between each element
      * @param prefix  the prefix of result
      * @param suffix  the suffix of result
      * @return a {@code Collector}
@@ -208,7 +208,7 @@ public final class Collectors {
     /**
      * Returns a {@code Collector} that concatenates input elements into new string.
      * 
-     * @param delimiter  the delimeter between each element
+     * @param delimiter  the delimiter between each element
      * @param prefix  the prefix of result
      * @param suffix  the suffix of result
      * @param emptyValue  the string which replaces empty element if exists
