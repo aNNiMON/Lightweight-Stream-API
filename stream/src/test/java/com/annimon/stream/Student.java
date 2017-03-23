@@ -42,10 +42,9 @@ public final class Student implements Comparable<Student> {
     @Override
     public int compareTo(Student o) {
         return ComparatorCompat
-                .chain(ComparatorCompat.comparing(Students.studentName))
+                .comparing(Students.studentName)
                 .thenComparing(Students.speciality)
                 .thenComparing(Students.course)
-                .comparator()
                 .compare(this, o);
     }
 
