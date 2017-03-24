@@ -65,7 +65,7 @@ public interface IntConsumer {
          * @return an {@code IntConsumer}
          * @throws NullPointerException if {@code throwableConsumer} is null
          * @since 1.1.7
-         * @see #safe(com.annimon.stream.function.ThrowableConsumer)
+         * @see #safe(com.annimon.stream.function.ThrowableIntConsumer)
          */
         public static IntConsumer safe(
                 final ThrowableIntConsumer<Throwable> throwableConsumer,

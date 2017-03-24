@@ -61,7 +61,7 @@ public interface LongConsumer {
          * @return a {@code LongConsumer}
          * @throws NullPointerException if {@code throwableConsumer} is null
          * @since 1.1.7
-         * @see #safe(com.annimon.stream.function.ThrowableConsumer)
+         * @see #safe(com.annimon.stream.function.ThrowableLongConsumer)
          */
         public static LongConsumer safe(
                 final ThrowableLongConsumer<Throwable> throwableConsumer,
