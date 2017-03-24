@@ -35,8 +35,9 @@ public class ComparatorCompatTest {
     public void testReversedComparator() {
         int[] expected = {1, -2, 4, -8, 16};
         IntStream stream = IntStream.of(-8, -2, 1, 4, 16)
-                .sorted(new ComparatorCompat<Integer>(Functions.descendingAbsoluteOrder())
-                        .reversed());
+                .sorted(ComparatorCompat.reversed(
+                        Functions.descendingAbsoluteOrder()
+                ));
         assertThat(stream.toArray(), is(expected));
     }
 
@@ -44,8 +45,9 @@ public class ComparatorCompatTest {
     public void testThenComparing() {
         int[] expected = {16, -16, 4, -4, -2, 1};
         IntStream stream = IntStream.of(-16, -4, -2, 1, 4, 16)
-                .sorted(new ComparatorCompat<Integer>(Functions.descendingAbsoluteOrder())
-                        .thenComparing(ComparatorCompat.<Integer>reverseOrder()
+                .sorted(ComparatorCompat.thenComparing(
+                        Functions.descendingAbsoluteOrder(),
+                        ComparatorCompat.<Integer>reverseOrder()
                 ));
         assertThat(stream.toArray(), is(expected));
     }
@@ -248,6 +250,18 @@ public class ComparatorCompatTest {
                 .reversed()
                 .thenComparing(Students.course)
                 .thenComparing(Students.speciality);
+        testStudentComparator(comparator);
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    public void testChain_NameReversedThenCourseThenSpeciality_Deprecation() {
+        Comparator<Student> comparator = ComparatorCompat
+                .chain(ComparatorCompat.comparing(Students.studentName))
+                .reversed()
+                .thenComparing(Students.course)
+                .thenComparing(Students.speciality)
+                .comparator();
         testStudentComparator(comparator);
     }
 

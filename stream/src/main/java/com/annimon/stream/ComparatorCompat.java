@@ -51,6 +51,46 @@ public final class ComparatorCompat<T> implements Comparator<T> {
     }
 
     /**
+     * Returns a comparator that reverses the order of the specified comparator.
+     * If the specified comparator is {@code null}, this method is equivalent
+     * to {@link #reverseOrder()}.
+     *
+     * @param <T> the type of the objects compared by the comparator
+     * @param comparator  a comparator to be reversed
+     * @return a comparator
+     * @see Collections#reverseOrder(java.util.Comparator)
+     * @throws NullPointerException if {@code comparator} is null
+     */
+    public static <T> Comparator<T> reversed(Comparator<T> comparator) {
+        return Collections.reverseOrder(comparator);
+    }
+
+    /**
+     * Returns a comparator that uses {@code c2} comparator
+     * if {@code c1} comparator considers two elements equal.
+     *
+     * @param <T> the type of the objects compared by the comparators
+     * @param c1  a first comparator
+     * @param c2  a second comparator
+     * @return a comparator
+     * @throws NullPointerException if {@code c1} or {@code c2} is null
+     */
+    public static <T> Comparator<T> thenComparing(
+            final Comparator<? super T> c1,
+            final Comparator<? super T> c2) {
+        Objects.requireNonNull(c1);
+        Objects.requireNonNull(c2);
+        return new Comparator<T>() {
+
+            @Override
+            public int compare(T t1, T t2) {
+                final int result = c1.compare(t1, t2);
+                return (result != 0) ? result : c2.compare(t1, t2);
+            }
+        };
+    }
+
+    /**
      * Returns a comparator that uses a function that extracts a sort key
      * to be compared with the specified comparator.
      *
@@ -235,6 +275,18 @@ public final class ComparatorCompat<T> implements Comparator<T> {
         });
     }
 
+    /**
+     * Allows to build comparators with method chaining.
+     *
+     * @param <T> the type of the objects compared by the comparator
+     * @param comparator  the comparator to be chained
+     * @return a {@code Chain} instance
+     */
+    public static <T> ComparatorCompat<T> chain(Comparator<T> comparator) {
+        return new ComparatorCompat<T>(comparator);
+    }
+
+
     private final Comparator<? super T> comparator;
 
     public ComparatorCompat(Comparator<? super T> comparator) {
@@ -329,6 +381,17 @@ public final class ComparatorCompat<T> implements Comparator<T> {
      */
     public ComparatorCompat<T> thenComparingDouble(ToDoubleFunction<? super T> keyExtractor) {
         return thenComparing(comparingDouble(keyExtractor));
+    }
+
+    /**
+     * Returns a chained {@code Comparator}.
+     *
+     * @deprecated  As of release 1.1.7, it is unnecessary to call this method.
+     * @return a comparator
+     */
+    @SuppressWarnings("unchecked")
+    public Comparator<T> comparator() {
+        return (Comparator<T>) comparator;
     }
 
     @Override
