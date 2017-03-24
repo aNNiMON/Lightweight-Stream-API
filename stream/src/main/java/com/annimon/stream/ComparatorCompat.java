@@ -12,16 +12,20 @@ import java.util.Comparator;
  *
  * @since 1.1.6
  */
-public final class ComparatorCompat {
+public final class ComparatorCompat<T> implements Comparator<T> {
 
-    private static final Comparator<Comparable<Object>> NATURAL_ORDER = new Comparator<Comparable<Object>>() {
-        @Override
-        public int compare(Comparable<Object> o1, Comparable<Object> o2) {
-            return o1.compareTo(o2);
-        }
-    };
+    private static final ComparatorCompat<Comparable<Object>>
+            NATURAL_ORDER = new ComparatorCompat<Comparable<Object>>(
+                    new Comparator<Comparable<Object>>() {
+                        @Override
+                        public int compare(Comparable<Object> o1, Comparable<Object> o2) {
+                            return o1.compareTo(o2);
+                        }
+                    });
 
-    private ComparatorCompat() { }
+    private static final ComparatorCompat<Comparable<Object>>
+            REVERSE_ORDER = new ComparatorCompat<Comparable<Object>>(
+                    Collections.reverseOrder());
 
     /**
      * Returns a comparator with natural order.
@@ -30,8 +34,8 @@ public final class ComparatorCompat {
      * @return a comparator
      */
     @SuppressWarnings("unchecked")
-    public static <T extends Comparable<? super T>> Comparator<T> naturalOrder() {
-        return (Comparator<T>) NATURAL_ORDER;
+    public static <T extends Comparable<? super T>> ComparatorCompat<T> naturalOrder() {
+        return (ComparatorCompat<T>) NATURAL_ORDER;
     }
 
     /**
@@ -41,8 +45,9 @@ public final class ComparatorCompat {
      * @return a comparator
      * @see Collections#reverseOrder()
      */
-    public static <T extends Comparable<? super T>> Comparator<T> reverseOrder() {
-        return Collections.reverseOrder();
+    @SuppressWarnings("unchecked")
+    public static <T extends Comparable<? super T>> ComparatorCompat<T> reverseOrder() {
+        return (ComparatorCompat<T>) REVERSE_ORDER;
     }
 
     /**
@@ -96,12 +101,12 @@ public final class ComparatorCompat {
      * @return a comparator
      * @throws NullPointerException if {@code keyExtractor} or {@code keyComparator} is null
      */
-    public static <T, U> Comparator<T> comparing(
+    public static <T, U> ComparatorCompat<T> comparing(
             final Function<? super T, ? extends U> keyExtractor,
             final Comparator<? super U> keyComparator) {
         Objects.requireNonNull(keyExtractor);
         Objects.requireNonNull(keyComparator);
-        return new Comparator<T>() {
+        return new ComparatorCompat<T>(new Comparator<T>() {
 
             @Override
             public int compare(T t1, T t2) {
@@ -109,7 +114,7 @@ public final class ComparatorCompat {
                 final U u2 = keyExtractor.apply(t2);
                 return keyComparator.compare(u1, u2);
             }
-        };
+        });
     }
 
     /**
@@ -122,10 +127,10 @@ public final class ComparatorCompat {
      * @return a comparator
      * @throws NullPointerException if {@code keyExtractor} is null
      */
-    public static <T, U extends Comparable<? super U>> Comparator<T> comparing(
+    public static <T, U extends Comparable<? super U>> ComparatorCompat<T> comparing(
             final Function<? super T, ? extends U> keyExtractor) {
         Objects.requireNonNull(keyExtractor);
-        return new Comparator<T>() {
+        return new ComparatorCompat<T>(new Comparator<T>() {
 
             @Override
             public int compare(T t1, T t2) {
@@ -133,7 +138,7 @@ public final class ComparatorCompat {
                 final U u2 = keyExtractor.apply(t2);
                 return u1.compareTo(u2);
             }
-        };
+        });
     }
 
     /**
@@ -145,10 +150,10 @@ public final class ComparatorCompat {
      * @return a comparator
      * @throws NullPointerException if {@code keyExtractor} is null
      */
-    public static <T> Comparator<T> comparingInt(
+    public static <T> ComparatorCompat<T> comparingInt(
             final ToIntFunction<? super T> keyExtractor) {
         Objects.requireNonNull(keyExtractor);
-        return new Comparator<T>() {
+        return new ComparatorCompat<T>(new Comparator<T>() {
 
             @Override
             public int compare(T t1, T t2) {
@@ -156,7 +161,7 @@ public final class ComparatorCompat {
                 final int i2 = keyExtractor.applyAsInt(t2);
                 return Objects.compareInt(i1, i2);
             }
-        };
+        });
     }
 
     /**
@@ -168,10 +173,10 @@ public final class ComparatorCompat {
      * @return a comparator
      * @throws NullPointerException if {@code keyExtractor} is null
      */
-    public static <T> Comparator<T> comparingLong(
+    public static <T> ComparatorCompat<T> comparingLong(
             final ToLongFunction<? super T> keyExtractor) {
         Objects.requireNonNull(keyExtractor);
-        return new Comparator<T>() {
+        return new ComparatorCompat<T>(new Comparator<T>() {
 
             @Override
             public int compare(T t1, T t2) {
@@ -179,7 +184,7 @@ public final class ComparatorCompat {
                 final long l2 = keyExtractor.applyAsLong(t2);
                 return Objects.compareLong(l1, l2);
             }
-        };
+        });
     }
 
     /**
@@ -191,10 +196,10 @@ public final class ComparatorCompat {
      * @return a comparator
      * @throws NullPointerException if {@code keyExtractor} is null
      */
-    public static <T> Comparator<T> comparingDouble(
+    public static <T> ComparatorCompat<T> comparingDouble(
             final ToDoubleFunction<? super T> keyExtractor) {
         Objects.requireNonNull(keyExtractor);
-        return new Comparator<T>() {
+        return new ComparatorCompat<T>(new Comparator<T>() {
 
             @Override
             public int compare(T t1, T t2) {
@@ -202,7 +207,7 @@ public final class ComparatorCompat {
                 final double d2 = keyExtractor.applyAsDouble(t2);
                 return Double.compare(d1, d2);
             }
-        };
+        });
     }
 
     /**
@@ -212,7 +217,7 @@ public final class ComparatorCompat {
      * @param <T> the type of the objects compared by the comparator
      * @return a comparator
      */
-    public static <T> Comparator<T> nullsFirst() {
+    public static <T> ComparatorCompat<T> nullsFirst() {
         return nullsComparator(true, null);
     }
 
@@ -225,7 +230,7 @@ public final class ComparatorCompat {
      * @param comparator  a comparator for comparing non-null values
      * @return a comparator
      */
-    public static <T> Comparator<T> nullsFirst(Comparator<? super T> comparator) {
+    public static <T> ComparatorCompat<T> nullsFirst(Comparator<? super T> comparator) {
         return nullsComparator(true, comparator);
     }
 
@@ -236,7 +241,7 @@ public final class ComparatorCompat {
      * @param <T> the type of the objects compared by the comparator
      * @return a comparator
      */
-    public static <T> Comparator<T> nullsLast() {
+    public static <T> ComparatorCompat<T> nullsLast() {
         return nullsComparator(false, null);
     }
 
@@ -249,13 +254,13 @@ public final class ComparatorCompat {
      * @param comparator  a comparator for comparing non-null values
      * @return a comparator
      */
-    public static <T> Comparator<T> nullsLast(Comparator<? super T> comparator) {
+    public static <T> ComparatorCompat<T> nullsLast(Comparator<? super T> comparator) {
         return nullsComparator(false, comparator);
     }
 
-    private static <T> Comparator<T> nullsComparator(
+    private static <T> ComparatorCompat<T> nullsComparator(
             final boolean nullFirst, final Comparator<? super T> comparator) {
-        return new Comparator<T>() {
+        return new ComparatorCompat<T>(new Comparator<T>() {
 
             @Override
             public int compare(T t1, T t2) {
@@ -267,123 +272,130 @@ public final class ComparatorCompat {
                     return (comparator == null) ? 0 : comparator.compare(t1, t2);
                 }
             }
-        };
+        });
     }
 
     /**
-     * Returns a {@link Chain} class instance for build comparators.
+     * Allows to build comparators with method chaining.
      *
      * @param <T> the type of the objects compared by the comparator
      * @param comparator  the comparator to be chained
      * @return a {@code Chain} instance
      */
-    public static <T> ComparatorCompat.Chain<T> chain(Comparator<T> comparator) {
-        return new ComparatorCompat.Chain<T>(comparator);
+    public static <T> ComparatorCompat<T> chain(Comparator<T> comparator) {
+        return new ComparatorCompat<T>(comparator);
+    }
+
+
+    private final Comparator<? super T> comparator;
+
+    public ComparatorCompat(Comparator<? super T> comparator) {
+        this.comparator = comparator;
     }
 
     /**
-     * Class that helps to build new comparators.
+     * Reverses the order of comparator.
      *
-     * @param <T> the type of the objects compared by the comparator
+     * @return the new {@code ComparatorCompat} instance
+     * @see ComparatorCompat#reverseOrder()
      */
-    public static class Chain<T> {
+    public ComparatorCompat<T> reversed() {
+        return new ComparatorCompat<T>(Collections.reverseOrder(comparator));
+    }
 
-        private final Comparator<T> comparator;
+    /**
+     * Adds the given comparator to the chain.
+     *
+     * @param other  the other comparator to be used when chained
+     *               comparator compares two objects that are equal
+     * @return the new {@code ComparatorCompat} instance
+     */
+    public ComparatorCompat<T> thenComparing(final Comparator<? super T> other) {
+        Objects.requireNonNull(other);
+        return new ComparatorCompat<T>(new Comparator<T>() {
 
-        private Chain(Comparator<T> comparator) {
-            this.comparator = comparator;
-        }
+            @Override
+            public int compare(T t1, T t2) {
+                final int result = comparator.compare(t1, t2);
+                return (result != 0) ? result : other.compare(t1, t2);
+            }
+        });
+    }
 
-        /**
-         * Reverses the order of comparator.
-         *
-         * @return the new {@code Chain} instance
-         * @see ComparatorCompat#reverseOrder()
-         */
-        public Chain<T> reversed() {
-            return new Chain<T>(ComparatorCompat.<T>reversed(comparator));
-        }
+    /**
+     * Adds the comparator, that uses a function for extract
+     * a sort key, to the chain.
+     *
+     * @param <U> the type of the sort key
+     * @param keyExtractor  the function that extracts the sort key
+     * @param keyComparator  the comparator used to compare the sort key
+     * @return the new {@code ComparatorCompat} instance
+     */
+    public <U> ComparatorCompat<T> thenComparing(
+            Function<? super T, ? extends U> keyExtractor,
+            Comparator<? super U> keyComparator) {
+        return thenComparing(comparing(keyExtractor, keyComparator));
+    }
 
-        /**
-         * Adds the given comparator to the chain.
-         *
-         * @param other  the other comparator to be used when chained
-         *               comparator compares two objects that are equal
-         * @return the new {@code Chain} instance
-         * @see ComparatorCompat#thenComparing(java.util.Comparator, java.util.Comparator)
-         */
-        public Chain<T> thenComparing(Comparator<? super T> other) {
-            return new Chain<T>(ComparatorCompat.<T>thenComparing(comparator, other));
-        }
+    /**
+     * Adds the comparator, that uses a function for extract
+     * a {@link java.lang.Comparable} sort key, to the chain.
+     *
+     * @param <U> the type of the sort key
+     * @param keyExtractor  the function that extracts the sort key
+     * @return the new {@code ComparatorCompat} instance
+     */
+    public <U extends Comparable<? super U>> ComparatorCompat<T> thenComparing(
+            Function<? super T, ? extends U> keyExtractor) {
+        return thenComparing(comparing(keyExtractor));
+    }
 
-        /**
-         * Adds the comparator, that uses a function for extract
-         * a sort key, to the chain.
-         *
-         * @param <U> the type of the sort key
-         * @param keyExtractor  the function that extracts the sort key
-         * @param keyComparator  the comparator used to compare the sort key
-         * @return the new {@code Chain} instance
-         */
-        public <U> Chain<T> thenComparing(
-                Function<? super T, ? extends U> keyExtractor,
-                Comparator<? super U> keyComparator) {
-            return thenComparing(comparing(keyExtractor, keyComparator));
-        }
+    /**
+     * Adds the comparator, that uses a function for extract
+     * an {@code int} sort key, to the chain.
+     *
+     * @param keyExtractor  the function that extracts the sort key
+     * @return the new {@code ComparatorCompat} instance
+     */
+    public ComparatorCompat<T> thenComparingInt(ToIntFunction<? super T> keyExtractor) {
+        return thenComparing(comparingInt(keyExtractor));
+    }
 
-        /**
-         * Adds the comparator, that uses a function for extract
-         * a {@link java.lang.Comparable} sort key, to the chain.
-         *
-         * @param <U> the type of the sort key
-         * @param keyExtractor  the function that extracts the sort key
-         * @return the new {@code Chain} instance
-         */
-        public <U extends Comparable<? super U>> Chain<T> thenComparing(
-                Function<? super T, ? extends U> keyExtractor) {
-            return thenComparing(comparing(keyExtractor));
-        }
+    /**
+     * Adds the comparator, that uses a function for extract
+     * a {@code long} sort key, to the chain.
+     *
+     * @param keyExtractor  the function that extracts the sort key
+     * @return the new {@code ComparatorCompat} instance
+     */
+    public ComparatorCompat<T> thenComparingLong(ToLongFunction<? super T> keyExtractor) {
+        return thenComparing(comparingLong(keyExtractor));
+    }
 
-        /**
-         * Adds the comparator, that uses a function for extract
-         * an {@code int} sort key, to the chain.
-         *
-         * @param keyExtractor  the function that extracts the sort key
-         * @return the new {@code Chain} instance
-         */
-        public Chain<T> thenComparingInt(ToIntFunction<? super T> keyExtractor) {
-            return thenComparing(comparingInt(keyExtractor));
-        }
+    /**
+     * Adds the comparator, that uses a function for extract
+     * a {@code double} sort key, to the chain.
+     *
+     * @param keyExtractor  the function that extracts the sort key
+     * @return the new {@code ComparatorCompat} instance
+     */
+    public ComparatorCompat<T> thenComparingDouble(ToDoubleFunction<? super T> keyExtractor) {
+        return thenComparing(comparingDouble(keyExtractor));
+    }
 
-        /**
-         * Adds the comparator, that uses a function for extract
-         * a {@code long} sort key, to the chain.
-         *
-         * @param keyExtractor  the function that extracts the sort key
-         * @return the new {@code Chain} instance
-         */
-        public Chain<T> thenComparingLong(ToLongFunction<? super T> keyExtractor) {
-            return thenComparing(comparingLong(keyExtractor));
-        }
+    /**
+     * Returns a chained {@code Comparator}.
+     *
+     * @deprecated  As of release 1.1.7, it is unnecessary to call this method.
+     * @return a comparator
+     */
+    @SuppressWarnings("unchecked")
+    public Comparator<T> comparator() {
+        return (Comparator<T>) comparator;
+    }
 
-        /**
-         * Adds the comparator, that uses a function for extract
-         * a {@code double} sort key, to the chain.
-         *
-         * @param keyExtractor  the function that extracts the sort key
-         * @return the new {@code Chain} instance
-         */
-        public Chain<T> thenComparingDouble(ToDoubleFunction<? super T> keyExtractor) {
-            return thenComparing(comparingDouble(keyExtractor));
-        }
-
-        /**
-         * Returns a chained {@code Comparator}.
-         *
-         * @return a comparator
-         */
-        public Comparator<T> comparator() {
-            return comparator;
-        }
+    @Override
+    public int compare(T o1, T o2) {
+        return comparator.compare(o1, o2);
     }
 }

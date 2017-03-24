@@ -8,6 +8,7 @@ import com.annimon.stream.function.IntUnaryOperator;
 import com.annimon.stream.test.hamcrest.StreamMatcher;
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.IntStreamMatcher.assertElements;
 import static org.hamcrest.Matchers.arrayContaining;
@@ -57,5 +58,13 @@ public final class FilterTest {
                 .custom(StreamMatcher.assertElements(contains(
                         "0", "2", "4"
                 )));
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testFilterIteratorNextOnEmpty() {
+        IntStream.empty()
+                .filter(Functions.remainderInt(2))
+                .iterator()
+                .next();
     }
 }

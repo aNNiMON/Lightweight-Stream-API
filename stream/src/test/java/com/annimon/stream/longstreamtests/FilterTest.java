@@ -3,6 +3,7 @@ package com.annimon.stream.longstreamtests;
 import com.annimon.stream.Functions;
 import com.annimon.stream.LongStream;
 import com.annimon.stream.function.LongPredicate;
+import java.util.NoSuchElementException;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.LongStreamMatcher.assertElements;
 import static com.annimon.stream.test.hamcrest.LongStreamMatcher.assertIsEmpty;
@@ -22,5 +23,13 @@ public final class FilterTest {
         LongStream.of(12, -10)
                 .filter(predicate)
                 .custom(assertIsEmpty());
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testFilterIteratorNextOnEmpty() {
+        LongStream.empty()
+                .filter(Functions.remainderLong(2))
+                .iterator()
+                .next();
     }
 }

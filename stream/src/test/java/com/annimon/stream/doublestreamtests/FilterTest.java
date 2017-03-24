@@ -3,6 +3,7 @@ package com.annimon.stream.doublestreamtests;
 import com.annimon.stream.DoubleStream;
 import com.annimon.stream.Functions;
 import com.annimon.stream.function.DoublePredicate;
+import java.util.NoSuchElementException;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.DoubleStreamMatcher.assertElements;
 import static com.annimon.stream.test.hamcrest.DoubleStreamMatcher.assertIsEmpty;
@@ -22,5 +23,13 @@ public final class FilterTest {
         DoubleStream.of(0.012, -10)
                 .filter(predicate)
                 .custom(assertIsEmpty());
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testFilterIteratorNextOnEmpty() {
+        DoubleStream.empty()
+                .filter(Functions.greaterThan(Math.PI))
+                .iterator()
+                .next();
     }
 }

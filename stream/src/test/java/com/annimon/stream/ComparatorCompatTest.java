@@ -8,18 +8,12 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import org.junit.Test;
-import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.assertElements;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 public class ComparatorCompatTest {
-
-    @Test
-    public void testPrivateConstructor() throws Exception {
-        assertThat(ComparatorCompat.class, hasOnlyPrivateConstructors());
-    }
 
     @Test
     public void testNaturalOrder() {
@@ -178,9 +172,8 @@ public class ComparatorCompatTest {
     @Test
     public void testChain_CourseReversed() {
         Comparator<Student> comparator = ComparatorCompat
-                .chain(ComparatorCompat.comparing(Students.course))
-                .reversed()
-                .comparator();
+                .comparing(Students.course)
+                .reversed();
 
         List<Student> input = Arrays.asList(
                 Students.MARIA_CS_1,
@@ -199,9 +192,8 @@ public class ComparatorCompatTest {
     @Test
     public void testChain_CourseThenName() {
         Comparator<Student> comparator = ComparatorCompat
-                .chain(ComparatorCompat.comparing(Students.course))
-                .thenComparing(Students.studentName)
-                .comparator();
+                .comparing(Students.course)
+                .thenComparing(Students.studentName);
 
         List<Student> input = Arrays.asList(
                 Students.MARIA_CS_1,
@@ -222,15 +214,14 @@ public class ComparatorCompatTest {
     @Test
     public void testChain_SpecialityThenCourseThenName() {
         Comparator<Student> comparator = ComparatorCompat
-                .chain(ComparatorCompat.comparing(Students.speciality))
+                .comparing(Students.speciality)
                 .thenComparingInt(new ToIntFunction<Student>() {
                     @Override
                     public int applyAsInt(Student student) {
                         return student.getCourse();
                     }
                 })
-                .thenComparing(Students.studentName)
-                .comparator();
+                .thenComparing(Students.studentName);
 
         List<Student> input = Arrays.asList(
                 Students.STEVE_CS_4,
@@ -255,6 +246,17 @@ public class ComparatorCompatTest {
     @Test
     public void testChain_NameReversedThenCourseThenSpeciality() {
         Comparator<Student> comparator = ComparatorCompat
+                .comparing(Students.studentName)
+                .reversed()
+                .thenComparing(Students.course)
+                .thenComparing(Students.speciality);
+        testStudentComparator(comparator);
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    public void testChain_NameReversedThenCourseThenSpeciality_Deprecation() {
+        Comparator<Student> comparator = ComparatorCompat
                 .chain(ComparatorCompat.comparing(Students.studentName))
                 .reversed()
                 .thenComparing(Students.course)
@@ -266,7 +268,7 @@ public class ComparatorCompatTest {
     @Test
     public void testChain_NameReversedThenCourseThenSpecialityDoubleReversed() {
         Comparator<Student> comparator = ComparatorCompat
-                .chain(ComparatorCompat.comparing(Students.studentName))
+                .comparing(Students.studentName)
                 .thenComparing(ComparatorCompat.<Student>reverseOrder())
                 .thenComparingLong(new ToLongFunction<Student>() {
                     @Override
@@ -275,15 +277,14 @@ public class ComparatorCompatTest {
                     }
                 })
                 .thenComparing(Students.speciality, ComparatorCompat.<String>reverseOrder())
-                .reversed()
-                .comparator();
+                .reversed();
         testStudentComparator(comparator);
     }
 
     @Test
     public void testChain_NameReversedThenCourseThenSpeciality2() {
         Comparator<Student> comparator = ComparatorCompat
-                .chain(ComparatorCompat.comparing(Students.studentName))
+                .comparing(Students.studentName)
                 .reversed()
                 .thenComparingDouble(new ToDoubleFunction<Student>() {
                     @Override
@@ -291,8 +292,7 @@ public class ComparatorCompatTest {
                         return student.getCourse() / 0.001;
                     }
                 })
-                .thenComparing(Students.speciality)
-                .comparator();
+                .thenComparing(Students.speciality);
         testStudentComparator(comparator);
     }
 
