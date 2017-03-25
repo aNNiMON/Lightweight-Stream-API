@@ -1670,6 +1670,63 @@ public class Stream<T> {
     }
 
     /**
+     * Finds the first element and its index that matches the given predicate.
+     *
+     * <p>This is a short-circuiting terminal operation.
+     *
+     * <p>Example:
+     * <pre>
+     * predicate: (index, value) -&gt; index + value == 7
+     * stream: [1, 2, 3, 4, 5, 2, 0]
+     * index:  [0, 1, 2, 3, 4, 5, 6]
+     * result: Optional.of(IntPair(3, 4))
+     * </pre>
+     *
+     * @param predicate  the predicate to find value
+     * @return an {@code Optional} with {@code IntPair}
+     *         or {@code Optional.empty()} if stream is empty or no value was found.
+     * @since 1.1.8
+     */
+    public Optional<IntPair<T>> findIndexed(IndexedPredicate<? super T> predicate) {
+        return findIndexed(0, 1, predicate);
+    }
+
+    /**
+     * Finds the first element and its index that matches the given predicate.
+     *
+     * <p>This is a short-circuiting terminal operation.
+     *
+     * <p>Example:
+     * <pre>
+     * from: 0
+     * step: 10
+     * predicate: (index, value) -&gt; index + value == 42
+     * stream: [1, 11, 22, 12, 40]
+     * index:  [0, 10, 20, 30, 40]
+     * result: Optional.of(IntPair(20, 22))
+     * </pre>
+     *
+     * @param from  the initial value of the index (inclusive)
+     * @param step  the step of the index
+     * @param predicate  the predicate to find value
+     * @return an {@code Optional} with {@code IntPair}
+     *         or {@code Optional.empty()} if stream is empty or no value was found.
+     * @since 1.1.8
+     */
+    public Optional<IntPair<T>> findIndexed(int from, int step,
+                                            IndexedPredicate<? super T> predicate) {
+        int index = from;
+        while (iterator.hasNext()) {
+            final T value = iterator.next();
+            if (predicate.test(index, value)) {
+                return Optional.of(new IntPair<T>(index, value));
+            }
+            index += step;
+        }
+        return Optional.empty();
+    }
+
+    /**
      * Returns the first element wrapped by {@code Optional} class.
      * If stream is empty, returns {@code Optional.empty()}.
      *
