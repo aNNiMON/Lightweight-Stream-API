@@ -3,7 +3,7 @@ package com.annimon.stream.iterator;
 import java.util.Iterator;
 
 /**
- * Lazily gets {@code Iterator} from the given {@code Iterable}.
+ * Lazily gets {@code Iterator} from the given {@link Iterable}.
  * 
  * @param <T> the type of the elements
  */

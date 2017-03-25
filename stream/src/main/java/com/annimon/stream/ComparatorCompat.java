@@ -280,7 +280,7 @@ public final class ComparatorCompat<T> implements Comparator<T> {
      *
      * @param <T> the type of the objects compared by the comparator
      * @param comparator  the comparator to be chained
-     * @return a {@code Chain} instance
+     * @return a {@code ComparatorCompat} instance
      */
     public static <T> ComparatorCompat<T> chain(Comparator<T> comparator) {
         return new ComparatorCompat<T>(comparator);

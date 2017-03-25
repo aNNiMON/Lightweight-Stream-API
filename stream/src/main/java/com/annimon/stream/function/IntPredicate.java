@@ -23,7 +23,7 @@ public interface IntPredicate {
          *
          * @param p1  the first predicate
          * @param p2  the second predicate
-         * @return a composed {@code Predicate}
+         * @return a composed {@code IntPredicate}
          * @throws NullPointerException if {@code p1} or {@code p2} is null
          */
         public static IntPredicate and(final IntPredicate p1, final IntPredicate p2) {
@@ -40,7 +40,7 @@ public interface IntPredicate {
          *
          * @param p1  the first predicate
          * @param p2  the second predicate
-         * @return a composed {@code Predicate}
+         * @return a composed {@code IntPredicate}
          * @throws NullPointerException if {@code p1} or {@code p2} is null
          */
         public static IntPredicate or(final IntPredicate p1, final IntPredicate p2) {
@@ -57,7 +57,7 @@ public interface IntPredicate {
          *
          * @param p1  the first predicate
          * @param p2  the second predicate
-         * @return a composed {@code Predicate}
+         * @return a composed {@code IntPredicate}
          * @throws NullPointerException if {@code p1} or {@code p2} is null
          */
         public static IntPredicate xor(final IntPredicate p1, final IntPredicate p2) {
@@ -73,7 +73,7 @@ public interface IntPredicate {
          * Applies logical negation to predicate.
          *
          * @param p1  the predicate to be negated
-         * @return a composed {@code Predicate}
+         * @return a composed {@code IntPredicate}
          * @throws NullPointerException if {@code p1} is null
          */
         public static IntPredicate negate(final IntPredicate p1) {

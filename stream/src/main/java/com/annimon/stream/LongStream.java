@@ -650,7 +650,7 @@ public final class LongStream {
     }
 
     /**
-     * Skips first {@code n} elements and returns {@code Stream} with remaining elements.
+     * Skips first {@code n} elements and returns {@code LongStream} with remaining elements.
      * If this stream contains fewer than {@code n} elements, then an
      * empty stream will be returned.
      *

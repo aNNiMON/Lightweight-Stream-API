@@ -765,10 +765,10 @@ public class Stream<T> {
     }
 
     /**
-     * Returns {@code Stream} with sorted elements (as determinated by {@code Comparable} interface).
+     * Returns {@code Stream} with sorted elements (as determinated by {@link Comparable} interface).
      *
      * <p>This is a stateful intermediate operation.
-     * <p>If the elements of this stream are not {@code Comparable},
+     * <p>If the elements of this stream are not {@link Comparable},
      * a {@code java.lang.ClassCastException} may be thrown when the terminal operation is executed.
      *
      * <p>Example:

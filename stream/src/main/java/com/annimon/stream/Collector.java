@@ -24,7 +24,7 @@ public interface Collector<T, A, R> {
     /**
      * Function folds elements into container.
      * 
-     * @return {@code Supplier}
+     * @return {@code BiConsumer}
      */
     BiConsumer<A, T> accumulator();
     
