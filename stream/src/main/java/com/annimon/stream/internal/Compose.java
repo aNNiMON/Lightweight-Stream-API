@@ -1,6 +1,8 @@
 package com.annimon.stream.internal;
 
-public class Compose {
+public final class Compose {
+
+    private Compose() { }
 
     public static Runnable runnables(final Runnable a, final Runnable b) {
         return new Runnable() {
@@ -12,6 +14,9 @@ public class Compose {
                     try {
                         b.run();
                     } catch (Throwable ignore) { }
+                    if (e1 instanceof RuntimeException) {
+                        throw (RuntimeException) e1;
+                    }
                     throw new RuntimeException(e1);
                 }
                 b.run();
