@@ -1,9 +1,12 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.*;
+import com.annimon.stream.internal.Compose;
 import com.annimon.stream.internal.Operators;
+import com.annimon.stream.internal.Params;
 import com.annimon.stream.iterator.PrimitiveIterator;
 import com.annimon.stream.operator.*;
+import java.io.Closeable;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 
@@ -12,7 +15,7 @@ import java.util.NoSuchElementException;
  * primitive specialization of {@link Stream}.
  */
 @SuppressWarnings("WeakerAccess")
-public final class IntStream {
+public final class IntStream implements Closeable {
 
     /**
      * Single instance for empty stream. It is safe for multi-thread environment because it has no content.
@@ -204,8 +207,14 @@ public final class IntStream {
     }
 
     private final PrimitiveIterator.OfInt iterator;
+    private final Params params;
 
     private IntStream(PrimitiveIterator.OfInt iterator) {
+        this(null, iterator);
+    }
+
+    IntStream(Params params, PrimitiveIterator.OfInt iterator) {
+        this.params = params;
         this.iterator = iterator;
     }
 
@@ -299,7 +308,7 @@ public final class IntStream {
      *         each boxed to an {@code Integer}
      */
     public Stream<Integer> boxed() {
-        return Stream.of(iterator);
+        return new Stream<Integer>(params, iterator);
     }
 
     /**
@@ -320,7 +329,7 @@ public final class IntStream {
      * @return the new stream
      */
     public IntStream filter(final IntPredicate predicate) {
-        return new IntStream(new IntFilter(iterator, predicate));
+        return new IntStream(params, new IntFilter(iterator, predicate));
     }
 
     /**
@@ -355,7 +364,7 @@ public final class IntStream {
      * @return the new {@code IntStream}
      */
     public IntStream map(final IntUnaryOperator mapper) {
-        return new IntStream(new IntMap(iterator, mapper));
+        return new IntStream(params, new IntMap(iterator, mapper));
     }
 
     /**
@@ -369,7 +378,7 @@ public final class IntStream {
      * @return the new {@code Stream}
      */
     public <R> Stream<R> mapToObj(final IntFunction<? extends R> mapper) {
-        return Stream.of(new IntMapToObj<R>(iterator, mapper));
+        return new Stream<R>(params, new IntMapToObj<R>(iterator, mapper));
     }
 
     /**
@@ -384,7 +393,7 @@ public final class IntStream {
      * @see #flatMap(com.annimon.stream.function.IntFunction)
      */
     public LongStream mapToLong(final IntToLongFunction mapper) {
-        return LongStream.of(new IntMapToLong(iterator, mapper));
+        return new LongStream(params, new IntMapToLong(iterator, mapper));
     }
 
     /**
@@ -399,7 +408,7 @@ public final class IntStream {
      * @see #flatMap(com.annimon.stream.function.IntFunction)
      */
     public DoubleStream mapToDouble(final IntToDoubleFunction mapper) {
-        return DoubleStream.of(new IntMapToDouble(iterator, mapper));
+        return new DoubleStream(params, new IntMapToDouble(iterator, mapper));
     }
 
     /**
@@ -422,7 +431,7 @@ public final class IntStream {
      * @see Stream#flatMap(Function)
      */
     public IntStream flatMap(final IntFunction<? extends IntStream> mapper) {
-        return new IntStream(new IntFlatMap(iterator, mapper));
+        return new IntStream(params, new IntFlatMap(iterator, mapper));
     }
 
     /**
@@ -459,7 +468,7 @@ public final class IntStream {
      * @return the new stream
      */
     public IntStream sorted() {
-        return new IntStream(new IntSorted(iterator));
+        return new IntStream(params, new IntSorted(iterator));
     }
 
     /**
@@ -501,7 +510,7 @@ public final class IntStream {
     public IntStream sample(final int stepWidth) {
         if (stepWidth <= 0) throw new IllegalArgumentException("stepWidth cannot be zero or negative");
         if (stepWidth == 1) return this;
-        return new IntStream(new IntSample(iterator, stepWidth));
+        return new IntStream(params, new IntSample(iterator, stepWidth));
     }
 
     /**
@@ -515,7 +524,7 @@ public final class IntStream {
      * @return the new stream
      */
     public IntStream peek(final IntConsumer action) {
-        return new IntStream(new IntPeek(iterator, action));
+        return new IntStream(params, new IntPeek(iterator, action));
     }
 
     /**
@@ -540,7 +549,7 @@ public final class IntStream {
      */
     public IntStream scan(final IntBinaryOperator accumulator) {
         Objects.requireNonNull(accumulator);
-        return new IntStream(new IntScan(iterator, accumulator));
+        return new IntStream(params, new IntScan(iterator, accumulator));
     }
 
     /**
@@ -567,7 +576,7 @@ public final class IntStream {
      */
     public IntStream scan(final int identity, final IntBinaryOperator accumulator) {
         Objects.requireNonNull(accumulator);
-        return new IntStream(new IntScanIdentity(iterator, identity, accumulator));
+        return new IntStream(params, new IntScanIdentity(iterator, identity, accumulator));
     }
 
     /**
@@ -586,7 +595,7 @@ public final class IntStream {
      * @return the new {@code IntStream}
      */
     public IntStream takeWhile(final IntPredicate predicate) {
-        return new IntStream(new IntTakeWhile(iterator, predicate));
+        return new IntStream(params, new IntTakeWhile(iterator, predicate));
     }
 
     /**
@@ -608,7 +617,7 @@ public final class IntStream {
      * @since 1.1.6
      */
     public IntStream takeUntil(final IntPredicate stopPredicate) {
-        return new IntStream(new IntTakeUntil(iterator, stopPredicate));
+        return new IntStream(params, new IntTakeUntil(iterator, stopPredicate));
     }
 
     /**
@@ -627,7 +636,7 @@ public final class IntStream {
      * @return the new {@code IntStream}
      */
     public IntStream dropWhile(final IntPredicate predicate) {
-        return new IntStream(new IntDropWhile(iterator, predicate));
+        return new IntStream(params, new IntDropWhile(iterator, predicate));
     }
 
     /**
@@ -658,7 +667,7 @@ public final class IntStream {
         if (maxSize == 0) {
             return IntStream.empty();
         }
-        return new IntStream(new IntLimit(iterator, maxSize));
+        return new IntStream(params, new IntLimit(iterator, maxSize));
     }
 
     /**
@@ -690,7 +699,7 @@ public final class IntStream {
         } else if (n == 0) {
             return this;
         } else {
-            return new IntStream(new IntSkip(iterator, n));
+            return new IntStream(params, new IntSkip(iterator, n));
         }
     }
 
@@ -1056,6 +1065,44 @@ public final class IntStream {
             }
         } else {
             return OptionalInt.empty();
+        }
+    }
+
+    /**
+     * Adds close handler to the current stream.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @param closeHandler  an action to execute when the stream is closed
+     * @return the new stream with the close handler
+     * @since 1.1.8
+     */
+    public IntStream onClose(final Runnable closeHandler) {
+        Objects.requireNonNull(closeHandler);
+        final Params newParams;
+        if (params == null) {
+            newParams = new Params();
+            newParams.closeHandler = closeHandler;
+        } else {
+            newParams = params;
+            final Runnable firstHandler = newParams.closeHandler;
+            newParams.closeHandler = Compose.runnables(firstHandler, closeHandler);
+        }
+        return new IntStream(newParams, iterator);
+    }
+
+    /**
+     * Causes close handler to be invoked if it exists.
+     * Since most of the stream providers are lists or arrays,
+     * it is not necessary to close the stream.
+     *
+     * @since 1.1.8
+     */
+    @Override
+    public void close() {
+        if (params != null && params.closeHandler != null) {
+            params.closeHandler.run();
+            params.closeHandler = null;
         }
     }
 

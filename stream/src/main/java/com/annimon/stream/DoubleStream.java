@@ -1,9 +1,12 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.*;
+import com.annimon.stream.internal.Compose;
 import com.annimon.stream.internal.Operators;
+import com.annimon.stream.internal.Params;
 import com.annimon.stream.iterator.PrimitiveIterator;
 import com.annimon.stream.operator.*;
+import java.io.Closeable;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 
@@ -14,7 +17,7 @@ import java.util.NoSuchElementException;
  * @see Stream
  */
 @SuppressWarnings("WeakerAccess")
-public final class DoubleStream {
+public final class DoubleStream implements Closeable {
 
     /**
      * Single instance for empty stream. It is safe for multi-thread environment because it has no content.
@@ -165,8 +168,14 @@ public final class DoubleStream {
 
 
     private final PrimitiveIterator.OfDouble iterator;
+    private final Params params;
 
     private DoubleStream(PrimitiveIterator.OfDouble iterator) {
+        this(null, iterator);
+    }
+
+    DoubleStream(Params params, PrimitiveIterator.OfDouble iterator) {
+        this.params = params;
         this.iterator = iterator;
     }
 
@@ -270,7 +279,7 @@ public final class DoubleStream {
      *         each boxed to an {@code Double}
      */
     public Stream<Double> boxed() {
-        return Stream.of(iterator);
+        return new Stream<Double>(params, iterator);
     }
 
     /**
@@ -289,7 +298,7 @@ public final class DoubleStream {
      * @return the new stream
      */
     public DoubleStream filter(final DoublePredicate predicate) {
-        return new DoubleStream(new DoubleFilter(iterator, predicate));
+        return new DoubleStream(params, new DoubleFilter(iterator, predicate));
     }
 
     /**
@@ -322,7 +331,7 @@ public final class DoubleStream {
      * @see Stream#map(com.annimon.stream.function.Function)
      */
     public DoubleStream map(final DoubleUnaryOperator mapper) {
-        return new DoubleStream(new DoubleMap(iterator, mapper));
+        return new DoubleStream(params, new DoubleMap(iterator, mapper));
     }
 
     /**
@@ -336,7 +345,7 @@ public final class DoubleStream {
      * @return the new {@code Stream}
      */
     public <R> Stream<R> mapToObj(final DoubleFunction<? extends R> mapper) {
-        return Stream.of(new DoubleMapToObj<R>(iterator, mapper));
+        return new Stream<R>(params, new DoubleMapToObj<R>(iterator, mapper));
     }
 
     /**
@@ -349,7 +358,7 @@ public final class DoubleStream {
      * @return the new {@code IntStream}
      */
     public IntStream mapToInt(final DoubleToIntFunction mapper) {
-        return IntStream.of(new DoubleMapToInt(iterator, mapper));
+        return new IntStream(params, new DoubleMapToInt(iterator, mapper));
     }
 
     /**
@@ -362,7 +371,7 @@ public final class DoubleStream {
      * @return the new {@code LongStream}
      */
     public LongStream mapToLong(final DoubleToLongFunction mapper) {
-        return LongStream.of(new DoubleMapToLong(iterator, mapper));
+        return new LongStream(params, new DoubleMapToLong(iterator, mapper));
     }
 
     /**
@@ -384,7 +393,7 @@ public final class DoubleStream {
      * @see Stream#flatMap(com.annimon.stream.function.Function)
      */
     public DoubleStream flatMap(final DoubleFunction<? extends DoubleStream> mapper) {
-        return new DoubleStream(new DoubleFlatMap(iterator, mapper));
+        return new DoubleStream(params, new DoubleFlatMap(iterator, mapper));
     }
 
     /**
@@ -418,7 +427,7 @@ public final class DoubleStream {
      * @return the new stream
      */
     public DoubleStream sorted() {
-        return new DoubleStream(new DoubleSorted(iterator));
+        return new DoubleStream(params, new DoubleSorted(iterator));
     }
 
     /**
@@ -461,7 +470,7 @@ public final class DoubleStream {
     public DoubleStream sample(final int stepWidth) {
         if (stepWidth <= 0) throw new IllegalArgumentException("stepWidth cannot be zero or negative");
         if (stepWidth == 1) return this;
-        return new DoubleStream(new DoubleSample(iterator, stepWidth));
+        return new DoubleStream(params, new DoubleSample(iterator, stepWidth));
     }
 
     /**
@@ -473,7 +482,7 @@ public final class DoubleStream {
      * @return the new stream
      */
     public DoubleStream peek(final DoubleConsumer action) {
-        return new DoubleStream(new DoublePeek(iterator, action));
+        return new DoubleStream(params, new DoublePeek(iterator, action));
     }
 
     /**
@@ -498,7 +507,7 @@ public final class DoubleStream {
      */
     public DoubleStream scan(final DoubleBinaryOperator accumulator) {
         Objects.requireNonNull(accumulator);
-        return new DoubleStream(new DoubleScan(iterator, accumulator));
+        return new DoubleStream(params, new DoubleScan(iterator, accumulator));
     }
 
     /**
@@ -525,7 +534,7 @@ public final class DoubleStream {
      */
     public DoubleStream scan(final double identity, final DoubleBinaryOperator accumulator) {
         Objects.requireNonNull(accumulator);
-        return new DoubleStream(new DoubleScanIdentity(iterator, identity, accumulator));
+        return new DoubleStream(params, new DoubleScanIdentity(iterator, identity, accumulator));
     }
 
     /**
@@ -544,7 +553,7 @@ public final class DoubleStream {
      * @return the new {@code DoubleStream}
      */
     public DoubleStream takeWhile(final DoublePredicate predicate) {
-        return new DoubleStream(new DoubleTakeWhile(iterator, predicate));
+        return new DoubleStream(params, new DoubleTakeWhile(iterator, predicate));
     }
 
     /**
@@ -566,7 +575,7 @@ public final class DoubleStream {
      * @since 1.1.6
      */
     public DoubleStream takeUntil(final DoublePredicate stopPredicate) {
-        return new DoubleStream(new DoubleTakeUntil(iterator, stopPredicate));
+        return new DoubleStream(params, new DoubleTakeUntil(iterator, stopPredicate));
     }
 
     /**
@@ -585,7 +594,7 @@ public final class DoubleStream {
      * @return the new {@code DoubleStream}
      */
     public DoubleStream dropWhile(final DoublePredicate predicate) {
-        return new DoubleStream(new DoubleDropWhile(iterator, predicate));
+        return new DoubleStream(params, new DoubleDropWhile(iterator, predicate));
     }
 
     /**
@@ -612,7 +621,7 @@ public final class DoubleStream {
     public DoubleStream limit(final long maxSize) {
         if (maxSize < 0) throw new IllegalArgumentException("maxSize cannot be negative");
         if (maxSize == 0) return DoubleStream.empty();
-        return new DoubleStream(new DoubleLimit(iterator, maxSize));
+        return new DoubleStream(params, new DoubleLimit(iterator, maxSize));
     }
 
     /**
@@ -640,7 +649,7 @@ public final class DoubleStream {
     public DoubleStream skip(final long n) {
         if (n < 0) throw new IllegalArgumentException("n cannot be negative");
         if (n == 0) return this;
-        return new DoubleStream(new DoubleSkip(iterator, n));
+        return new DoubleStream(params, new DoubleSkip(iterator, n));
     }
 
     /**
@@ -1009,6 +1018,44 @@ public final class DoubleStream {
             throw new IllegalStateException("DoubleStream contains more than one element");
         }
         return OptionalDouble.of(singleCandidate);
+    }
+
+    /**
+     * Adds close handler to the current stream.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @param closeHandler  an action to execute when the stream is closed
+     * @return the new stream with the close handler
+     * @since 1.1.8
+     */
+    public DoubleStream onClose(final Runnable closeHandler) {
+        Objects.requireNonNull(closeHandler);
+        final Params newParams;
+        if (params == null) {
+            newParams = new Params();
+            newParams.closeHandler = closeHandler;
+        } else {
+            newParams = params;
+            final Runnable firstHandler = newParams.closeHandler;
+            newParams.closeHandler = Compose.runnables(firstHandler, closeHandler);
+        }
+        return new DoubleStream(newParams, iterator);
+    }
+
+    /**
+     * Causes close handler to be invoked if it exists.
+     * Since most of the stream providers are lists or arrays,
+     * it is not necessary to close the stream.
+     *
+     * @since 1.1.8
+     */
+    @Override
+    public void close() {
+        if (params != null && params.closeHandler != null) {
+            params.closeHandler.run();
+            params.closeHandler = null;
+        }
     }
 
 

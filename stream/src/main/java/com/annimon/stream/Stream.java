@@ -319,7 +319,7 @@ public class Stream<T> implements Closeable {
         this(new LazyIterator<T>(iterable));
     }
 
-    private Stream(Params params, Iterator<? extends T> iterator) {
+    Stream(Params params, Iterator<? extends T> iterator) {
         this.params = params;
         this.iterator = iterator;
     }
@@ -612,7 +612,7 @@ public class Stream<T> implements Closeable {
      * @see #map(com.annimon.stream.function.Function)
      */
     public IntStream mapToInt(final ToIntFunction<? super T> mapper) {
-        return IntStream.of(new ObjMapToInt<T>(iterator, mapper));
+        return new IntStream(params, new ObjMapToInt<T>(iterator, mapper));
     }
 
     /**
@@ -626,7 +626,7 @@ public class Stream<T> implements Closeable {
      * @see #map(com.annimon.stream.function.Function)
      */
     public LongStream mapToLong(final ToLongFunction<? super T> mapper) {
-        return LongStream.of(new ObjMapToLong<T>(iterator, mapper));
+        return new LongStream(params, new ObjMapToLong<T>(iterator, mapper));
     }
 
     /**
@@ -640,7 +640,7 @@ public class Stream<T> implements Closeable {
      * @see #map(com.annimon.stream.function.Function)
      */
     public DoubleStream mapToDouble(final ToDoubleFunction<? super T> mapper) {
-        return DoubleStream.of(new ObjMapToDouble<T>(iterator, mapper));
+        return new DoubleStream(params, new ObjMapToDouble<T>(iterator, mapper));
     }
 
     /**
@@ -677,7 +677,7 @@ public class Stream<T> implements Closeable {
      * @see #flatMap(com.annimon.stream.function.Function)
      */
     public IntStream flatMapToInt(final Function<? super T, ? extends IntStream> mapper) {
-        return IntStream.of(new ObjFlatMapToInt<T>(iterator, mapper));
+        return new IntStream(params, new ObjFlatMapToInt<T>(iterator, mapper));
     }
 
     /**
@@ -692,7 +692,7 @@ public class Stream<T> implements Closeable {
      * @see #flatMap(com.annimon.stream.function.Function)
      */
     public LongStream flatMapToLong(final Function<? super T, ? extends LongStream> mapper) {
-        return LongStream.of(new ObjFlatMapToLong<T>(iterator, mapper));
+        return new LongStream(params, new ObjFlatMapToLong<T>(iterator, mapper));
     }
 
     /**
@@ -707,7 +707,7 @@ public class Stream<T> implements Closeable {
      * @see #flatMap(com.annimon.stream.function.Function)
      */
     public DoubleStream flatMapToDouble(final Function<? super T, ? extends DoubleStream> mapper) {
-        return DoubleStream.of(new ObjFlatMapToDouble<T>(iterator, mapper));
+        return new DoubleStream(params, new ObjFlatMapToDouble<T>(iterator, mapper));
     }
 
     /**
