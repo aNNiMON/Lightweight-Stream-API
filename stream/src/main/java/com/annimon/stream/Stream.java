@@ -1,10 +1,13 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.*;
+import com.annimon.stream.internal.Compose;
 import com.annimon.stream.internal.Operators;
+import com.annimon.stream.internal.Params;
 import com.annimon.stream.iterator.IndexedIterator;
 import com.annimon.stream.iterator.LazyIterator;
 import com.annimon.stream.operator.*;
+import java.io.Closeable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -18,7 +21,7 @@ import java.util.NoSuchElementException;
  *
  * @param <T> the type of the stream elements
  */
-public class Stream<T> {
+public class Stream<T> implements Closeable {
 
     /**
      * Returns an empty stream.
@@ -306,13 +309,19 @@ public class Stream<T> {
 
 //<editor-fold defaultstate="collapsed" desc="Implementation">
     private final Iterator<? extends T> iterator;
+    private final Params params;
 
     private Stream(Iterator<? extends T> iterator) {
-        this.iterator = iterator;
+        this(null, iterator);
     }
 
     private Stream(Iterable<? extends T> iterable) {
         this(new LazyIterator<T>(iterable));
+    }
+
+    private Stream(Params params, Iterator<? extends T> iterator) {
+        this.params = params;
+        this.iterator = iterator;
     }
 
     /**
@@ -412,7 +421,7 @@ public class Stream<T> {
      * @return the new stream
      */
     public Stream<T> filter(final Predicate<? super T> predicate) {
-        return new Stream<T>(new ObjFilter<T>(iterator, predicate));
+        return new Stream<T>(params, new ObjFilter<T>(iterator, predicate));
     }
 
     /**
@@ -462,7 +471,7 @@ public class Stream<T> {
      * @since 1.1.6
      */
     public Stream<T> filterIndexed(int from, int step, IndexedPredicate<? super T> predicate) {
-        return new Stream<T>(new ObjFilterIndexed<T>(
+        return new Stream<T>(params, new ObjFilterIndexed<T>(
                 new IndexedIterator<T>(from, step, iterator),
                 predicate));
     }
@@ -540,7 +549,7 @@ public class Stream<T> {
      * @return the new stream
      */
     public <R> Stream<R> map(final Function<? super T, ? extends R> mapper) {
-        return new Stream<R>(new ObjMap<T, R>(iterator, mapper));
+        return new Stream<R>(params, new ObjMap<T, R>(iterator, mapper));
     }
 
     /**
@@ -588,7 +597,7 @@ public class Stream<T> {
      * @since 1.1.6
      */
     public <R> Stream<R> mapIndexed(int from, int step, IndexedFunction<? super T, ? extends R> mapper) {
-        return new Stream<R>(new ObjMapIndexed<T, R>(
+        return new Stream<R>(params, new ObjMapIndexed<T, R>(
                 new IndexedIterator<T>(from, step, iterator),
                 mapper));
     }
@@ -653,7 +662,7 @@ public class Stream<T> {
      * @return the new stream
      */
     public <R> Stream<R> flatMap(final Function<? super T, ? extends Stream<? extends R>> mapper) {
-        return new Stream<R>(new ObjFlatMap<T, R>(iterator, mapper));
+        return new Stream<R>(params, new ObjFlatMap<T, R>(iterator, mapper));
     }
 
     /**
@@ -761,7 +770,7 @@ public class Stream<T> {
      * @return the new stream
      */
     public Stream<T> distinct() {
-        return new Stream<T>(new ObjDistinct<T>(iterator));
+        return new Stream<T>(params, new ObjDistinct<T>(iterator));
     }
 
     /**
@@ -808,7 +817,7 @@ public class Stream<T> {
      * @return the new stream
      */
     public Stream<T> sorted(final Comparator<? super T> comparator) {
-        return new Stream<T>(new ObjSorted<T>(iterator, comparator));
+        return new Stream<T>(params, new ObjSorted<T>(iterator, comparator));
     }
 
     /**
@@ -873,7 +882,7 @@ public class Stream<T> {
      * @return the new stream
      */
     public <K> Stream<List<T>> chunkBy(final Function<? super T, ? extends K> classifier) {
-        return new Stream<List<T>>(new ObjChunkBy<T, K>(iterator, classifier));
+        return new Stream<List<T>>(params, new ObjChunkBy<T, K>(iterator, classifier));
     }
 
     /**
@@ -958,7 +967,7 @@ public class Stream<T> {
     public Stream<List<T>> slidingWindow(final int windowSize, final int stepWidth) {
         if (windowSize <= 0) throw new IllegalArgumentException("windowSize cannot be zero or negative");
         if (stepWidth <= 0) throw new IllegalArgumentException("stepWidth cannot be zero or negative");
-        return new Stream<List<T>>(new ObjSlidingWindow<T>(iterator, windowSize, stepWidth));
+        return new Stream<List<T>>(params, new ObjSlidingWindow<T>(iterator, windowSize, stepWidth));
     }
 
     /**
@@ -970,7 +979,7 @@ public class Stream<T> {
      * @return the new stream
      */
     public Stream<T> peek(final Consumer<? super T> action) {
-        return new Stream<T>(new ObjPeek<T>(iterator, action));
+        return new Stream<T>(params, new ObjPeek<T>(iterator, action));
     }
 
     /**
@@ -995,7 +1004,7 @@ public class Stream<T> {
      */
     public Stream<T> scan(final BiFunction<T, T, T> accumulator) {
         Objects.requireNonNull(accumulator);
-        return new Stream<T>(new ObjScan<T>(iterator, accumulator));
+        return new Stream<T>(params, new ObjScan<T>(iterator, accumulator));
     }
 
     /**
@@ -1023,7 +1032,7 @@ public class Stream<T> {
      */
     public <R> Stream<R> scan(final R identity, final BiFunction<? super R, ? super T, ? extends R> accumulator) {
         Objects.requireNonNull(accumulator);
-        return new Stream<R>(new ObjScanIdentity<T, R>(iterator, identity, accumulator));
+        return new Stream<R>(params, new ObjScanIdentity<T, R>(iterator, identity, accumulator));
     }
 
     /**
@@ -1042,7 +1051,7 @@ public class Stream<T> {
      * @return the new stream
      */
     public Stream<T> takeWhile(final Predicate<? super T> predicate) {
-        return new Stream<T>(new ObjTakeWhile<T>(iterator, predicate));
+        return new Stream<T>(params, new ObjTakeWhile<T>(iterator, predicate));
     }
 
     /**
@@ -1090,7 +1099,7 @@ public class Stream<T> {
      * @since 1.1.6
      */
     public Stream<T> takeWhileIndexed(int from, int step, IndexedPredicate<? super T> predicate) {
-        return new Stream<T>(new ObjTakeWhileIndexed<T>(
+        return new Stream<T>(params, new ObjTakeWhileIndexed<T>(
                 new IndexedIterator<T>(from, step, iterator),
                 predicate));
     }
@@ -1114,7 +1123,7 @@ public class Stream<T> {
      * @since 1.1.6
      */
     public Stream<T> takeUntil(final Predicate<? super T> stopPredicate) {
-        return new Stream<T>(new ObjTakeUntil<T>(iterator, stopPredicate));
+        return new Stream<T>(params, new ObjTakeUntil<T>(iterator, stopPredicate));
     }
 
     /**
@@ -1166,7 +1175,7 @@ public class Stream<T> {
      * @since 1.1.6
      */
     public Stream<T> takeUntilIndexed(int from, int step, IndexedPredicate<? super T> stopPredicate) {
-        return new Stream<T>(new ObjTakeUntilIndexed<T>(
+        return new Stream<T>(params, new ObjTakeUntilIndexed<T>(
                 new IndexedIterator<T>(from, step, iterator),
                 stopPredicate));
     }
@@ -1187,7 +1196,7 @@ public class Stream<T> {
      * @return the new stream
      */
     public Stream<T> dropWhile(final Predicate<? super T> predicate) {
-        return new Stream<T>(new ObjDropWhile<T>(iterator, predicate));
+        return new Stream<T>(params, new ObjDropWhile<T>(iterator, predicate));
     }
 
     /**
@@ -1235,7 +1244,7 @@ public class Stream<T> {
      * @since 1.1.6
      */
     public Stream<T> dropWhileIndexed(int from, int step, IndexedPredicate<? super T> predicate) {
-        return new Stream<T>(new ObjDropWhileIndexed<T>(
+        return new Stream<T>(params, new ObjDropWhileIndexed<T>(
                 new IndexedIterator<T>(from, step, iterator),
                 predicate));
     }
@@ -1267,7 +1276,7 @@ public class Stream<T> {
         if (maxSize == 0) {
             return Stream.empty();
         }
-        return new Stream<T>(new ObjLimit<T>(iterator, maxSize));
+        return new Stream<T>(params, new ObjLimit<T>(iterator, maxSize));
     }
 
     /**
@@ -1294,7 +1303,7 @@ public class Stream<T> {
     public Stream<T> skip(final long n) {
         if (n < 0) throw new IllegalArgumentException("n cannot be negative");
         if (n == 0) return this;
-        return new Stream<T>(new ObjSkip<T>(iterator, n));
+        return new Stream<T>(params, new ObjSkip<T>(iterator, n));
     }
 
     /**
@@ -1812,6 +1821,44 @@ public class Stream<T> {
             }
         } else {
             return Optional.empty();
+        }
+    }
+
+    /**
+     * Adds close handler to the current stream.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @param closeHandler  an action to execute when the stream is closed
+     * @return the new stream with the close handler
+     * @since 1.1.8
+     */
+    public Stream<T> onClose(final Runnable closeHandler) {
+        Objects.requireNonNull(closeHandler);
+        final Params newParams;
+        if (params == null) {
+            newParams = new Params();
+            newParams.closeHandler = closeHandler;
+        } else {
+            newParams = params;
+            final Runnable firstHandler = newParams.closeHandler;
+            newParams.closeHandler = Compose.runnables(firstHandler, closeHandler);
+        }
+        return new Stream<T>(newParams, iterator);
+    }
+
+    /**
+     * Causes close handler to be invoked if it exists.
+     * Since most of the stream providers are lists or arrays,
+     * it is not necessary to close the stream.
+     *
+     * @since 1.1.8
+     */
+    @Override
+    public void close() {
+        if (params != null && params.closeHandler != null) {
+            params.closeHandler.run();
+            params.closeHandler = null;
         }
     }
 
