@@ -17,7 +17,7 @@ public final class Compose {
                     if (e1 instanceof RuntimeException) {
                         throw (RuntimeException) e1;
                     }
-                    throw new RuntimeException(e1);
+                    throw (Error) e1;
                 }
                 b.run();
             }

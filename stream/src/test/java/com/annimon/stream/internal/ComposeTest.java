@@ -2,7 +2,6 @@ package com.annimon.stream.internal;
 
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
-import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -105,10 +104,8 @@ public class ComposeTest {
         Runnable composed = Compose.runnables(runnable1, runnable2);
         try {
             composed.run();
-        } catch (Throwable throwable) {
-            assertThat(throwable, instanceOf(RuntimeException.class));
-            assertThat(throwable.getCause(), instanceOf(AssertionError.class));
-            assertThat(throwable.getCause().getMessage(), is("1"));
+        } catch (AssertionError error) {
+            assertThat(error.getMessage(), is("1"));
         }
         assertThat(counter[0], is(2));
     }
