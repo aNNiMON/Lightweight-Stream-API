@@ -317,7 +317,11 @@ public class Stream<T> implements Closeable {
     }
 
     private Stream(Iterable<? extends T> iterable) {
-        this(new LazyIterator<T>(iterable));
+        this(null, new LazyIterator<T>(iterable));
+    }
+
+    private Stream(Params params, Iterable<? extends T> iterable) {
+        this(params, new LazyIterator<T>(iterable));
     }
 
     Stream(Params params, Iterator<? extends T> iterator) {
@@ -859,7 +863,8 @@ public class Stream<T> implements Closeable {
      * @return the new stream
      */
     public <K> Stream<Map.Entry<K, List<T>>> groupBy(final Function<? super T, ? extends K> classifier) {
-        return Stream.of( collect(Collectors.<T, K>groupingBy(classifier)) );
+        Map<K, List<T>> map = collect(Collectors.<T, K>groupingBy(classifier));
+        return new Stream<Map.Entry<K, List<T>>>(params, map.entrySet());
     }
 
     /**
