@@ -10,6 +10,7 @@ public class LongFlatMap extends PrimitiveIterator.OfLong {
     private final PrimitiveIterator.OfLong iterator;
     private final LongFunction<? extends LongStream> mapper;
     private PrimitiveIterator.OfLong inner;
+    private LongStream innerStream;
 
     public LongFlatMap(PrimitiveIterator.OfLong iterator, LongFunction<? extends LongStream> mapper) {
         this.iterator = iterator;
@@ -22,15 +23,24 @@ public class LongFlatMap extends PrimitiveIterator.OfLong {
             return true;
         }
         while (iterator.hasNext()) {
+            if (innerStream != null) {
+                innerStream.close();
+                innerStream = null;
+            }
             final long arg = iterator.nextLong();
             final LongStream result = mapper.apply(arg);
             if (result == null) {
                 continue;
             }
+            innerStream = result;
             if (result.iterator().hasNext()) {
                 inner = result.iterator();
                 return true;
             }
+        }
+        if (innerStream != null) {
+            innerStream.close();
+            innerStream = null;
         }
         return false;
     }

@@ -10,6 +10,7 @@ public class ObjFlatMap<T, R> extends LsaExtIterator<R> {
     private final Iterator<? extends T> iterator;
     private final Function<? super T, ? extends Stream<? extends R>> mapper;
     private Iterator<? extends R> inner;
+    private Stream<? extends R> innerStream;
 
     public ObjFlatMap(Iterator<? extends T> iterator,
             Function<? super T, ? extends Stream<? extends R>> mapper) {
@@ -26,10 +27,15 @@ public class ObjFlatMap<T, R> extends LsaExtIterator<R> {
         }
         while (iterator.hasNext()) {
             if (inner == null || !inner.hasNext()) {
+                if (innerStream != null) {
+                    innerStream.close();
+                    innerStream = null;
+                }
                 final T arg = iterator.next();
                 final Stream <? extends R> result = mapper.apply(arg);
                 if (result != null) {
                     inner = result.iterator();
+                    innerStream = result;
                 }
             }
             if ((inner != null) && inner.hasNext()) {
@@ -39,5 +45,9 @@ public class ObjFlatMap<T, R> extends LsaExtIterator<R> {
             }
         }
         hasNext = false;
+        if (innerStream != null) {
+            innerStream.close();
+            innerStream = null;
+        }
     }
 }

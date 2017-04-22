@@ -1,9 +1,12 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.*;
+import com.annimon.stream.internal.Compose;
 import com.annimon.stream.internal.Operators;
+import com.annimon.stream.internal.Params;
 import com.annimon.stream.iterator.PrimitiveIterator;
 import com.annimon.stream.operator.*;
+import java.io.Closeable;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 
@@ -14,7 +17,7 @@ import java.util.NoSuchElementException;
  * @see Stream
  */
 @SuppressWarnings("WeakerAccess")
-public final class LongStream {
+public final class LongStream implements Closeable {
 
     /**
      * Single instance for empty stream. It is safe for multi-thread environment because it has no content.
@@ -195,13 +198,20 @@ public final class LongStream {
     public static LongStream concat(final LongStream a, final LongStream b) {
         Objects.requireNonNull(a);
         Objects.requireNonNull(b);
-        return new LongStream(new LongConcat(a.iterator, b.iterator));
+        LongStream result = new LongStream(new LongConcat(a.iterator, b.iterator));
+        return result.onClose(Compose.closeables(a, b));
     }
 
 
     private final PrimitiveIterator.OfLong iterator;
+    private final Params params;
 
     private LongStream(PrimitiveIterator.OfLong iterator) {
+        this(null, iterator);
+    }
+
+    LongStream(Params params, PrimitiveIterator.OfLong iterator) {
+        this.params = params;
         this.iterator = iterator;
     }
 
@@ -304,7 +314,7 @@ public final class LongStream {
      *         each boxed to an {@code Long}
      */
     public Stream<Long> boxed() {
-        return Stream.of(iterator);
+        return new Stream<Long>(params, iterator);
     }
 
     /**
@@ -323,7 +333,7 @@ public final class LongStream {
      * @return the new stream
      */
     public LongStream filter(final LongPredicate predicate) {
-        return new LongStream(new LongFilter(iterator, predicate));
+        return new LongStream(params, new LongFilter(iterator, predicate));
     }
 
     /**
@@ -356,7 +366,7 @@ public final class LongStream {
      * @see Stream#map(com.annimon.stream.function.Function)
      */
     public LongStream map(final LongUnaryOperator mapper) {
-        return new LongStream(new LongMap(iterator, mapper));
+        return new LongStream(params, new LongMap(iterator, mapper));
     }
 
     /**
@@ -370,7 +380,7 @@ public final class LongStream {
      * @return the new {@code Stream}
      */
     public <R> Stream<R> mapToObj(final LongFunction<? extends R> mapper) {
-        return Stream.of(new LongMapToObj<R>(iterator, mapper));
+        return new Stream<R>(params, new LongMapToObj<R>(iterator, mapper));
     }
 
     /**
@@ -383,7 +393,7 @@ public final class LongStream {
      * @return the new {@code IntStream}
      */
     public IntStream mapToInt(final LongToIntFunction mapper) {
-        return IntStream.of(new LongMapToInt(iterator, mapper));
+        return new IntStream(params, new LongMapToInt(iterator, mapper));
     }
 
     /**
@@ -396,7 +406,7 @@ public final class LongStream {
      * @return the new {@code DoubleStream}
      */
     public DoubleStream mapToDouble(final LongToDoubleFunction mapper) {
-        return DoubleStream.of(new LongMapToDouble(iterator, mapper));
+        return new DoubleStream(params, new LongMapToDouble(iterator, mapper));
     }
 
     /**
@@ -418,7 +428,7 @@ public final class LongStream {
      * @see Stream#flatMap(com.annimon.stream.function.Function)
      */
     public LongStream flatMap(final LongFunction<? extends LongStream> mapper) {
-        return new LongStream(new LongFlatMap(iterator, mapper));
+        return new LongStream(params, new LongFlatMap(iterator, mapper));
     }
 
     /**
@@ -452,7 +462,7 @@ public final class LongStream {
      * @return the new stream
      */
     public LongStream sorted() {
-        return new LongStream(new LongSorted(iterator));
+        return new LongStream(params, new LongSorted(iterator));
     }
 
     /**
@@ -495,7 +505,7 @@ public final class LongStream {
     public LongStream sample(final int stepWidth) {
         if (stepWidth <= 0) throw new IllegalArgumentException("stepWidth cannot be zero or negative");
         if (stepWidth == 1) return this;
-        return new LongStream(new LongSample(iterator, stepWidth));
+        return new LongStream(params, new LongSample(iterator, stepWidth));
     }
 
     /**
@@ -507,7 +517,7 @@ public final class LongStream {
      * @return the new stream
      */
     public LongStream peek(final LongConsumer action) {
-        return new LongStream(new LongPeek(iterator, action));
+        return new LongStream(params, new LongPeek(iterator, action));
     }
 
     /**
@@ -532,7 +542,7 @@ public final class LongStream {
      */
     public LongStream scan(final LongBinaryOperator accumulator) {
         Objects.requireNonNull(accumulator);
-        return new LongStream(new LongScan(iterator, accumulator));
+        return new LongStream(params, new LongScan(iterator, accumulator));
     }
 
     /**
@@ -559,7 +569,7 @@ public final class LongStream {
      */
     public LongStream scan(final long identity, final LongBinaryOperator accumulator) {
         Objects.requireNonNull(accumulator);
-        return new LongStream(new LongScanIdentity(iterator, identity, accumulator));
+        return new LongStream(params, new LongScanIdentity(iterator, identity, accumulator));
     }
 
     /**
@@ -578,7 +588,7 @@ public final class LongStream {
      * @return the new {@code LongStream}
      */
     public LongStream takeWhile(final LongPredicate predicate) {
-        return new LongStream(new LongTakeWhile(iterator, predicate));
+        return new LongStream(params, new LongTakeWhile(iterator, predicate));
     }
 
     /**
@@ -600,7 +610,7 @@ public final class LongStream {
      * @since 1.1.6
      */
     public LongStream takeUntil(final LongPredicate stopPredicate) {
-        return new LongStream(new LongTakeUntil(iterator, stopPredicate));
+        return new LongStream(params, new LongTakeUntil(iterator, stopPredicate));
     }
 
     /**
@@ -619,7 +629,7 @@ public final class LongStream {
      * @return the new {@code LongStream}
      */
     public LongStream dropWhile(final LongPredicate predicate) {
-        return new LongStream(new LongDropWhile(iterator, predicate));
+        return new LongStream(params, new LongDropWhile(iterator, predicate));
     }
 
     /**
@@ -646,7 +656,7 @@ public final class LongStream {
     public LongStream limit(final long maxSize) {
         if (maxSize < 0) throw new IllegalArgumentException("maxSize cannot be negative");
         if (maxSize == 0) return LongStream.empty();
-        return new LongStream(new LongLimit(iterator, maxSize));
+        return new LongStream(params, new LongLimit(iterator, maxSize));
     }
 
     /**
@@ -674,7 +684,7 @@ public final class LongStream {
     public LongStream skip(final long n) {
         if (n < 0) throw new IllegalArgumentException("n cannot be negative");
         if (n == 0) return this;
-        return new LongStream(new LongSkip(iterator, n));
+        return new LongStream(params, new LongSkip(iterator, n));
     }
 
     /**
@@ -1025,6 +1035,44 @@ public final class LongStream {
             throw new IllegalStateException("LongStream contains more than one element");
         }
         return OptionalLong.of(singleCandidate);
+    }
+
+    /**
+     * Adds close handler to the current stream.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @param closeHandler  an action to execute when the stream is closed
+     * @return the new stream with the close handler
+     * @since 1.1.8
+     */
+    public LongStream onClose(final Runnable closeHandler) {
+        Objects.requireNonNull(closeHandler);
+        final Params newParams;
+        if (params == null) {
+            newParams = new Params();
+            newParams.closeHandler = closeHandler;
+        } else {
+            newParams = params;
+            final Runnable firstHandler = newParams.closeHandler;
+            newParams.closeHandler = Compose.runnables(firstHandler, closeHandler);
+        }
+        return new LongStream(newParams, iterator);
+    }
+
+    /**
+     * Causes close handler to be invoked if it exists.
+     * Since most of the stream providers are lists or arrays,
+     * it is not necessary to close the stream.
+     *
+     * @since 1.1.8
+     */
+    @Override
+    public void close() {
+        if (params != null && params.closeHandler != null) {
+            params.closeHandler.run();
+            params.closeHandler = null;
+        }
     }
 
 
