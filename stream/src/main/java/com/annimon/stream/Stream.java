@@ -247,7 +247,8 @@ public class Stream<T> implements Closeable {
     public static <T> Stream<T> concat(Stream<? extends T> stream1, Stream<? extends T> stream2) {
         Objects.requireNonNull(stream1);
         Objects.requireNonNull(stream2);
-        return new Stream<T>(new ObjConcat<T>(stream1.iterator, stream2.iterator));
+        Stream<T> result = new Stream<T>(new ObjConcat<T>(stream1.iterator, stream2.iterator));
+        return result.onClose(Compose.closeables(stream1, stream2));
     }
 
     /**

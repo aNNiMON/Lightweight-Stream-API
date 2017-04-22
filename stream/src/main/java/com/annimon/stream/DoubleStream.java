@@ -163,7 +163,8 @@ public final class DoubleStream implements Closeable {
     public static DoubleStream concat(final DoubleStream a, final DoubleStream b) {
         Objects.requireNonNull(a);
         Objects.requireNonNull(b);
-        return new DoubleStream(new DoubleConcat(a.iterator, b.iterator));
+        DoubleStream result = new DoubleStream(new DoubleConcat(a.iterator, b.iterator));
+        return result.onClose(Compose.closeables(a, b));
     }
 
 

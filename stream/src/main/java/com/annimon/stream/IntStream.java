@@ -203,7 +203,8 @@ public final class IntStream implements Closeable {
     public static IntStream concat(final IntStream a, final IntStream b) {
         Objects.requireNonNull(a);
         Objects.requireNonNull(b);
-        return new IntStream(new IntConcat(a.iterator, b.iterator));
+        IntStream result = new IntStream(new IntConcat(a.iterator, b.iterator));
+        return result.onClose(Compose.closeables(a, b));
     }
 
     private final PrimitiveIterator.OfInt iterator;

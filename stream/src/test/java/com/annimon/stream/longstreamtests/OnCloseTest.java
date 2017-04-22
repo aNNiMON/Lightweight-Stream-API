@@ -73,4 +73,24 @@ public class OnCloseTest {
         stream.close();
         assertThat(counter[0], is(5));
     }
+
+    @Test
+    public void testOnCloseConcat() {
+        final int[] counter = new int[] { 0 };
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                counter[0]++;
+            }
+        };
+
+        LongStream stream1 = LongStream.range(0, 2).onClose(runnable);
+        LongStream stream2 = LongStream.range(0, 2).onClose(runnable);
+        LongStream stream = LongStream.concat(stream1, stream2)
+                .onClose(runnable);
+        stream.count();
+        assertThat(counter[0], is(0));
+        stream.close();
+        assertThat(counter[0], is(3));
+    }
 }

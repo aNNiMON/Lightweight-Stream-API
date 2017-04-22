@@ -198,7 +198,8 @@ public final class LongStream implements Closeable {
     public static LongStream concat(final LongStream a, final LongStream b) {
         Objects.requireNonNull(a);
         Objects.requireNonNull(b);
-        return new LongStream(new LongConcat(a.iterator, b.iterator));
+        LongStream result = new LongStream(new LongConcat(a.iterator, b.iterator));
+        return result.onClose(Compose.closeables(a, b));
     }
 
 
