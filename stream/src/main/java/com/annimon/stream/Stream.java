@@ -6,6 +6,7 @@ import com.annimon.stream.internal.Operators;
 import com.annimon.stream.internal.Params;
 import com.annimon.stream.iterator.IndexedIterator;
 import com.annimon.stream.iterator.LazyIterator;
+import com.annimon.stream.iterator.PrimitiveIterator;
 import com.annimon.stream.operator.*;
 import java.io.Closeable;
 import java.util.ArrayList;
@@ -87,6 +88,47 @@ public class Stream<T> implements Closeable {
             return Stream.<T>empty();
         }
         return new Stream<T>(new ObjArray<T>(elements));
+    }
+
+    /**
+     * Creates a {@code Stream<Integer>} of code point values from the given sequence.
+     * Any surrogate pairs encountered in the sequence are combined as if by {@linkplain
+     * Character#toCodePoint Character.toCodePoint} and the result is passed to the stream.
+     * Any other code units, including ordinary BMP characters, unpaired surrogates, and
+     * undefined code units, are zero-extended to {@code int} values which are then
+     * passed to the stream.
+     *
+     * @param charSequence the sequence where to get all code points values.
+     * @return the new stream
+     */
+    public static Stream<Integer> ofCodePoints(final CharSequence charSequence) {
+        return IntStream.of(new PrimitiveIterator.OfInt() {
+            int current = 0;
+
+            @Override
+            public boolean hasNext() {
+                return current < charSequence.length();
+            }
+
+            @Override
+            public int nextInt() {
+                final int length = charSequence.length();
+
+                if (current >= length) {
+                    throw new NoSuchElementException();
+                }
+                char nextChar = charSequence.charAt(current++);
+
+                if (Character.isHighSurrogate(nextChar) && current < length) {
+                    char currentChar = charSequence.charAt(current);
+                    if (Character.isLowSurrogate(currentChar)) {
+                        current++;
+                        return Character.toCodePoint(nextChar, currentChar);
+                    }
+                }
+                return nextChar;
+            }
+        }).boxed();
     }
 
     /**
