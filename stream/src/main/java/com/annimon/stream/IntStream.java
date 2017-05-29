@@ -79,6 +79,21 @@ public final class IntStream implements Closeable {
     }
 
     /**
+     * Creates an {@code IntStream} of code point values from the given sequence.
+     * Any surrogate pairs encountered in the sequence are combined as if by {@linkplain
+     * Character#toCodePoint Character.toCodePoint} and the result is passed to the stream.
+     * Any other code units, including ordinary BMP characters, unpaired surrogates, and
+     * undefined code units, are zero-extended to {@code int} values which are then
+     * passed to the stream.
+     *
+     * @param charSequence  the sequence where to get all code points values.
+     * @return the new stream
+     */
+    public static IntStream ofCodePoints(CharSequence charSequence) {
+        return new IntStream(new IntCodePoints(charSequence));
+    }
+
+    /**
      * Returns a sequential ordered {@code IntStream} from {@code startInclusive}
      * (inclusive) to {@code endExclusive} (exclusive) by an incremental step of
      * {@code 1}.
