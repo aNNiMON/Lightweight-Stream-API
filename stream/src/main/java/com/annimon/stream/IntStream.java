@@ -88,6 +88,7 @@ public final class IntStream implements Closeable {
      *
      * @param charSequence  the sequence where to get all code points values.
      * @return the new stream
+     * @since 1.1.8
      */
     public static IntStream ofCodePoints(CharSequence charSequence) {
         return new IntStream(new IntCodePoints(charSequence));
