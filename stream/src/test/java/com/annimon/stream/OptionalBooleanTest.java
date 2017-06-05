@@ -336,6 +336,18 @@ public class OptionalBooleanTest {
     }
 
     @Test
+    public void testSingleInstance() {
+        assertTrue(OptionalBoolean.of(true) == OptionalBoolean.of(true));
+        assertTrue(OptionalBoolean.of(true) == OptionalBoolean.of(false).map(new BooleanPredicate() {
+            @Override
+            public boolean test(boolean value) {
+                return !value;
+            }
+        }));
+        assertTrue(OptionalBoolean.of(false) == OptionalBoolean.of(false));
+    }
+
+    @Test
     public void testHashCode() {
         assertEquals(OptionalBoolean.empty().hashCode(), 0);
         assertEquals(1231, OptionalBoolean.of(true).hashCode());
