@@ -763,7 +763,7 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Returns {@code Stream} with distinct elements (as determinated by {@code hashCode} and {@code equals} methods).
+     * Returns {@code Stream} with distinct elements (as determined by {@code hashCode} and {@code equals} methods).
      *
      * <p>This is a stateful intermediate operation.
      *
@@ -777,6 +777,26 @@ public class Stream<T> implements Closeable {
      */
     public Stream<T> distinct() {
         return new Stream<T>(params, new ObjDistinct<T>(iterator));
+    }
+
+    /**
+     * Returns {@code Stream} with distinct elements (as determined by {@code hashCode}
+     * and {@code equals} methods) according to the given classifier function.
+     *
+     * <p>This is a stateful intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * classifier: (str) -&gt; str.length()
+     * stream: ["a", "bc", "d", "ef", "ghij"]
+     * result: ["a", "bc", "ghij"]
+     * </pre>
+     *
+     * @param classifier  the classifier function
+     * @return the new stream
+     */
+    public <K> Stream<T> distinctBy(Function<? super T, ? extends K> classifier) {
+        return new Stream<T>(params, new ObjDistinctBy<T, K>(iterator, classifier));
     }
 
     /**
