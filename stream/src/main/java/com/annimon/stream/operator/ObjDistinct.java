@@ -19,8 +19,7 @@ public class ObjDistinct<T> extends LsaExtIterator<T> {
     protected void nextIteration() {
         while (hasNext = iterator.hasNext()) {
             next = iterator.next();
-            if (!set.contains(next)) {
-                set.add(next);
+            if (set.add(next)) {
                 return;
             }
         }
