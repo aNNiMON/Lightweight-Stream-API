@@ -968,6 +968,24 @@ public final class LongStream implements Closeable {
     }
 
     /**
+     * Returns the last element wrapped by {@code OptionalLong} class.
+     * If stream is empty, returns {@code OptionalLong.empty()}.
+     *
+     * <p>This is a short-circuiting terminal operation.
+     *
+     * @return an {@code OptionalLong} with the last element
+     *         or {@code OptionalLong.empty()} if the stream is empty
+     */
+    public OptionalLong findLast() {
+        return reduce(new LongBinaryOperator() {
+            @Override
+            public long applyAsLong(long left, long right) {
+                return right;
+            }
+        });
+    }
+
+    /**
      * Returns the single element of stream.
      * If stream is empty, throws {@code NoSuchElementException}.
      * If stream contains more than one element, throws {@code IllegalStateException}.

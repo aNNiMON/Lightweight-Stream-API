@@ -1768,7 +1768,7 @@ public class Stream<T> implements Closeable {
      *
      * <p>This is a short-circuiting terminal operation.
      *
-     * @return an {@code Optional} with first element
+     * @return an {@code Optional} with the first element
      *         or {@code Optional.empty()} if stream is empty
      */
     public Optional<T> findFirst() {
@@ -1776,6 +1776,24 @@ public class Stream<T> implements Closeable {
             return Optional.of(iterator.next());
         }
         return Optional.empty();
+    }
+
+    /**
+     * Returns the last element wrapped by {@code Optional} class.
+     * If stream is empty, returns {@code Optional.empty()}.
+     *
+     * <p>This is a short-circuiting terminal operation.
+     *
+     * @return an {@code Optional} with the last element
+     *         or {@code Optional.empty()} if the stream is empty
+     */
+    public Optional<T> findLast() {
+        return reduce(new BinaryOperator<T>() {
+            @Override
+            public T apply(T left, T right) {
+                return right;
+            }
+        });
     }
 
     /**

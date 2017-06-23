@@ -1005,11 +1005,29 @@ public final class IntStream implements Closeable {
      *         or an empty {@code OptionalInt} if the stream is empty
      */
     public OptionalInt findFirst() {
-        if(iterator.hasNext()) {
+        if (iterator.hasNext()) {
             return OptionalInt.of(iterator.nextInt());
         } else {
             return OptionalInt.empty();
         }
+    }
+
+    /**
+     * Returns the last element wrapped by {@code OptionalInt} class.
+     * If stream is empty, returns {@code OptionalInt.empty()}.
+     *
+     * <p>This is a short-circuiting terminal operation.
+     *
+     * @return an {@code OptionalInt} with the last element
+     *         or {@code OptionalInt.empty()} if the stream is empty
+     */
+    public OptionalInt findLast() {
+        return reduce(new IntBinaryOperator() {
+            @Override
+            public int applyAsInt(int left, int right) {
+                return right;
+            }
+        });
     }
 
     /**

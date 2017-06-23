@@ -952,6 +952,24 @@ public final class DoubleStream implements Closeable {
     }
 
     /**
+     * Returns the last element wrapped by {@code OptionalDouble} class.
+     * If stream is empty, returns {@code OptionalDouble.empty()}.
+     *
+     * <p>This is a short-circuiting terminal operation.
+     *
+     * @return an {@code OptionalDouble} with the last element
+     *         or {@code OptionalDouble.empty()} if the stream is empty
+     */
+    public OptionalDouble findLast() {
+        return reduce(new DoubleBinaryOperator() {
+            @Override
+            public double applyAsDouble(double left, double right) {
+                return right;
+            }
+        });
+    }
+
+    /**
      * Returns the single element of stream.
      * If stream is empty, throws {@code NoSuchElementException}.
      * If stream contains more than one element, throws {@code IllegalStateException}.
