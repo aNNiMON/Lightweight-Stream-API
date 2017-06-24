@@ -14,7 +14,7 @@ Stream API from Java 8 rewritten on iterators for Java 7 and below.
 
  + Functional interfaces (`Supplier`, `Function`, `Consumer` etc);
  + `Stream`/`IntStream`/`LongStream`/`DoubleStream` (without parallel processing, but with a variety of additional methods and with custom operators);
- + `Optional`/`OptionalInt`/`OptionalLong`/`OptionalDouble` classes;
+ + `Optional`/`OptionalBoolean`/`OptionalInt`/`OptionalLong`/`OptionalDouble` classes;
  + `Exceptional` class - functional way to deal with exceptions;
  + `Objects` from Java 7.
 
@@ -186,7 +186,7 @@ Download [latest release](https://github.com/aNNiMON/Lightweight-Stream-API/rele
 <dependency>
   <groupId>com.annimon</groupId>
   <artifactId>stream</artifactId>
-  <version>1.1.7</version>
+  <version>1.1.</version>
 </dependency>
 ```
 or Gradle:
@@ -194,7 +194,7 @@ or Gradle:
 ```groovy
 dependencies {
   ...
-  compile 'com.annimon:stream:1.1.7'
+  compile 'com.annimon:stream:1.1.8'
   ...
 }
 ```
