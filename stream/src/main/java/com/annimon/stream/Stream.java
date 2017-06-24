@@ -794,6 +794,7 @@ public class Stream<T> implements Closeable {
      *
      * @param classifier  the classifier function
      * @return the new stream
+     * @since 1.1.8
      */
     public <K> Stream<T> distinctBy(Function<? super T, ? extends K> classifier) {
         return new Stream<T>(params, new ObjDistinctBy<T, K>(iterator, classifier));
@@ -1786,6 +1787,7 @@ public class Stream<T> implements Closeable {
      *
      * @return an {@code Optional} with the last element
      *         or {@code Optional.empty()} if the stream is empty
+     * @since 1.1.8
      */
     public Optional<T> findLast() {
         return reduce(new BinaryOperator<T>() {

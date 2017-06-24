@@ -975,6 +975,7 @@ public final class LongStream implements Closeable {
      *
      * @return an {@code OptionalLong} with the last element
      *         or {@code OptionalLong.empty()} if the stream is empty
+     * @since 1.1.8
      */
     public OptionalLong findLast() {
         return reduce(new LongBinaryOperator() {

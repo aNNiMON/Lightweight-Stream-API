@@ -1020,6 +1020,7 @@ public final class IntStream implements Closeable {
      *
      * @return an {@code OptionalInt} with the last element
      *         or {@code OptionalInt.empty()} if the stream is empty
+     * @since 1.1.8
      */
     public OptionalInt findLast() {
         return reduce(new IntBinaryOperator() {

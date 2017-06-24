@@ -959,6 +959,7 @@ public final class DoubleStream implements Closeable {
      *
      * @return an {@code OptionalDouble} with the last element
      *         or {@code OptionalDouble.empty()} if the stream is empty
+     * @since 1.1.8
      */
     public OptionalDouble findLast() {
         return reduce(new DoubleBinaryOperator() {
