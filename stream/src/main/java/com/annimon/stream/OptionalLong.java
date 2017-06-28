@@ -1,5 +1,6 @@
 package com.annimon.stream;
 
+import com.annimon.stream.function.Function;
 import com.annimon.stream.function.LongConsumer;
 import com.annimon.stream.function.LongFunction;
 import com.annimon.stream.function.LongPredicate;
@@ -129,6 +130,20 @@ public final class OptionalLong {
             action.run();
         }
         return this;
+    }
+
+    /**
+     * Applies custom operator on {@code OptionalLong}.
+     *
+     * @param <R> the type of the result
+     * @param function  a transforming function
+     * @return a result of the transforming function
+     * @throws NullPointerException if {@code function} is null
+     * @since 1.1.9
+     */
+    public <R> R custom(Function<OptionalLong, R> function) {
+        Objects.requireNonNull(function);
+        return function.apply(this);
     }
 
     /**

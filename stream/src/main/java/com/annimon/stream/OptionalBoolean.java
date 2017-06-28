@@ -4,6 +4,7 @@ import com.annimon.stream.function.BooleanConsumer;
 import com.annimon.stream.function.BooleanFunction;
 import com.annimon.stream.function.BooleanPredicate;
 import com.annimon.stream.function.BooleanSupplier;
+import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Supplier;
 import java.util.NoSuchElementException;
 
@@ -129,6 +130,20 @@ public final class OptionalBoolean {
             action.run();
         }
         return this;
+    }
+
+    /**
+     * Applies custom operator on {@code OptionalBoolean}.
+     *
+     * @param <R> the type of the result
+     * @param function  a transforming function
+     * @return a result of the transforming function
+     * @throws NullPointerException if {@code function} is null
+     * @since 1.1.9
+     */
+    public <R> R custom(Function<OptionalBoolean, R> function) {
+        Objects.requireNonNull(function);
+        return function.apply(this);
     }
 
     /**

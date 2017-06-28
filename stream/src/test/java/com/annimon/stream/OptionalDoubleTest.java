@@ -6,14 +6,16 @@ import com.annimon.stream.function.DoubleSupplier;
 import com.annimon.stream.function.DoubleToIntFunction;
 import com.annimon.stream.function.DoubleToLongFunction;
 import com.annimon.stream.function.DoubleUnaryOperator;
+import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Supplier;
 import com.annimon.stream.test.hamcrest.OptionalMatcher;
 import java.util.NoSuchElementException;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.OptionalDoubleMatcher.hasValueThat;
 import static com.annimon.stream.test.hamcrest.OptionalDoubleMatcher.isEmpty;
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.closeTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -178,6 +180,37 @@ public class OptionalDoubleTest {
                         fail();
                     }
                 });
+    }
+
+    @Test
+    public void testCustomIntermediate() {
+        OptionalDouble result = OptionalDouble.of(10)
+                .custom(new Function<OptionalDouble, OptionalDouble>() {
+                    @Override
+                    public OptionalDouble apply(OptionalDouble optional) {
+                        return optional.filter(Functions.greaterThan(Math.PI));
+                    }
+                });
+
+        assertThat(result, hasValueThat(closeTo(10, 0.0001)));
+    }
+
+    @Test
+    public void testCustomTerminal() {
+        Double result = OptionalDouble.empty()
+                .custom(new Function<OptionalDouble, Double>() {
+                    @Override
+                    public Double apply(OptionalDouble optional) {
+                        return optional.orElse(0);
+                    }
+                });
+
+        assertThat(result, closeTo(0, 0.0001));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testCustomException() {
+        OptionalDouble.empty().custom(null);
     }
 
     @Test

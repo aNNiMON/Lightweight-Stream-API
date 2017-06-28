@@ -1,5 +1,6 @@
 package com.annimon.stream;
 
+import com.annimon.stream.function.Function;
 import com.annimon.stream.function.IntConsumer;
 import com.annimon.stream.function.IntFunction;
 import com.annimon.stream.function.IntPredicate;
@@ -146,6 +147,20 @@ public final class OptionalInt {
         if (!isPresent())
             action.run();
         return this;
+    }
+
+    /**
+     * Applies custom operator on {@code OptionalInt}.
+     *
+     * @param <R> the type of the result
+     * @param function  a transforming function
+     * @return a result of the transforming function
+     * @throws NullPointerException if {@code function} is null
+     * @since 1.1.9
+     */
+    public <R> R custom(Function<OptionalInt, R> function) {
+        Objects.requireNonNull(function);
+        return function.apply(this);
     }
 
     /**
