@@ -4,6 +4,7 @@ import com.annimon.stream.function.BooleanConsumer;
 import com.annimon.stream.function.BooleanFunction;
 import com.annimon.stream.function.BooleanPredicate;
 import com.annimon.stream.function.BooleanSupplier;
+import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Supplier;
 import com.annimon.stream.test.hamcrest.OptionalMatcher;
 import java.util.NoSuchElementException;
@@ -11,6 +12,7 @@ import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.OptionalBooleanMatcher.hasValue;
 import static com.annimon.stream.test.hamcrest.OptionalBooleanMatcher.isEmpty;
 import static com.annimon.stream.test.hamcrest.OptionalBooleanMatcher.isPresent;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
@@ -174,6 +176,37 @@ public class OptionalBooleanTest {
                         fail();
                     }
                 });
+    }
+
+    @Test
+    public void testCustomIntermediate() {
+        OptionalBoolean result = OptionalBoolean.of(true)
+                .custom(new Function<OptionalBoolean, OptionalBoolean>() {
+                    @Override
+                    public OptionalBoolean apply(OptionalBoolean optional) {
+                        return optional.filter(BooleanPredicate.Util.identity());
+                    }
+                });
+
+        assertThat(result, hasValue(true));
+    }
+
+    @Test
+    public void testCustomTerminal() {
+        Boolean result = OptionalBoolean.empty()
+                .custom(new Function<OptionalBoolean, Boolean>() {
+                    @Override
+                    public Boolean apply(OptionalBoolean optional) {
+                        return optional.orElse(false);
+                    }
+                });
+
+        assertThat(result, is(false));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testCustomException() {
+        OptionalBoolean.empty().custom(null);
     }
 
     @Test

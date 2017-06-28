@@ -7,6 +7,7 @@ import com.annimon.stream.function.DoubleSupplier;
 import com.annimon.stream.function.DoubleToIntFunction;
 import com.annimon.stream.function.DoubleToLongFunction;
 import com.annimon.stream.function.DoubleUnaryOperator;
+import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Supplier;
 import java.util.NoSuchElementException;
 
@@ -130,6 +131,20 @@ public final class OptionalDouble {
             action.run();
         }
         return this;
+    }
+
+    /**
+     * Applies custom operator on {@code OptionalDouble}.
+     *
+     * @param <R> the type of the result
+     * @param function  a transforming function
+     * @return a result of the transforming function
+     * @throws NullPointerException if {@code function} is null
+     * @since 1.1.9
+     */
+    public <R> R custom(Function<OptionalDouble, R> function) {
+        Objects.requireNonNull(function);
+        return function.apply(this);
     }
 
     /**

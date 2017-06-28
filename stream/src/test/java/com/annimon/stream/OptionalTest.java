@@ -17,7 +17,7 @@ import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.OptionalMatcher.hasValue;
 import static com.annimon.stream.test.hamcrest.OptionalMatcher.isEmpty;
 import static com.annimon.stream.test.hamcrest.OptionalMatcher.isPresent;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.closeTo;
 import static org.junit.Assert.*;
 
@@ -185,6 +185,37 @@ public final class OptionalTest {
                         fail();
                     }
                 });
+    }
+
+    @Test
+    public void testCustomIntermediate() {
+        Optional<Integer> result = Optional.of(10)
+                .custom(new Function<Optional<Integer>, Optional<Integer>>() {
+                    @Override
+                    public Optional<Integer> apply(Optional<Integer> optional) {
+                        return optional.filter(Functions.remainder(2));
+                    }
+                });
+
+        assertThat(result, hasValue(10));
+    }
+
+    @Test
+    public void testCustomTerminal() {
+        Integer result = Optional.<Integer>empty()
+                .custom(new Function<Optional<Integer>, Integer>() {
+                    @Override
+                    public Integer apply(Optional<Integer> optional) {
+                        return optional.orElse(0);
+                    }
+                });
+
+        assertThat(result, is(0));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testCustomException() {
+        Optional.<Integer>empty().custom(null);
     }
 
     @Test

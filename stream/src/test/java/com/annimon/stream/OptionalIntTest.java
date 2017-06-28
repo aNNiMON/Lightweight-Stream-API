@@ -1,5 +1,6 @@
 package com.annimon.stream;
 
+import com.annimon.stream.function.Function;
 import com.annimon.stream.function.IntConsumer;
 import com.annimon.stream.function.IntFunction;
 import com.annimon.stream.function.IntSupplier;
@@ -15,7 +16,7 @@ import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.hasValue;
 import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.isEmpty;
 import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.isPresent;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.closeTo;
 import static org.junit.Assert.*;
 
@@ -176,6 +177,37 @@ public class OptionalIntTest {
                         fail();
                     }
                 });
+    }
+
+    @Test
+    public void testCustomIntermediate() {
+        OptionalInt result = OptionalInt.of(10)
+                .custom(new Function<OptionalInt, OptionalInt>() {
+                    @Override
+                    public OptionalInt apply(OptionalInt optional) {
+                        return optional.filter(Functions.remainderInt(2));
+                    }
+                });
+
+        assertThat(result, hasValue(10));
+    }
+
+    @Test
+    public void testCustomTerminal() {
+        Integer result = OptionalInt.empty()
+                .custom(new Function<OptionalInt, Integer>() {
+                    @Override
+                    public Integer apply(OptionalInt optional) {
+                        return optional.orElse(0);
+                    }
+                });
+
+        assertThat(result, is(0));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testCustomException() {
+        OptionalInt.empty().custom(null);
     }
 
     @Test
