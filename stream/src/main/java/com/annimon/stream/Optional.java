@@ -155,7 +155,7 @@ public class Optional<T> {
     }
     
     /**
-     * Performs filtering on inner value if present.
+     * Performs filtering on inner value if it is present.
      * 
      * @param predicate  a predicate function
      * @return this {@code Optional} if the value is present and matches predicate,
@@ -165,7 +165,18 @@ public class Optional<T> {
         if (!isPresent()) return this;
         return predicate.test(value) ? this : Optional.<T>empty();
     }
-    
+
+    /**
+     * Performs negated filtering on inner value if it is present.
+     *
+     * @param predicate  a predicate function
+     * @return this {@code Optional} if the value is present and doesn't matches predicate,
+     *              otherwise an empty {@code Optional}
+     */
+    public Optional<T> filterNot(Predicate<? super T> predicate) {
+        return filter(Predicate.Util.negate(predicate));
+    }
+
     /**
      * Invokes the given mapping function on inner value if present.
      * 

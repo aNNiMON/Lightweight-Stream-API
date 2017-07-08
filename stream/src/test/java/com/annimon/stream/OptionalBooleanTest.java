@@ -231,6 +231,28 @@ public class OptionalBooleanTest {
         assertThat(result, isEmpty());
     }
 
+    @Test
+    public void testFilterNot() {
+        final BooleanPredicate predicate = new BooleanPredicate() {
+            @Override
+            public boolean test(boolean value) {
+                return value || false;
+            }
+        };
+        OptionalBoolean result;
+        result = OptionalBoolean.of(false)
+                .filterNot(predicate);
+        assertThat(result, hasValue(false));
+
+        result = OptionalBoolean.empty()
+                .filterNot(predicate);
+        assertThat(result, isEmpty());
+
+        result = OptionalBoolean.of(true)
+                .filterNot(predicate);
+        assertThat(result, isEmpty());
+    }
+
 
     @Test
     public void testMap() {

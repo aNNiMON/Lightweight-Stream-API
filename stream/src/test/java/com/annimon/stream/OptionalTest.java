@@ -227,6 +227,14 @@ public final class OptionalTest {
     }
 
     @Test
+    public void testFilterNot() {
+        Optional<Integer> result = Optional.of(10)
+                .filterNot(Functions.remainder(2));
+
+        assertThat(result, isEmpty());
+    }
+
+    @Test
     public void testMapOnEmptyOptional() {
         assertFalse(
                 Optional.<Integer>empty()

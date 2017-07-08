@@ -164,7 +164,7 @@ public final class OptionalInt {
     }
 
     /**
-     * Performs filtering on inner value if present.
+     * Performs filtering on inner value if it is present.
      *
      * @param predicate  a predicate function
      * @return this {@code OptionalInt} if the value is present and matches predicate,
@@ -174,6 +174,17 @@ public final class OptionalInt {
     public OptionalInt filter(IntPredicate predicate) {
         if (!isPresent()) return this;
         return predicate.test(value) ? this : OptionalInt.empty();
+    }
+
+    /**
+     * Performs negated filtering on inner value if it is present.
+     *
+     * @param predicate  a predicate function
+     * @return this {@code OptionalInt} if the value is present and doesn't matches predicate,
+     *              otherwise an empty {@code OptionalInt}
+     */
+    public OptionalInt filterNot(IntPredicate predicate) {
+        return filter(IntPredicate.Util.negate(predicate));
     }
 
     /**
