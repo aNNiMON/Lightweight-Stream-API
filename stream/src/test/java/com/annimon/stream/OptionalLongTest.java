@@ -226,6 +226,22 @@ public class OptionalLongTest {
         assertThat(result, isEmpty());
     }
 
+    @Test
+    public void testFilterNot() {
+        OptionalLong result;
+        result = OptionalLong.of(4)
+                .filterNot(Functions.remainderLong(3));
+        assertThat(result, hasValue(4));
+
+        result = OptionalLong.empty()
+                .filterNot(Functions.remainderLong(3));
+        assertThat(result, isEmpty());
+
+        result = OptionalLong.of(9)
+                .filterNot(Functions.remainderLong(3));
+        assertThat(result, isEmpty());
+    }
+
 
     @Test
     public void testMap() {

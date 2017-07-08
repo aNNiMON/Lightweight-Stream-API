@@ -147,7 +147,7 @@ public final class OptionalBoolean {
     }
 
     /**
-     * Performs filtering on inner value if present.
+     * Performs filtering on inner value if it is present.
      *
      * @param predicate  a predicate function
      * @return this {@code OptionalBoolean} if the value is present and matches predicate,
@@ -156,6 +156,17 @@ public final class OptionalBoolean {
     public OptionalBoolean filter(BooleanPredicate predicate) {
         if (!isPresent()) return this;
         return predicate.test(value) ? this : OptionalBoolean.empty();
+    }
+
+    /**
+     * Performs negated filtering on inner value if it is present.
+     *
+     * @param predicate  a predicate function
+     * @return this {@code OptionalBoolean} if the value is present and doesn't matches predicate,
+     *              otherwise an empty {@code OptionalBoolean}
+     */
+    public OptionalBoolean filterNot(BooleanPredicate predicate) {
+        return filter(BooleanPredicate.Util.negate(predicate));
     }
 
     /**

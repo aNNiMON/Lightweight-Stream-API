@@ -226,6 +226,22 @@ public class OptionalIntTest {
         assertThat(result, isEmpty());
     }
 
+    @Test
+    public void testFilterNot() {
+        OptionalInt result;
+        result = OptionalInt.of(4)
+                .filterNot(Functions.remainderInt(3));
+        assertThat(result, hasValue(4));
+
+        result = OptionalInt.empty()
+                .filterNot(Functions.remainderInt(3));
+        assertThat(result, isEmpty());
+
+        result = OptionalInt.of(9)
+                .filterNot(Functions.remainderInt(3));
+        assertThat(result, isEmpty());
+    }
+
 
     @Test
     public void testMap() {
