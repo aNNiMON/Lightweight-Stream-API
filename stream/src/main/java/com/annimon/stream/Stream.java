@@ -252,6 +252,29 @@ public class Stream<T> implements Closeable {
     }
 
     /**
+     * Concatenates two iterators to a stream.
+     *
+     * <p>Example:
+     * <pre>
+     * iterator 1: [1, 2, 3, 4]
+     * iterator 2: [5, 6]
+     * result:     [1, 2, 3, 4, 5, 6]
+     * </pre>
+     *
+     * @param <T> The type of iterator elements
+     * @param iterator1  the first iterator
+     * @param iterator2  the second iterator
+     * @return the new stream
+     * @throws NullPointerException if {@code iterator1} or {@code iterator2} is null
+     * @since 1.1.9
+     */
+    public static <T> Stream<T> concat(Iterator<? extends T> iterator1, Iterator<? extends T> iterator2) {
+        Objects.requireNonNull(iterator1);
+        Objects.requireNonNull(iterator2);
+        return new Stream<T>(new ObjConcat<T>(iterator1, iterator2));
+    }
+
+    /**
      * Combines two streams by applying specified combiner function to each element at same position.
      *
      * <p>Example:

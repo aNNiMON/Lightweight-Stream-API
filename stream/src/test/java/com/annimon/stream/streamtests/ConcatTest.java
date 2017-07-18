@@ -3,6 +3,8 @@ package com.annimon.stream.streamtests;
 import com.annimon.stream.Functions;
 import com.annimon.stream.Stream;
 import com.annimon.stream.function.Function;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.assertElements;
 import static org.hamcrest.Matchers.contains;
@@ -53,6 +55,20 @@ public final class ConcatTest {
         Stream.concat(stream1, stream2)
                 .custom(assertElements(contains(
                         1, 1, 2, 2, 3, 3, 4, 4
+                )));
+    }
+
+    @Test
+    public void testMergeIterator() {
+        List<Integer> shorter = Arrays.asList(1, 2, 3, 4, 5);
+        List<Integer> longer = Stream.rangeClosed(2, 8).toList();
+        Stream.concat(shorter.iterator(), longer.iterator())
+                .custom(assertElements(contains(
+                        1, 2, 3, 4, 5, 2, 3, 4, 5, 6, 7, 8
+                )));
+        Stream.concat(longer.iterator(), shorter.iterator())
+                .custom(assertElements(contains(
+                        2, 3, 4, 5, 6, 7, 8, 1, 2, 3, 4, 5
                 )));
     }
 }
