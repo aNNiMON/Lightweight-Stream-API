@@ -147,7 +147,7 @@ public final class OptionalLong {
     }
 
     /**
-     * Performs filtering on inner value if present.
+     * Performs filtering on inner value if it is present.
      *
      * @param predicate  a predicate function
      * @return this {@code OptionalLong} if the value is present and matches predicate,
@@ -156,6 +156,17 @@ public final class OptionalLong {
     public OptionalLong filter(LongPredicate predicate) {
         if (!isPresent()) return this;
         return predicate.test(value) ? this : OptionalLong.empty();
+    }
+
+    /**
+     * Performs negated filtering on inner value if it is present.
+     *
+     * @param predicate  a predicate function
+     * @return this {@code OptionalLong} if the value is present and doesn't matches predicate,
+     *              otherwise an empty {@code OptionalLong}
+     */
+    public OptionalLong filterNot(LongPredicate predicate) {
+        return filter(LongPredicate.Util.negate(predicate));
     }
 
     /**

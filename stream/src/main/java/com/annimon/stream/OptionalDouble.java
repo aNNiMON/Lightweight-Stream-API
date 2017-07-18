@@ -148,7 +148,7 @@ public final class OptionalDouble {
     }
 
     /**
-     * Performs filtering on inner value if present.
+     * Performs filtering on inner value if it is present.
      *
      * @param predicate  a predicate function
      * @return this {@code OptionalDouble} if the value is present and matches predicate,
@@ -157,6 +157,17 @@ public final class OptionalDouble {
     public OptionalDouble filter(DoublePredicate predicate) {
         if (!isPresent()) return this;
         return predicate.test(value) ? this : OptionalDouble.empty();
+    }
+
+    /**
+     * Performs negated filtering on inner value if it is present.
+     *
+     * @param predicate  a predicate function
+     * @return this {@code OptionalDouble} if the value is present and doesn't matches predicate,
+     *              otherwise an empty {@code OptionalDouble}
+     */
+    public OptionalDouble filterNot(DoublePredicate predicate) {
+        return filter(DoublePredicate.Util.negate(predicate));
     }
 
     /**
