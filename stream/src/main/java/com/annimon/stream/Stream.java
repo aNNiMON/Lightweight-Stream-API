@@ -310,6 +310,22 @@ public class Stream<T> implements Closeable {
     /**
      * Merges elements of two streams according to the supplied selector function.
      *
+     * <p>Example 1 — Merge two sorted streams:
+     * <pre>
+     * stream1: [1, 3, 8, 10]
+     * stream2: [2, 5, 6, 12]
+     * selector: (a, b) -&gt; a &lt; b ? TAKE_FIRST : TAKE_SECOND
+     * result: [1, 2, 3, 5, 6, 8, 10, 12]
+     * </pre>
+     *
+     * <p>Example 2 — Concat two streams:
+     * <pre>
+     * stream1: [0, 3, 1]
+     * stream2: [2, 5, 6, 1]
+     * selector: (a, b) -&gt; TAKE_SECOND
+     * result: [2, 5, 6, 1, 0, 3, 1]
+     * </pre>
+     *
      * @param <T> the type of the elements
      * @param stream1  the first stream
      * @param stream2  the second stream
@@ -328,6 +344,22 @@ public class Stream<T> implements Closeable {
 
     /**
      * Merges elements of two iterators according to the supplied selector function.
+     *
+     * <p>Example 1 — Merge two sorted iterators:
+     * <pre>
+     * iterator1: [1, 3, 8, 10]
+     * iterator2: [2, 5, 6, 12]
+     * selector: (a, b) -&gt; a &lt; b ? TAKE_FIRST : TAKE_SECOND
+     * result: [1, 2, 3, 5, 6, 8, 10, 12]
+     * </pre>
+     *
+     * <p>Example 2 — Concat two iterators:
+     * <pre>
+     * iterator1: [0, 3, 1]
+     * iterator2: [2, 5, 6, 1]
+     * selector: (a, b) -&gt; TAKE_SECOND
+     * result: [2, 5, 6, 1, 0, 3, 1]
+     * </pre>
      *
      * @param <T> the type of the elements
      * @param iterator1  the first iterator
