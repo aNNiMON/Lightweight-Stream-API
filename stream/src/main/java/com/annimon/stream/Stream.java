@@ -6,7 +6,6 @@ import com.annimon.stream.internal.Operators;
 import com.annimon.stream.internal.Params;
 import com.annimon.stream.iterator.IndexedIterator;
 import com.annimon.stream.iterator.LazyIterator;
-import com.annimon.stream.iterator.PrimitiveIterator;
 import com.annimon.stream.operator.*;
 import java.io.Closeable;
 import java.util.ArrayList;
@@ -253,6 +252,29 @@ public class Stream<T> implements Closeable {
     }
 
     /**
+     * Concatenates two iterators to a stream.
+     *
+     * <p>Example:
+     * <pre>
+     * iterator 1: [1, 2, 3, 4]
+     * iterator 2: [5, 6]
+     * result:     [1, 2, 3, 4, 5, 6]
+     * </pre>
+     *
+     * @param <T> The type of iterator elements
+     * @param iterator1  the first iterator
+     * @param iterator2  the second iterator
+     * @return the new stream
+     * @throws NullPointerException if {@code iterator1} or {@code iterator2} is null
+     * @since 1.1.9
+     */
+    public static <T> Stream<T> concat(Iterator<? extends T> iterator1, Iterator<? extends T> iterator2) {
+        Objects.requireNonNull(iterator1);
+        Objects.requireNonNull(iterator2);
+        return new Stream<T>(new ObjConcat<T>(iterator1, iterator2));
+    }
+
+    /**
      * Combines two streams by applying specified combiner function to each element at same position.
      *
      * <p>Example:
@@ -306,6 +328,76 @@ public class Stream<T> implements Closeable {
         Objects.requireNonNull(iterator1);
         Objects.requireNonNull(iterator2);
         return new Stream<R>(new ObjZip<F, S, R>(iterator1, iterator2, combiner));
+    }
+
+    /**
+     * Merges elements of two streams according to the supplied selector function.
+     *
+     * <p>Example 1 — Merge two sorted streams:
+     * <pre>
+     * stream1: [1, 3, 8, 10]
+     * stream2: [2, 5, 6, 12]
+     * selector: (a, b) -&gt; a &lt; b ? TAKE_FIRST : TAKE_SECOND
+     * result: [1, 2, 3, 5, 6, 8, 10, 12]
+     * </pre>
+     *
+     * <p>Example 2 — Concat two streams:
+     * <pre>
+     * stream1: [0, 3, 1]
+     * stream2: [2, 5, 6, 1]
+     * selector: (a, b) -&gt; TAKE_SECOND
+     * result: [2, 5, 6, 1, 0, 3, 1]
+     * </pre>
+     *
+     * @param <T> the type of the elements
+     * @param stream1  the first stream
+     * @param stream2  the second stream
+     * @param selector the selector function used to choose elements
+     * @return the new stream
+     * @throws NullPointerException if {@code stream1} or {@code stream2} is null
+     * @since 1.1.9
+     */
+    public static <T> Stream<T> merge(
+            Stream<? extends T> stream1, Stream<? extends T> stream2,
+            BiFunction<? super T, ? super T, ObjMerge.MergeResult> selector) {
+        Objects.requireNonNull(stream1);
+        Objects.requireNonNull(stream2);
+        return Stream.<T>merge(stream1.iterator, stream2.iterator, selector);
+    }
+
+    /**
+     * Merges elements of two iterators according to the supplied selector function.
+     *
+     * <p>Example 1 — Merge two sorted iterators:
+     * <pre>
+     * iterator1: [1, 3, 8, 10]
+     * iterator2: [2, 5, 6, 12]
+     * selector: (a, b) -&gt; a &lt; b ? TAKE_FIRST : TAKE_SECOND
+     * result: [1, 2, 3, 5, 6, 8, 10, 12]
+     * </pre>
+     *
+     * <p>Example 2 — Concat two iterators:
+     * <pre>
+     * iterator1: [0, 3, 1]
+     * iterator2: [2, 5, 6, 1]
+     * selector: (a, b) -&gt; TAKE_SECOND
+     * result: [2, 5, 6, 1, 0, 3, 1]
+     * </pre>
+     *
+     * @param <T> the type of the elements
+     * @param iterator1  the first iterator
+     * @param iterator2  the second iterator
+     * @param selector  the selector function used to choose elements
+     * @return the new stream
+     * @throws NullPointerException if {@code iterator1} or {@code iterator2} is null
+     * @since 1.1.9
+     */
+    public static <T> Stream<T> merge(
+            Iterator<? extends T> iterator1, Iterator<? extends T> iterator2,
+            BiFunction<? super T, ? super T, ObjMerge.MergeResult> selector) {
+        Objects.requireNonNull(iterator1);
+        Objects.requireNonNull(iterator2);
+        return new Stream<T>(new ObjMerge<T>(iterator1, iterator2, selector));
     }
 
 
