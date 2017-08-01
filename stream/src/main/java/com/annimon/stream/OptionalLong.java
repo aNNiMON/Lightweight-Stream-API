@@ -164,6 +164,7 @@ public final class OptionalLong {
      * @param predicate  a predicate function
      * @return this {@code OptionalLong} if the value is present and doesn't matches predicate,
      *              otherwise an empty {@code OptionalLong}
+     * @since 1.1.9
      */
     public OptionalLong filterNot(LongPredicate predicate) {
         return filter(LongPredicate.Util.negate(predicate));
