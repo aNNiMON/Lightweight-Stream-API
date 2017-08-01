@@ -165,6 +165,7 @@ public final class OptionalDouble {
      * @param predicate  a predicate function
      * @return this {@code OptionalDouble} if the value is present and doesn't matches predicate,
      *              otherwise an empty {@code OptionalDouble}
+     * @since 1.1.9
      */
     public OptionalDouble filterNot(DoublePredicate predicate) {
         return filter(DoublePredicate.Util.negate(predicate));
