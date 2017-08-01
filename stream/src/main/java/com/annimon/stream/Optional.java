@@ -172,6 +172,7 @@ public class Optional<T> {
      * @param predicate  a predicate function
      * @return this {@code Optional} if the value is present and doesn't matches predicate,
      *              otherwise an empty {@code Optional}
+     * @since 1.1.9
      */
     public Optional<T> filterNot(Predicate<? super T> predicate) {
         return filter(Predicate.Util.negate(predicate));

@@ -182,6 +182,7 @@ public final class OptionalInt {
      * @param predicate  a predicate function
      * @return this {@code OptionalInt} if the value is present and doesn't matches predicate,
      *              otherwise an empty {@code OptionalInt}
+     * @since 1.1.9
      */
     public OptionalInt filterNot(IntPredicate predicate) {
         return filter(IntPredicate.Util.negate(predicate));

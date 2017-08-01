@@ -164,6 +164,7 @@ public final class OptionalBoolean {
      * @param predicate  a predicate function
      * @return this {@code OptionalBoolean} if the value is present and doesn't matches predicate,
      *              otherwise an empty {@code OptionalBoolean}
+     * @since 1.1.9
      */
     public OptionalBoolean filterNot(BooleanPredicate predicate) {
         return filter(BooleanPredicate.Util.negate(predicate));
