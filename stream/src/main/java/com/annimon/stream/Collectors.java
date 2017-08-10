@@ -762,7 +762,70 @@ public final class Collectors {
                 finisher
         );
     }
-    
+
+    /**
+     * Returns a {@code Collector} that performs partitioning operation according to a predicate.
+     * The returned {@code Map} always contains mappings for both {@code false} and {@code true} keys.
+     *
+     * @param <T> the type of the input elements
+     * @param predicate  a predicate used for classifying input elements
+     * @return a {@code Collector}
+     * @since 1.1.9
+     */
+    public static <T> Collector<T, ?, Map<Boolean, List<T>>> partitioningBy​(
+            Predicate<? super T> predicate) {
+        return partitioningBy​(predicate, Collectors.<T>toList());
+    }
+
+    /**
+     * Returns a {@code Collector} that performs partitioning operation according to a predicate.
+     * The returned {@code Map} always contains mappings for both {@code false} and {@code true} keys.
+     *
+     * @param <T> the type of the input elements
+     * @param <D> the result type of downstream reduction
+     * @param <A> the accumulation type
+     * @param predicate  a predicate used for classifying input elements
+     * @param downstream  the collector of partitioned elements
+     * @return a {@code Collector}
+     * @since 1.1.9
+     */
+    public static <T, D, A> Collector<T, ?, Map<Boolean, D>> partitioningBy​(
+            final Predicate<? super T> predicate,
+            final Collector<? super T, A, D> downstream) {
+
+        final BiConsumer<A, ? super T> downstreamAccumulator = downstream.accumulator();
+        return new CollectorsImpl<T, Tuple2<A>, Map<Boolean, D>>(
+                new Supplier<Tuple2<A>>() {
+                    @Override
+                    public Tuple2<A> get() {
+                        return new Tuple2<A>(
+                                downstream.supplier().get(),
+                                downstream.supplier().get());
+                    }
+                },
+                new BiConsumer<Tuple2<A>, T>() {
+                    @Override
+                    public void accept(Tuple2<A> container, T t) {
+                        downstreamAccumulator.accept(
+                                predicate.test(t) ? container.a : container.b, t);
+                    }
+                },
+                new Function<Tuple2<A>, Map<Boolean, D>>() {
+                    @Override
+                    public Map<Boolean, D> apply(Tuple2<A> container) {
+                        final Function<A, D> downstreamFinisher = downstream.finisher();
+                        final Function<A, D> finisher = downstreamFinisher == null
+                                ? Collectors.<A, D>castIdentity()
+                                : downstreamFinisher;
+                        Map<Boolean, D> result = new HashMap<Boolean, D>(2);
+                        result.put(Boolean.TRUE, finisher.apply(container.a));
+                        result.put(Boolean.FALSE, finisher.apply(container.b));
+                        return result;
+                    }
+                }
+        );
+    }
+
     private static <K, V>  Supplier<Map<K, V>> hashMapSupplier() {
         return new Supplier<Map<K, V>>() {
 
@@ -791,7 +854,16 @@ public final class Collectors {
             this.a = a;
         }
     }
-    
+
+    private static final class Tuple2<A> {
+        A a, b;
+
+        Tuple2(A a, A b) {
+            this.a = a;
+            this.b = b;
+        }
+    }
+
     private static final class CollectorsImpl<T, A, R> implements Collector<T, A, R> {
         
         private final Supplier<A> supplier;

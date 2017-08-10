@@ -3,6 +3,7 @@ package com.annimon.stream;
 import com.annimon.stream.function.BinaryOperator;
 import com.annimon.stream.function.Function;
 import com.annimon.stream.function.IntSupplier;
+import com.annimon.stream.function.Predicate;
 import com.annimon.stream.function.Supplier;
 import com.annimon.stream.function.ToDoubleFunction;
 import com.annimon.stream.function.ToIntFunction;
@@ -429,6 +430,42 @@ public class CollectorsTest {
                 hasEntry(3, 2L),
                 hasEntry(4, 1L)
         ));
+    }
+
+    @Test
+    public void testPartitioningByStudentCourse() {
+        Map<Boolean, List<Student>> byCourse = Stream.of(Students.ALL)
+                .collect(Collectors.partitioningBy​(new Predicate<Student>() {
+                    @Override
+                    public boolean test(Student student) {
+                        return student.getCourse() == 2;
+                    }
+                }));
+        assertThat(byCourse.get(true), is(Arrays.asList(
+                Students.JOHN_CS_2,
+                Students.SERGEY_ECONOMICS_2,
+                Students.SOPHIA_ECONOMICS_2
+        )));
+        assertThat(byCourse.get(false), is(Arrays.asList(
+                Students.STEVE_CS_4, Students.MARIA_ECONOMICS_1, Students.VICTORIA_CS_3,
+                Students.GEORGE_LAW_3, Students.SERGEY_LAW_1, Students.MARIA_CS_1
+        )));
+    }
+
+    @Test
+    public void testPartitioningByStudentCourseToNames() {
+        Map<Boolean, String> byCourse = Stream.of(Students.ALL)
+                .collect(Collectors.partitioningBy​(new Predicate<Student>() {
+                    @Override
+                    public boolean test(Student student) {
+                        return student.getCourse() > 2;
+                    }
+                }, Collectors.mapping(
+                        Students.studentName,
+                        Collectors.joining(", ")
+                )));
+        assertThat(byCourse.get(true), is("Steve, Victoria, George"));
+        assertThat(byCourse.get(false), is("Maria, John, Sergey, Sergey, Sophia, Maria"));
     }
 
     @Test
