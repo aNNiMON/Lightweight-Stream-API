@@ -104,6 +104,46 @@ public class Stream<T> implements Closeable {
     }
 
     /**
+     * If specified array is null, returns an empty {@code Stream},
+     * otherwise returns a {@code Stream} containing elements of this array.
+     *
+     * @param <T> the type of the stream elements
+     * @param array  the array whose elements to be passed to stream
+     * @return the new stream
+     * @since 1.1.9
+     */
+    public static <T> Stream<T> ofNullable(final T[] array) {
+        return (array == null) ? Stream.<T>empty() : Stream.of(array);
+    }
+
+    /**
+     * If specified map is null, returns an empty {@code Stream},
+     * otherwise returns a {@code Stream} containing entries of this map.
+     *
+     * @param <K> the type of map keys
+     * @param <V> the type of map values
+     * @param map  the map with elements to be passed to stream
+     * @return the new stream
+     * @since 1.1.9
+     */
+    public static <K, V> Stream<Map.Entry<K, V>> ofNullable(Map<K, V> map) {
+        return (map == null) ? Stream.<Map.Entry<K, V>>empty() : Stream.of(map);
+    }
+
+    /**
+     * If specified iterator is null, returns an empty {@code Stream},
+     * otherwise returns a {@code Stream} containing entries of this iterator.
+     *
+     * @param <T> the type of the stream elements
+     * @param iterator  the iterator with elements to be passed to stream
+     * @return the new stream
+     * @since 1.1.9
+     */
+    public static <T> Stream<T> ofNullable(Iterator<? extends T> iterator) {
+        return (iterator == null) ? Stream.<T>empty() : Stream.of(iterator);
+    }
+
+    /**
      * If specified iterable is null, returns an empty {@code Stream},
      * otherwise returns a {@code Stream} containing elements of this iterable.
      *
@@ -113,7 +153,7 @@ public class Stream<T> implements Closeable {
      * @since 1.1.5
      */
     public static <T> Stream<T> ofNullable(Iterable<? extends T> iterable) {
-        return (iterable == null) ? Stream.<T>empty() : Stream.<T>of(iterable);
+        return (iterable == null) ? Stream.<T>empty() : Stream.of(iterable);
     }
 
     /**
