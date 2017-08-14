@@ -772,9 +772,9 @@ public final class Collectors {
      * @return a {@code Collector}
      * @since 1.1.9
      */
-    public static <T> Collector<T, ?, Map<Boolean, List<T>>> partitioningBy​(
+    public static <T> Collector<T, ?, Map<Boolean, List<T>>> partitioningBy(
             Predicate<? super T> predicate) {
-        return partitioningBy​(predicate, Collectors.<T>toList());
+        return partitioningBy(predicate, Collectors.<T>toList());
     }
 
     /**
@@ -789,7 +789,7 @@ public final class Collectors {
      * @return a {@code Collector}
      * @since 1.1.9
      */
-    public static <T, D, A> Collector<T, ?, Map<Boolean, D>> partitioningBy​(
+    public static <T, D, A> Collector<T, ?, Map<Boolean, D>> partitioningBy(
             final Predicate<? super T> predicate,
             final Collector<? super T, A, D> downstream) {
 
