@@ -31,6 +31,8 @@ coveralls {
     coberturaReportPath = "${rootProject.buildDir}/reports/coverage/coverage.xml"
 }
 
+test.dependsOn(rootProject.subprojects.collect { ":${it.name}:cobertura" })
+
 tasks.coveralls {
     dependsOn coberturaReport
 }

@@ -7,6 +7,7 @@ group = 'com.annimon'
 ext.isReleaseVersion = !version.contains("SNAPSHOT")
 
 sourceCompatibility = '1.6'
+targetCompatibility = '1.6'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 if (!hasProperty('mainClass')) {

@@ -8,7 +8,6 @@ cache:
     - $HOME/.m2
     - $HOME/.gradle
 
-dist: trusty
 sudo: false
 
 branches:
