@@ -24,7 +24,7 @@ cobertura {
     coverageReportDir = file("build/reports/coverage")
     coverageSourceDirs = subprojects.sourceSets.main.allSource.srcDirs.flatten()
     coverageMergeDatafiles = subprojects.collect { file("${it.buildDir}/cobertura/cobertura.ser") }
-    coverageDirs = subprojects.collect { file("${it.buildDir}/classes/main") }
+    coverageDirs = subprojects.sourceSets.main.output.classesDirs.collect { it.getFiles() }
 }
 
 coveralls {

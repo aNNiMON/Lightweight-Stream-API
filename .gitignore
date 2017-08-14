@@ -7,8 +7,11 @@
 /.gradle/
 /stream/target/
 /stream/build/
+/stream/out/
 /streamTest/target/
 /streamTest/build/
+/streamTest/out/
 /.idea/
 *.iml
 local.properties
+
