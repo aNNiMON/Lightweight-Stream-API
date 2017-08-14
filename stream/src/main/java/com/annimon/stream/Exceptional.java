@@ -85,6 +85,17 @@ public class Exceptional<T> {
     }
 
     /**
+     * Returns inner value if there were no exceptions, otherwise returns value produced by supplier function.
+     *
+     * @param other  the supplier function that produces value if there were any exception
+     * @return inner value if there were no exceptions, otherwise value produced by supplier function
+     * @since 1.1.9
+     */
+    public T getOrElse(Supplier<? extends T> other) {
+        return throwable == null ? value : other.get();
+    }
+
+    /**
      * Wraps inner value with {@code Optional} container
      * 
      * @return an {@code Optional}

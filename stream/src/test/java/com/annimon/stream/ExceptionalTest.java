@@ -38,6 +38,22 @@ public class ExceptionalTest {
                 .of(tenSupplier)
                 .getOrElse(20);
         assertEquals(10, value);
+
+        Supplier<Integer> supplier = new Supplier<Integer>() {
+            @Override
+            public Integer get() {
+                return 3228;
+            }
+        };
+        value = Exceptional
+                .of(ioExceptionSupplier)
+                .getOrElse(supplier);
+        assertEquals(3228, value);
+
+        value = Exceptional
+                .of(tenSupplier)
+                .getOrElse(supplier);
+        assertEquals(10, value);
     }
 
     @Test
