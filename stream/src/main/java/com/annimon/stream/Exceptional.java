@@ -42,7 +42,7 @@ public class Exceptional<T> {
         try {
             return new Exceptional<T>(supplier.get(), null);
         } catch (Throwable throwable) {
-            return new Exceptional<T>(null, throwable);
+            return of(throwable);
         }
     }
 
@@ -83,7 +83,7 @@ public class Exceptional<T> {
     public T getOrElse(T other) {
         return throwable == null ? value : other;
     }
-    
+
     /**
      * Wraps inner value with {@code Optional} container
      * 
@@ -170,13 +170,13 @@ public class Exceptional<T> {
      */
     public <U> Exceptional<U> map(ThrowableFunction<? super T, ? extends U, Throwable> mapper) {
         if (throwable != null) {
-            return new Exceptional<U>(null, throwable);
+            return of(throwable);
         }
         Objects.requireNonNull(mapper);
         try {
             return new Exceptional<U>(mapper.apply(value), null);
         } catch (Throwable t) {
-            return new Exceptional<U>(null, t);
+            return of(t);
         }
     }
     
@@ -241,7 +241,7 @@ public class Exceptional<T> {
         try {
             return new Exceptional<T>(function.apply(throwable), null);
         } catch (Throwable throwable) {
-            return new Exceptional<T>(null, throwable);
+            return of(throwable);
         }
     }
 
