@@ -181,6 +181,20 @@ public class Exceptional<T> {
     }
 
     /**
+     * Applies custom operator on {@code Exceptional}.
+     *
+     * @param <R> the type of the result
+     * @param function  a transforming function
+     * @return a result of the transforming function
+     * @throws NullPointerException if {@code function} is null
+     * @since 1.1.9
+     */
+    public <R> R custom(Function<Exceptional<T>, R> function) {
+        Objects.requireNonNull(function);
+        return function.apply(this);
+    }
+
+    /**
      * Invokes mapping function on inner value if there were no exceptions.
      *
      * @param <U> the type of result value

@@ -185,6 +185,55 @@ public class ExceptionalTest {
     }
 
     @Test
+    public void testCustomIntermediate() {
+        UnaryOperator<Exceptional<Integer>> incrementer = new UnaryOperator<Exceptional<Integer>>() {
+            @Override
+            public Exceptional<Integer> apply(Exceptional<Integer> exceptional) {
+                return exceptional
+                        .map(new ThrowableFunction<Integer, Integer, Throwable>() {
+                            @Override
+                            public Integer apply(Integer integer) throws Throwable {
+                                return integer + 1;
+                            }
+                        });
+            }
+        };
+        int value;
+        value = Exceptional.of(ioExceptionSupplier)
+                .custom(incrementer)
+                .getOrElse(0);
+        assertEquals(0, value);
+
+        value = Exceptional.of(tenSupplier)
+                .custom(incrementer)
+                .getOrElse(0);
+        assertEquals(11, value);
+    }
+
+    @Test
+    public void testCustomTerminal() {
+        Function<Exceptional<Integer>, Integer> incrementer = new Function<Exceptional<Integer>, Integer>() {
+            @Override
+            public Integer apply(Exceptional<Integer> exceptional) {
+                return exceptional.map(new ThrowableFunction<Integer, Integer, Throwable>() {
+                    @Override
+                    public Integer apply(Integer integer) throws Throwable {
+                        return integer + 1;
+                    }
+                }).getOrElse(0);
+            }
+        };
+        int value;
+        value = Exceptional.of(ioExceptionSupplier)
+                .custom(incrementer);
+        assertEquals(0, value);
+
+        value = Exceptional.of(tenSupplier)
+                .custom(incrementer);
+        assertEquals(11, value);
+    }
+
+    @Test
     public void testMapWithoutException() {
         String value = Exceptional
                 .of(tenSupplier)
