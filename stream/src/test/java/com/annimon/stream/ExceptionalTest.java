@@ -5,6 +5,7 @@ import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Supplier;
 import com.annimon.stream.function.ThrowableFunction;
 import com.annimon.stream.function.ThrowableSupplier;
+import com.annimon.stream.function.UnaryOperator;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -25,6 +26,17 @@ public class ExceptionalTest {
                 .of(tenSupplier)
                 .get();
         assertEquals(10, value);
+    }
+
+    @Test
+    public void testIsPresent() {
+        assertTrue(Exceptional
+                .of(tenSupplier)
+                .isPresent());
+
+        assertFalse(Exceptional
+                .of(ioExceptionSupplier)
+                .isPresent());
     }
 
     @Test

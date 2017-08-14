@@ -73,6 +73,15 @@ public class Exceptional<T> {
     public T get() {
         return value;
     }
+
+    /**
+     * Checks value present (i.e. there were no exceptions).
+     *
+     * @return {@code true} if a value present, {@code false} otherwise
+     */
+    public boolean isPresent() {
+        return throwable == null;
+    }
     
     /**
      * Returns inner value if there were no exceptions, otherwise returns {@code other}.
