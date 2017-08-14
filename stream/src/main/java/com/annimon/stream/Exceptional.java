@@ -42,7 +42,7 @@ public class Exceptional<T> {
         try {
             return new Exceptional<T>(supplier.get(), null);
         } catch (Throwable throwable) {
-            return new Exceptional<T>(null, throwable);
+            return of(throwable);
         }
     }
 
@@ -73,6 +73,15 @@ public class Exceptional<T> {
     public T get() {
         return value;
     }
+
+    /**
+     * Checks value present (i.e. there were no exceptions).
+     *
+     * @return {@code true} if a value present, {@code false} otherwise
+     */
+    public boolean isPresent() {
+        return throwable == null;
+    }
     
     /**
      * Returns inner value if there were no exceptions, otherwise returns {@code other}.
@@ -83,7 +92,18 @@ public class Exceptional<T> {
     public T getOrElse(T other) {
         return throwable == null ? value : other;
     }
-    
+
+    /**
+     * Returns inner value if there were no exceptions, otherwise returns value produced by supplier function.
+     *
+     * @param other  the supplier function that produces value if there were any exception
+     * @return inner value if there were no exceptions, otherwise value produced by supplier function
+     * @since 1.1.9
+     */
+    public T getOrElse(Supplier<? extends T> other) {
+        return throwable == null ? value : other.get();
+    }
+
     /**
      * Wraps inner value with {@code Optional} container
      * 
@@ -161,6 +181,20 @@ public class Exceptional<T> {
     }
 
     /**
+     * Applies custom operator on {@code Exceptional}.
+     *
+     * @param <R> the type of the result
+     * @param function  a transforming function
+     * @return a result of the transforming function
+     * @throws NullPointerException if {@code function} is null
+     * @since 1.1.9
+     */
+    public <R> R custom(Function<Exceptional<T>, R> function) {
+        Objects.requireNonNull(function);
+        return function.apply(this);
+    }
+
+    /**
      * Invokes mapping function on inner value if there were no exceptions.
      *
      * @param <U> the type of result value
@@ -170,13 +204,13 @@ public class Exceptional<T> {
      */
     public <U> Exceptional<U> map(ThrowableFunction<? super T, ? extends U, Throwable> mapper) {
         if (throwable != null) {
-            return new Exceptional<U>(null, throwable);
+            return of(throwable);
         }
         Objects.requireNonNull(mapper);
         try {
             return new Exceptional<U>(mapper.apply(value), null);
         } catch (Throwable t) {
-            return new Exceptional<U>(null, t);
+            return of(t);
         }
     }
     
@@ -241,7 +275,7 @@ public class Exceptional<T> {
         try {
             return new Exceptional<T>(function.apply(throwable), null);
         } catch (Throwable throwable) {
-            return new Exceptional<T>(null, throwable);
+            return of(throwable);
         }
     }
 
