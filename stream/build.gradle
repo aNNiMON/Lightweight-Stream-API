@@ -2,7 +2,7 @@ apply plugin: 'java-library'
 apply plugin: 'maven'
 
 archivesBaseName = 'stream'
-version = '1.1.8-SNAPSHOT'
+version = '1.1.9-SNAPSHOT'
 group = 'com.annimon'
 ext.isReleaseVersion = !version.contains("SNAPSHOT")
 
