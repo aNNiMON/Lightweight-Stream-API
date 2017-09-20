@@ -924,6 +924,7 @@ public class Stream<T> implements Closeable {
      * result: ["a", "bc", "ghij"]
      * </pre>
      *
+     * @param <K> the type of the result of classifier function
      * @param classifier  the classifier function
      * @return the new stream
      * @since 1.1.8
