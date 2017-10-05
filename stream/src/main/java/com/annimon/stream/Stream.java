@@ -108,12 +108,12 @@ public class Stream<T> implements Closeable {
      * otherwise returns a {@code Stream} containing elements of this array.
      *
      * @param <T> the type of the stream elements
-     * @param array  the array whose elements to be passed to stream
+     * @param elements  elements to be passed to stream
      * @return the new stream
      * @since 1.1.9
      */
-    public static <T> Stream<T> ofNullable(final T[] array) {
-        return (array == null) ? Stream.<T>empty() : Stream.of(array);
+    public static <T> Stream<T> ofNullable(final T... elements) {
+        return (elements == null) ? Stream.<T>empty() : Stream.of(elements);
     }
 
     /**
