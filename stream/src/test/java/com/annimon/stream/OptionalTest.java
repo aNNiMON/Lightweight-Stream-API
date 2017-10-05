@@ -4,10 +4,12 @@ import com.annimon.stream.function.Consumer;
 import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Predicate;
 import com.annimon.stream.function.Supplier;
+import com.annimon.stream.function.ToBooleanFunction;
 import com.annimon.stream.function.ToDoubleFunction;
 import com.annimon.stream.function.ToIntFunction;
 import com.annimon.stream.function.ToLongFunction;
 import com.annimon.stream.function.UnaryOperator;
+import com.annimon.stream.test.hamcrest.OptionalBooleanMatcher;
 import com.annimon.stream.test.hamcrest.OptionalDoubleMatcher;
 import com.annimon.stream.test.hamcrest.OptionalIntMatcher;
 import com.annimon.stream.test.hamcrest.OptionalLongMatcher;
@@ -307,6 +309,23 @@ public final class OptionalTest {
 
         result = Optional.of("65").mapToDouble(mapper);
         assertThat(result, OptionalDoubleMatcher.hasValueThat(closeTo(0.65, 0.0001)));
+    }
+
+    @Test
+    public void testMapToBoolean() {
+        final ToBooleanFunction<String> mapper = new ToBooleanFunction<String>() {
+            @Override
+            public boolean applyAsBoolean(String s) {
+                return "true".equalsIgnoreCase(s);
+            }
+        };
+
+        OptionalBoolean result;
+        result = Optional.<String>empty().mapToBoolean(mapper);
+        assertThat(result, OptionalBooleanMatcher.isEmpty());
+
+        result = Optional.of("true").mapToBoolean(mapper);
+        assertThat(result, OptionalBooleanMatcher.hasValueThat(is(true)));
     }
 
     @Test
