@@ -7,6 +7,8 @@ import com.annimon.stream.function.Supplier;
 import com.annimon.stream.function.ToDoubleFunction;
 import com.annimon.stream.function.ToIntFunction;
 import com.annimon.stream.function.ToLongFunction;
+import com.annimon.stream.function.ToBooleanFunction;
+
 import java.util.NoSuchElementException;
 
 /**
@@ -237,7 +239,21 @@ public class Optional<T> {
         if (!isPresent()) return OptionalDouble.empty();
         return OptionalDouble.of(mapper.applyAsDouble(value));
     }
-    
+
+    /**
+     * Invokes mapping function on inner value if present.
+     *
+     * @param mapper  mapping function
+     * @return an {@code OptionalBoolean} with transformed value if present,
+     *         otherwise an empty {@code OptionalBoolean}
+     * @throws NullPointerException if value is present and
+     *         {@code mapper} is {@code null}
+     */
+    public OptionalBoolean mapToBoolean(ToBooleanFunction<? super T> mapper) {
+        if (!isPresent()) return OptionalBoolean.empty();
+        return OptionalBoolean.of(mapper.applyAsBoolean(value));
+    }
+
     /**
      * Invokes mapping function with {@code Optional} result if value is present.
      * 
