@@ -15,7 +15,7 @@ public interface IndexedPredicate<T> {
      * Tests the value for satisfying predicate.
      *
      * @param index  the index
-     * @param value  the value to be tests
+     * @param value  the value to be tested
      * @return {@code true} if the value matches the predicate, otherwise {@code false}
      */
     boolean test(int index, T value);
