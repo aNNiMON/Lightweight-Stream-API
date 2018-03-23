@@ -671,6 +671,23 @@ public class Stream<T> implements Closeable {
     }
 
     /**
+     * Returns {@code Stream} with elements that is equality of {@code object} only.
+     * <p>
+     * <p>This is an intermediate operation.
+     *
+     * @param object object
+     * @return the new stream
+     */
+    public Stream<T> equalsOnly(final T object) {
+        return filter(new Predicate<T>() {
+            @Override
+            public boolean test(T value) {
+                return Objects.equals(value, object);
+            }
+        });
+    }
+
+    /**
      * Returns {@code Stream} with elements that obtained by applying the given function.
      *
      * <p>This is an intermediate operation.
