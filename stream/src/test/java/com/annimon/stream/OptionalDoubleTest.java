@@ -394,6 +394,17 @@ public class OptionalDoubleTest {
     }
 
     @Test
+    public void testOrElseThrowWithPresentValue() {
+        double value = OptionalDouble.of(10.123).orElseThrow();
+        assertThat(value, closeTo(10.123, 0.0001));
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testOrElseThrowOnEmptyOptional() {
+        OptionalDouble.empty().orElseThrow();
+    }
+
+    @Test
     public void testOrElseThrow() {
         try {
             assertThat(OptionalDouble.of(10.123).orElseThrow(new Supplier<NoSuchElementException>() {

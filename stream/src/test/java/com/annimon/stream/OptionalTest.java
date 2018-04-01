@@ -471,6 +471,22 @@ public final class OptionalTest {
         assertEquals(42, value);
     }
 
+    @Test
+    public void testOrElseThrowWithPresentValue() {
+        int value = Optional.of(10).orElseThrow();
+        assertEquals(10, value);
+    }
+
+    @Test
+    public void testOrElseThrowWithObject() {
+        assertEquals("Lena", Optional.of(student).orElseThrow().getName());
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testOrElseThrowOnEmptyOptional() {
+        Optional.empty().orElseThrow();
+    }
+
     @Test(expected = ArithmeticException.class)
     public void testOrElseThrow() {
         Optional.empty().orElseThrow(new Supplier<RuntimeException>() {

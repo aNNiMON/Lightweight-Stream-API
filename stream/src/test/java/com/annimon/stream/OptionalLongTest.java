@@ -374,6 +374,17 @@ public class OptionalLongTest {
     }
 
     @Test
+    public void testOrElseThrowWithPresentValue() {
+        long value = OptionalLong.of(10).orElseThrow();
+        assertEquals(10, value);
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testOrElseThrowOnEmptyOptional() {
+        OptionalLong.empty().orElseThrow();
+    }
+
+    @Test
     public void testOrElseThrow() {
         try {
             assertEquals(25, OptionalLong.of(25).orElseThrow(new Supplier<NoSuchElementException>() {

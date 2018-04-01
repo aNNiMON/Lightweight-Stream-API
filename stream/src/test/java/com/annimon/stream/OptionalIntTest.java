@@ -390,6 +390,17 @@ public class OptionalIntTest {
     }
 
     @Test
+    public void testOrElseThrowWithPresentValue() {
+        int value = OptionalInt.of(10).orElseThrow();
+        assertEquals(10, value);
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testOrElseThrowOnEmptyOptional() {
+        OptionalInt.empty().orElseThrow();
+    }
+
+    @Test
     public void testOrElseThrow() {
         try {
             assertEquals(25, OptionalInt.of(25).orElseThrow(new Supplier<NoSuchElementException>() {
