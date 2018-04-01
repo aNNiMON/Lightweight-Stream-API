@@ -57,15 +57,15 @@ public final class OptionalLong {
     /**
      * Returns an inner value if present, otherwise throws {@code NoSuchElementException}.
      *
+     * Since 1.2.0 prefer {@link #orElseThrow()} method as it has readable name.
+     *
      * @return the inner value of this {@code OptionalLong}
      * @throws NoSuchElementException if there is no value present
      * @see OptionalLong#isPresent()
+     * @see #orElseThrow()
      */
     public long getAsLong() {
-        if (!isPresent) {
-            throw new NoSuchElementException("No value present");
-        }
-        return value;
+        return orElseThrow();
     }
 
     /**
@@ -270,6 +270,19 @@ public final class OptionalLong {
      */
     public long orElseGet(LongSupplier other) {
         return isPresent ? value : other.getAsLong();
+    }
+
+    /**
+     * Returns inner value if present, otherwise throws {@code NoSuchElementException}.
+     * @return inner value if present
+     * @throws NoSuchElementException if inner value is not present
+     * @since 1.2.0
+     */
+    public long orElseThrow() {
+        if (!isPresent) {
+            throw new NoSuchElementException("No value present");
+        }
+        return value;
     }
 
     /**
