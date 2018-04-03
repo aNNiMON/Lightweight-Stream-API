@@ -12,6 +12,7 @@ import com.annimon.stream.function.UnaryOperator;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -152,9 +153,10 @@ public class CollectorsTest {
     }
 
     @Test
-    public void testToMapWithCustomValueMapper() {
+    public void testToMapWithValueMapperThatReturnsNullValue() {
+        expectedException.expect(NullPointerException.class);
         final Function<String, Character> keyMapper = Functions.firstCharacterExtractor();
-        Map<Character, String> chars = Stream.of("a0", "b0", "c0", "d0")
+        Stream.of("a0", "b0", "c0", "d0")
                 .collect(Collectors.toMap(keyMapper, new UnaryOperator<String>() {
 
             @Override
@@ -163,11 +165,73 @@ public class CollectorsTest {
                 return String.valueOf(Character.toUpperCase(value.charAt(0)));
             }
         }));
+    }
+
+    @Test
+    public void testToMapWithDefaultValueMapperAndDuplicatingKeys() {
+        expectedException.expect(IllegalStateException.class);
+        expectedException.expectMessage("Duplicate key a (attempted merging values a0 and a2)");
+        Stream.of("a0", "b1", "a2", "d3")
+                .collect(Collectors.toMap(Functions.firstCharacterExtractor()));
+    }
+
+    @Test
+    public void testToMapWithMergerFunction() {
+        final Function<String, Character> keyMapper = Functions.firstCharacterExtractor();
+        final UnaryOperator<String> valueMapper = new UnaryOperator<String>() {
+            @Override
+            public String apply(String value) {
+                if ("c0".equals(value)) return null;
+                return String.valueOf(Character.toUpperCase(value.charAt(0)));
+            }
+        };
+        final BinaryOperator<String> merger = new BinaryOperator<String>() {
+            @Override
+            public String apply(String oldValue, String newValue) {
+                return newValue;
+            }
+        };
+        Map<Character, String> chars = Stream.of("a0", "b0", "c0", "d0")
+                .collect(Collectors.toMap(keyMapper, valueMapper, merger));
 
         assertThat(chars.size(), is(3));
         assertThat(chars, allOf(
                 hasEntry('a', "A"),
                 hasEntry('b', "B"),
+                hasEntry('d', "D")
+        ));
+    }
+
+    @Test
+    public void testToMapWithMergerFunctionAndLinkedHashMapSupplier() {
+        final Function<String, Character> keyMapper = Functions.firstCharacterExtractor();
+        final UnaryOperator<String> valueMapper = new UnaryOperator<String>() {
+            @Override
+            public String apply(String value) {
+                return String.valueOf(Character.toUpperCase(value.charAt(0)));
+            }
+        };
+        final BinaryOperator<String> merger = new BinaryOperator<String>() {
+            @Override
+            public String apply(String oldValue, String newValue) {
+                return newValue;
+            }
+        };
+        final Supplier<Map<Character, String>> supplier = new Supplier<Map<Character, String>>() {
+            @Override
+            public Map<Character, String> get() {
+                return new LinkedHashMap<Character, String>();
+            }
+        };
+        Map<Character, String> chars = Stream.of("a0", "b1", "c2", "d3")
+                .collect(Collectors.toMap(keyMapper, valueMapper, merger, supplier));
+
+        assertThat(chars, instanceOf(LinkedHashMap.class));
+        assertThat(chars.size(), is(4));
+        assertThat(chars, allOf(
+                hasEntry('a', "A"),
+                hasEntry('b', "B"),
+                hasEntry('c', "C"),
                 hasEntry('d', "D")
         ));
     }

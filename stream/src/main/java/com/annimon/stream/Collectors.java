@@ -153,11 +153,15 @@ public final class Collectors {
     /**
      * Returns a {@code Collector} that fills new {@code Map} with input elements.
      *
+     * If the mapped keys contain duplicates, an {@code IllegalStateException} is thrown.
+     * Use {@link #toMap(Function, Function, BinaryOperator)} to handle merging of the values.
+     *
      * @param <T> the type of the input elements and the result type of value mapping function
      * @param <K> the result type of key mapping function
      * @param keyMapper  a mapping function to produce keys
      * @return a {@code Collector}
      * @since 1.1.3
+     * @see #toMap(Function, Function, BinaryOperator)
      */
     public static <T, K> Collector<T, ?, Map<K, T>> toMap(
             final Function<? super T, ? extends K> keyMapper) {
@@ -167,12 +171,16 @@ public final class Collectors {
     /**
      * Returns a {@code Collector} that fills new {@code Map} with input elements.
      *
+     * If the mapped keys contain duplicates, an {@code IllegalStateException} is thrown.
+     * Use {@link #toMap(Function, Function, BinaryOperator)} to handle merging of the values.
+     *
      * @param <T> the type of the input elements
      * @param <K> the result type of key mapping function
      * @param <V> the result type of value mapping function
      * @param keyMapper  a mapping function to produce keys
      * @param valueMapper  a mapping function to produce values
      * @return a {@code Collector}
+     * @see #toMap(Function, Function, BinaryOperator)
      */
     public static <T, K, V> Collector<T, ?, Map<K, V>> toMap(
             final Function<? super T, ? extends K> keyMapper,
@@ -183,6 +191,9 @@ public final class Collectors {
     
     /**
      * Returns a {@code Collector} that fills new {@code Map} with input elements.
+     *
+     * If the mapped keys contain duplicates, an {@code IllegalStateException} is thrown.
+     * Use {@link #toMap(Function, Function, BinaryOperator, Supplier)} to handle merging of the values.
      * 
      * @param <T> the type of the input elements
      * @param <K> the result type of key mapping function
@@ -192,6 +203,7 @@ public final class Collectors {
      * @param valueMapper  a mapping function to produce values
      * @param mapFactory  a supplier function that provides new {@code Map}
      * @return a {@code Collector}
+     * @see #toMap(Function, Function, BinaryOperator, Supplier)
      */
     public static <T, K, V, M extends Map<K, V>> Collector<T, ?, M> toMap(
             final Function<? super T, ? extends K> keyMapper,
@@ -205,18 +217,84 @@ public final class Collectors {
                     @Override
                     public void accept(M map, T t) {
                         final K key = keyMapper.apply(t);
-                        final V value = valueMapper.apply(t);
-                        final V oldValue = map.get(key);
-                        final V newValue = (oldValue == null) ? value : oldValue;
-                        if (newValue == null) {
-                            map.remove(key);
-                        } else {
-                            map.put(key, newValue);
+                        final V value = Objects.requireNonNull(valueMapper.apply(t));
+
+                        // To avoid calling map.get to determine duplicate keys
+                        // we check the result of map.put
+                        final V oldValue = map.put(key, value);
+                        if (oldValue != null) {
+                            // If there is duplicate key, rollback previous put operation
+                            map.put(key, oldValue);
+                            throw duplicateKeyException(key, oldValue, value);
                         }
                     }
                 }
         );
     }
+
+    /**
+     * Returns a {@code Collector} that fills new {@code Map} with input elements.
+     *
+     * If the mapped keys contain duplicates, the value mapping function is applied
+     * to each equal element, and the results are merged using the provided merging function.
+     *
+     * @param <T> the type of the input elements
+     * @param <K> the result type of key mapping function
+     * @param <V> the result type of value mapping function
+     * @param keyMapper  a mapping function to produce keys
+     * @param valueMapper  a mapping function to produce values
+     * @param mergeFunction  a merge function, used to resolve collisions between
+     *                       values associated with the same key
+     * @return a {@code Collector}
+     * @since 1.2.0
+     */
+    public static <T, K, V> Collector<T, ?, Map<K, V>> toMap(
+            final Function<? super T, ? extends K> keyMapper,
+            final Function<? super T, ? extends V> valueMapper,
+            final BinaryOperator<V> mergeFunction) {
+        return Collectors.<T, K, V, Map<K, V>>toMap(
+                keyMapper, valueMapper, mergeFunction,
+                Collectors.<K, V>hashMapSupplier());
+    }
+
+    /**
+     * Returns a {@code Collector} that fills new {@code Map} with input elements.
+     *
+     * If the mapped keys contain duplicates, the value mapping function is applied
+     * to each equal element, and the results are merged using the provided merging function.
+     *
+     * @param <T> the type of the input elements
+     * @param <K> the result type of key mapping function
+     * @param <V> the result type of value mapping function
+     * @param <M> the type of the resulting {@code Map}
+     * @param keyMapper  a mapping function to produce keys
+     * @param valueMapper  a mapping function to produce values
+     * @param mergeFunction  a merge function, used to resolve collisions between
+     *                       values associated with the same key
+     * @param mapFactory  a supplier function that provides new {@code Map}
+     * @return a {@code Collector}
+     * @since 1.2.0
+     */
+    public static <T, K, V, M extends Map<K, V>> Collector<T, ?, M> toMap(
+            final Function<? super T, ? extends K> keyMapper,
+            final Function<? super T, ? extends V> valueMapper,
+            final BinaryOperator<V> mergeFunction,
+            final Supplier<M> mapFactory) {
+        return new CollectorsImpl<T, M, M>(
+
+                mapFactory,
+
+                new BiConsumer<M, T>() {
+                    @Override
+                    public void accept(M map, T t) {
+                        final K key = keyMapper.apply(t);
+                        final V value = valueMapper.apply(t);
+                        mapMerge(map, key, value, mergeFunction);
+                    }
+                }
+        );
+    }
+
     
     /**
      * Returns a {@code Collector} that concatenates input elements into new string.
@@ -885,6 +963,29 @@ public final class Collectors {
             Objects.requireNonNull(t);
         }
     }
+
+    private static IllegalStateException duplicateKeyException(Object key, Object old, Object value) {
+        return new IllegalStateException(String.format(
+                "Duplicate key %s (attempted merging values %s and %s)",
+                key, old, value));
+    }
+
+    private static <K, V> void mapMerge(Map<K, V> map, K key, V value, BinaryOperator<V> merger) {
+        final V oldValue = map.get(key);
+        final V newValue;
+        if (oldValue == null) {
+            newValue = value;
+        } else {
+            newValue = merger.apply(oldValue, value);
+        }
+
+        if (newValue == null) {
+            map.remove(key);
+        } else {
+            map.put(key, newValue);
+        }
+    }
+
     
     @SuppressWarnings("unchecked")
     static <A, R> Function<A, R> castIdentity() {
