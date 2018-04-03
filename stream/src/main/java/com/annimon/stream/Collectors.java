@@ -4,6 +4,7 @@ import com.annimon.stream.function.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -79,6 +80,27 @@ public final class Collectors {
                     }
                 }
         );
+    }
+
+    /**
+     * Returns a {@code Collector} that fills new unmodifiable {@code List} with input elements.
+     *
+     * The returned {@code Collector} disallows {@code null}s
+     * and throws {@code NullPointerException} if it is presented with a null value.
+     *
+     * @param <T> the type of the input elements
+     * @return a {@code Collector}
+     * @since 1.2.0
+     */
+    public static <T> Collector<T, ?, List<T>> toUnmodifiableList() {
+        return Collectors.collectingAndThen(Collectors.<T>toList(), new UnaryOperator<List<T>>() {
+
+            @Override
+            public List<T> apply(List<T> list) {
+                requireNonNullElements(list);
+                return Collections.unmodifiableList(list);
+            }
+        });
     }
     
     /**
@@ -834,6 +856,12 @@ public final class Collectors {
                 return new HashMap<K, V>();
             }
         };
+    }
+
+    private static <T> void requireNonNullElements(Collection<T> collection) {
+        for (T t : collection) {
+            Objects.requireNonNull(t);
+        }
     }
     
     @SuppressWarnings("unchecked")

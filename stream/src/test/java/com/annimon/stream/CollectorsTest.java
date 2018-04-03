@@ -16,9 +16,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
-import org.junit.Test;
 
 /**
  * Tests {@code Collectors}.
@@ -26,6 +28,9 @@ import org.junit.Test;
  * @see com.annimon.stream.Collectors
  */
 public class CollectorsTest {
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     @Test
     public void testToCollection() {
@@ -46,6 +51,36 @@ public class CollectorsTest {
         List<Integer> list = Stream.range(0, 10)
                 .collect(Collectors.<Integer>toList());
         assertThat(list, is(expected));
+    }
+
+    @Test
+    public void testToUnmodifiableList() {
+        List<Integer> expected = Arrays.asList(0, 1, 2, 3, 4, 5);
+        List<Integer> list = Stream.range(0, 6)
+                .collect(Collectors.<Integer>toUnmodifiableList());
+        assertThat(list, is(expected));
+
+        try {
+            list.add(1);
+            fail("Expected an UnsupportedOperationException to be thrown when add item to list");
+        } catch (UnsupportedOperationException uoe) { }
+
+        try {
+            list.clear();
+            fail("Expected an UnsupportedOperationException to be thrown when clear the list");
+        } catch (UnsupportedOperationException uoe) { }
+
+        try {
+            list.subList(1, 2).clear();
+            fail("Expected an UnsupportedOperationException to be thrown when clear the sublist");
+        } catch (UnsupportedOperationException uoe) { }
+    }
+
+    @Test
+    public void testToUnmodifiableListWithNullValues() {
+        expectedException.expect(NullPointerException.class);
+        Stream.of(0, 1, null, 3, 4, null)
+                .collect(Collectors.toUnmodifiableList());
     }
 
     @Test
