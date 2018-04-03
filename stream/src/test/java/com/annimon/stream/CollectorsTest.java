@@ -91,6 +91,37 @@ public class CollectorsTest {
     }
 
     @Test
+    public void testToUnmodifiableSet() {
+        Set<Integer> set = Stream.range(0, 6)
+                .collect(Collectors.<Integer>toUnmodifiableSet());
+        assertThat(set, containsInAnyOrder(0, 1, 2, 3, 4, 5));
+
+        try {
+            set.add(1);
+            fail("Expected an UnsupportedOperationException to be thrown when add item to set");
+        } catch (UnsupportedOperationException uoe) { }
+
+        try {
+            set.clear();
+            fail("Expected an UnsupportedOperationException to be thrown when clear the set");
+        } catch (UnsupportedOperationException uoe) { }
+    }
+
+    @Test
+    public void testToUnmodifiableSetWithNullValues() {
+        expectedException.expect(NullPointerException.class);
+        Stream.of(0, 1, null, 3, 4, null)
+                .collect(Collectors.toUnmodifiableSet());
+    }
+
+    @Test
+    public void testToUnmodifiableSetWithDuplicates() {
+        Set<Integer> set = Stream.of(0, 1, 2, 1, 3, 0)
+                .collect(Collectors.<Integer>toUnmodifiableSet());
+        assertThat(set, containsInAnyOrder(0, 1, 2, 3));
+    }
+
+    @Test
     public void testToMapWithDefaultValueMapper() {
         final Function<String, Character> keyMapper = Functions.firstCharacterExtractor();
         Map<Character, String> chars = Stream.of("a", "b", "c", "d")
@@ -210,7 +241,7 @@ public class CollectorsTest {
         };
 
         double avg;
-        
+
         avg = Stream.<Integer>empty()
                 .collect(Collectors.averagingInt(identity));
         assertThat(avg, closeTo(0, 0.001));

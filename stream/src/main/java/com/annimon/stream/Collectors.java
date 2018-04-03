@@ -111,21 +111,43 @@ public final class Collectors {
      */
     public static <T> Collector<T, ?, Set<T>> toSet() {
         return new CollectorsImpl<T, Set<T>, Set<T>>(
-                
+
                 new Supplier<Set<T>>() {
                     @Override
                     public Set<T> get() {
                         return new HashSet<T>();
                     }
                 },
-                
+
                 new BiConsumer<Set<T>, T>() {
                     @Override
-                    public void accept(Set<T> t, T u) {
-                        t.add(u);
+                    public void accept(Set<T> set, T t) {
+                        set.add(t);
                     }
                 }
         );
+    }
+
+    /**
+     * Returns a {@code Collector} that fills new unmodifiable {@code Set} with input elements.
+     *
+     * The returned {@code Collector} disallows {@code null}s
+     * and throws {@code NullPointerException} if it is presented with a null value.
+     * If elements contain duplicates, an arbitrary element of the duplicates is preserved.
+     *
+     * @param <T> the type of the input elements
+     * @return a {@code Collector}
+     * @since 1.2.0
+     */
+    public static <T> Collector<T, ?, Set<T>> toUnmodifiableSet() {
+        return Collectors.collectingAndThen(Collectors.<T>toSet(), new UnaryOperator<Set<T>>() {
+
+            @Override
+            public Set<T> apply(Set<T> set) {
+                requireNonNullElements(set);
+                return Collections.unmodifiableSet(set);
+            }
+        });
     }
 
     /**
