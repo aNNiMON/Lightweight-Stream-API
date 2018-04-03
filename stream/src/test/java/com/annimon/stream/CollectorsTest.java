@@ -176,6 +176,46 @@ public class CollectorsTest {
     }
 
     @Test
+    public void testToUnmodifiableMapDuplicatingKeys() {
+        expectedException.expect(IllegalStateException.class);
+        expectedException.expectMessage("Duplicate key a (attempted merging values a0 and a2)");
+        final Function<String, Character> keyMapper = Functions.firstCharacterExtractor();
+        final UnaryOperator<String> valueMapper = UnaryOperator.Util.identity();
+        Stream.of("a0", "b1", "a2", "d3")
+                .collect(Collectors.toUnmodifiableMap(keyMapper, valueMapper));
+    }
+
+    @Test
+    public void testToUnmodifiableMapWithNullKey() {
+        expectedException.expect(NullPointerException.class);
+        final Function<String, Character> keyMapper = Functions.firstCharacterExtractor();
+        final UnaryOperator<String> valueMapper = new UnaryOperator<String>() {
+            @Override
+            public String apply(String value) {
+                if (value == null) return "";
+                return String.valueOf(Character.toUpperCase(value.charAt(0)));
+            }
+        };
+        Stream.of("a0", "b1", null, "d3")
+                .collect(Collectors.toUnmodifiableMap(keyMapper, valueMapper));
+    }
+
+    @Test
+    public void testToUnmodifiableMapWithNullValue() {
+        expectedException.expect(NullPointerException.class);
+        final Function<String, Character> keyMapper = Functions.firstCharacterExtractor();
+        final UnaryOperator<String> valueMapper = new UnaryOperator<String>() {
+            @Override
+            public String apply(String value) {
+                if ("c2".equals(value)) return null;
+                return String.valueOf(Character.toUpperCase(value.charAt(0)));
+            }
+        };
+        Stream.of("a0", "b1", "c2", "d3")
+                .collect(Collectors.toUnmodifiableMap(keyMapper, valueMapper));
+    }
+
+    @Test
     public void testToMapWithMergerFunction() {
         final Function<String, Character> keyMapper = Functions.firstCharacterExtractor();
         final UnaryOperator<String> valueMapper = new UnaryOperator<String>() {
@@ -234,6 +274,101 @@ public class CollectorsTest {
                 hasEntry('c', "C"),
                 hasEntry('d', "D")
         ));
+    }
+
+    @Test
+    public void testToUnmodifiableMapWithMergerFunction() {
+        final Function<String, Character> keyMapper = Functions.firstCharacterExtractor();
+        final UnaryOperator<String> valueMapper = new UnaryOperator<String>() {
+            @Override
+            public String apply(String value) {
+                if ("c0".equals(value)) return null;
+                return String.valueOf(Character.toUpperCase(value.charAt(0)));
+            }
+        };
+        final BinaryOperator<String> merger = new BinaryOperator<String>() {
+            @Override
+            public String apply(String oldValue, String newValue) {
+                return newValue;
+            }
+        };
+        Map<Character, String> chars = Stream.of("a0", "b0", "c0", "d0")
+                .collect(Collectors.toUnmodifiableMap(keyMapper, valueMapper, merger));
+
+        assertThat(chars.size(), is(3));
+        assertThat(chars, allOf(
+                hasEntry('a', "A"),
+                hasEntry('b', "B"),
+                hasEntry('d', "D")
+        ));
+
+        try {
+            chars.put('u', "U");
+            fail("Expected an UnsupportedOperationException to be thrown when add item to map");
+        } catch (UnsupportedOperationException uoe) { }
+
+        try {
+            chars.clear();
+            fail("Expected an UnsupportedOperationException to be thrown when clear the map");
+        } catch (UnsupportedOperationException uoe) { }
+    }
+
+    @Test
+    public void testToUnmodifiableMapWithMergerFunctionAndNullKey() {
+        expectedException.expect(NullPointerException.class);
+        final Function<String, Character> keyMapper = Functions.firstCharacterExtractor();
+        final UnaryOperator<String> valueMapper = new UnaryOperator<String>() {
+            @Override
+            public String apply(String value) {
+                if (value == null) return "";
+                return String.valueOf(Character.toUpperCase(value.charAt(0)));
+            }
+        };
+        final BinaryOperator<String> merger = new BinaryOperator<String>() {
+            @Override
+            public String apply(String oldValue, String newValue) {
+                return newValue;
+            }
+        };
+        Stream.of("a0", "b1", null, "d3")
+                .collect(Collectors.toUnmodifiableMap(keyMapper, valueMapper, merger));
+    }
+
+    @Test
+    public void testToUnmodifiableMapWithMergerFunctionAndNullValue() {
+        final Function<String, Character> keyMapper = Functions.firstCharacterExtractor();
+        final UnaryOperator<String> valueMapper = new UnaryOperator<String>() {
+            @Override
+            public String apply(String value) {
+                if ("c2".equals(value)) return null;
+                return String.valueOf(Character.toUpperCase(value.charAt(0)));
+            }
+        };
+        final BinaryOperator<String> merger = new BinaryOperator<String>() {
+            @Override
+            public String apply(String oldValue, String newValue) {
+                return newValue;
+            }
+        };
+        Map<Character, String> chars = Stream.of("a0", "b1", "c2", "d3")
+                .collect(Collectors.toUnmodifiableMap(keyMapper, valueMapper, merger));
+
+        assertThat(chars.size(), is(3));
+        assertThat(chars, allOf(
+                hasEntry('a', "A"),
+                hasEntry('b', "B"),
+                hasEntry('d', "D")
+        ));
+
+        try {
+            chars.put('u', "U");
+            fail("Expected an UnsupportedOperationException to be thrown when add item to map");
+        } catch (UnsupportedOperationException uoe) { }
+
+        try {
+            chars.clear();
+            fail("Expected an UnsupportedOperationException to be thrown when clear the map");
+        } catch (UnsupportedOperationException uoe) { }
     }
 
     @Test

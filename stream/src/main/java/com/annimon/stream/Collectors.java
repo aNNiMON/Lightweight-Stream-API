@@ -233,6 +233,30 @@ public final class Collectors {
     }
 
     /**
+     * Returns a {@code Collector} that fills new unmodifiable {@code Map} with input elements.
+     *
+     * The returned {@code Collector} disallows {@code null} keys and values.
+     * If the mapped keys contain duplicates, an {@code IllegalStateException} is thrown,
+     * see {@link #toUnmodifiableMap(Function, Function, BinaryOperator)}.
+     *
+     * @param <T> the type of the input elements
+     * @param <K> the result type of key mapping function
+     * @param <V> the result type of value mapping function
+     * @param keyMapper  a mapping function to produce keys
+     * @param valueMapper  a mapping function to produce values
+     * @return a {@code Collector}
+     * @see #toUnmodifiableMap(Function, Function, BinaryOperator)
+     * @since 1.2.0
+     */
+    public static <T, K, V> Collector<T, ?, Map<K, V>> toUnmodifiableMap(
+            final Function<? super T, ? extends K> keyMapper,
+            final Function<? super T, ? extends V> valueMapper) {
+        return Collectors.collectingAndThen(
+                Collectors.<T, K, V>toMap(keyMapper, valueMapper),
+                Collectors.<K, V>toUnmodifiableMapConverter());
+    }
+
+    /**
      * Returns a {@code Collector} that fills new {@code Map} with input elements.
      *
      * If the mapped keys contain duplicates, the value mapping function is applied
@@ -295,6 +319,31 @@ public final class Collectors {
         );
     }
 
+    /**
+     * Returns a {@code Collector} that fills new unmodifiable {@code Map} with input elements.
+     *
+     * The returned {@code Collector} disallows {@code null} keys and values.
+     *
+     * @param <T> the type of the input elements
+     * @param <K> the result type of key mapping function
+     * @param <V> the result type of value mapping function
+     * @param keyMapper  a mapping function to produce keys
+     * @param valueMapper  a mapping function to produce values
+     * @param mergeFunction  a merge function, used to resolve collisions between
+     *                       values associated with the same key
+     * @return a {@code Collector}
+     * @since 1.2.0
+     */
+    public static <T, K, V> Collector<T, ?, Map<K, V>> toUnmodifiableMap(
+            final Function<? super T, ? extends K> keyMapper,
+            final Function<? super T, ? extends V> valueMapper,
+            final BinaryOperator<V> mergeFunction) {
+        return Collectors.collectingAndThen(
+                Collectors.<T, K, V, Map<K, V>>toMap(
+                        keyMapper, valueMapper, mergeFunction,
+                        Collectors.<K, V>hashMapSupplier()),
+                Collectors.<K, V>toUnmodifiableMapConverter());
+    }
     
     /**
      * Returns a {@code Collector} that concatenates input elements into new string.
@@ -986,6 +1035,16 @@ public final class Collectors {
         }
     }
 
+    private static <K, V> UnaryOperator<Map<K, V>> toUnmodifiableMapConverter() {
+        return new UnaryOperator<Map<K, V>>() {
+            @Override
+            public Map<K, V> apply(Map<K, V> map) {
+                requireNonNullElements(map.keySet());
+                requireNonNullElements(map.values());
+                return Collections.unmodifiableMap(map);
+            }
+        };
+    }
     
     @SuppressWarnings("unchecked")
     static <A, R> Function<A, R> castIdentity() {
