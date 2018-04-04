@@ -7,7 +7,6 @@ package com.annimon.stream.function;
  * @since 1.1.7
  * @see IntSupplier
  */
-@FunctionalInterface
 public interface ThrowableIntSupplier<E extends Throwable> {
 
     /**

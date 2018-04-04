@@ -10,7 +10,6 @@ package com.annimon.stream.function;
  * @see com.annimon.stream.function.BinaryOperator
  * @see IntUnaryOperator
  */
-@FunctionalInterface
 public interface IntBinaryOperator {
 
     /**

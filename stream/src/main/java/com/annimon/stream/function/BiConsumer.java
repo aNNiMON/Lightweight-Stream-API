@@ -7,7 +7,6 @@ package com.annimon.stream.function;
  * @param <U> the type of the second argument
  * @see Consumer
  */
-@FunctionalInterface
 public interface BiConsumer<T, U> {
 
     /**

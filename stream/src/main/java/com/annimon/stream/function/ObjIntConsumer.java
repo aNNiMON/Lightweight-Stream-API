@@ -6,7 +6,6 @@ package com.annimon.stream.function;
  * @param <T> the type of the first argument
  * @see BiConsumer
  */
-@FunctionalInterface
 public interface ObjIntConsumer<T> {
 
     /**

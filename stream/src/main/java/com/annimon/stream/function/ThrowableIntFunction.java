@@ -9,7 +9,6 @@ package com.annimon.stream.function;
  * @since 1.1.7
  * @see IntFunction
  */
-@FunctionalInterface
 public interface ThrowableIntFunction<R, E extends Throwable> {
 
     /**

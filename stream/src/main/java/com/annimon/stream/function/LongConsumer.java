@@ -6,7 +6,6 @@ package com.annimon.stream.function;
  * @since 1.1.4
  * @see Consumer
  */
-@FunctionalInterface
 public interface LongConsumer {
 
     /**

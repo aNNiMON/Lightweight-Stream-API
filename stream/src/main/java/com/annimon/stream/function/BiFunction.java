@@ -9,7 +9,6 @@ import com.annimon.stream.Objects;
  * @param <U> the type of the second argument
  * @param <R> the type of the result of the function
  */
-@FunctionalInterface
 public interface BiFunction<T, U, R> {
 
     /**

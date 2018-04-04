@@ -7,7 +7,6 @@ package com.annimon.stream.function;
  * @since 1.1.7
  * @see IntConsumer
  */
-@FunctionalInterface
 public interface ThrowableIntConsumer<E extends Throwable> {
 
     /**

@@ -6,7 +6,6 @@ package com.annimon.stream.function;
  *
  * @param <T> the type of the operand and result of the operator
  */
-@FunctionalInterface
 public interface UnaryOperator<T> extends Function<T, T> {
     class Util {
 

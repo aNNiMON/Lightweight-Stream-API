@@ -7,7 +7,6 @@ package com.annimon.stream.function;
  * @see Predicate
  * @see UnaryOperator
  */
-@FunctionalInterface
 public interface BooleanPredicate {
 
     /**

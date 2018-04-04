@@ -8,7 +8,6 @@ package com.annimon.stream.function;
  * @since 1.1.8
  * @see Function
  */
-@FunctionalInterface
 public interface BooleanFunction<R> {
 
     /**

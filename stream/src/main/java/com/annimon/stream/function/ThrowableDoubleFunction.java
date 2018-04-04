@@ -9,7 +9,6 @@ package com.annimon.stream.function;
  * @since 1.1.7
  * @see DoubleFunction
  */
-@FunctionalInterface
 public interface ThrowableDoubleFunction<R, E extends Throwable> {
 
     /**

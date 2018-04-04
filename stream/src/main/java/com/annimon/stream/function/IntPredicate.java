@@ -3,7 +3,6 @@ package com.annimon.stream.function;
 /**
  * Represents a predicate (function with boolean type result).
  */
-@FunctionalInterface
 public interface IntPredicate {
 
     /**
