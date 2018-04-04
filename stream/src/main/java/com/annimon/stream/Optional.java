@@ -68,15 +68,15 @@ public class Optional<T> {
     
     /**
      * Returns an inner value if present, otherwise throws {@code NoSuchElementException}.
+     *
+     * Since 1.2.0 prefer {@link #orElseThrow()} method as it has readable name.
      * 
      * @return the inner value of {@code Optional}
      * @throws NoSuchElementException if value is not present
+     * @see #orElseThrow()
      */
     public T get() {
-        if (value == null) {
-            throw new NoSuchElementException("No value present");
-        }
-        return value;
+        return orElseThrow();
     }
     
     /**
@@ -325,6 +325,19 @@ public class Optional<T> {
      */
     public T orElseGet(Supplier<? extends T> other) {
         return value != null ? value : other.get();
+    }
+
+    /**
+     * Returns inner value if present, otherwise throws {@code NoSuchElementException}.
+     * @return inner value if present
+     * @throws NoSuchElementException if inner value is not present
+     * @since 1.2.0
+     */
+    public T orElseThrow() {
+        if (value == null) {
+            throw new NoSuchElementException("No value present");
+        }
+        return value;
     }
     
     /**

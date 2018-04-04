@@ -71,16 +71,15 @@ public final class OptionalInt {
      * If a value is present in this {@code OptionalInt}, returns the value,
      * otherwise throws {@code NoSuchElementException}.
      *
+     * Since 1.2.0 prefer {@link #orElseThrow()} method as it has readable name.
+     *
      * @return the value held by this {@code OptionalInt}
      * @throws NoSuchElementException if there is no value present
-     *
      * @see OptionalInt#isPresent()
+     * @see #orElseThrow()
      */
     public int getAsInt() {
-        if(!isPresent) {
-            throw new NoSuchElementException("No value present");
-        }
-        return value;
+        return orElseThrow();
     }
 
     /**
@@ -297,6 +296,19 @@ public final class OptionalInt {
      */
     public int orElseGet(IntSupplier other) {
         return isPresent ? value : other.getAsInt();
+    }
+
+    /**
+     * Returns inner value if present, otherwise throws {@code NoSuchElementException}.
+     * @return inner value if present
+     * @throws NoSuchElementException if inner value is not present
+     * @since 1.2.0
+     */
+    public int orElseThrow() {
+        if (!isPresent) {
+            throw new NoSuchElementException("No value present");
+        }
+        return value;
     }
 
     /**

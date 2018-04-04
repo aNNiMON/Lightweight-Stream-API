@@ -355,6 +355,17 @@ public class OptionalBooleanTest {
     }
 
     @Test
+    public void testOrElseThrowWithPresentValue() {
+        boolean value = OptionalBoolean.of(true).orElseThrow();
+        assertEquals(true, value);
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testOrElseThrowOnEmptyOptional() {
+        OptionalBoolean.empty().orElseThrow();
+    }
+
+    @Test
     public void testOrElseThrow() {
         try {
             assertFalse(OptionalBoolean.of(false).orElseThrow(new Supplier<NoSuchElementException>() {
