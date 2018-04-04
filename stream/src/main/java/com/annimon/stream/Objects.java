@@ -3,6 +3,7 @@ package com.annimon.stream;
 import com.annimon.stream.function.Predicate;
 import com.annimon.stream.function.Supplier;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
 
 /**
@@ -193,6 +194,23 @@ public final class Objects {
         if (obj != null) return obj;
         final T suppliedObj = requireNonNull(supplier, "supplier").get();
         return requireNonNull(suppliedObj, "supplier.get()");
+    }
+
+    /**
+     * Checks that collection and its elements are non-{@code null}.
+     *
+     * @param <T> the type of the objects in the collection
+     * @param collection  a collection to be checked for non-{@code null} elements
+     * @return a collection
+     * @throws NullPointerException if collection or its elements are {@code null}
+     * @since 1.2.0
+     */
+    public static <T> Collection<T> requireNonNullElements(Collection<T> collection) {
+        requireNonNull(collection);
+        for (T t : collection) {
+            requireNonNull(t);
+        }
+        return collection;
     }
 
     /**

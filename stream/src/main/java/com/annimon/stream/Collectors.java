@@ -97,7 +97,7 @@ public final class Collectors {
 
             @Override
             public List<T> apply(List<T> list) {
-                requireNonNullElements(list);
+                Objects.requireNonNullElements(list);
                 return Collections.unmodifiableList(list);
             }
         });
@@ -144,7 +144,7 @@ public final class Collectors {
 
             @Override
             public Set<T> apply(Set<T> set) {
-                requireNonNullElements(set);
+                Objects.requireNonNullElements(set);
                 return Collections.unmodifiableSet(set);
             }
         });
@@ -1007,12 +1007,6 @@ public final class Collectors {
         };
     }
 
-    private static <T> void requireNonNullElements(Collection<T> collection) {
-        for (T t : collection) {
-            Objects.requireNonNull(t);
-        }
-    }
-
     private static IllegalStateException duplicateKeyException(Object key, Object old, Object value) {
         return new IllegalStateException(String.format(
                 "Duplicate key %s (attempted merging values %s and %s)",
@@ -1039,8 +1033,8 @@ public final class Collectors {
         return new UnaryOperator<Map<K, V>>() {
             @Override
             public Map<K, V> apply(Map<K, V> map) {
-                requireNonNullElements(map.keySet());
-                requireNonNullElements(map.values());
+                Objects.requireNonNullElements(map.keySet());
+                Objects.requireNonNullElements(map.values());
                 return Collections.unmodifiableMap(map);
             }
         };

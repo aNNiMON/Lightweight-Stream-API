@@ -1,11 +1,14 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.Supplier;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Random;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
+import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
@@ -217,6 +220,24 @@ public class ObjectsTest {
                 return null;
             }
         });
+    }
+
+    @Test
+    public void testRequireNonNullElements() {
+        Collection<Integer> col = Objects.requireNonNullElements(Arrays.asList(1, 2, 3, 4));
+        assertThat(col, contains(1, 2, 3, 4));
+    }
+
+    @Test
+    public void testRequireNonNullElementsWithNullCollection() {
+        expectedException.expect(NullPointerException.class);
+        Objects.requireNonNullElements(null);
+    }
+
+    @Test
+    public void testRequireNonNullElementsWithNullElement() {
+        expectedException.expect(NullPointerException.class);
+        Objects.requireNonNullElements(Arrays.asList(1, 2, null, 4));
     }
 
     @Test
