@@ -672,7 +672,7 @@ public class Stream<T> implements Closeable {
 
     /**
      * Returns {@code Stream} with elements that is equality of {@code object} only.
-     * <p>
+     *
      * <p>This is an intermediate operation.
      *
      * @param object object

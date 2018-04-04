@@ -8,7 +8,7 @@ import java.util.NoSuchElementException;
  * @param <T> the type of the elements
  */
 public abstract class LsaIterator<T> implements Iterator<T> {
- 
+
     @Override
     public void remove() {
         throw new UnsupportedOperationException("remove not supported");

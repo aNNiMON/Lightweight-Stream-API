@@ -8,9 +8,9 @@ import com.annimon.stream.function.ThrowableSupplier;
 
 /**
  * A container for values which provided by {@code ThrowableSupplier}.
- * 
+ *
  * Stores value which provided by {@link ThrowableSupplier} or an exception which were thrown.
- * 
+ *
  * <pre><code>
  *     Exceptional.of(new ThrowableSupplier&lt;String, Throwable&gt;() {
  *          &#64;Override
@@ -23,17 +23,17 @@ import com.annimon.stream.function.ThrowableSupplier;
  *              logger.log(Level.WARNING, "read file", exception);
  *          }
  *      }).getOrElse("default string");
- *       
+ *
  *      Exceptional.of(() -&gt; IOUtils.readBytes(inputStream)).getOrElse(new byte[0]);
  * </code></pre>
- * 
+ *
  * @param <T> the type of the inner value
  */
 public class Exceptional<T> {
 
     /**
      * Returns an {@code Exceptional} with value provided by given {@code ThrowableSupplier} function.
-     * 
+     *
      * @param <T> the type of value
      * @param supplier  a supplier function
      * @return an {@code Exceptional}
@@ -56,7 +56,7 @@ public class Exceptional<T> {
     public static <T> Exceptional<T> of(Throwable throwable) {
         return new Exceptional<T>(null, throwable);
     }
-    
+
     private final T value;
     private final Throwable throwable;
 
@@ -64,10 +64,10 @@ public class Exceptional<T> {
         this.value = value;
         this.throwable = throwable;
     }
-    
+
     /**
      * Returns inner value.
-     * 
+     *
      * @return inner value.
      */
     public T get() {
@@ -82,11 +82,11 @@ public class Exceptional<T> {
     public boolean isPresent() {
         return throwable == null;
     }
-    
+
     /**
      * Returns inner value if there were no exceptions, otherwise returns {@code other}.
-     * 
-     * @param other  the value to be returned if there were any exception 
+     *
+     * @param other  the value to be returned if there were any exception
      * @return inner value if there were no exceptions, otherwise {@code other}
      */
     public T getOrElse(T other) {
@@ -106,7 +106,7 @@ public class Exceptional<T> {
 
     /**
      * Wraps inner value with {@code Optional} container
-     * 
+     *
      * @return an {@code Optional}
      */
     public Optional<T> getOptional() {
@@ -115,16 +115,16 @@ public class Exceptional<T> {
 
     /**
      * Returns exception.
-     * 
+     *
      * @return exception
      */
     public Throwable getException() {
         return throwable;
     }
-    
+
     /**
      * Returns inner value if there were no exceptions, otherwise throws an exception.
-     * 
+     *
      * @return inner value if there were no exceptions
      * @throws Throwable that was thrown in supplier function
      */
@@ -134,10 +134,10 @@ public class Exceptional<T> {
         }
         return value;
     }
-    
+
     /**
      * Returns inner value if there were no exceptions, otherwise throws {@code RuntimeException}.
-     * 
+     *
      * @return inner value if there were no exceptions
      * @throws RuntimeException with wrapped exception which was thrown in supplier function
      */
@@ -147,10 +147,10 @@ public class Exceptional<T> {
         }
         return value;
     }
-    
+
     /**
      * Returns inner value if there were no exceptions, otherwise throws the given {@code exception}.
-     * 
+     *
      * @param <E> the type of exception
      * @param exception  an exception to be thrown
      * @return inner value if there were no exceptions
@@ -213,7 +213,7 @@ public class Exceptional<T> {
             return of(t);
         }
     }
-    
+
     /**
      * Invokes consumer function with value if present.
      *
@@ -230,7 +230,7 @@ public class Exceptional<T> {
 
     /**
      * Invokes consumer function if there were any exception.
-     * 
+     *
      * @param consumer  a consumer function
      * @return an {@code Exceptional}
      */
@@ -240,10 +240,10 @@ public class Exceptional<T> {
         }
         return this;
     }
-    
+
     /**
      * Invokes consumer function if exception class matches {@code throwableClass}.
-     * 
+     *
      * @param <E> the type of exception
      * @param throwableClass  the class of an exception to be compared
      * @param consumer  a consumer function
@@ -295,7 +295,7 @@ public class Exceptional<T> {
         Objects.requireNonNull(function);
         return Objects.requireNonNull(function.apply(throwable));
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -310,12 +310,12 @@ public class Exceptional<T> {
         return Objects.equals(value, other.value) &&
                 Objects.equals(throwable, other.throwable);
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(value, throwable);
     }
-    
+
     @Override
     public String toString() {
         return throwable == null

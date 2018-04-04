@@ -54,7 +54,7 @@ public interface BiFunction<T, U, R> {
         /**
          * Returns a {@code BiFunction} that reverses the input arguments order
          * of the specified {@code BiFunction}.
-         * 
+         *
          * @param <T> the type of the first argument of the given function
          *            and the second argument of the reversed function
          * @param <U> the type of the second argument of the given function

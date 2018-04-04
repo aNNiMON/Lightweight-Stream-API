@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 /**
  * Lazily gets {@code Iterator} from the given {@link Iterable}.
- * 
+ *
  * @param <T> the type of the elements
  */
 public class LazyIterator<T> implements Iterator<T> {
