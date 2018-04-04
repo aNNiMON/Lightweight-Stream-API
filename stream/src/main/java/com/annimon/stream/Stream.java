@@ -677,6 +677,7 @@ public class Stream<T> implements Closeable {
      *
      * @param object object
      * @return the new stream
+     * @since 1.2.0
      */
     public Stream<T> equalsOnly(final T object) {
         return filter(new Predicate<T>() {

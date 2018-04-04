@@ -300,6 +300,7 @@ public final class OptionalInt {
 
     /**
      * Returns inner value if present, otherwise throws {@code NoSuchElementException}.
+     *
      * @return inner value if present
      * @throws NoSuchElementException if inner value is not present
      * @since 1.2.0
