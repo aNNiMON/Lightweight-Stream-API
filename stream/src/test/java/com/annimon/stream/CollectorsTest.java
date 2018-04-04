@@ -56,25 +56,24 @@ public class CollectorsTest {
 
     @Test
     public void testToUnmodifiableList() {
-        List<Integer> expected = Arrays.asList(0, 1, 2, 3, 4, 5);
         List<Integer> list = Stream.range(0, 6)
                 .collect(Collectors.<Integer>toUnmodifiableList());
-        assertThat(list, is(expected));
+        assertThat(list, is(Arrays.asList(0, 1, 2, 3, 4, 5)));
 
         try {
             list.add(1);
             fail("Expected an UnsupportedOperationException to be thrown when add item to list");
-        } catch (UnsupportedOperationException uoe) { }
+        } catch (UnsupportedOperationException expected) { }
 
         try {
             list.clear();
             fail("Expected an UnsupportedOperationException to be thrown when clear the list");
-        } catch (UnsupportedOperationException uoe) { }
+        } catch (UnsupportedOperationException expected) { }
 
         try {
             list.subList(1, 2).clear();
             fail("Expected an UnsupportedOperationException to be thrown when clear the sublist");
-        } catch (UnsupportedOperationException uoe) { }
+        } catch (UnsupportedOperationException expected) { }
     }
 
     @Test
@@ -100,12 +99,12 @@ public class CollectorsTest {
         try {
             set.add(1);
             fail("Expected an UnsupportedOperationException to be thrown when add item to set");
-        } catch (UnsupportedOperationException uoe) { }
+        } catch (UnsupportedOperationException expected) { }
 
         try {
             set.clear();
             fail("Expected an UnsupportedOperationException to be thrown when clear the set");
-        } catch (UnsupportedOperationException uoe) { }
+        } catch (UnsupportedOperationException expected) { }
     }
 
     @Test
@@ -231,7 +230,7 @@ public class CollectorsTest {
                 return newValue;
             }
         };
-        Map<Character, String> chars = Stream.of("a0", "b0", "c0", "d0")
+        Map<Character, String> chars = Stream.of("a0", "b0", "c0", "d0", "b1", "b2")
                 .collect(Collectors.toMap(keyMapper, valueMapper, merger));
 
         assertThat(chars.size(), is(3));
@@ -305,12 +304,12 @@ public class CollectorsTest {
         try {
             chars.put('u', "U");
             fail("Expected an UnsupportedOperationException to be thrown when add item to map");
-        } catch (UnsupportedOperationException uoe) { }
+        } catch (UnsupportedOperationException expected) { }
 
         try {
             chars.clear();
             fail("Expected an UnsupportedOperationException to be thrown when clear the map");
-        } catch (UnsupportedOperationException uoe) { }
+        } catch (UnsupportedOperationException expected) { }
     }
 
     @Test
@@ -363,12 +362,12 @@ public class CollectorsTest {
         try {
             chars.put('u', "U");
             fail("Expected an UnsupportedOperationException to be thrown when add item to map");
-        } catch (UnsupportedOperationException uoe) { }
+        } catch (UnsupportedOperationException expected) { }
 
         try {
             chars.clear();
             fail("Expected an UnsupportedOperationException to be thrown when clear the map");
-        } catch (UnsupportedOperationException uoe) { }
+        } catch (UnsupportedOperationException expected) { }
     }
 
     @Test
