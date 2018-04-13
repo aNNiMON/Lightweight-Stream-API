@@ -125,7 +125,7 @@ public final class Objects {
     public static <T> T requireNonNull(T obj) {
         if (obj == null)
             throw new NullPointerException();
-        return obj;
+        else return obj;
     }
 
     /**
@@ -141,7 +141,7 @@ public final class Objects {
     public static <T> T requireNonNull(T obj, String message) {
         if (obj == null)
             throw new NullPointerException(message);
-        return obj;
+        else return obj;
     }
 
     /**
@@ -159,7 +159,7 @@ public final class Objects {
     public static <T> T requireNonNull(T obj, Supplier<String> messageSupplier) {
         if (obj == null)
             throw new NullPointerException(messageSupplier.get());
-        return obj;
+        else return obj;
     }
 
     /**
