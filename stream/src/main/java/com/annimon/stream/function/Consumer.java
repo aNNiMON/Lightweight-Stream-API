@@ -8,7 +8,6 @@ import com.annimon.stream.Objects;
  * @param <T> the type of the input to the operation
  * @see BiConsumer
  */
-@FunctionalInterface
 public interface Consumer<T> {
 
     /**

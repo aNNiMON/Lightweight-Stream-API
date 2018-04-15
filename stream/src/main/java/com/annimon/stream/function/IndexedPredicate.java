@@ -8,7 +8,6 @@ import com.annimon.stream.Objects;
  * @param <T> the type of the input to the function
  * @since 1.1.6
  */
-@FunctionalInterface
 public interface IndexedPredicate<T> {
 
     /**

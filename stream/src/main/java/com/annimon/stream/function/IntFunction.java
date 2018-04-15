@@ -12,7 +12,6 @@ package com.annimon.stream.function;
  *
  * @see Function
  */
-@FunctionalInterface
 public interface IntFunction<R> {
 
     /**

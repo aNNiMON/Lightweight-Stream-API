@@ -1,10 +1,14 @@
 package com.annimon.stream;
 
+import com.annimon.stream.function.Supplier;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Random;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
+import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
@@ -28,6 +32,28 @@ public class ObjectsTest {
     @Test
     public void testEqualsNonEqualNumbers() {
         assertFalse(Objects.equals(80, 10));
+    }
+
+    @Test
+    public void testDeepEqualsBasic() {
+        assertTrue(Objects.deepEquals(this, this));
+        assertFalse(Objects.deepEquals(80, 10));
+        assertFalse(Objects.deepEquals(80, null));
+    }
+
+    @Test
+    public void testDeepEqualsArrays() {
+        final Supplier<Object> s = new Supplier<Object>() {
+            @Override
+            public Object get() {
+                return new Object[] {
+                        this, 1, 2, 3, "test",
+                        new Integer[] {1, 2, 3}
+                };
+            }
+        };
+        assertTrue(Objects.deepEquals(s.get(), s.get()));
+        assertFalse(Objects.deepEquals(s.get(), new Object[] {this, 1, 2, 3}));
     }
 
     @Test
@@ -107,6 +133,123 @@ public class ObjectsTest {
         expectedException.expectMessage("message");
 
         Objects.requireNonNull(null, "message");
+    }
+
+    @Test
+    public void testRequireNonNullWithMessageSupplier() {
+        Object result = Objects.requireNonNull("test", new Supplier<String>() {
+            @Override
+            public String get() {
+                return "supplied message";
+            }
+        });
+        assertEquals("test", result);
+    }
+
+    @Test
+    public void testRequireNonNullWithMessageSupplierAndException() {
+        expectedException.expect(NullPointerException.class);
+        expectedException.expectMessage("supplied message");
+
+        Objects.requireNonNull(null, new Supplier<String>() {
+            @Override
+            public String get() {
+                return "supplied message";
+            }
+        });
+    }
+
+    @Test
+    public void testRequireNonNullElse() {
+        Object result = Objects.requireNonNullElse("a", "b");
+        assertEquals("a", result);
+    }
+
+    @Test
+    public void testRequireNonNullElseWithNullFirstArgument() {
+        Object result = Objects.requireNonNullElse(null, "b");
+        assertEquals("b", result);
+    }
+
+    @Test
+    public void testRequireNonNullElseWithNullArguments() {
+        expectedException.expect(NullPointerException.class);
+        expectedException.expectMessage("defaultObj");
+
+        Objects.requireNonNullElse(null, null);
+    }
+
+    @Test
+    public void testRequireNonNullElseGet() {
+        Object result = Objects.requireNonNullElseGet("a", new Supplier<String>() {
+            @Override
+            public String get() {
+                return "b";
+            }
+        });
+        assertEquals("a", result);
+    }
+
+    @Test
+    public void testRequireNonNullElseGetWithNullFirstArgument() {
+        Object result = Objects.requireNonNullElseGet(null, new Supplier<String>() {
+            @Override
+            public String get() {
+                return "b";
+            }
+        });
+        assertEquals("b", result);
+    }
+
+    @Test
+    public void testRequireNonNullElseGetWithNullArguments() {
+        expectedException.expect(NullPointerException.class);
+        expectedException.expectMessage("supplier");
+
+        Objects.requireNonNullElseGet(null, null);
+    }
+
+    @Test
+    public void testRequireNonNullElseGetWithNullSupplied() {
+        expectedException.expect(NullPointerException.class);
+        expectedException.expectMessage("supplier.get()");
+
+        Objects.requireNonNullElseGet(null, new Supplier<String>() {
+            @Override
+            public String get() {
+                return null;
+            }
+        });
+    }
+
+    @Test
+    public void testRequireNonNullElements() {
+        Collection<Integer> col = Objects.requireNonNullElements(Arrays.asList(1, 2, 3, 4));
+        assertThat(col, contains(1, 2, 3, 4));
+    }
+
+    @Test
+    public void testRequireNonNullElementsWithNullCollection() {
+        expectedException.expect(NullPointerException.class);
+        Objects.requireNonNullElements(null);
+    }
+
+    @Test
+    public void testRequireNonNullElementsWithNullElement() {
+        expectedException.expect(NullPointerException.class);
+        Objects.requireNonNullElements(Arrays.asList(1, 2, null, 4));
+    }
+
+    @Test
+    public void testIsNull() {
+        assertTrue(Objects.isNull(null));
+        assertFalse(Objects.isNull(1));
+    }
+
+    @Test
+    public void testNonNull() {
+        assertFalse(Objects.nonNull(null));
+        assertTrue(Objects.nonNull(1));
     }
 
     @Test

@@ -7,7 +7,6 @@ package com.annimon.stream.function;
  * @since 1.1.4
  * @see BinaryOperator
  */
-@FunctionalInterface
 public interface LongBinaryOperator {
 
     /**

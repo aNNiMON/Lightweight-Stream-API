@@ -58,15 +58,15 @@ public final class OptionalDouble {
     /**
      * Returns an inner value if present, otherwise throws {@code NoSuchElementException}.
      *
+     * Since 1.2.0 prefer {@link #orElseThrow()} method as it has readable name.
+     *
      * @return the inner value of this {@code OptionalDouble}
      * @throws NoSuchElementException if there is no value present
      * @see OptionalDouble#isPresent()
+     * @see #orElseThrow()
      */
     public double getAsDouble() {
-        if (!isPresent) {
-            throw new NoSuchElementException("No value present");
-        }
-        return value;
+        return orElseThrow();
     }
 
     /**
@@ -288,6 +288,20 @@ public final class OptionalDouble {
      */
     public double orElseGet(DoubleSupplier other) {
         return isPresent ? value : other.getAsDouble();
+    }
+
+    /**
+     * Returns inner value if present, otherwise throws {@code NoSuchElementException}.
+     *
+     * @return inner value if present
+     * @throws NoSuchElementException if inner value is not present
+     * @since 1.2.0
+     */
+    public double orElseThrow() {
+        if (!isPresent) {
+            throw new NoSuchElementException("No value present");
+        }
+        return value;
     }
 
     /**

@@ -7,7 +7,6 @@ package com.annimon.stream.function;
  * <p>There is no requirement that a distinct result be returned each
  * time the supplier is invoked.
  */
-@FunctionalInterface
 public interface IntSupplier {
 
     /**

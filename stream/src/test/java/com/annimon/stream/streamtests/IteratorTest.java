@@ -10,12 +10,6 @@ import static org.junit.Assert.assertThat;
 public final class IteratorTest {
 
     @Test
-    @SuppressWarnings("deprecation")
-    public void testGetIterator() {
-        assertThat(Stream.of(1).getIterator(), is(not(nullValue())));
-    }
-
-    @Test
     public void testIterator() {
         assertThat(Stream.of(1).iterator(), is(not(nullValue())));
     }

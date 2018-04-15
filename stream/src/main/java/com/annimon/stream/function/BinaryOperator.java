@@ -9,7 +9,6 @@ import java.util.Comparator;
  *
  * @param <T> the type of the operands and result of the operator
  */
-@FunctionalInterface
 public interface BinaryOperator<T> extends BiFunction<T, T, T> {
     class Util {
 

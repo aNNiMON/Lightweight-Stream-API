@@ -6,7 +6,6 @@ package com.annimon.stream.function;
  * @param <T> the type of the input of the function
  * @param <R> the type of the result of the function
  */
-@FunctionalInterface
 public interface Function<T, R> {
 
     /**

@@ -9,7 +9,6 @@ import com.annimon.stream.Objects;
  * @param <R> the type of the result of the function
  * @since 1.1.6
  */
-@FunctionalInterface
 public interface IndexedFunction<T, R> {
 
     /**

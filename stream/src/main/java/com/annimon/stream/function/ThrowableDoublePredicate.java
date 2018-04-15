@@ -7,7 +7,6 @@ package com.annimon.stream.function;
  * @since 1.1.7
  * @see DoublePredicate
  */
-@FunctionalInterface
 public interface ThrowableDoublePredicate<E extends Throwable> {
 
     /**

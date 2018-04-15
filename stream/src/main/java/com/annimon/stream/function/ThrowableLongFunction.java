@@ -9,7 +9,6 @@ package com.annimon.stream.function;
  * @since 1.1.7
  * @see LongFunction
  */
-@FunctionalInterface
 public interface ThrowableLongFunction<R, E extends Throwable> {
 
     /**

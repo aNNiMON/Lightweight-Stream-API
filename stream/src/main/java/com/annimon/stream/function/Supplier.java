@@ -5,7 +5,6 @@ package com.annimon.stream.function;
  *
  * @param <T> the type of the result
  */
-@FunctionalInterface
 public interface Supplier<T> {
 
     /**

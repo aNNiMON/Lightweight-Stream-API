@@ -8,7 +8,6 @@ package com.annimon.stream.function;
  * @since 1.1.4
  * @see Function
  */
-@FunctionalInterface
 public interface DoubleFunction<R> {
 
     /**

@@ -465,17 +465,6 @@ public class Stream<T> implements Closeable {
     /**
      * Returns internal stream iterator.
      *
-     * @deprecated  As of release 1.1.1, replaced by {@link #iterator()}
-     * @return internal stream iterator
-     */
-    @Deprecated
-    public Iterator<? extends T> getIterator() {
-        return iterator;
-    }
-
-    /**
-     * Returns internal stream iterator.
-     *
      * @return internal stream iterator
      */
     public Iterator<? extends T> iterator() {
@@ -668,6 +657,24 @@ public class Stream<T> implements Closeable {
      */
     public Stream<T> nullsOnly() {
         return filterNot(Predicate.Util.<T>notNull());
+    }
+
+    /**
+     * Returns {@code Stream} with elements that is equality of {@code object} only.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @param object object
+     * @return the new stream
+     * @since 1.2.0
+     */
+    public Stream<T> equalsOnly(final T object) {
+        return filter(new Predicate<T>() {
+            @Override
+            public boolean test(T value) {
+                return Objects.equals(value, object);
+            }
+        });
     }
 
     /**

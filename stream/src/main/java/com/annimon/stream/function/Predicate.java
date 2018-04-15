@@ -5,7 +5,6 @@ package com.annimon.stream.function;
  *
  * @param <T> the type of the input to the function
  */
-@FunctionalInterface
 public interface Predicate<T> {
 
     /**

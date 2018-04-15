@@ -57,15 +57,15 @@ public final class OptionalBoolean {
     /**
      * Returns an inner value if present, otherwise throws {@code NoSuchElementException}.
      *
+     * Since 1.2.0 prefer {@link #orElseThrow()} method as it has readable name.
+     *
      * @return the inner value of this {@code OptionalBoolean}
      * @throws NoSuchElementException if there is no value present
      * @see OptionalBoolean#isPresent()
+     * @see #orElseThrow()
      */
     public boolean getAsBoolean() {
-        if (!isPresent) {
-            throw new NoSuchElementException("No value present");
-        }
-        return value;
+        return orElseThrow();
     }
 
     /**
@@ -240,6 +240,20 @@ public final class OptionalBoolean {
      */
     public boolean orElseGet(BooleanSupplier other) {
         return isPresent ? value : other.getAsBoolean();
+    }
+
+    /**
+     * Returns inner value if present, otherwise throws {@code NoSuchElementException}.
+     *
+     * @return inner value if present
+     * @throws NoSuchElementException if inner value is not present
+     * @since 1.2.0
+     */
+    public boolean orElseThrow() {
+        if (!isPresent) {
+            throw new NoSuchElementException("No value present");
+        }
+        return value;
     }
 
     /**

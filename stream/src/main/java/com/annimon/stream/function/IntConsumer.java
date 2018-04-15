@@ -10,7 +10,6 @@ package com.annimon.stream.function;
  *
  * @see com.annimon.stream.function.Consumer
  */
-@FunctionalInterface
 public interface IntConsumer {
 
     /**
