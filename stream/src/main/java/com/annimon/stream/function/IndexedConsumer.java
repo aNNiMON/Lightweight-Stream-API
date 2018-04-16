@@ -28,7 +28,7 @@ public interface IndexedConsumer<T> {
          * @param <T> the type of the input argument
          * @param consumer  the consumer to wrap
          * @return a wrapped {@code IndexedConsumer}
-         * @throws NullPointerException if {@code function} is null
+         * @throws NullPointerException if {@code consumer} is null
          */
         public static <T> IndexedConsumer<T> wrap(
                 final Consumer<? super T> consumer) {
