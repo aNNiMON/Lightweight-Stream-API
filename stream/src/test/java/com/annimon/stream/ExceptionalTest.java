@@ -469,7 +469,7 @@ public class ExceptionalTest {
     @Test
     public void testEqualsWithDifferentTypes() {
         final Exceptional<Integer> ten1 = Exceptional.of(tenSupplier);
-        assertNotEquals(10, ten1);
+        assertFalse(ten1.equals(10));
     }
 
     @Test

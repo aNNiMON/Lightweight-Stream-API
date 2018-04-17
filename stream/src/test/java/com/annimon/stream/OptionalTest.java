@@ -527,7 +527,7 @@ public final class OptionalTest {
     @Test
     public void testEqualsWithDifferentTypes() {
         final Optional<Integer> optInt = Optional.of(10);
-        assertNotEquals(10, optInt);
+        assertFalse(optInt.equals(10));
     }
 
     @Test

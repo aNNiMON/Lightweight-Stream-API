@@ -52,7 +52,7 @@ public final class IntPairTest {
     @Test
     public void testEqualsWithDifferentTypes() {
         final IntPair<String> p = new IntPair<String>(1, "first");
-        assertNotEquals(1, p);
+        assertFalse(p.equals(1));
     }
 
     @Test
