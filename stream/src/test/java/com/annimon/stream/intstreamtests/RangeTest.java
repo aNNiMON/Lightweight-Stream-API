@@ -3,15 +3,15 @@ package com.annimon.stream.intstreamtests;
 import com.annimon.stream.IntStream;
 import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 public final class RangeTest {
 
     @Test
     public void testStreamRange() {
-        assertTrue(IntStream.range(1, 5).sum() == 10);
-        assertTrue(IntStream.range(2, 2).count() == 0);
+        assertEquals(10, IntStream.range(1, 5).sum());
+        assertEquals(0, IntStream.range(2, 2).count());
     }
 
     @Test
@@ -35,8 +35,8 @@ public final class RangeTest {
 
     @Test
     public void testStreamRangeClosed() {
-        assertTrue(IntStream.rangeClosed(1, 5).sum() == 15);
-        assertTrue(IntStream.rangeClosed(1, 5).count() == 5);
+        assertEquals(15, IntStream.rangeClosed(1, 5).sum());
+        assertEquals(5, IntStream.rangeClosed(1, 5).count());
     }
 
     @Test

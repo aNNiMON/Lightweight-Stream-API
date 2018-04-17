@@ -4,7 +4,6 @@ import com.annimon.stream.IntStream;
 import com.annimon.stream.function.IntConsumer;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public final class ForEachTest {
 
@@ -20,7 +19,7 @@ public final class ForEachTest {
         IntStream.of(42).forEach(new IntConsumer() {
             @Override
             public void accept(int value) {
-                assertTrue(value == 42);
+                assertEquals(42, value);
             }
         });
 

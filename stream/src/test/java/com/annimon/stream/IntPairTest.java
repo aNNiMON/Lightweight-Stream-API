@@ -20,7 +20,7 @@ public final class IntPairTest {
     @Test
     public void testEqualsReflexive() {
         final IntPair<String> p = new IntPair<String>(1, "first");
-        assertTrue(p.equals(p));
+        assertEquals(p, p);
     }
 
     @Test
@@ -28,8 +28,8 @@ public final class IntPairTest {
         final IntPair<String> p1 = new IntPair<String>(1, "first");
         final IntPair<String> p2 = new IntPair<String>(1, "first");
 
-        assertTrue(p1.equals(p2));
-        assertTrue(p2.equals(p1));
+        assertEquals(p1, p2);
+        assertEquals(p2, p1);
     }
 
     @Test
@@ -38,21 +38,21 @@ public final class IntPairTest {
         final IntPair<String> p2 = new IntPair<String>(1, "first");
         final IntPair<String> p3 = new IntPair<String>(1, "first");
 
-        assertTrue(p1.equals(p2));
-        assertTrue(p2.equals(p3));
-        assertTrue(p1.equals(p3));
+        assertEquals(p1, p2);
+        assertEquals(p2, p3);
+        assertEquals(p1, p3);
     }
 
     @Test
     public void testEqualsWithNull() {
         final IntPair<String> p = new IntPair<String>(1, "first");
-        assertFalse(p.equals(null));
+        assertNotEquals(null, p);
     }
 
     @Test
     public void testEqualsWithDifferentTypes() {
         final IntPair<String> p = new IntPair<String>(1, "first");
-        assertFalse(p.equals(1));
+        assertNotEquals(1, p);
     }
 
     @Test
@@ -60,7 +60,7 @@ public final class IntPairTest {
         final IntPair<String> p1 = new IntPair<String>(1, "first");
         final IntPair<Integer> p2 = new IntPair<Integer>(1, 1);
 
-        assertFalse(p1.equals(p2));
+        assertNotEquals(p1, p2);
     }
 
     @Test
@@ -68,7 +68,7 @@ public final class IntPairTest {
         final IntPair<Integer> p1 = new IntPair<Integer>(10, 15);
         final IntPair<Integer> p2 = new IntPair<Integer>(15, 10);
 
-        assertFalse(p1.equals(p2));
+        assertNotEquals(p1, p2);
     }
 
     @Test

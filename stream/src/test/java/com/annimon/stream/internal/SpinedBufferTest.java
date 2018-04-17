@@ -4,10 +4,7 @@ import com.annimon.stream.iterator.PrimitiveIterator;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static org.hamcrest.Matchers.closeTo;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Tests for {@link SpinedBuffer}
@@ -41,7 +38,7 @@ public class SpinedBufferTest {
         assertEquals(64, b2.capacity());
 
         SpinedBuffer.OfInt b3 = new SpinedBuffer.OfInt(1735);
-        assertTrue(b3.capacity() % SpinedBuffer.MIN_CHUNK_SIZE == 0);
+        assertEquals(0, b3.capacity() % SpinedBuffer.MIN_CHUNK_SIZE);
     }
 
     @Test
@@ -52,7 +49,7 @@ public class SpinedBufferTest {
         assertEquals(64, b2.capacity());
 
         SpinedBuffer.OfLong b3 = new SpinedBuffer.OfLong(1735);
-        assertTrue(b3.capacity() % SpinedBuffer.MIN_CHUNK_SIZE == 0);
+        assertEquals(0, b3.capacity() % SpinedBuffer.MIN_CHUNK_SIZE);
     }
 
     @Test
@@ -63,7 +60,7 @@ public class SpinedBufferTest {
         assertEquals(64, b2.capacity());
 
         SpinedBuffer.OfDouble b3 = new SpinedBuffer.OfDouble(1735);
-        assertTrue(b3.capacity() % SpinedBuffer.MIN_CHUNK_SIZE == 0);
+        assertEquals(0, b3.capacity() % SpinedBuffer.MIN_CHUNK_SIZE);
     }
 
 
@@ -545,7 +542,7 @@ public class SpinedBufferTest {
 
         b.clear();
 
-        assertTrue(b.spine == null);
+        assertNull(b.spine);
         assertEquals(0, b.elementIndex);
         assertEquals(0, b.spineIndex);
 
@@ -575,7 +572,7 @@ public class SpinedBufferTest {
 
         b.clear();
 
-        assertTrue(b.spine == null);
+        assertNull(b.spine);
         assertEquals(0, b.elementIndex);
         assertEquals(0, b.spineIndex);
 
@@ -605,7 +602,7 @@ public class SpinedBufferTest {
 
         b.clear();
 
-        assertTrue(b.spine == null);
+        assertNull(b.spine);
         assertEquals(0, b.elementIndex);
         assertEquals(0, b.spineIndex);
 

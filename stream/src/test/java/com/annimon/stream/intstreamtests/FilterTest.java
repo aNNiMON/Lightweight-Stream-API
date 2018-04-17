@@ -13,7 +13,7 @@ import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.IntStreamMatcher.assertElements;
 import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.Matchers.contains;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 public final class FilterTest {
 
@@ -25,7 +25,7 @@ public final class FilterTest {
                         2, 4, 6, 8, 10
                 )));
 
-        assertTrue(IntStream.iterate(0, new IntUnaryOperator() {
+        assertEquals(0, IntStream.iterate(0, new IntUnaryOperator() {
             @Override
             public int applyAsInt(int operand) {
                 return operand + 1;
@@ -35,7 +35,7 @@ public final class FilterTest {
             public boolean test(int value) {
                 return value == 0;
             }
-        }).findFirst().getAsInt() == 0);
+        }).findFirst().getAsInt());
     }
 
     @Test

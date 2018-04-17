@@ -15,10 +15,7 @@ import static com.annimon.stream.test.hamcrest.OptionalLongMatcher.hasValue;
 import static com.annimon.stream.test.hamcrest.OptionalLongMatcher.isEmpty;
 import static com.annimon.stream.test.hamcrest.OptionalLongMatcher.isPresent;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * Tests for {@link OptionalLong}
@@ -412,12 +409,12 @@ public class OptionalLongTest {
     @Test
     public void testEquals() {
         assertEquals(OptionalLong.empty(), OptionalLong.empty());
-        assertFalse(OptionalLong.empty().equals(Optional.empty()));
+        assertNotEquals(OptionalLong.empty(), Optional.empty());
 
         assertEquals(OptionalLong.of(42), OptionalLong.of(42));
 
-        assertFalse(OptionalLong.of(41).equals(OptionalLong.of(42)));
-        assertFalse(OptionalLong.of(0).equals(OptionalLong.empty()));
+        assertNotEquals(OptionalLong.of(41), OptionalLong.of(42));
+        assertNotEquals(OptionalLong.of(0), OptionalLong.empty());
     }
 
     @Test

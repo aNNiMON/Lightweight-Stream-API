@@ -16,11 +16,7 @@ import static com.annimon.stream.test.hamcrest.OptionalDoubleMatcher.isEmpty;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.closeTo;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * Tests for {@link OptionalDouble}
@@ -431,12 +427,12 @@ public class OptionalDoubleTest {
     @Test
     public void testEquals() {
         assertEquals(OptionalDouble.empty(), OptionalDouble.empty());
-        assertFalse(OptionalDouble.empty().equals(Optional.empty()));
+        assertNotEquals(OptionalDouble.empty(), Optional.empty());
 
         assertEquals(OptionalDouble.of(Math.PI), OptionalDouble.of(Math.PI));
 
-        assertFalse(OptionalDouble.of(41d).equals(OptionalDouble.of(42d)));
-        assertFalse(OptionalDouble.of(0d).equals(OptionalDouble.empty()));
+        assertNotEquals(OptionalDouble.of(41d), OptionalDouble.of(42d));
+        assertNotEquals(OptionalDouble.of(0d), OptionalDouble.empty());
     }
 
     @Test
