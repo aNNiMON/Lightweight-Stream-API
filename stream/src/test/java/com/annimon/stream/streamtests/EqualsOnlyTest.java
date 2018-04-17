@@ -1,7 +1,6 @@
 package com.annimon.stream.streamtests;
 
 import com.annimon.stream.Stream;
-import com.annimon.stream.function.Function;
 import org.junit.Test;
 
 import java.util.List;

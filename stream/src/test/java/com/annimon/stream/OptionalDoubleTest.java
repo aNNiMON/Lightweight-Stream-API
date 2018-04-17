@@ -10,7 +10,6 @@ import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Supplier;
 import com.annimon.stream.test.hamcrest.OptionalMatcher;
 import java.util.NoSuchElementException;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.OptionalDoubleMatcher.hasValueThat;
 import static com.annimon.stream.test.hamcrest.OptionalDoubleMatcher.isEmpty;
