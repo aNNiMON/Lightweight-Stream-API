@@ -43,7 +43,7 @@ public interface IndexedLongConsumer {
 
         /**
          * Returns an {@code IndexedLongConsumer} that accepts {@code IntConsumer}
-         * for index and {@code LongConsumer} for object.
+         * for index and {@code LongConsumer} for value.
          *
          * <pre><code>
          *  if (c1 != null)
@@ -53,7 +53,7 @@ public interface IndexedLongConsumer {
          * </code></pre>
          *
          * @param c1  the {@code IntConsumer} for index, can be null
-         * @param c2  the {@code LongConsumer} for object, can be null
+         * @param c2  the {@code LongConsumer} for value, can be null
          * @return an {@code IndexedLongConsumer}
          */
         public static IndexedLongConsumer accept(

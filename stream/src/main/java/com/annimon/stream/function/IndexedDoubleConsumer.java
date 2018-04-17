@@ -43,7 +43,7 @@ public interface IndexedDoubleConsumer {
 
         /**
          * Returns an {@code IndexedDoubleConsumer} that accepts {@code IntConsumer}
-         * for index and {@code DoubleConsumer} for object.
+         * for index and {@code DoubleConsumer} for value.
          *
          * <pre><code>
          *  if (c1 != null)
@@ -53,7 +53,7 @@ public interface IndexedDoubleConsumer {
          * </code></pre>
          *
          * @param c1  the {@code IntConsumer} for index, can be null
-         * @param c2  the {@code DoubleConsumer} for object, can be null
+         * @param c2  the {@code DoubleConsumer} for value, can be null
          * @return an {@code IndexedDoubleConsumer}
          */
         public static IndexedDoubleConsumer accept(
