@@ -22,19 +22,21 @@ public interface IndexedLongConsumer {
         private Util() { }
 
         /**
-         * Wraps a {@link LongConsumer} and returns {@code IndexedLongConsumer}.
+         * Composes {@code IndexedLongConsumer} calls.
          *
-         * @param consumer  the consumer to wrap
-         * @return a wrapped {@code IndexedLongConsumer}
-         * @throws NullPointerException if {@code consumer} is null
+         * <p>{@code c1.accept(index, value); c2.accept(index, value); }
+         *
+         * @param c1  the first {@code IndexedLongConsumer}
+         * @param c2  the second {@code IndexedLongConsumer}
+         * @return a composed {@code IndexedLongConsumer}
+         * @throws NullPointerException if {@code c1} or {@code c2} is null
          */
-        public static IndexedLongConsumer wrap(
-                final LongConsumer consumer) {
-            Objects.requireNonNull(consumer);
+        public static IndexedLongConsumer andThen(final IndexedLongConsumer c1, final IndexedLongConsumer c2) {
             return new IndexedLongConsumer() {
                 @Override
                 public void accept(int index, long value) {
-                    consumer.accept(value);
+                    c1.accept(index, value);
+                    c2.accept(index, value);
                 }
             };
         }

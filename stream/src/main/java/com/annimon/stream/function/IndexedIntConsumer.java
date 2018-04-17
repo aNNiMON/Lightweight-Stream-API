@@ -22,19 +22,21 @@ public interface IndexedIntConsumer {
         private Util() { }
 
         /**
-         * Wraps a {@link IntConsumer} and returns {@code IndexedIntConsumer}.
+         * Composes {@code IndexedIntConsumer} calls.
          *
-         * @param consumer  the consumer to wrap
-         * @return a wrapped {@code IndexedIntConsumer}
-         * @throws NullPointerException if {@code consumer} is null
+         * <p>{@code c1.accept(index, value); c2.accept(index, value); }
+         *
+         * @param c1  the first {@code IndexedIntConsumer}
+         * @param c2  the second {@code IndexedIntConsumer}
+         * @return a composed {@code IndexedIntConsumer}
+         * @throws NullPointerException if {@code c1} or {@code c2} is null
          */
-        public static IndexedIntConsumer wrap(
-                final IntConsumer consumer) {
-            Objects.requireNonNull(consumer);
+        public static IndexedIntConsumer andThen(final IndexedIntConsumer c1, final IndexedIntConsumer c2) {
             return new IndexedIntConsumer() {
                 @Override
                 public void accept(int index, int value) {
-                    consumer.accept(value);
+                    c1.accept(index, value);
+                    c2.accept(index, value);
                 }
             };
         }
@@ -51,7 +53,7 @@ public interface IndexedIntConsumer {
          * </code></pre>
          *
          * @param c1  the {@code IntConsumer} for index, can be null
-         * @param c2  the {@code IntConsumer} for object, can be null
+         * @param c2  the {@code IntConsumer} for value, can be null
          * @return an {@code IndexedIntConsumer}
          */
         public static IndexedIntConsumer accept(
