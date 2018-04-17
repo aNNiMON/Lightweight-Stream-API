@@ -567,7 +567,7 @@ public class ExceptionalTest {
         throw new IOException();
     }
 
-    private static enum ExceptionType {
+    private enum ExceptionType {
         NULL_POINTER(new NullPointerException()),
         UNSUPPORTED_OPERATION(new UnsupportedOperationException()),
         FILE_NOT_FOUND(new FileNotFoundException()),
@@ -577,7 +577,7 @@ public class ExceptionalTest {
 
         private final Exception exception;
 
-        private ExceptionType(Exception exception) {
+        ExceptionType(Exception exception) {
             this.exception = exception;
         }
 

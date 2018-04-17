@@ -143,7 +143,7 @@ public class OptionalIntTest {
                     }
                 })
                 .getAsInt();
-        assertEquals(10, (int) value);
+        assertEquals(10, value);
     }
 
     @Test

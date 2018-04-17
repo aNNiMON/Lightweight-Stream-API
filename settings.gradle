@@ -13,7 +13,7 @@ def subDirs = rootDir.listFiles(new FileFilter() {
         }
         return new File(file, 'build.gradle').isFile()
     }
-});
+})
 
 subDirs.each { File dir ->
     include dir.name

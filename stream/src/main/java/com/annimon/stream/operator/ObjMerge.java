@@ -9,7 +9,7 @@ import java.util.Queue;
 public class ObjMerge<T> extends LsaIterator<T> {
 
     public enum MergeResult {
-        TAKE_FIRST, TAKE_SECOND;
+        TAKE_FIRST, TAKE_SECOND
     }
 
     private final Iterator<? extends T> iterator1;

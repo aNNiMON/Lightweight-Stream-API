@@ -1060,7 +1060,8 @@ public final class Collectors {
     }
 
     private static final class Tuple2<A> {
-        A a, b;
+        final A a;
+        final A b;
 
         Tuple2(A a, A b) {
             this.a = a;

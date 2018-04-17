@@ -14,35 +14,35 @@ import static org.junit.Assert.assertTrue;
  */
 public class IntPredicateTest {
 
-    private static IntPredicate alwaysTrue = new IntPredicate() {
+    private static final IntPredicate alwaysTrue = new IntPredicate() {
         @Override
         public boolean test(int value) {
             return true;
         }
     };
 
-    private static IntPredicate alwaysFalse = new IntPredicate() {
+    private static final IntPredicate alwaysFalse = new IntPredicate() {
         @Override
         public boolean test(int value) {
             return false;
         }
     };
 
-    private static IntPredicate odd = new IntPredicate() {
+    private static final IntPredicate odd = new IntPredicate() {
         @Override
         public boolean test(int value) {
             return value%2 != 0;
         }
     };
 
-    private static IntPredicate even = new IntPredicate() {
+    private static final IntPredicate even = new IntPredicate() {
         @Override
         public boolean test(int value) {
             return value%2 == 0;
         }
     };
 
-    private static IntPredicate divBy3 = new IntPredicate() {
+    private static final IntPredicate divBy3 = new IntPredicate() {
         @Override
         public boolean test(int value) {
             return value%3 == 0;
