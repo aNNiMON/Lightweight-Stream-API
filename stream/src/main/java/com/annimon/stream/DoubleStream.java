@@ -4,6 +4,7 @@ import com.annimon.stream.function.*;
 import com.annimon.stream.internal.Compose;
 import com.annimon.stream.internal.Operators;
 import com.annimon.stream.internal.Params;
+import com.annimon.stream.iterator.PrimitiveIndexedIterator;
 import com.annimon.stream.iterator.PrimitiveIterator;
 import com.annimon.stream.operator.*;
 import java.io.Closeable;
@@ -300,6 +301,58 @@ public final class DoubleStream implements Closeable {
      */
     public DoubleStream filter(final DoublePredicate predicate) {
         return new DoubleStream(params, new DoubleFilter(iterator, predicate));
+    }
+
+    /**
+     * Returns a {@code DoubleStream} with elements that satisfy the given {@code IndexedDoublePredicate}.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * predicate: (index, value) -&gt; (index + value) &gt; 6
+     * stream: [1, 2, 3, 4, 0, 11]
+     * index:  [0, 1, 2, 3, 4,  5]
+     * sum:    [1, 3, 5, 7, 4, 16]
+     * filter: [         7,    16]
+     * result: [4, 11]
+     * </pre>
+     *
+     * @param predicate  the {@code IndexedDoublePredicate} used to filter elements
+     * @return the new stream
+     * @since 1.2.1
+     */
+    public DoubleStream filterIndexed(IndexedDoublePredicate predicate) {
+        return filterIndexed(0, 1, predicate);
+    }
+
+    /**
+     * Returns a {@code DoubleStream} with elements that satisfy the given {@code IndexedDoublePredicate}.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * from: 4
+     * step: 3
+     * predicate: (index, value) -&gt; (index + value) &gt; 15
+     * stream: [1, 2,  3,  4,  0, 11]
+     * index:  [4, 7, 10, 13, 16, 19]
+     * sum:    [5, 9, 13, 17, 16, 30]
+     * filter: [          17, 16, 30]
+     * result: [4, 0, 11]
+     * </pre>
+     *
+     * @param from  the initial value of the index (inclusive)
+     * @param step  the step of the index
+     * @param predicate  the {@code IndexedDoublePredicate} used to filter elements
+     * @return the new stream
+     * @since 1.2.1
+     */
+    public DoubleStream filterIndexed(int from, int step, IndexedDoublePredicate predicate) {
+        return new DoubleStream(params, new DoubleFilterIndexed(
+                new PrimitiveIndexedIterator.OfDouble(from, step, iterator),
+                predicate));
     }
 
     /**

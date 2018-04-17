@@ -1,5 +1,6 @@
 apply plugin: 'java-library'
 apply plugin: 'maven'
+apply plugin: 'me.champeau.gradle.jmh'
 
 archivesBaseName = 'stream'
 version = '1.2.0-SNAPSHOT'
@@ -26,6 +27,14 @@ dependencies {
 
 cobertura {
     coverageExcludes = ['.*com\\.annimon\\.stream\\.internal\\.Compat.*']
+}
+
+jmh {
+    benchmarkMode = ['Throughput', 'AverageTime']
+    fork = 2
+    threads = 2
+    warmupIterations = 3
+    iterations = 5
 }
 
 // maven signing

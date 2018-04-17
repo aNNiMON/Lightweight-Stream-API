@@ -4,6 +4,7 @@ import com.annimon.stream.function.*;
 import com.annimon.stream.internal.Compose;
 import com.annimon.stream.internal.Operators;
 import com.annimon.stream.internal.Params;
+import com.annimon.stream.iterator.PrimitiveIndexedIterator;
 import com.annimon.stream.iterator.PrimitiveIterator;
 import com.annimon.stream.operator.*;
 import java.io.Closeable;
@@ -334,6 +335,58 @@ public final class LongStream implements Closeable {
      */
     public LongStream filter(final LongPredicate predicate) {
         return new LongStream(params, new LongFilter(iterator, predicate));
+    }
+
+    /**
+     * Returns a {@code LongStream} with elements that satisfy the given {@code IndexedLongPredicate}.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * predicate: (index, value) -&gt; (index + value) &gt; 6
+     * stream: [1, 2, 3, 4, 0, 11]
+     * index:  [0, 1, 2, 3, 4,  5]
+     * sum:    [1, 3, 5, 7, 4, 16]
+     * filter: [         7,    16]
+     * result: [4, 11]
+     * </pre>
+     *
+     * @param predicate  the {@code IndexedLongPredicate} used to filter elements
+     * @return the new stream
+     * @since 1.2.1
+     */
+    public LongStream filterIndexed(IndexedLongPredicate predicate) {
+        return filterIndexed(0, 1, predicate);
+    }
+
+    /**
+     * Returns a {@code LongStream} with elements that satisfy the given {@code IndexedLongPredicate}.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * from: 4
+     * step: 3
+     * predicate: (index, value) -&gt; (index + value) &gt; 15
+     * stream: [1, 2,  3,  4,  0, 11]
+     * index:  [4, 7, 10, 13, 16, 19]
+     * sum:    [5, 9, 13, 17, 16, 30]
+     * filter: [          17, 16, 30]
+     * result: [4, 0, 11]
+     * </pre>
+     *
+     * @param from  the initial value of the index (inclusive)
+     * @param step  the step of the index
+     * @param predicate  the {@code IndexedLongPredicate} used to filter elements
+     * @return the new stream
+     * @since 1.2.1
+     */
+    public LongStream filterIndexed(int from, int step, IndexedLongPredicate predicate) {
+        return new LongStream(params, new LongFilterIndexed(
+                new PrimitiveIndexedIterator.OfLong(from, step, iterator),
+                predicate));
     }
 
     /**
