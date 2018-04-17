@@ -65,7 +65,7 @@ public class IteratorIssueTest {
         private final List<T> list;
         private int index;
 
-        public CustomIterator(List<T> list) {
+        CustomIterator(List<T> list) {
             this.list = list;
             index = 0;
         }

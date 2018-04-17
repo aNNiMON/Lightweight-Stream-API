@@ -100,7 +100,7 @@ public class LongConsumerTest {
         private final long factor;
         private final List<Long> buffer;
 
-        public Multiplier(List<Long> buffer, long factor) {
+        Multiplier(List<Long> buffer, long factor) {
             this.buffer = buffer;
             this.factor = factor;
         }
@@ -116,7 +116,7 @@ public class LongConsumerTest {
 
         private final DataOutputStream os;
 
-        public UnsafeConsumer(DataOutputStream os) {
+        UnsafeConsumer(DataOutputStream os) {
             this.os = os;
         }
 

@@ -108,7 +108,7 @@ public class IndexedConsumerTest {
     static class IntHolder {
         int value;
 
-        public IntHolder(int value) {
+        IntHolder(int value) {
             this.value = value;
         }
     }

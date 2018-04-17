@@ -63,7 +63,7 @@ public class DoubleSupplierTest {
 
         private final DataInputStream is;
 
-        public UnsafeSupplier(DataInputStream is) {
+        UnsafeSupplier(DataInputStream is) {
             this.is = is;
         }
 
