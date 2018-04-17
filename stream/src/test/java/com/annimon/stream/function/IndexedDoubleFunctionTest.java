@@ -23,15 +23,15 @@ public class IndexedDoubleFunctionTest {
     @Test
     public void testApply() {
         assertEquals(new IntPair<String>(1, "4.2"), wrapper.apply(1, 4.2));
-        assertEquals(new IntPair<String>(0, "0"), wrapper.apply(0, 0.0));
+        assertEquals(new IntPair<String>(0, "0.0"), wrapper.apply(0, 0.0));
     }
 
     @Test
     public void testWrap() {
         IndexedDoubleFunction<String> function = IndexedDoubleFunction.Util.wrap(toString);
 
-        assertEquals("60", function.apply(0, 60L));
-        assertEquals("-10", function.apply(10, -10L));
+        assertEquals("60.0", function.apply(0, 60.0));
+        assertEquals("-10.0", function.apply(10, -10.0));
     }
 
     private static final DoubleFunction<String> toString = Functions.convertDoubleToString();

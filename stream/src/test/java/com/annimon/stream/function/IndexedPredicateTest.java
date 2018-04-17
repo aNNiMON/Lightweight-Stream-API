@@ -18,7 +18,7 @@ public class IndexedPredicateTest {
     }
 
     @Test
-    public void testLessThan100() {
+    public void testEven() {
         assertTrue(areIndexAndValueEven.test(10, 10));
         assertFalse(areIndexAndValueEven.test(5, 10));
         assertFalse(areIndexAndValueEven.test(5, 5));
