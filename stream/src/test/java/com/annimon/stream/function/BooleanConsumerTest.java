@@ -52,7 +52,7 @@ public class BooleanConsumerTest {
         private final boolean factor;
         private final List<Boolean> buffer;
 
-        public BooleanOperator(List<Boolean> buffer, boolean factor) {
+        BooleanOperator(List<Boolean> buffer, boolean factor) {
             this.buffer = buffer;
             this.factor = factor;
         }

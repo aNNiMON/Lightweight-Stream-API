@@ -443,7 +443,7 @@ public class ExceptionalTest {
     @Test
     public void testEqualsReflexive() {
         final Exceptional<Integer> ten1 = Exceptional.of(tenSupplier);
-        assertTrue(ten1.equals(ten1));
+        assertEquals(ten1, ten1);
     }
 
     @Test
@@ -451,8 +451,8 @@ public class ExceptionalTest {
         final Exceptional<Integer> ten1 = Exceptional.of(tenSupplier);
         final Exceptional<Integer> ten2 = Exceptional.of(tenSupplier);
 
-        assertTrue(ten1.equals(ten2));
-        assertTrue(ten2.equals(ten1));
+        assertEquals(ten1, ten2);
+        assertEquals(ten2, ten1);
     }
 
     @Test
@@ -461,9 +461,9 @@ public class ExceptionalTest {
         final Exceptional<Integer> ten2 = Exceptional.of(tenSupplier);
         final Exceptional<Integer> ten3 = Exceptional.of(tenSupplier);
 
-        assertTrue(ten1.equals(ten2));
-        assertTrue(ten2.equals(ten3));
-        assertTrue(ten1.equals(ten3));
+        assertEquals(ten1, ten2);
+        assertEquals(ten2, ten3);
+        assertEquals(ten1, ten3);
     }
 
     @Test
@@ -482,7 +482,7 @@ public class ExceptionalTest {
             }
         });
 
-        assertFalse(ten1.equals(tenByte));
+        assertNotEquals(ten1, tenByte);
     }
 
     @Test
@@ -496,7 +496,7 @@ public class ExceptionalTest {
             }
         });
 
-        assertFalse(ten1.equals(ten2));
+        assertNotEquals(ten1, ten2);
     }
 
     @Test
@@ -504,7 +504,7 @@ public class ExceptionalTest {
         final Exceptional<Integer> ten = Exceptional.of(tenSupplier);
         final Exceptional<Integer> io = Exceptional.of(ioExceptionSupplier);
 
-        assertFalse(ten.equals(io));
+        assertNotEquals(ten, io);
     }
 
 
@@ -567,7 +567,7 @@ public class ExceptionalTest {
         throw new IOException();
     }
 
-    private static enum ExceptionType {
+    private enum ExceptionType {
         NULL_POINTER(new NullPointerException()),
         UNSUPPORTED_OPERATION(new UnsupportedOperationException()),
         FILE_NOT_FOUND(new FileNotFoundException()),
@@ -577,7 +577,7 @@ public class ExceptionalTest {
 
         private final Exception exception;
 
-        private ExceptionType(Exception exception) {
+        ExceptionType(Exception exception) {
             this.exception = exception;
         }
 

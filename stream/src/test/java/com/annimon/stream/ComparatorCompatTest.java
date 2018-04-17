@@ -296,7 +296,7 @@ public class ComparatorCompatTest {
         testStudentComparator(comparator);
     }
 
-    public void testStudentComparator(Comparator<Student> comparator) {
+    private void testStudentComparator(Comparator<Student> comparator) {
         List<Student> input = Arrays.asList(
                 Students.STEVE_CS_4,
                 Students.SERGEY_LAW_1,

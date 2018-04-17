@@ -3,8 +3,8 @@ package com.annimon.stream.intstreamtests;
 import com.annimon.stream.IntStream;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.IntStreamMatcher.assertIsEmpty;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 public final class OfArrayTest {
 
@@ -14,8 +14,8 @@ public final class OfArrayTest {
         int[] data2 = {42};
         int[] data3 = {};
 
-        assertTrue(IntStream.of(data1).count() == 5);
-        assertTrue(IntStream.of(data2).findFirst().getAsInt() == 42);
+        assertEquals(5, IntStream.of(data1).count());
+        assertEquals(42, IntStream.of(data2).findFirst().getAsInt());
         assertFalse(IntStream.of(data3).findFirst().isPresent());
     }
 

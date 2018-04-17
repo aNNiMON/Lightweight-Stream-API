@@ -501,7 +501,7 @@ public final class OptionalTest {
     @Test
     public void testEqualsReflexive() {
         final Optional<Student> s1 = Optional.of(student);
-        assertTrue(s1.equals(s1));
+        assertEquals(s1, s1);
     }
 
     @Test
@@ -509,8 +509,8 @@ public final class OptionalTest {
         final Optional<Student> s1 = Optional.of(student);
         final Optional<Student> s2 = Optional.of(student);
 
-        assertTrue(s1.equals(s2));
-        assertTrue(s2.equals(s1));
+        assertEquals(s1, s2);
+        assertEquals(s2, s1);
     }
 
     @Test
@@ -519,9 +519,9 @@ public final class OptionalTest {
         final Optional<Student> s2 = Optional.of(student);
         final Optional<Student> s3 = Optional.of(student);
 
-        assertTrue(s1.equals(s2));
-        assertTrue(s2.equals(s3));
-        assertTrue(s1.equals(s3));
+        assertEquals(s1, s2);
+        assertEquals(s2, s3);
+        assertEquals(s1, s3);
     }
 
     @Test
@@ -535,7 +535,7 @@ public final class OptionalTest {
         final Optional<Student> s1 = Optional.of(student);
         final Optional<Integer> optInt = Optional.of(10);
 
-        assertFalse(s1.equals(optInt));
+        assertNotEquals(s1, optInt);
     }
 
     @Test
@@ -543,7 +543,7 @@ public final class OptionalTest {
         final Optional<Integer> optInt = Optional.of(10);
         final Optional<Integer> optIntNullable = Optional.ofNullable(10);
 
-        assertTrue(optInt.equals(optIntNullable));
+        assertEquals(optInt, optIntNullable);
     }
 
     @Test
@@ -551,7 +551,7 @@ public final class OptionalTest {
         final Optional<Integer> empty1 = Optional.ofNullable(null);
         final Optional<Integer> empty2 = Optional.empty();
 
-        assertTrue(empty1.equals(empty2));
+        assertEquals(empty1, empty2);
     }
 
     @Test

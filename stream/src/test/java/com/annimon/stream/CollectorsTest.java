@@ -31,7 +31,7 @@ import static org.junit.Assert.*;
 public class CollectorsTest {
 
     @Rule
-    public ExpectedException expectedException = ExpectedException.none();
+    public final ExpectedException expectedException = ExpectedException.none();
 
     @Test
     public void testToCollection() {

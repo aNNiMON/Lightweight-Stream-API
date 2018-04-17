@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -17,8 +18,8 @@ public final class SortedTest {
 
     @Test
     public void testSorted() {
-        assertTrue(IntStream.empty().sorted().count() == 0);
-        assertTrue(IntStream.of(42).sorted().findFirst().getAsInt() == 42);
+        assertEquals(0, IntStream.empty().sorted().count());
+        assertEquals(42, IntStream.of(42).sorted().findFirst().getAsInt());
 
         final boolean[] wrongOrder = new boolean[]{false};
 

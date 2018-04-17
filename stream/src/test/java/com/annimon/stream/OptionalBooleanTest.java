@@ -13,11 +13,7 @@ import static com.annimon.stream.test.hamcrest.OptionalBooleanMatcher.hasValue;
 import static com.annimon.stream.test.hamcrest.OptionalBooleanMatcher.isEmpty;
 import static com.annimon.stream.test.hamcrest.OptionalBooleanMatcher.isPresent;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * Tests for {@link OptionalBoolean}
@@ -27,7 +23,7 @@ public class OptionalBooleanTest {
     @Test
     public void testGetWithPresentValue() {
         boolean value = OptionalBoolean.of(true).getAsBoolean();
-        assertEquals(true, value);
+        assertTrue(value);
     }
 
     @Test(expected = NoSuchElementException.class)
@@ -357,7 +353,7 @@ public class OptionalBooleanTest {
     @Test
     public void testOrElseThrowWithPresentValue() {
         boolean value = OptionalBoolean.of(true).orElseThrow();
-        assertEquals(true, value);
+        assertTrue(value);
     }
 
     @Test(expected = NoSuchElementException.class)
@@ -393,24 +389,24 @@ public class OptionalBooleanTest {
     @Test
     public void testEquals() {
         assertEquals(OptionalBoolean.empty(), OptionalBoolean.empty());
-        assertFalse(OptionalBoolean.empty().equals(Optional.empty()));
+        assertNotEquals(OptionalBoolean.empty(), Optional.empty());
 
         assertEquals(OptionalBoolean.of(true), OptionalBoolean.of(true));
 
-        assertFalse(OptionalBoolean.of(false).equals(OptionalBoolean.of(true)));
-        assertFalse(OptionalBoolean.of(false).equals(OptionalBoolean.empty()));
+        assertNotEquals(OptionalBoolean.of(false), OptionalBoolean.of(true));
+        assertNotEquals(OptionalBoolean.of(false), OptionalBoolean.empty());
     }
 
     @Test
     public void testSingleInstance() {
-        assertTrue(OptionalBoolean.of(true) == OptionalBoolean.of(true));
-        assertTrue(OptionalBoolean.of(true) == OptionalBoolean.of(false).map(new BooleanPredicate() {
+        assertSame(OptionalBoolean.of(true), OptionalBoolean.of(true));
+        assertSame(OptionalBoolean.of(true), OptionalBoolean.of(false).map(new BooleanPredicate() {
             @Override
             public boolean test(boolean value) {
                 return !value;
             }
         }));
-        assertTrue(OptionalBoolean.of(false) == OptionalBoolean.of(false));
+        assertSame(OptionalBoolean.of(false), OptionalBoolean.of(false));
     }
 
     @Test

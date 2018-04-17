@@ -143,7 +143,7 @@ public class OptionalIntTest {
                     }
                 })
                 .getAsInt();
-        assertEquals(10, (int) value);
+        assertEquals(10, value);
     }
 
     @Test
@@ -428,12 +428,12 @@ public class OptionalIntTest {
     @Test
     public void testEquals() {
         assertEquals(OptionalInt.empty(), OptionalInt.empty());
-        assertFalse(OptionalInt.empty().equals(Optional.empty()));
+        assertNotEquals(OptionalInt.empty(), Optional.empty());
 
         assertEquals(OptionalInt.of(42), OptionalInt.of(42));
 
-        assertFalse(OptionalInt.of(41).equals(OptionalInt.of(42)));
-        assertFalse(OptionalInt.of(0).equals(OptionalInt.empty()));
+        assertNotEquals(OptionalInt.of(41), OptionalInt.of(42));
+        assertNotEquals(OptionalInt.of(0), OptionalInt.empty());
     }
 
     @Test

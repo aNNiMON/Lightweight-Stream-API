@@ -3,7 +3,7 @@ package com.annimon.stream.intstreamtests;
 import com.annimon.stream.IntStream;
 import com.annimon.stream.function.IntSupplier;
 import org.junit.Test;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 public final class GenerateTest {
 
@@ -16,7 +16,7 @@ public final class GenerateTest {
             }
         };
 
-        assertTrue(IntStream.generate(s).findFirst().getAsInt() == 42);
+        assertEquals(42, IntStream.generate(s).findFirst().getAsInt());
     }
 
     @Test(expected = NullPointerException.class)

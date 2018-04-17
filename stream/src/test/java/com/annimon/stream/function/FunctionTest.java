@@ -53,7 +53,7 @@ public class FunctionTest {
         });
 
         assertEquals(10, (int) function.apply(false));
-        assertEquals(null, function.apply(true));
+        assertNull(function.apply(true));
     }
 
     @Test

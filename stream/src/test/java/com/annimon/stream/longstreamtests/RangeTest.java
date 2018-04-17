@@ -6,15 +6,15 @@ import static com.annimon.stream.test.hamcrest.LongStreamMatcher.elements;
 import static com.annimon.stream.test.hamcrest.LongStreamMatcher.isEmpty;
 import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 
 public final class RangeTest {
 
     @Test
     public void testStreamRange() {
-        assertTrue(LongStream.range(1, 5).sum() == 10);
-        assertTrue(LongStream.range(2, 2).count() == 0);
+        assertEquals(10, LongStream.range(1, 5).sum());
+        assertEquals(0, LongStream.range(2, 2).count());
     }
 
     @Test(timeout = 1000)

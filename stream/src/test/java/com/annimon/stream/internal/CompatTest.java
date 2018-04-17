@@ -2,6 +2,7 @@ package com.annimon.stream.internal;
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public final class CompatTest {
 
@@ -13,7 +14,7 @@ public final class CompatTest {
 
         assertEquals(5, copy.length);
         assertEquals("abc", copy[0]);
-        assertEquals(null, copy[3]);
+        assertNull(copy[3]);
 
         String[] empty = new String[0];
 

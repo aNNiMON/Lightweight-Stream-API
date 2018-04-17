@@ -8,17 +8,14 @@ import java.util.Random;
 import org.junit.Test;
 import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.instanceOf;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class RandomCompatTest {
 
     @Test
     public void testRandomConstructor() {
-        assertTrue(new RandomCompat(1).getRandom() != null);
-        assertTrue(new RandomCompat().getRandom() != null);
+        assertNotNull(new RandomCompat(1).getRandom());
+        assertNotNull(new RandomCompat().getRandom());
 
         final RandomCompat secureRandom = new RandomCompat(new SecureRandom());
         assertThat(secureRandom.getRandom(), instanceOf(SecureRandom.class));

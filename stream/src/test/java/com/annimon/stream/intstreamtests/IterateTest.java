@@ -6,6 +6,7 @@ import com.annimon.stream.function.IntUnaryOperator;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.IntStreamMatcher.assertElements;
 import static org.hamcrest.Matchers.arrayContaining;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public final class IterateTest {
@@ -19,7 +20,7 @@ public final class IterateTest {
             }
         };
 
-        assertTrue(IntStream.iterate(1, operator).limit(3).sum() == 6);
+        assertEquals(6, IntStream.iterate(1, operator).limit(3).sum());
         assertTrue(IntStream.iterate(1, operator).iterator().hasNext());
     }
 

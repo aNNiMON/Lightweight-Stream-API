@@ -96,7 +96,7 @@ public class IntConsumerTest {
 
         private final List<Integer> buffer;
 
-        public Increment(List<Integer> buffer) {
+        Increment(List<Integer> buffer) {
             this.buffer = buffer;
         }
 
@@ -112,7 +112,7 @@ public class IntConsumerTest {
         private final int factor;
         private final List<Integer> buffer;
 
-        public Multiplier(List<Integer> buffer, int factor) {
+        Multiplier(List<Integer> buffer, int factor) {
             this.buffer = buffer;
             this.factor = factor;
         }
@@ -128,7 +128,7 @@ public class IntConsumerTest {
 
         private final DataOutputStream os;
 
-        public UnsafeConsumer(DataOutputStream os) {
+        UnsafeConsumer(DataOutputStream os) {
             this.os = os;
         }
 

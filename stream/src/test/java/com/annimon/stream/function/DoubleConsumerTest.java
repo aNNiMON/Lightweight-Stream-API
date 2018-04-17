@@ -110,7 +110,7 @@ public class DoubleConsumerTest {
         private final double factor;
         private final List<Double> buffer;
 
-        public Multiplier(List<Double> buffer, double factor) {
+        Multiplier(List<Double> buffer, double factor) {
             this.buffer = buffer;
             this.factor = factor;
         }
@@ -126,7 +126,7 @@ public class DoubleConsumerTest {
 
         private final DataOutputStream os;
 
-        public UnsafeConsumer(DataOutputStream os) {
+        UnsafeConsumer(DataOutputStream os) {
             this.os = os;
         }
 
