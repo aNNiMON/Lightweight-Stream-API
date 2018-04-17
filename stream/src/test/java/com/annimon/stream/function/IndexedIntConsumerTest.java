@@ -1,7 +1,5 @@
 package com.annimon.stream.function;
 
-import com.annimon.stream.IntStream;
-import com.annimon.stream.Stream;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -48,16 +46,14 @@ public class IndexedIntConsumerTest {
 
     @Test
     public void testUtilAccept() {
-        final IntHolder countHolder = new IntHolder();
-        final IntHolder valueHolder = new IntHolder();
+        final IntHolder countHolder = new IntHolder(0);
+        final IntHolder valueHolder = new IntHolder(10);
         final IntConsumer indexConsumer = new IntConsumer() {
             @Override
             public void accept(int index) {
                 countHolder.accept(1);
             }
         };
-
-        valueHolder.value = 10;
         IndexedIntConsumer consumer = IndexedIntConsumer.Util
                 .accept(indexConsumer, valueHolder);
 
@@ -98,9 +94,13 @@ public class IndexedIntConsumerTest {
         }
     }
 
-    static class IntHolder implements IntConsumer {
+    private static class IntHolder implements IntConsumer {
 
         public int value;
+
+        IntHolder(int value) {
+            this.value = value;
+        }
 
         @Override
         public void accept(int value) {

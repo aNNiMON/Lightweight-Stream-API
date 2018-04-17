@@ -39,7 +39,7 @@ public class IntConsumerTest {
         consumer.accept(-10);
         consumer.accept(5);
         consumer.accept(118);
-        assertThat(buffer, contains(-9, -20,  6, 10,  119, 236));
+        assertThat(buffer, contains(-9, -20, 6, 10, 119, 236));
     }
 
     @Test
