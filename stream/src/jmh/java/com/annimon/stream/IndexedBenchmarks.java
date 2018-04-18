@@ -9,13 +9,14 @@ import org.openjdk.jmh.annotations.Param;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.infra.Blackhole;
 
 @State(Scope.Benchmark)
 public class IndexedBenchmarks {
 
     private int[] input;
 
-    @Param({"10000", "10000000"})
+    @Param({"10000000"})
     public int size;
 
     @Setup
@@ -27,8 +28,8 @@ public class IndexedBenchmarks {
     }
 
     @Benchmark
-    public long boxedFilterIndexed() {
-        return IntStream.of(input)
+    public void boxedFilterIndexed(Blackhole bh) {
+        bh.consume(IntStream.of(input)
                 .boxed()
                 .filterIndexed(new IndexedPredicate<Integer>() {
                     @Override
@@ -36,25 +37,25 @@ public class IndexedBenchmarks {
                         return index != value;
                     }
                 })
-                .count();
+                .count());
     }
 
     @Benchmark
-    public long primitiveFilterIndexed() {
-        return IntStream.of(input)
+    public void primitiveFilterIndexed(Blackhole bh) {
+        bh.consume(IntStream.of(input)
                 .filterIndexed(new IndexedIntPredicate() {
                     @Override
                     public boolean test(int index, int value) {
                         return index != value;
                     }
                 })
-                .count();
+                .count());
     }
 
 
     @Benchmark
-    public long boxedFilterIndexedAndMap() {
-        return IntStream.of(input)
+    public void boxedFilterIndexedAndMap(Blackhole bh) {
+        bh.consume(IntStream.of(input)
                 .boxed()
                 .filterIndexed(new IndexedPredicate<Integer>() {
                     @Override
@@ -74,12 +75,12 @@ public class IndexedBenchmarks {
                         return index != value;
                     }
                 })
-                .count();
+                .count());
     }
 
     @Benchmark
-    public long primitiveFilterIndexedAndMap() {
-        return IntStream.of(input)
+    public void primitiveFilterIndexedAndMap(Blackhole bh) {
+        bh.consume(IntStream.of(input)
                 .filterIndexed(new IndexedIntPredicate() {
                     @Override
                     public boolean test(int index, int value) {
@@ -98,6 +99,6 @@ public class IndexedBenchmarks {
                         return index != value;
                     }
                 })
-                .count();
+                .count());
     }
 }
