@@ -43,7 +43,7 @@ public interface IndexedIntConsumer {
 
         /**
          * Returns an {@code IndexedIntConsumer} that accepts {@code IntConsumer}
-         * for index and {@code IntConsumer} for object.
+         * for index and {@code IntConsumer} for value.
          *
          * <pre><code>
          *  if (c1 != null)
