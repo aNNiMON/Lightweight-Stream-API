@@ -423,6 +423,56 @@ public final class LongStream implements Closeable {
     }
 
     /**
+     * Returns a {@code LongStream} with elements that obtained
+     * by applying the given {@code IndexedLongUnaryOperator}.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * mapper: (index, value) -&gt; (index * value)
+     * stream: [1, 2, 3,  4]
+     * index:  [0, 1, 2,  3]
+     * result: [0, 2, 6, 12]
+     * </pre>
+     *
+     * @param mapper  the mapper function used to apply to each element
+     * @return the new stream
+     * @since 1.2.1
+     */
+    public LongStream mapIndexed(IndexedLongUnaryOperator mapper) {
+        return mapIndexed(0, 1, mapper);
+    }
+
+    /**
+     * Returns a {@code LongStream} with elements that obtained
+     * by applying the given {@code IndexedLongUnaryOperator}.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * from: -2
+     * step: 2
+     * mapper: (index, value) -&gt; (index * value)
+     * stream: [ 1, 2, 3,  4]
+     * index:  [-2, 0, 2,  4]
+     * result: [-2, 0, 6, 16]
+     * </pre>
+     *
+     * @param from  the initial value of the index (inclusive)
+     * @param step  the step of the index
+     * @param mapper  the mapper function used to apply to each element
+     * @return the new stream
+     * @since 1.2.1
+     */
+    public LongStream mapIndexed(int from, int step, IndexedLongUnaryOperator mapper) {
+        return new LongStream(params, new LongMapIndexed(
+                new PrimitiveIndexedIterator.OfLong(from, step, iterator),
+                mapper));
+    }
+
+    /**
      * Returns a {@code Stream} consisting of the results of applying the given
      * function to the elements of this stream.
      *
