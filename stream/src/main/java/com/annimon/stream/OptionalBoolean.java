@@ -40,6 +40,15 @@ public final class OptionalBoolean {
         return value ? TRUE : FALSE;
     }
 
+    /**
+     * Returns an {@code OptionalBoolean} with the specified value, or empty {@code OptionalBoolean} if value is null.
+     *
+     * @param value  the value which can be null
+     * @return an {@code OptionalBoolean}
+     */
+    public static OptionalBoolean ofNullable(Boolean value) {
+        return value == null ? EMPTY : of(value);
+    }
 
     private final boolean isPresent;
     private final boolean value;

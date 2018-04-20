@@ -28,6 +28,16 @@ public class OptionalLongTest {
         assertEquals(10, value);
     }
 
+    @Test
+    public void testOfNullableWithPresentValue() {
+        assertThat(OptionalLong.ofNullable(10L), hasValue(10L));
+    }
+
+    @Test
+    public void testOfNullableWithAbsentValue() {
+        assertThat(OptionalLong.ofNullable(null), isEmpty());
+    }
+
     @Test(expected = NoSuchElementException.class)
     public void testGetOnEmptyOptional() {
         OptionalLong.empty().getAsLong();
