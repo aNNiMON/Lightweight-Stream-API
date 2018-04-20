@@ -1,5 +1,6 @@
 package com.annimon.stream.iterator;
 
+import com.annimon.stream.iterator.PrimitiveIterators.*;
 import java.util.NoSuchElementException;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
@@ -18,70 +19,70 @@ public class PrimitiveIteratorTest {
 
     @Test
     public void testOfIntHasNext() {
-        assertFalse(new EmptyPrimitiveIteratorOfInt().hasNext());
-        assertTrue(new PrimitiveIteratorOfIntImpl().hasNext());
+        assertFalse(new OfIntEmpty().hasNext());
+        assertTrue(new OfInt().hasNext());
     }
 
     @Test
     public void testOfLongHasNext() {
-        assertFalse(new EmptyPrimitiveIteratorOfLong().hasNext());
-        assertTrue(new PrimitiveIteratorOfLongImpl().hasNext());
+        assertFalse(new OfLongEmpty().hasNext());
+        assertTrue(new OfLong().hasNext());
     }
 
     @Test
     public void testOfDoubleHasNext() {
-        assertFalse(new EmptyPrimitiveIteratorOfDouble().hasNext());
-        assertTrue(new PrimitiveIteratorOfDoubleImpl().hasNext());
+        assertFalse(new OfDoubleEmpty().hasNext());
+        assertTrue(new OfDouble().hasNext());
     }
 
 
     @Test(expected = NoSuchElementException.class)
     public void testOfIntNext() {
-        final PrimitiveIteratorOfIntImpl iterator = new PrimitiveIteratorOfIntImpl();
+        final OfInt iterator = new OfInt();
         assertEquals(iterator.nextInt(), 1);
         assertEquals(iterator.nextInt(), 2);
 
-        new EmptyPrimitiveIteratorOfInt().nextInt();
+        new OfIntEmpty().nextInt();
     }
 
     @Test(expected = NoSuchElementException.class)
     public void testOfLongNext() {
-        final PrimitiveIteratorOfLongImpl iterator = new PrimitiveIteratorOfLongImpl();
+        final OfLong iterator = new OfLong();
         assertEquals(iterator.nextLong(), 1);
         assertEquals(iterator.nextLong(), 2);
 
-        new EmptyPrimitiveIteratorOfLong().nextLong();
+        new OfLongEmpty().nextLong();
     }
 
     @Test(expected = NoSuchElementException.class)
     public void testOfDoubleNext() {
-        final PrimitiveIteratorOfDoubleImpl iterator = new PrimitiveIteratorOfDoubleImpl();
+        final OfDouble iterator = new OfDouble();
         assertThat(iterator.nextDouble(), closeTo(1.01, 0.00001));
         assertThat(iterator.nextDouble(), closeTo(2.02, 0.00001));
 
-        new EmptyPrimitiveIteratorOfDouble().nextDouble();
+        new OfDoubleEmpty().nextDouble();
     }
 
 
     @Test(expected = UnsupportedOperationException.class)
     public void testOfIntRemove() {
-        new EmptyPrimitiveIteratorOfInt().remove();
+        new OfIntEmpty().remove();
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void testOfLongRemove() {
-        new EmptyPrimitiveIteratorOfLong().remove();
+        new OfLongEmpty().remove();
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void testOfDoubleRemove() {
-        new EmptyPrimitiveIteratorOfDouble().remove();
+        new OfDoubleEmpty().remove();
     }
 
 
     @Test(expected = NoSuchElementException.class)
     public void testOfInt() {
-        final PrimitiveIteratorOfIntImpl iterator = new PrimitiveIteratorOfIntImpl();
+        final OfInt iterator = new OfInt();
         assertTrue(iterator.hasNext());
         assertTrue(iterator.hasNext());
         assertEquals(iterator.nextInt(), 1);
@@ -93,7 +94,7 @@ public class PrimitiveIteratorTest {
 
     @Test(expected = NoSuchElementException.class)
     public void testOfLong() {
-        final PrimitiveIteratorOfLongImpl iterator = new PrimitiveIteratorOfLongImpl();
+        final OfLong iterator = new OfLong();
         assertTrue(iterator.hasNext());
         assertTrue(iterator.hasNext());
         assertEquals(iterator.nextLong(), 1L);
@@ -105,7 +106,7 @@ public class PrimitiveIteratorTest {
 
     @Test(expected = NoSuchElementException.class)
     public void testOfDouble() {
-        final PrimitiveIteratorOfDoubleImpl iterator = new PrimitiveIteratorOfDoubleImpl();
+        final OfDouble iterator = new OfDouble();
         assertTrue(iterator.hasNext());
         assertTrue(iterator.hasNext());
         assertThat(iterator.nextDouble(), closeTo(1.01, 0.00001));
@@ -113,93 +114,5 @@ public class PrimitiveIteratorTest {
         assertFalse(iterator.hasNext());
         assertFalse(iterator.hasNext());
         iterator.nextDouble();
-    }
-
-    private class EmptyPrimitiveIteratorOfInt extends PrimitiveIterator.OfInt {
-
-        @Override
-        public boolean hasNext() {
-            return false;
-        }
-
-        @Override
-        public int nextInt() {
-           throw new NoSuchElementException();
-        }
-    }
-
-    private class PrimitiveIteratorOfIntImpl extends PrimitiveIterator.OfInt {
-
-        private int next = 0;
-
-        @Override
-        public boolean hasNext() {
-            return next < 2;
-        }
-
-        @Override
-        public int nextInt() {
-            if (!hasNext()) throw new NoSuchElementException();
-            return ++next;
-        }
-    }
-
-    private class EmptyPrimitiveIteratorOfLong extends PrimitiveIterator.OfLong {
-
-        @Override
-        public boolean hasNext() {
-            return false;
-        }
-
-        @Override
-        public long nextLong() {
-           throw new NoSuchElementException();
-        }
-    }
-
-    private class PrimitiveIteratorOfLongImpl extends PrimitiveIterator.OfLong {
-
-        private long next = 0;
-
-        @Override
-        public boolean hasNext() {
-            return next < 2;
-        }
-
-        @Override
-        public long nextLong() {
-            if (!hasNext()) throw new NoSuchElementException();
-            return ++next;
-        }
-    }
-
-    private class EmptyPrimitiveIteratorOfDouble extends PrimitiveIterator.OfDouble {
-
-        @Override
-        public boolean hasNext() {
-            return false;
-        }
-
-        @Override
-        public double nextDouble() {
-           throw new NoSuchElementException();
-        }
-    }
-
-    private class PrimitiveIteratorOfDoubleImpl extends PrimitiveIterator.OfDouble {
-
-        private double next = 0;
-
-        @Override
-        public boolean hasNext() {
-            return next < 2;
-        }
-
-        @Override
-        public double nextDouble() {
-            if (!hasNext()) throw new NoSuchElementException();
-            next += 1.01;
-            return next;
-        }
     }
 }

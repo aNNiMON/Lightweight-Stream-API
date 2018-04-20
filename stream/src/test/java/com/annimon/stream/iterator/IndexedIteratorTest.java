@@ -39,7 +39,7 @@ public class IndexedIteratorTest {
     }
 
     @Test
-    public void testxWithStartAndStep() {
+    public void testWithStartAndStep() {
         IndexedIterator<String> iterator = new IndexedIterator<String>(
                 100, -5, Arrays.asList("a", "b", "c").iterator());
 
