@@ -29,6 +29,16 @@ public class OptionalDoubleTest {
         assertThat(value, closeTo(10.123, 0.0001));
     }
 
+    @Test
+    public void testOfNullableWithPresentValue() {
+        assertThat(OptionalDouble.ofNullable(10.123), hasValueThat(closeTo(10.123, 0.0001)));
+    }
+
+    @Test
+    public void testOfNullableWithAbsentValue() {
+        assertThat(OptionalDouble.ofNullable(null), isEmpty());
+    }
+
     @Test(expected = NoSuchElementException.class)
     public void testGetOnEmptyOptional() {
         OptionalDouble.empty().getAsDouble();

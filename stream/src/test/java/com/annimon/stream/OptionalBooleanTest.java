@@ -26,6 +26,16 @@ public class OptionalBooleanTest {
         assertTrue(value);
     }
 
+    @Test
+    public void testOfNullableWithPresentValue() {
+        assertThat(OptionalBoolean.ofNullable(true), hasValue(true));
+    }
+
+    @Test
+    public void testOfNullableWithAbsentValue() {
+        assertThat(OptionalBoolean.ofNullable(null), isEmpty());
+    }
+
     @Test(expected = NoSuchElementException.class)
     public void testGetOnEmptyOptional() {
         OptionalBoolean.empty().getAsBoolean();

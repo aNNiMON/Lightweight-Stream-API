@@ -31,6 +31,16 @@ public class OptionalIntTest {
         assertEquals(10, value);
     }
 
+    @Test
+    public void testOfNullableWithPresentValue() {
+        assertThat(OptionalInt.ofNullable(10), hasValue(10));
+    }
+
+    @Test
+    public void testOfNullableWithAbsentValue() {
+        assertThat(OptionalInt.ofNullable(null), isEmpty());
+    }
+
     @Test(expected = NoSuchElementException.class)
     public void testGetOnEmptyOptional() {
         OptionalInt.empty().getAsInt();

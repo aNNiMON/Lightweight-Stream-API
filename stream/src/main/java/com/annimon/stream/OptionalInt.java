@@ -68,6 +68,16 @@ public final class OptionalInt {
     }
 
     /**
+     * Returns an {@code OptionalInt} with the specified value, or empty {@code OptionalInt} if value is null.
+     *
+     * @param value the value which can be null
+     * @return an {@code OptionalInt}
+     */
+    public static OptionalInt ofNullable(Integer value) {
+        return value == null ? EMPTY : new OptionalInt(value);
+    }
+
+    /**
      * If a value is present in this {@code OptionalInt}, returns the value,
      * otherwise throws {@code NoSuchElementException}.
      *

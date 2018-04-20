@@ -41,6 +41,15 @@ public final class OptionalDouble {
         return new OptionalDouble(value);
     }
 
+    /**
+     * Returns an {@code OptionalDouble} with the specified value, or empty {@code OptionalDouble} if value is null.
+     *
+     * @param value the value which can be null
+     * @return an {@code OptionalDouble}
+     */
+    public static OptionalDouble ofNullable(Double value) {
+        return value == null ? EMPTY : new OptionalDouble(value);
+    }
 
     private final boolean isPresent;
     private final double value;

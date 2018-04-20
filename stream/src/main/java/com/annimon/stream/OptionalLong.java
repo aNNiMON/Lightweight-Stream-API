@@ -40,6 +40,15 @@ public final class OptionalLong {
         return new OptionalLong(value);
     }
 
+    /**
+     * Returns an {@code OptionalLong} with the specified value, or empty {@code OptionalLong} if value is null.
+     *
+     * @param value the value which can be null
+     * @return an {@code OptionalLong}
+     */
+    public static OptionalLong ofNullable(Long value) {
+        return value == null ? EMPTY : new OptionalLong(value);
+    }
 
     private final boolean isPresent;
     private final long value;
