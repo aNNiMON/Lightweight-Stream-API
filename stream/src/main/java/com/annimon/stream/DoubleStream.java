@@ -770,6 +770,36 @@ public final class DoubleStream implements Closeable {
     }
 
     /**
+     * Performs the given indexed action on each element.
+     *
+     * <p>This is a terminal operation.
+     *
+     * @param action  the action to be performed on each element
+     * @since 1.2.1
+     */
+    public void forEachIndexed(IndexedDoubleConsumer action) {
+        forEachIndexed(0, 1, action);
+    }
+
+    /**
+     * Performs the given indexed action on each element.
+     *
+     * <p>This is a terminal operation.
+     *
+     * @param from  the initial value of the index (inclusive)
+     * @param step  the step of the index
+     * @param action  the action to be performed on each element
+     * @since 1.2.1
+     */
+    public void forEachIndexed(int from, int step, IndexedDoubleConsumer action) {
+        int index = from;
+        while (iterator.hasNext()) {
+            action.accept(index, iterator.nextDouble());
+            index += step;
+        }
+    }
+
+    /**
      * Performs a reduction on the elements of this stream, using the provided
      * identity value and an associative accumulation function, and returns the
      * reduced value.

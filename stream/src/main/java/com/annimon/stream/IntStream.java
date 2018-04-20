@@ -835,6 +835,36 @@ public final class IntStream implements Closeable {
     }
 
     /**
+     * Performs the given indexed action on each element.
+     *
+     * <p>This is a terminal operation.
+     *
+     * @param action  the action to be performed on each element
+     * @since 1.2.1
+     */
+    public void forEachIndexed(IndexedIntConsumer action) {
+        forEachIndexed(0, 1, action);
+    }
+
+    /**
+     * Performs the given indexed action on each element.
+     *
+     * <p>This is a terminal operation.
+     *
+     * @param from  the initial value of the index (inclusive)
+     * @param step  the step of the index
+     * @param action  the action to be performed on each element
+     * @since 1.2.1
+     */
+    public void forEachIndexed(int from, int step, IndexedIntConsumer action) {
+        int index = from;
+        while (iterator.hasNext()) {
+            action.accept(index, iterator.nextInt());
+            index += step;
+        }
+    }
+
+    /**
      * Performs a reduction on the elements of this stream, using the provided
      * identity value and an associative accumulation function, and returns the
      * reduced value.
