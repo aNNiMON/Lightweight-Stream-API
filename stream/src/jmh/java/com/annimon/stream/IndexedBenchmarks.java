@@ -1,9 +1,11 @@
 package com.annimon.stream;
 
+import com.annimon.stream.function.IndexedConsumer;
+import com.annimon.stream.function.IndexedFunction;
+import com.annimon.stream.function.IndexedIntConsumer;
 import com.annimon.stream.function.IndexedIntPredicate;
 import com.annimon.stream.function.IndexedPredicate;
-import com.annimon.stream.function.IntUnaryOperator;
-import com.annimon.stream.function.UnaryOperator;
+import com.annimon.stream.function.IntBinaryOperator;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.Param;
 import org.openjdk.jmh.annotations.Scope;
@@ -28,34 +30,8 @@ public class IndexedBenchmarks {
     }
 
     @Benchmark
-    public void boxedFilterIndexed(Blackhole bh) {
-        bh.consume(IntStream.of(input)
-                .boxed()
-                .filterIndexed(new IndexedPredicate<Integer>() {
-                    @Override
-                    public boolean test(int index, Integer value) {
-                        return index != value;
-                    }
-                })
-                .count());
-    }
-
-    @Benchmark
-    public void primitiveFilterIndexed(Blackhole bh) {
-        bh.consume(IntStream.of(input)
-                .filterIndexed(new IndexedIntPredicate() {
-                    @Override
-                    public boolean test(int index, int value) {
-                        return index != value;
-                    }
-                })
-                .count());
-    }
-
-
-    @Benchmark
-    public void boxedFilterIndexedAndMap(Blackhole bh) {
-        bh.consume(IntStream.of(input)
+    public void boxedIndexed(final Blackhole bh) {
+        IntStream.of(input)
                 .boxed()
                 .filterIndexed(new IndexedPredicate<Integer>() {
                     @Override
@@ -63,42 +39,42 @@ public class IndexedBenchmarks {
                         return index % 5 == 0;
                     }
                 })
-                .map(new UnaryOperator<Integer>() {
+                .mapIndexed(new IndexedFunction<Integer, Integer>() {
                     @Override
-                    public Integer apply(Integer value) {
-                        return value * 7;
+                    public Integer apply(int index, Integer value) {
+                        return (index + value) / 2;
                     }
                 })
-                .filterIndexed(new IndexedPredicate<Integer>() {
+                .forEachIndexed(new IndexedConsumer<Integer>() {
                     @Override
-                    public boolean test(int index, Integer value) {
-                        return index != value;
+                    public void accept(int index, Integer value) {
+                        bh.consume(index);
+                        bh.consume(value);
                     }
-                })
-                .count());
+                });
     }
 
     @Benchmark
-    public void primitiveFilterIndexedAndMap(Blackhole bh) {
-        bh.consume(IntStream.of(input)
+    public void primitiveIndexed(final Blackhole bh) {
+        IntStream.of(input)
                 .filterIndexed(new IndexedIntPredicate() {
                     @Override
                     public boolean test(int index, int value) {
                         return index % 5 == 0;
                     }
                 })
-                .map(new IntUnaryOperator() {
+                .mapIndexed(new IntBinaryOperator() {
                     @Override
-                    public int applyAsInt(int value) {
-                        return value * 7;
+                    public int applyAsInt(int index, int value) {
+                        return (index + value) / 2;
                     }
                 })
-                .filterIndexed(new IndexedIntPredicate() {
+                .forEachIndexed(new IndexedIntConsumer() {
                     @Override
-                    public boolean test(int index, int value) {
-                        return index != value;
+                    public void accept(int index, int value) {
+                        bh.consume(index);
+                        bh.consume(value);
                     }
-                })
-                .count());
+                });
     }
 }

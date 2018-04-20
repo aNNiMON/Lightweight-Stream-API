@@ -30,7 +30,7 @@ cobertura {
 }
 
 jmh {
-    benchmarkMode = ['Throughput', 'AverageTime']
+    benchmarkMode = ['Throughput']
     fork = 2
     threads = 2
     warmupIterations = 3
