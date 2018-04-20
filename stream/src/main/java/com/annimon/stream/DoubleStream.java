@@ -4,6 +4,7 @@ import com.annimon.stream.function.*;
 import com.annimon.stream.internal.Compose;
 import com.annimon.stream.internal.Operators;
 import com.annimon.stream.internal.Params;
+import com.annimon.stream.iterator.PrimitiveIndexedIterator;
 import com.annimon.stream.iterator.PrimitiveIterator;
 import com.annimon.stream.operator.*;
 import java.io.Closeable;
@@ -303,6 +304,58 @@ public final class DoubleStream implements Closeable {
     }
 
     /**
+     * Returns a {@code DoubleStream} with elements that satisfy the given {@code IndexedDoublePredicate}.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * predicate: (index, value) -&gt; (index + value) &gt; 6
+     * stream: [1, 2, 3, 4, 0, 11]
+     * index:  [0, 1, 2, 3, 4,  5]
+     * sum:    [1, 3, 5, 7, 4, 16]
+     * filter: [         7,    16]
+     * result: [4, 11]
+     * </pre>
+     *
+     * @param predicate  the {@code IndexedDoublePredicate} used to filter elements
+     * @return the new stream
+     * @since 1.2.1
+     */
+    public DoubleStream filterIndexed(IndexedDoublePredicate predicate) {
+        return filterIndexed(0, 1, predicate);
+    }
+
+    /**
+     * Returns a {@code DoubleStream} with elements that satisfy the given {@code IndexedDoublePredicate}.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * from: 4
+     * step: 3
+     * predicate: (index, value) -&gt; (index + value) &gt; 15
+     * stream: [1, 2,  3,  4,  0, 11]
+     * index:  [4, 7, 10, 13, 16, 19]
+     * sum:    [5, 9, 13, 17, 16, 30]
+     * filter: [          17, 16, 30]
+     * result: [4, 0, 11]
+     * </pre>
+     *
+     * @param from  the initial value of the index (inclusive)
+     * @param step  the step of the index
+     * @param predicate  the {@code IndexedDoublePredicate} used to filter elements
+     * @return the new stream
+     * @since 1.2.1
+     */
+    public DoubleStream filterIndexed(int from, int step, IndexedDoublePredicate predicate) {
+        return new DoubleStream(params, new DoubleFilterIndexed(
+                new PrimitiveIndexedIterator.OfDouble(from, step, iterator),
+                predicate));
+    }
+
+    /**
      * Returns {@code DoubleStream} with elements that does not satisfy the given predicate.
      *
      * <p> This is an intermediate operation.
@@ -333,6 +386,56 @@ public final class DoubleStream implements Closeable {
      */
     public DoubleStream map(final DoubleUnaryOperator mapper) {
         return new DoubleStream(params, new DoubleMap(iterator, mapper));
+    }
+
+    /**
+     * Returns a {@code DoubleStream} with elements that obtained
+     * by applying the given {@code IndexedDoubleUnaryOperator}.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * mapper: (index, value) -&gt; (index * value)
+     * stream: [1, 2, 3,  4]
+     * index:  [0, 1, 2,  3]
+     * result: [0, 2, 6, 12]
+     * </pre>
+     *
+     * @param mapper  the mapper function used to apply to each element
+     * @return the new stream
+     * @since 1.2.1
+     */
+    public DoubleStream mapIndexed(IndexedDoubleUnaryOperator mapper) {
+        return mapIndexed(0, 1, mapper);
+    }
+
+    /**
+     * Returns a {@code DoubleStream} with elements that obtained
+     * by applying the given {@code IndexedDoubleUnaryOperator}.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * from: -2
+     * step: 2
+     * mapper: (index, value) -&gt; (index * value)
+     * stream: [ 1, 2, 3,  4]
+     * index:  [-2, 0, 2,  4]
+     * result: [-2, 0, 6, 16]
+     * </pre>
+     *
+     * @param from  the initial value of the index (inclusive)
+     * @param step  the step of the index
+     * @param mapper  the mapper function used to apply to each element
+     * @return the new stream
+     * @since 1.2.1
+     */
+    public DoubleStream mapIndexed(int from, int step, IndexedDoubleUnaryOperator mapper) {
+        return new DoubleStream(params, new DoubleMapIndexed(
+                new PrimitiveIndexedIterator.OfDouble(from, step, iterator),
+                mapper));
     }
 
     /**
@@ -663,6 +766,36 @@ public final class DoubleStream implements Closeable {
     public void forEach(DoubleConsumer action) {
         while (iterator.hasNext()) {
             action.accept(iterator.nextDouble());
+        }
+    }
+
+    /**
+     * Performs the given indexed action on each element.
+     *
+     * <p>This is a terminal operation.
+     *
+     * @param action  the action to be performed on each element
+     * @since 1.2.1
+     */
+    public void forEachIndexed(IndexedDoubleConsumer action) {
+        forEachIndexed(0, 1, action);
+    }
+
+    /**
+     * Performs the given indexed action on each element.
+     *
+     * <p>This is a terminal operation.
+     *
+     * @param from  the initial value of the index (inclusive)
+     * @param step  the step of the index
+     * @param action  the action to be performed on each element
+     * @since 1.2.1
+     */
+    public void forEachIndexed(int from, int step, IndexedDoubleConsumer action) {
+        int index = from;
+        while (iterator.hasNext()) {
+            action.accept(index, iterator.nextDouble());
+            index += step;
         }
     }
 
