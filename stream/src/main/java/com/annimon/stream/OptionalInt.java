@@ -72,6 +72,7 @@ public final class OptionalInt {
      *
      * @param value the value which can be null
      * @return an {@code OptionalInt}
+     * @since 1.2.1
      */
     public static OptionalInt ofNullable(Integer value) {
         return value == null ? EMPTY : new OptionalInt(value);

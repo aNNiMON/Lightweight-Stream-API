@@ -45,6 +45,7 @@ public final class OptionalLong {
      *
      * @param value the value which can be null
      * @return an {@code OptionalLong}
+     * @since 1.2.1
      */
     public static OptionalLong ofNullable(Long value) {
         return value == null ? EMPTY : new OptionalLong(value);

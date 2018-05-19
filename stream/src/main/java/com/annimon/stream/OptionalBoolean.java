@@ -45,6 +45,7 @@ public final class OptionalBoolean {
      *
      * @param value  the value which can be null
      * @return an {@code OptionalBoolean}
+     * @since 1.2.1
      */
     public static OptionalBoolean ofNullable(Boolean value) {
         return value == null ? EMPTY : of(value);

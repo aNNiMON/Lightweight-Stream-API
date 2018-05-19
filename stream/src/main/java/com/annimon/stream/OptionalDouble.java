@@ -46,6 +46,7 @@ public final class OptionalDouble {
      *
      * @param value the value which can be null
      * @return an {@code OptionalDouble}
+     * @since 1.2.1
      */
     public static OptionalDouble ofNullable(Double value) {
         return value == null ? EMPTY : new OptionalDouble(value);
