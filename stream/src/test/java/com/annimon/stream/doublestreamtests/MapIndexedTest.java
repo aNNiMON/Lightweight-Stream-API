@@ -10,6 +10,7 @@ import static org.hamcrest.Matchers.closeTo;
 public final class MapIndexedTest {
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testMapIndexed() {
         DoubleStream.of(0.1, 0.3, 0.8, 1.2)
                 .mapIndexed(new IndexedDoubleUnaryOperator() {
@@ -27,6 +28,7 @@ public final class MapIndexedTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testMapIndexedWithStartAndStep() {
         DoubleStream.of(0.1, 0.3, 0.8, 1.2)
                 .mapIndexed(4, -2, new IndexedDoubleUnaryOperator() {

@@ -13,6 +13,7 @@ import static org.junit.Assert.assertThat;
 public final class ForEachIndexedTest {
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testForEachIndexed() {
         final List<IntPair<Long>> result = new ArrayList<IntPair<Long>>();
         LongStream.of(1000, 2000, 3000)
@@ -30,6 +31,7 @@ public final class ForEachIndexedTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testForEachIndexedWithStartAndStep() {
         final List<IntPair<Long>> result = new ArrayList<IntPair<Long>>();
         LongStream.of(1000, 2000, 3000)

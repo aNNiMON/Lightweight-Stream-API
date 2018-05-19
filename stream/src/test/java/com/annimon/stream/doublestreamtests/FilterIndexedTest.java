@@ -12,6 +12,7 @@ import static org.hamcrest.Matchers.closeTo;
 public final class FilterIndexedTest {
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testFilterIndexed() {
         DoubleStream.of(1, 12, 3, 8, 2)
                 .filterIndexed(new IndexedDoublePredicate() {
@@ -30,6 +31,7 @@ public final class FilterIndexedTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testFilterIndexedWithStartAndStep() {
         DoubleStream.of(1, 12, 3, 8, 2)
                 .filterIndexed(4, -2, new IndexedDoublePredicate() {
