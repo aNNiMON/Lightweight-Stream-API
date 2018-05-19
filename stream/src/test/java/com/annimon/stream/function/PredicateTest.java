@@ -33,6 +33,40 @@ public class PredicateTest {
         assertFalse(predicate.test(55));
         assertFalse(predicate.test(1002));
     }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testAndMultiplePredicates() {
+        Predicate<Integer> predicate = Predicate.Util.and(
+                new Predicate<Object>() {
+                    @Override
+                    public boolean test(Object value) {
+                        return value != null;
+                    }
+                },
+                lessThan100,
+                isEven,
+                new Predicate<Number>() {
+                    @Override
+                    public boolean test(Number value) {
+                        return value.intValue() > 0;
+                    }
+                },
+                new Predicate<Integer>() {
+                    @Override
+                    public boolean test(Integer value) {
+                        return (50 <= value) && (value <= 60);
+                    }
+                });
+
+        assertTrue(predicate.test(50));
+        assertFalse(predicate.test(55));
+        assertFalse(predicate.test(null));
+        assertFalse(predicate.test(-56));
+        assertTrue(predicate.test(60));
+        assertFalse(predicate.test(62));
+        assertFalse(predicate.test(1002));
+    }
     
     @Test
     public void testOrPredicate() {
@@ -42,6 +76,42 @@ public class PredicateTest {
         assertTrue(predicate.test(55));
         assertTrue(predicate.test(1002));
         assertFalse(predicate.test(1001));
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void testOrMultiplePredicates() {
+        Predicate<Integer> predicate = Predicate.Util.or(
+                new Predicate<Object>() {
+                    @Override
+                    public boolean test(Object value) {
+                        return value == null;
+                    }
+                },
+                lessThan100,
+                isEven,
+                new Predicate<Number>() {
+                    @Override
+                    public boolean test(Number value) {
+                        return value.intValue() > 2000;
+                    }
+                },
+                new Predicate<Integer>() {
+                    @Override
+                    public boolean test(Integer value) {
+                        return (50 <= value) && (value <= 60);
+                    }
+                });
+
+        assertTrue(predicate.test(50));
+        assertTrue(predicate.test(55));
+        assertTrue(predicate.test(-56));
+        assertTrue(predicate.test(60));
+        assertTrue(predicate.test(1002));
+        assertTrue(predicate.test(null));
+        assertFalse(predicate.test(1001));
+        assertFalse(predicate.test(1001));
+        assertTrue(predicate.test(2001));
     }
     
     @Test

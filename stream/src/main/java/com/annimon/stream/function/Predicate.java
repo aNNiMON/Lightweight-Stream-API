@@ -1,5 +1,8 @@
 package com.annimon.stream.function;
 
+import com.annimon.stream.Objects;
+import java.util.Arrays;
+
 /**
  * Represents a predicate (function with boolean type result).
  *
@@ -38,6 +41,38 @@ public interface Predicate<T> {
         }
 
         /**
+         * Applies logical AND to multiple predicates.
+         *
+         * @param <T> the type of the input to the function
+         * @param p1  the first predicate
+         * @param p2  the second predicate
+         * @param rest  the rest predicates
+         * @return a composed {@code Predicate}
+         * @throws NullPointerException if any of predicates are null
+         * @since 1.2.1
+         */
+        public static <T> Predicate<T> and(
+                final Predicate<? super T> p1,
+                final Predicate<? super T> p2,
+                final Predicate<? super T>... rest) {
+            Objects.requireNonNull(p1);
+            Objects.requireNonNull(p2);
+            Objects.requireNonNull(rest);
+            Objects.requireNonNullElements(Arrays.asList(rest));
+            return new Predicate<T>() {
+                @Override
+                public boolean test(T value) {
+                    boolean result = p1.test(value) && p2.test(value);
+                    if (!result) return false;
+                    for (Predicate<? super T> p : rest) {
+                        if (!p.test(value)) return false;
+                    }
+                    return true;
+                }
+            };
+        }
+
+        /**
          * Applies logical OR to predicates.
          *
          * @param <T> the type of the input to the function
@@ -51,6 +86,37 @@ public interface Predicate<T> {
                 @Override
                 public boolean test(T value) {
                     return p1.test(value) || p2.test(value);
+                }
+            };
+        }
+
+        /**
+         * Applies logical OR to multiple predicates.
+         *
+         * @param <T> the type of the input to the function
+         * @param p1  the first predicate
+         * @param p2  the second predicate
+         * @param rest  the rest predicates
+         * @return a composed {@code Predicate}
+         * @throws NullPointerException if any of predicates are null
+         */
+        public static <T> Predicate<T> or(
+                final Predicate<? super T> p1,
+                final Predicate<? super T> p2,
+                final Predicate<? super T>... rest) {
+            Objects.requireNonNull(p1);
+            Objects.requireNonNull(p2);
+            Objects.requireNonNull(rest);
+            Objects.requireNonNullElements(Arrays.asList(rest));
+            return new Predicate<T>() {
+                @Override
+                public boolean test(T value) {
+                    boolean result = p1.test(value) || p2.test(value);
+                    if (result) return true;
+                    for (Predicate<? super T> p : rest) {
+                        if (p.test(value)) return true;
+                    }
+                    return false;
                 }
             };
         }
