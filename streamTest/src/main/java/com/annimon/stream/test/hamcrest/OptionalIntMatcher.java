@@ -45,7 +45,7 @@ public class OptionalIntMatcher {
         @Override
         protected boolean matchesSafely(OptionalInt optional, Description mismatchDescription) {
             mismatchDescription.appendText("OptionalInt was present");
-            return !optional.isPresent();
+            return optional.isEmpty();
         }
 
         @Override
@@ -64,7 +64,7 @@ public class OptionalIntMatcher {
 
         @Override
         protected boolean matchesSafely(OptionalInt optional, Description mismatchDescription) {
-            if (!optional.isPresent()) {
+            if (optional.isEmpty()) {
                 mismatchDescription.appendText("OptionalInt was empty");
                 return false;
             }

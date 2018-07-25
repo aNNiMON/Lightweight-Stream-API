@@ -45,7 +45,7 @@ public class OptionalDoubleMatcher {
         @Override
         protected boolean matchesSafely(OptionalDouble optional, Description mismatchDescription) {
             mismatchDescription.appendText("OptionalDouble was present");
-            return !optional.isPresent();
+            return optional.isEmpty();
         }
 
         @Override
@@ -64,7 +64,7 @@ public class OptionalDoubleMatcher {
 
         @Override
         protected boolean matchesSafely(OptionalDouble optional, Description mismatchDescription) {
-            if (!optional.isPresent()) {
+            if (optional.isEmpty()) {
                 mismatchDescription.appendText("OptionalDouble was empty");
                 return false;
             }

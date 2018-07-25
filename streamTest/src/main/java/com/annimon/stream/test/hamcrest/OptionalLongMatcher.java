@@ -45,7 +45,7 @@ public class OptionalLongMatcher {
         @Override
         protected boolean matchesSafely(OptionalLong optional, Description mismatchDescription) {
             mismatchDescription.appendText("OptionalLong was present");
-            return !optional.isPresent();
+            return optional.isEmpty();
         }
 
         @Override
@@ -64,7 +64,7 @@ public class OptionalLongMatcher {
 
         @Override
         protected boolean matchesSafely(OptionalLong optional, Description mismatchDescription) {
-            if (!optional.isPresent()) {
+            if (optional.isEmpty()) {
                 mismatchDescription.appendText("OptionalLong was empty");
                 return false;
             }

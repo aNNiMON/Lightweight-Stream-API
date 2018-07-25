@@ -89,6 +89,16 @@ public class Optional<T> {
     }
 
     /**
+     * Checks the value is not present.
+     *
+     * @return {@code true} if a value is not present, {@code false} otherwise
+     * @since 1.2.1
+     */
+    public boolean isEmpty() {
+        return value == null;
+    }
+
+    /**
      * Invokes consumer function with value if present.
      *
      * @param consumer  the consumer function

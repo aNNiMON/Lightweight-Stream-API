@@ -88,6 +88,16 @@ public final class OptionalBoolean {
     }
 
     /**
+     * Checks the value is not present.
+     *
+     * @return {@code true} if a value is not present, {@code false} otherwise
+     * @since 1.2.1
+     */
+    public boolean isEmpty() {
+        return !isPresent;
+    }
+
+    /**
      * Invokes consumer function with value if present, otherwise does nothing.
      *
      * @param consumer  the consumer function to be executed if a value is present

@@ -41,7 +41,7 @@ public class OptionalMatcher {
 
         @Override
         public boolean matches(Optional<T> argument) {
-            return argument != null && !argument.isPresent();
+            return argument != null && argument.isEmpty();
         }
 
         @Override
