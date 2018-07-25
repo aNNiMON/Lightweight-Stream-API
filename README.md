@@ -186,7 +186,7 @@ Download [latest release](https://github.com/aNNiMON/Lightweight-Stream-API/rele
 <dependency>
   <groupId>com.annimon</groupId>
   <artifactId>stream</artifactId>
-  <version>1.2.0</version>
+  <version>1.2.1</version>
 </dependency>
 ```
 or Gradle:
@@ -194,11 +194,11 @@ or Gradle:
 ```groovy
 dependencies {
   ...
-  implementation 'com.annimon:stream:1.2.0'
+  implementation 'com.annimon:stream:1.2.1'
   ...
 }
 ```
 
-Also included version for **Java ME**. Checkout [javame branch](https://github.com/aNNiMON/Lightweight-Stream-API/tree/javame).
+or use latest unrealeased features with [JitPack](https://jitpack.io/#aNNiMON/Lightweight-Stream-API).
 
-For use lambda expressions in Java 6, Java 7 or Android, take a look at [Retrolambda](https://github.com/orfjackal/retrolambda) repository.
+Also included version for **Java ME**. Checkout [javame branch](https://github.com/aNNiMON/Lightweight-Stream-API/tree/javame).
