@@ -16,10 +16,8 @@ public final class Compose {
                     try {
                         b.run();
                     } catch (Throwable ignore) { }
-                    if (e1 instanceof RuntimeException) {
-                        throw (RuntimeException) e1;
-                    }
-                    throw (Error) e1;
+                    handleException(e1);
+                    return;
                 }
                 b.run();
             }
@@ -36,23 +34,25 @@ public final class Compose {
                     try {
                         b.close();
                     } catch (Throwable ignore) { }
-                    if (e1 instanceof RuntimeException) {
-                        throw (RuntimeException) e1;
-                    }
-                    throw (Error) e1;
+                    handleException(e1);
+                    return;
                 }
                 try {
                     b.close();
                 } catch (Throwable e2) {
-                    if (e2 instanceof RuntimeException) {
-                        throw (RuntimeException) e2;
-                    } else if (e2 instanceof Error) {
-                        throw (Error) e2;
-                    } else {
-                        throw new RuntimeException(e2);
-                    }
+                    handleException(e2);
                 }
             }
         };
+    }
+
+    private static void handleException(Throwable e) {
+        if (e instanceof RuntimeException) {
+            throw (RuntimeException) e;
+        } else if (e instanceof Error) {
+            throw (Error) e;
+        } else {
+            throw new RuntimeException(e);
+        }
     }
 }
