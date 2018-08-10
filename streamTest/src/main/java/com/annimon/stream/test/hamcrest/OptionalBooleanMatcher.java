@@ -45,7 +45,7 @@ public class OptionalBooleanMatcher {
         @Override
         protected boolean matchesSafely(OptionalBoolean optional, Description mismatchDescription) {
             mismatchDescription.appendText("OptionalBoolean was present");
-            return !optional.isPresent();
+            return optional.isEmpty();
         }
 
         @Override

@@ -17,7 +17,6 @@ public final class Compose {
                         b.run();
                     } catch (Throwable ignore) { }
                     handleException(e1);
-                    return;
                 }
                 b.run();
             }
@@ -35,7 +34,6 @@ public final class Compose {
                         b.close();
                     } catch (Throwable ignore) { }
                     handleException(e1);
-                    return;
                 }
                 try {
                     b.close();
@@ -46,7 +44,9 @@ public final class Compose {
         };
     }
 
-    private static void handleException(Throwable e) {
+    private static Throwable handleException(Throwable e) {
+        // Errors and runtime exceptions are thrown as is
+        // Checked exceptions are wrapped in RuntimeException
         if (e instanceof RuntimeException) {
             throw (RuntimeException) e;
         } else if (e instanceof Error) {
