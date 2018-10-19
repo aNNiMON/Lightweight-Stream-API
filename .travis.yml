@@ -1,4 +1,6 @@
 language: java
+sudo: false
+install: true
 
 jdk:
   - oraclejdk8
@@ -6,12 +8,15 @@ jdk:
   - oraclejdk10
   - oraclejdk11
 
+addons:
+  sonarcloud:
+    organization: "annimon-github"
+
 cache:
   directories:
     - $HOME/.m2
     - $HOME/.gradle
-
-sudo: false
+    - $HOME/.sonar/cache
 
 branches:
   except:
