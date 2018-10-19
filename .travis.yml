@@ -4,8 +4,6 @@ install: true
 
 jdk:
   - oraclejdk8
-  - oraclejdk9
-  - oraclejdk10
   - oraclejdk11
 
 addons:
@@ -26,5 +24,5 @@ before_install:
  - chmod +x gradlew
 
 after_success:
-  - ./gradlew cobertura coveralls
+  - ./gradlew cobertura coveralls sonarqube
 #  - mvn cobertura:cobertura coveralls:report
