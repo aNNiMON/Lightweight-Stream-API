@@ -6,7 +6,7 @@ Lightweight-Stream-API
 [![SonarCloud Status](https://sonarcloud.io/api/project_badges/measure?project=lightweight-stream-api&metric=alert_status)](https://sonarcloud.io/dashboard?id=lightweight-stream-api)
 [![SonarCloud Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=lightweight-stream-api&metric=sqale_rating)](https://sonarcloud.io/dashboard/?id=lightweight-stream-api)  
 [![Build Status](https://travis-ci.org/aNNiMON/Lightweight-Stream-API.svg?branch=master)](https://travis-ci.org/aNNiMON/Lightweight-Stream-API)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.annimon/stream/badge.svg?style=flat)](https://maven-badges.herokuapp.com/maven-central/com.annimon/stream)
+[![Maven Central](https://img.shields.io/maven-central/v/com.annimon/stream.svg)](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.annimon%22%20AND%20a%3A%22stream%22)
 [![JavaDocs](http://javadoc-badge.appspot.com/com.annimon/stream.svg?label=JavaDocs)](http://www.javadoc.io/doc/com.annimon/stream/)
 
 Stream API from Java 8 rewritten on iterators for Java 7 and below.
