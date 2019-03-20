@@ -10,6 +10,8 @@ import com.annimon.stream.operator.*;
 import java.io.Closeable;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A sequence of {@code double}-valued elements supporting aggregate operations.
@@ -41,6 +43,7 @@ public final class DoubleStream implements Closeable {
      *
      * @return the empty stream
      */
+    @NotNull
     public static DoubleStream empty() {
         return EMPTY;
     }
@@ -52,7 +55,8 @@ public final class DoubleStream implements Closeable {
      * @return the new {@code DoubleStream}
      * @throws NullPointerException if {@code iterator} is null
      */
-    public static DoubleStream of(PrimitiveIterator.OfDouble iterator) {
+    @NotNull
+    public static DoubleStream of(@NotNull PrimitiveIterator.OfDouble iterator) {
         Objects.requireNonNull(iterator);
         return new DoubleStream(iterator);
     }
@@ -64,7 +68,8 @@ public final class DoubleStream implements Closeable {
      * @return the new stream
      * @throws NullPointerException if {@code values} is null
      */
-    public static DoubleStream of(final double... values) {
+    @NotNull
+    public static DoubleStream of(@NotNull final double... values) {
         Objects.requireNonNull(values);
         if (values.length == 0) {
             return DoubleStream.empty();
@@ -78,6 +83,7 @@ public final class DoubleStream implements Closeable {
      * @param t  element of the stream
      * @return the new stream
      */
+    @NotNull
     public static DoubleStream of(final double t) {
         return new DoubleStream(new DoubleArray(new double[] { t }));
     }
@@ -89,7 +95,8 @@ public final class DoubleStream implements Closeable {
      * @return a new infinite sequential {@code DoubleStream}
      * @throws NullPointerException if {@code s} is null
      */
-    public static DoubleStream generate(final DoubleSupplier s) {
+    @NotNull
+    public static DoubleStream generate(@NotNull final DoubleSupplier s) {
         Objects.requireNonNull(s);
         return new DoubleStream(new DoubleGenerate(s));
     }
@@ -116,7 +123,9 @@ public final class DoubleStream implements Closeable {
      * @return a new sequential {@code DoubleStream}
      * @throws NullPointerException if {@code f} is null
      */
-    public static DoubleStream iterate(final double seed, final DoubleUnaryOperator f) {
+    @NotNull
+    public static DoubleStream iterate(final double seed,
+                                       @NotNull final DoubleUnaryOperator f) {
         Objects.requireNonNull(f);
         return new DoubleStream(new DoubleIterate(seed, f));
     }
@@ -140,8 +149,11 @@ public final class DoubleStream implements Closeable {
      * @throws NullPointerException if {@code op} is null
      * @since 1.1.5
      */
-    public static DoubleStream iterate(final double seed,
-            final DoublePredicate predicate, final DoubleUnaryOperator op) {
+    @NotNull
+    public static DoubleStream iterate(
+            final double seed,
+            @NotNull final DoublePredicate predicate,
+            @NotNull final DoubleUnaryOperator op) {
         Objects.requireNonNull(predicate);
         return iterate(seed, op).takeWhile(predicate);
     }
@@ -161,7 +173,10 @@ public final class DoubleStream implements Closeable {
      * @return the new concatenated stream
      * @throws NullPointerException if {@code a} or {@code b} is null
      */
-    public static DoubleStream concat(final DoubleStream a, final DoubleStream b) {
+    @NotNull
+    public static DoubleStream concat(
+            @NotNull final DoubleStream a,
+            @NotNull final DoubleStream b) {
         Objects.requireNonNull(a);
         Objects.requireNonNull(b);
         DoubleStream result = new DoubleStream(new DoubleConcat(a.iterator, b.iterator));
@@ -266,7 +281,8 @@ public final class DoubleStream implements Closeable {
      * @see Stream#custom(com.annimon.stream.function.Function)
      * @throws NullPointerException if {@code function} is null
      */
-    public <R> R custom(final Function<DoubleStream, R> function) {
+    @Nullable
+    public <R> R custom(@NotNull final Function<DoubleStream, R> function) {
         Objects.requireNonNull(function);
         return function.apply(this);
     }
@@ -280,6 +296,7 @@ public final class DoubleStream implements Closeable {
      * @return a {@code Stream} consistent of the elements of this stream,
      *         each boxed to an {@code Double}
      */
+    @NotNull
     public Stream<Double> boxed() {
         return new Stream<Double>(params, iterator);
     }
@@ -299,7 +316,8 @@ public final class DoubleStream implements Closeable {
      * @param predicate  the predicate used to filter elements
      * @return the new stream
      */
-    public DoubleStream filter(final DoublePredicate predicate) {
+    @NotNull
+    public DoubleStream filter(@NotNull final DoublePredicate predicate) {
         return new DoubleStream(params, new DoubleFilter(iterator, predicate));
     }
 
@@ -322,7 +340,8 @@ public final class DoubleStream implements Closeable {
      * @return the new stream
      * @since 1.2.1
      */
-    public DoubleStream filterIndexed(IndexedDoublePredicate predicate) {
+    @NotNull
+    public DoubleStream filterIndexed(@NotNull IndexedDoublePredicate predicate) {
         return filterIndexed(0, 1, predicate);
     }
 
@@ -349,7 +368,9 @@ public final class DoubleStream implements Closeable {
      * @return the new stream
      * @since 1.2.1
      */
-    public DoubleStream filterIndexed(int from, int step, IndexedDoublePredicate predicate) {
+    @NotNull
+    public DoubleStream filterIndexed(int from, int step,
+                                      @NotNull IndexedDoublePredicate predicate) {
         return new DoubleStream(params, new DoubleFilterIndexed(
                 new PrimitiveIndexedIterator.OfDouble(from, step, iterator),
                 predicate));
@@ -363,7 +384,8 @@ public final class DoubleStream implements Closeable {
      * @param predicate  the predicate used to filter elements
      * @return the new stream
      */
-    public DoubleStream filterNot(final DoublePredicate predicate) {
+    @NotNull
+    public DoubleStream filterNot(@NotNull final DoublePredicate predicate) {
         return filter(DoublePredicate.Util.negate(predicate));
     }
 
@@ -384,7 +406,8 @@ public final class DoubleStream implements Closeable {
      * @return the new stream
      * @see Stream#map(com.annimon.stream.function.Function)
      */
-    public DoubleStream map(final DoubleUnaryOperator mapper) {
+    @NotNull
+    public DoubleStream map(@NotNull final DoubleUnaryOperator mapper) {
         return new DoubleStream(params, new DoubleMap(iterator, mapper));
     }
 
@@ -406,7 +429,8 @@ public final class DoubleStream implements Closeable {
      * @return the new stream
      * @since 1.2.1
      */
-    public DoubleStream mapIndexed(IndexedDoubleUnaryOperator mapper) {
+    @NotNull
+    public DoubleStream mapIndexed(@NotNull IndexedDoubleUnaryOperator mapper) {
         return mapIndexed(0, 1, mapper);
     }
 
@@ -432,7 +456,9 @@ public final class DoubleStream implements Closeable {
      * @return the new stream
      * @since 1.2.1
      */
-    public DoubleStream mapIndexed(int from, int step, IndexedDoubleUnaryOperator mapper) {
+    @NotNull
+    public DoubleStream mapIndexed(int from, int step,
+                                   @NotNull IndexedDoubleUnaryOperator mapper) {
         return new DoubleStream(params, new DoubleMapIndexed(
                 new PrimitiveIndexedIterator.OfDouble(from, step, iterator),
                 mapper));
@@ -448,7 +474,8 @@ public final class DoubleStream implements Closeable {
      * @param mapper  the mapper function used to apply to each element
      * @return the new {@code Stream}
      */
-    public <R> Stream<R> mapToObj(final DoubleFunction<? extends R> mapper) {
+    @NotNull
+    public <R> Stream<R> mapToObj(@NotNull final DoubleFunction<? extends R> mapper) {
         return new Stream<R>(params, new DoubleMapToObj<R>(iterator, mapper));
     }
 
@@ -461,7 +488,8 @@ public final class DoubleStream implements Closeable {
      * @param mapper  the mapper function used to apply to each element
      * @return the new {@code IntStream}
      */
-    public IntStream mapToInt(final DoubleToIntFunction mapper) {
+    @NotNull
+    public IntStream mapToInt(@NotNull final DoubleToIntFunction mapper) {
         return new IntStream(params, new DoubleMapToInt(iterator, mapper));
     }
 
@@ -474,7 +502,8 @@ public final class DoubleStream implements Closeable {
      * @param mapper  the mapper function used to apply to each element
      * @return the new {@code LongStream}
      */
-    public LongStream mapToLong(final DoubleToLongFunction mapper) {
+    @NotNull
+    public LongStream mapToLong(@NotNull final DoubleToLongFunction mapper) {
         return new LongStream(params, new DoubleMapToLong(iterator, mapper));
     }
 
@@ -496,7 +525,8 @@ public final class DoubleStream implements Closeable {
      * @return the new stream
      * @see Stream#flatMap(com.annimon.stream.function.Function)
      */
-    public DoubleStream flatMap(final DoubleFunction<? extends DoubleStream> mapper) {
+    @NotNull
+    public DoubleStream flatMap(@NotNull final DoubleFunction<? extends DoubleStream> mapper) {
         return new DoubleStream(params, new DoubleFlatMap(iterator, mapper));
     }
 
@@ -513,6 +543,7 @@ public final class DoubleStream implements Closeable {
      *
      * @return the new stream
      */
+    @NotNull
     public DoubleStream distinct() {
         return boxed().distinct().mapToDouble(UNBOX_FUNCTION);
     }
@@ -530,6 +561,7 @@ public final class DoubleStream implements Closeable {
      *
      * @return the new stream
      */
+    @NotNull
     public DoubleStream sorted() {
         return new DoubleStream(params, new DoubleSorted(iterator));
     }
@@ -550,7 +582,8 @@ public final class DoubleStream implements Closeable {
      * @param comparator  the {@code Comparator} to compare elements
      * @return the new {@code DoubleStream}
      */
-    public DoubleStream sorted(Comparator<Double> comparator) {
+    @NotNull
+    public DoubleStream sorted(@NotNull Comparator<Double> comparator) {
         return boxed().sorted(comparator).mapToDouble(UNBOX_FUNCTION);
     }
 
@@ -571,6 +604,7 @@ public final class DoubleStream implements Closeable {
      * @throws IllegalArgumentException if {@code stepWidth} is zero or negative
      * @see Stream#sample(int)
      */
+    @NotNull
     public DoubleStream sample(final int stepWidth) {
         if (stepWidth <= 0) throw new IllegalArgumentException("stepWidth cannot be zero or negative");
         if (stepWidth == 1) return this;
@@ -585,7 +619,8 @@ public final class DoubleStream implements Closeable {
      * @param action the action to be performed on each element
      * @return the new stream
      */
-    public DoubleStream peek(final DoubleConsumer action) {
+    @NotNull
+    public DoubleStream peek(@NotNull final DoubleConsumer action) {
         return new DoubleStream(params, new DoublePeek(iterator, action));
     }
 
@@ -609,7 +644,8 @@ public final class DoubleStream implements Closeable {
      * @throws NullPointerException if {@code accumulator} is null
      * @since 1.1.6
      */
-    public DoubleStream scan(final DoubleBinaryOperator accumulator) {
+    @NotNull
+    public DoubleStream scan(@NotNull final DoubleBinaryOperator accumulator) {
         Objects.requireNonNull(accumulator);
         return new DoubleStream(params, new DoubleScan(iterator, accumulator));
     }
@@ -636,7 +672,9 @@ public final class DoubleStream implements Closeable {
      * @throws NullPointerException if {@code accumulator} is null
      * @since 1.1.6
      */
-    public DoubleStream scan(final double identity, final DoubleBinaryOperator accumulator) {
+    @NotNull
+    public DoubleStream scan(final double identity,
+                             @NotNull final DoubleBinaryOperator accumulator) {
         Objects.requireNonNull(accumulator);
         return new DoubleStream(params, new DoubleScanIdentity(iterator, identity, accumulator));
     }
@@ -656,7 +694,8 @@ public final class DoubleStream implements Closeable {
      * @param predicate  the predicate used to take elements
      * @return the new {@code DoubleStream}
      */
-    public DoubleStream takeWhile(final DoublePredicate predicate) {
+    @NotNull
+    public DoubleStream takeWhile(@NotNull final DoublePredicate predicate) {
         return new DoubleStream(params, new DoubleTakeWhile(iterator, predicate));
     }
 
@@ -678,7 +717,8 @@ public final class DoubleStream implements Closeable {
      * @return the new {@code DoubleStream}
      * @since 1.1.6
      */
-    public DoubleStream takeUntil(final DoublePredicate stopPredicate) {
+    @NotNull
+    public DoubleStream takeUntil(@NotNull final DoublePredicate stopPredicate) {
         return new DoubleStream(params, new DoubleTakeUntil(iterator, stopPredicate));
     }
 
@@ -697,7 +737,8 @@ public final class DoubleStream implements Closeable {
      * @param predicate  the predicate used to drop elements
      * @return the new {@code DoubleStream}
      */
-    public DoubleStream dropWhile(final DoublePredicate predicate) {
+    @NotNull
+    public DoubleStream dropWhile(@NotNull final DoublePredicate predicate) {
         return new DoubleStream(params, new DoubleDropWhile(iterator, predicate));
     }
 
@@ -722,6 +763,7 @@ public final class DoubleStream implements Closeable {
      * @return the new stream
      * @throws IllegalArgumentException if {@code maxSize} is negative
      */
+    @NotNull
     public DoubleStream limit(final long maxSize) {
         if (maxSize < 0) throw new IllegalArgumentException("maxSize cannot be negative");
         if (maxSize == 0) return DoubleStream.empty();
@@ -750,6 +792,7 @@ public final class DoubleStream implements Closeable {
      * @return the new stream
      * @throws IllegalArgumentException if {@code n} is negative
      */
+    @NotNull
     public DoubleStream skip(final long n) {
         if (n < 0) throw new IllegalArgumentException("n cannot be negative");
         if (n == 0) return this;
@@ -763,7 +806,7 @@ public final class DoubleStream implements Closeable {
      *
      * @param action  the action to be performed on each element
      */
-    public void forEach(DoubleConsumer action) {
+    public void forEach(@NotNull DoubleConsumer action) {
         while (iterator.hasNext()) {
             action.accept(iterator.nextDouble());
         }
@@ -777,7 +820,7 @@ public final class DoubleStream implements Closeable {
      * @param action  the action to be performed on each element
      * @since 1.2.1
      */
-    public void forEachIndexed(IndexedDoubleConsumer action) {
+    public void forEachIndexed(@NotNull IndexedDoubleConsumer action) {
         forEachIndexed(0, 1, action);
     }
 
@@ -791,7 +834,8 @@ public final class DoubleStream implements Closeable {
      * @param action  the action to be performed on each element
      * @since 1.2.1
      */
-    public void forEachIndexed(int from, int step, IndexedDoubleConsumer action) {
+    public void forEachIndexed(int from, int step,
+                               @NotNull IndexedDoubleConsumer action) {
         int index = from;
         while (iterator.hasNext()) {
             action.accept(index, iterator.nextDouble());
@@ -826,7 +870,7 @@ public final class DoubleStream implements Closeable {
      * @see #min()
      * @see #max()
      */
-    public double reduce(double identity, DoubleBinaryOperator accumulator) {
+    public double reduce(double identity, @NotNull DoubleBinaryOperator accumulator) {
         double result = identity;
         while (iterator.hasNext()) {
             final double value = iterator.nextDouble();
@@ -848,7 +892,8 @@ public final class DoubleStream implements Closeable {
      * @return the result of the reduction
      * @see #reduce(com.annimon.stream.function.DoubleBinaryOperator)
      */
-    public OptionalDouble reduce(DoubleBinaryOperator accumulator) {
+    @NotNull
+    public OptionalDouble reduce(@NotNull DoubleBinaryOperator accumulator) {
         boolean foundAny = false;
         double result = 0;
         while (iterator.hasNext()) {
@@ -870,6 +915,7 @@ public final class DoubleStream implements Closeable {
      *
      * @return an array containing the elements of this stream
      */
+    @NotNull
     public double[] toArray() {
         return Operators.toDoubleArray(iterator);
     }
@@ -885,7 +931,9 @@ public final class DoubleStream implements Closeable {
      * @return the result of collect elements
      * @see Stream#collect(com.annimon.stream.function.Supplier, com.annimon.stream.function.BiConsumer)
      */
-    public <R> R collect(Supplier<R> supplier, ObjDoubleConsumer<R> accumulator) {
+    @Nullable
+    public <R> R collect(@NotNull Supplier<R> supplier,
+                         @NotNull ObjDoubleConsumer<R> accumulator) {
         final R result = supplier.get();
         while (iterator.hasNext()) {
             final double value = iterator.nextDouble();
@@ -915,6 +963,7 @@ public final class DoubleStream implements Closeable {
      *
      * @return the minimum element
      */
+    @NotNull
     public OptionalDouble min() {
         return reduce(new DoubleBinaryOperator() {
             @Override
@@ -932,6 +981,7 @@ public final class DoubleStream implements Closeable {
      *
      * @return the maximum element
      */
+    @NotNull
     public OptionalDouble max() {
         return reduce(new DoubleBinaryOperator() {
             @Override
@@ -964,6 +1014,7 @@ public final class DoubleStream implements Closeable {
      *
      * @return the average of elements in this stream
      */
+    @NotNull
     public OptionalDouble average() {
         long count = 0;
         double sum = 0d;
@@ -998,7 +1049,7 @@ public final class DoubleStream implements Closeable {
      * @return {@code true} if any elements of the stream match the provided
      *         predicate, otherwise {@code false}
      */
-    public boolean anyMatch(DoublePredicate predicate) {
+    public boolean anyMatch(@NotNull DoublePredicate predicate) {
         while (iterator.hasNext()) {
             if (predicate.test(iterator.nextDouble()))
                 return true;
@@ -1029,7 +1080,7 @@ public final class DoubleStream implements Closeable {
      * @return {@code true} if either all elements of the stream match the
      *         provided predicate or the stream is empty, otherwise {@code false}
      */
-    public boolean allMatch(DoublePredicate predicate) {
+    public boolean allMatch(@NotNull DoublePredicate predicate) {
         while (iterator.hasNext()) {
             if (!predicate.test(iterator.nextDouble()))
                 return false;
@@ -1060,7 +1111,7 @@ public final class DoubleStream implements Closeable {
      * @return {@code true} if either no elements of the stream match the
      *         provided predicate or the stream is empty, otherwise {@code false}
      */
-    public boolean noneMatch(DoublePredicate predicate) {
+    public boolean noneMatch(@NotNull DoublePredicate predicate) {
         while (iterator.hasNext()) {
             if (predicate.test(iterator.nextDouble()))
                 return false;
@@ -1077,6 +1128,7 @@ public final class DoubleStream implements Closeable {
      * @return an {@code OptionalDouble} with first element
      *         or {@code OptionalDouble.empty()} if stream is empty
      */
+    @NotNull
     public OptionalDouble findFirst() {
         if (iterator.hasNext()) {
             return OptionalDouble.of(iterator.nextDouble());
@@ -1094,6 +1146,7 @@ public final class DoubleStream implements Closeable {
      *         or {@code OptionalDouble.empty()} if the stream is empty
      * @since 1.1.8
      */
+    @NotNull
     public OptionalDouble findLast() {
         return reduce(new DoubleBinaryOperator() {
             @Override
@@ -1161,6 +1214,7 @@ public final class DoubleStream implements Closeable {
      *         or {@code OptionalDouble.empty()} if stream is empty
      * @throws IllegalStateException if stream contains more than one element
      */
+    @NotNull
     public OptionalDouble findSingle() {
         if (!iterator.hasNext()) {
             return OptionalDouble.empty();
@@ -1182,7 +1236,8 @@ public final class DoubleStream implements Closeable {
      * @return the new stream with the close handler
      * @since 1.1.8
      */
-    public DoubleStream onClose(final Runnable closeHandler) {
+    @NotNull
+    public DoubleStream onClose(@NotNull final Runnable closeHandler) {
         Objects.requireNonNull(closeHandler);
         final Params newParams;
         if (params == null) {

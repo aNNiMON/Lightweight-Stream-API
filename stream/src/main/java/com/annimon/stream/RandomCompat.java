@@ -4,6 +4,7 @@ import com.annimon.stream.function.DoubleSupplier;
 import com.annimon.stream.function.IntSupplier;
 import com.annimon.stream.function.LongSupplier;
 import java.util.Random;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Backported stream apis from {@link java.util.Random} class.
@@ -11,6 +12,7 @@ import java.util.Random;
 @SuppressWarnings("WeakerAccess")
 public final class RandomCompat {
 
+    @NotNull
     private final Random random;
 
     /**
@@ -34,7 +36,7 @@ public final class RandomCompat {
      *
      * @param random  {@code Random} instance
      */
-    public RandomCompat(Random random) {
+    public RandomCompat(@NotNull Random random) {
         this.random = random;
     }
 
@@ -43,6 +45,7 @@ public final class RandomCompat {
      *
      * @return {@link java.util.Random} object instance
      */
+    @NotNull
     public Random getRandom() {
         return random;
     }
@@ -59,6 +62,7 @@ public final class RandomCompat {
      * @throws IllegalArgumentException if {@code streamSize} is
      *         less than zero
      */
+    @NotNull
     public IntStream ints(long streamSize) {
         if (streamSize < 0L) throw new IllegalArgumentException();
         if (streamSize == 0L) {
@@ -80,6 +84,7 @@ public final class RandomCompat {
      * @throws IllegalArgumentException if {@code streamSize} is
      *         less than zero
      */
+    @NotNull
     public LongStream longs(long streamSize) {
         if (streamSize < 0L) throw new IllegalArgumentException();
         if (streamSize == 0L) {
@@ -101,6 +106,7 @@ public final class RandomCompat {
      * @throws IllegalArgumentException if {@code streamSize} is
      *         less than zero
      */
+    @NotNull
     public DoubleStream doubles(long streamSize) {
         if (streamSize < 0L) throw new IllegalArgumentException();
         if (streamSize == 0L) {
@@ -119,6 +125,7 @@ public final class RandomCompat {
      *
      * @return a stream of pseudorandom {@code int} values
      */
+    @NotNull
     public IntStream ints() {
         return IntStream.generate(new IntSupplier() {
             @Override
@@ -137,6 +144,7 @@ public final class RandomCompat {
      *
      * @return a stream of pseudorandom {@code long} values
      */
+    @NotNull
     public LongStream longs() {
         return LongStream.generate(new LongSupplier() {
             @Override
@@ -155,6 +163,7 @@ public final class RandomCompat {
      *
      * @return a stream of pseudorandom {@code double} values
      */
+    @NotNull
     public DoubleStream doubles() {
         return DoubleStream.generate(new DoubleSupplier() {
             @Override
@@ -178,6 +187,7 @@ public final class RandomCompat {
      *         less than zero, or {@code randomNumberOrigin} is
      *         greater than or equal to {@code randomNumberBound}
      */
+    @NotNull
     public IntStream ints(long streamSize, final int randomNumberOrigin, final int randomNumberBound) {
         if (streamSize < 0L) throw new IllegalArgumentException();
         if (streamSize == 0L) {
@@ -200,6 +210,7 @@ public final class RandomCompat {
      *         less than zero, or {@code randomNumberOrigin} is
      *         greater than or equal to {@code randomNumberBound}
      */
+    @NotNull
     public LongStream longs(long streamSize,
             final long randomNumberOrigin, final long randomNumberBound) {
         if (streamSize < 0L) throw new IllegalArgumentException();
@@ -223,6 +234,7 @@ public final class RandomCompat {
      *         less than zero, or {@code randomNumberOrigin} is
      *         greater than or equal to {@code randomNumberBound}
      */
+    @NotNull
     public DoubleStream doubles(long streamSize,
             final double randomNumberOrigin, final double randomNumberBound) {
         if (streamSize < 0L) throw new IllegalArgumentException();
@@ -243,6 +255,7 @@ public final class RandomCompat {
      * @throws IllegalArgumentException if {@code randomNumberOrigin}
      *         is greater than or equal to {@code randomNumberBound}
      */
+    @NotNull
     public IntStream ints(final int randomNumberOrigin, final int randomNumberBound) {
         if (randomNumberOrigin >= randomNumberBound) {
             throw new IllegalArgumentException();
@@ -277,6 +290,7 @@ public final class RandomCompat {
      * @throws IllegalArgumentException if {@code randomNumberOrigin}
      *         is greater than or equal to {@code randomNumberBound}
      */
+    @NotNull
     public LongStream longs(final long randomNumberOrigin, final long randomNumberBound) {
         if (randomNumberOrigin >= randomNumberBound) {
             throw new IllegalArgumentException();
@@ -321,6 +335,7 @@ public final class RandomCompat {
      * @throws IllegalArgumentException if {@code randomNumberOrigin}
      *         is greater than or equal to {@code randomNumberBound}
      */
+    @NotNull
     public DoubleStream doubles(final double randomNumberOrigin, final double randomNumberBound) {
         if (randomNumberOrigin >= randomNumberBound) {
             throw new IllegalArgumentException();

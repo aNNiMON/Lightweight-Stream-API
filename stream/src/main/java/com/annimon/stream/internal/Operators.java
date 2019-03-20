@@ -5,12 +5,14 @@ import com.annimon.stream.iterator.PrimitiveIterator;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 public final class Operators {
 
     private Operators() {}
 
-    public static <T> List<T> toList(Iterator<? extends T> iterator) {
+    @NotNull
+    public static <T> List<T> toList(@NotNull Iterator<? extends T> iterator) {
         final List<T> result = new ArrayList<T>();
         while (iterator.hasNext()) {
             result.add(iterator.next());
@@ -18,8 +20,10 @@ public final class Operators {
         return result;
     }
 
+    @NotNull
     @SuppressWarnings("unchecked")
-    public static <T, R> R[] toArray(Iterator<? extends T> iterator, IntFunction<R[]> generator) {
+    public static <T, R> R[] toArray(@NotNull Iterator<? extends T> iterator,
+                                     @NotNull IntFunction<R[]> generator) {
         final List<T> container = Operators.<T>toList(iterator);
         final int size = container.size();
 
@@ -34,7 +38,8 @@ public final class Operators {
         return boxed;
     }
 
-    public static int[] toIntArray(PrimitiveIterator.OfInt iterator) {
+    @NotNull
+    public static int[] toIntArray(@NotNull PrimitiveIterator.OfInt iterator) {
         final SpinedBuffer.OfInt b = new SpinedBuffer.OfInt();
         while (iterator.hasNext()) {
             b.accept(iterator.nextInt());
@@ -42,7 +47,8 @@ public final class Operators {
         return b.asPrimitiveArray();
     }
 
-    public static long[] toLongArray(PrimitiveIterator.OfLong iterator) {
+    @NotNull
+    public static long[] toLongArray(@NotNull PrimitiveIterator.OfLong iterator) {
         final SpinedBuffer.OfLong b = new SpinedBuffer.OfLong();
         while (iterator.hasNext()) {
             b.accept(iterator.nextLong());
@@ -50,7 +56,8 @@ public final class Operators {
         return b.asPrimitiveArray();
     }
 
-    public static double[] toDoubleArray(PrimitiveIterator.OfDouble iterator) {
+    @NotNull
+    public static double[] toDoubleArray(@NotNull PrimitiveIterator.OfDouble iterator) {
         final SpinedBuffer.OfDouble b = new SpinedBuffer.OfDouble();
         while (iterator.hasNext()) {
             b.accept(iterator.nextDouble());

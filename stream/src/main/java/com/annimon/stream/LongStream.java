@@ -10,6 +10,8 @@ import com.annimon.stream.operator.*;
 import java.io.Closeable;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A sequence of {@code long}-valued elements supporting aggregate operations.
@@ -41,6 +43,7 @@ public final class LongStream implements Closeable {
      *
      * @return the empty stream
      */
+    @NotNull
     public static LongStream empty() {
         return EMPTY;
     }
@@ -52,7 +55,8 @@ public final class LongStream implements Closeable {
      * @return the new {@code LongStream}
      * @throws NullPointerException if {@code iterator} is null
      */
-    public static LongStream of(PrimitiveIterator.OfLong iterator) {
+    @NotNull
+    public static LongStream of(@NotNull PrimitiveIterator.OfLong iterator) {
         Objects.requireNonNull(iterator);
         return new LongStream(iterator);
     }
@@ -64,7 +68,8 @@ public final class LongStream implements Closeable {
      * @return the new stream
      * @throws NullPointerException if {@code values} is null
      */
-    public static LongStream of(final long... values) {
+    @NotNull
+    public static LongStream of(@NotNull final long... values) {
         Objects.requireNonNull(values);
         if (values.length == 0) {
             return LongStream.empty();
@@ -78,6 +83,7 @@ public final class LongStream implements Closeable {
      * @param t  element of the stream
      * @return the new stream
      */
+    @NotNull
     public static LongStream of(final long t) {
         return new LongStream(new LongArray(new long[] { t }));
     }
@@ -92,6 +98,7 @@ public final class LongStream implements Closeable {
      * @return a sequential {@code LongStream} for the range of {@code long}
      *         elements
      */
+    @NotNull
     public static LongStream range(final long startInclusive, final long endExclusive) {
         if (startInclusive >= endExclusive) {
             return empty();
@@ -109,6 +116,7 @@ public final class LongStream implements Closeable {
      * @return a sequential {@code LongStream} for the range of {@code long}
      *         elements
      */
+    @NotNull
     public static LongStream rangeClosed(final long startInclusive, final long endInclusive) {
         if (startInclusive > endInclusive) {
             return empty();
@@ -124,7 +132,8 @@ public final class LongStream implements Closeable {
      * @return a new infinite sequential {@code LongStream}
      * @throws NullPointerException if {@code s} is null
      */
-    public static LongStream generate(final LongSupplier s) {
+    @NotNull
+    public static LongStream generate(@NotNull final LongSupplier s) {
         Objects.requireNonNull(s);
         return new LongStream(new LongGenerate(s));
     }
@@ -151,7 +160,9 @@ public final class LongStream implements Closeable {
      * @return a new sequential {@code LongStream}
      * @throws NullPointerException if {@code f} is null
      */
-    public static LongStream iterate(final long seed, final LongUnaryOperator f) {
+    @NotNull
+    public static LongStream iterate(final long seed,
+                                     @NotNull final LongUnaryOperator f) {
         Objects.requireNonNull(f);
         return new LongStream(new LongIterate(seed, f));
     }
@@ -175,8 +186,11 @@ public final class LongStream implements Closeable {
      * @throws NullPointerException if {@code op} is null
      * @since 1.1.5
      */
-    public static LongStream iterate(final long seed,
-            final LongPredicate predicate, final LongUnaryOperator op) {
+    @NotNull
+    public static LongStream iterate(
+            final long seed,
+            @NotNull final LongPredicate predicate,
+            @NotNull final LongUnaryOperator op) {
         Objects.requireNonNull(predicate);
         return iterate(seed, op).takeWhile(predicate);
     }
@@ -196,7 +210,10 @@ public final class LongStream implements Closeable {
      * @return the new concatenated stream
      * @throws NullPointerException if {@code a} or {@code b} is null
      */
-    public static LongStream concat(final LongStream a, final LongStream b) {
+    @NotNull
+    public static LongStream concat(
+            @NotNull final LongStream a,
+            @NotNull final LongStream b) {
         Objects.requireNonNull(a);
         Objects.requireNonNull(b);
         LongStream result = new LongStream(new LongConcat(a.iterator, b.iterator));
@@ -300,7 +317,8 @@ public final class LongStream implements Closeable {
      * @see Stream#custom(com.annimon.stream.function.Function)
      * @throws NullPointerException if {@code function} is null
      */
-    public <R> R custom(final Function<LongStream, R> function) {
+    @Nullable
+    public <R> R custom(@NotNull final Function<LongStream, R> function) {
         Objects.requireNonNull(function);
         return function.apply(this);
     }
@@ -314,6 +332,7 @@ public final class LongStream implements Closeable {
      * @return a {@code Stream} consistent of the elements of this stream,
      *         each boxed to an {@code Long}
      */
+    @NotNull
     public Stream<Long> boxed() {
         return new Stream<Long>(params, iterator);
     }
@@ -333,7 +352,8 @@ public final class LongStream implements Closeable {
      * @param predicate  the predicate used to filter elements
      * @return the new stream
      */
-    public LongStream filter(final LongPredicate predicate) {
+    @NotNull
+    public LongStream filter(@NotNull final LongPredicate predicate) {
         return new LongStream(params, new LongFilter(iterator, predicate));
     }
 
@@ -356,7 +376,8 @@ public final class LongStream implements Closeable {
      * @return the new stream
      * @since 1.2.1
      */
-    public LongStream filterIndexed(IndexedLongPredicate predicate) {
+    @NotNull
+    public LongStream filterIndexed(@NotNull IndexedLongPredicate predicate) {
         return filterIndexed(0, 1, predicate);
     }
 
@@ -383,7 +404,9 @@ public final class LongStream implements Closeable {
      * @return the new stream
      * @since 1.2.1
      */
-    public LongStream filterIndexed(int from, int step, IndexedLongPredicate predicate) {
+    @NotNull
+    public LongStream filterIndexed(int from, int step,
+                                    @NotNull IndexedLongPredicate predicate) {
         return new LongStream(params, new LongFilterIndexed(
                 new PrimitiveIndexedIterator.OfLong(from, step, iterator),
                 predicate));
@@ -397,7 +420,8 @@ public final class LongStream implements Closeable {
      * @param predicate  the predicate used to filter elements
      * @return the new stream
      */
-    public LongStream filterNot(final LongPredicate predicate) {
+    @NotNull
+    public LongStream filterNot(@NotNull final LongPredicate predicate) {
         return filter(LongPredicate.Util.negate(predicate));
     }
 
@@ -418,7 +442,8 @@ public final class LongStream implements Closeable {
      * @return the new stream
      * @see Stream#map(com.annimon.stream.function.Function)
      */
-    public LongStream map(final LongUnaryOperator mapper) {
+    @NotNull
+    public LongStream map(@NotNull final LongUnaryOperator mapper) {
         return new LongStream(params, new LongMap(iterator, mapper));
     }
 
@@ -440,7 +465,8 @@ public final class LongStream implements Closeable {
      * @return the new stream
      * @since 1.2.1
      */
-    public LongStream mapIndexed(IndexedLongUnaryOperator mapper) {
+    @NotNull
+    public LongStream mapIndexed(@NotNull IndexedLongUnaryOperator mapper) {
         return mapIndexed(0, 1, mapper);
     }
 
@@ -466,7 +492,9 @@ public final class LongStream implements Closeable {
      * @return the new stream
      * @since 1.2.1
      */
-    public LongStream mapIndexed(int from, int step, IndexedLongUnaryOperator mapper) {
+    @NotNull
+    public LongStream mapIndexed(int from, int step,
+                                 @NotNull IndexedLongUnaryOperator mapper) {
         return new LongStream(params, new LongMapIndexed(
                 new PrimitiveIndexedIterator.OfLong(from, step, iterator),
                 mapper));
@@ -482,7 +510,8 @@ public final class LongStream implements Closeable {
      * @param mapper  the mapper function used to apply to each element
      * @return the new {@code Stream}
      */
-    public <R> Stream<R> mapToObj(final LongFunction<? extends R> mapper) {
+    @NotNull
+    public <R> Stream<R> mapToObj(@NotNull final LongFunction<? extends R> mapper) {
         return new Stream<R>(params, new LongMapToObj<R>(iterator, mapper));
     }
 
@@ -495,7 +524,8 @@ public final class LongStream implements Closeable {
      * @param mapper  the mapper function used to apply to each element
      * @return the new {@code IntStream}
      */
-    public IntStream mapToInt(final LongToIntFunction mapper) {
+    @NotNull
+    public IntStream mapToInt(@NotNull final LongToIntFunction mapper) {
         return new IntStream(params, new LongMapToInt(iterator, mapper));
     }
 
@@ -508,7 +538,8 @@ public final class LongStream implements Closeable {
      * @param mapper  the mapper function used to apply to each element
      * @return the new {@code DoubleStream}
      */
-    public DoubleStream mapToDouble(final LongToDoubleFunction mapper) {
+    @NotNull
+    public DoubleStream mapToDouble(@NotNull final LongToDoubleFunction mapper) {
         return new DoubleStream(params, new LongMapToDouble(iterator, mapper));
     }
 
@@ -530,7 +561,8 @@ public final class LongStream implements Closeable {
      * @return the new stream
      * @see Stream#flatMap(com.annimon.stream.function.Function)
      */
-    public LongStream flatMap(final LongFunction<? extends LongStream> mapper) {
+    @NotNull
+    public LongStream flatMap(@NotNull final LongFunction<? extends LongStream> mapper) {
         return new LongStream(params, new LongFlatMap(iterator, mapper));
     }
 
@@ -547,6 +579,7 @@ public final class LongStream implements Closeable {
      *
      * @return the new stream
      */
+    @NotNull
     public LongStream distinct() {
         return boxed().distinct().mapToLong(UNBOX_FUNCTION);
     }
@@ -564,6 +597,7 @@ public final class LongStream implements Closeable {
      *
      * @return the new stream
      */
+    @NotNull
     public LongStream sorted() {
         return new LongStream(params, new LongSorted(iterator));
     }
@@ -584,7 +618,8 @@ public final class LongStream implements Closeable {
      * @param comparator  the {@code Comparator} to compare elements
      * @return the new {@code LongStream}
      */
-    public LongStream sorted(Comparator<Long> comparator) {
+    @NotNull
+    public LongStream sorted(@NotNull Comparator<Long> comparator) {
         return boxed().sorted(comparator).mapToLong(UNBOX_FUNCTION);
     }
 
@@ -605,6 +640,7 @@ public final class LongStream implements Closeable {
      * @throws IllegalArgumentException if {@code stepWidth} is zero or negative
      * @see Stream#sample(int)
      */
+    @NotNull
     public LongStream sample(final int stepWidth) {
         if (stepWidth <= 0) throw new IllegalArgumentException("stepWidth cannot be zero or negative");
         if (stepWidth == 1) return this;
@@ -619,7 +655,8 @@ public final class LongStream implements Closeable {
      * @param action the action to be performed on each element
      * @return the new stream
      */
-    public LongStream peek(final LongConsumer action) {
+    @NotNull
+    public LongStream peek(@NotNull final LongConsumer action) {
         return new LongStream(params, new LongPeek(iterator, action));
     }
 
@@ -643,7 +680,8 @@ public final class LongStream implements Closeable {
      * @throws NullPointerException if {@code accumulator} is null
      * @since 1.1.6
      */
-    public LongStream scan(final LongBinaryOperator accumulator) {
+    @NotNull
+    public LongStream scan(@NotNull final LongBinaryOperator accumulator) {
         Objects.requireNonNull(accumulator);
         return new LongStream(params, new LongScan(iterator, accumulator));
     }
@@ -670,7 +708,9 @@ public final class LongStream implements Closeable {
      * @throws NullPointerException if {@code accumulator} is null
      * @since 1.1.6
      */
-    public LongStream scan(final long identity, final LongBinaryOperator accumulator) {
+    @NotNull
+    public LongStream scan(final long identity,
+                           @NotNull final LongBinaryOperator accumulator) {
         Objects.requireNonNull(accumulator);
         return new LongStream(params, new LongScanIdentity(iterator, identity, accumulator));
     }
@@ -690,7 +730,8 @@ public final class LongStream implements Closeable {
      * @param predicate  the predicate used to take elements
      * @return the new {@code LongStream}
      */
-    public LongStream takeWhile(final LongPredicate predicate) {
+    @NotNull
+    public LongStream takeWhile(@NotNull final LongPredicate predicate) {
         return new LongStream(params, new LongTakeWhile(iterator, predicate));
     }
 
@@ -712,7 +753,8 @@ public final class LongStream implements Closeable {
      * @return the new {@code LongStream}
      * @since 1.1.6
      */
-    public LongStream takeUntil(final LongPredicate stopPredicate) {
+    @NotNull
+    public LongStream takeUntil(@NotNull final LongPredicate stopPredicate) {
         return new LongStream(params, new LongTakeUntil(iterator, stopPredicate));
     }
 
@@ -731,7 +773,8 @@ public final class LongStream implements Closeable {
      * @param predicate  the predicate used to drop elements
      * @return the new {@code LongStream}
      */
-    public LongStream dropWhile(final LongPredicate predicate) {
+    @NotNull
+    public LongStream dropWhile(@NotNull final LongPredicate predicate) {
         return new LongStream(params, new LongDropWhile(iterator, predicate));
     }
 
@@ -756,6 +799,7 @@ public final class LongStream implements Closeable {
      * @return the new stream
      * @throws IllegalArgumentException if {@code maxSize} is negative
      */
+    @NotNull
     public LongStream limit(final long maxSize) {
         if (maxSize < 0) throw new IllegalArgumentException("maxSize cannot be negative");
         if (maxSize == 0) return LongStream.empty();
@@ -784,6 +828,7 @@ public final class LongStream implements Closeable {
      * @return the new stream
      * @throws IllegalArgumentException if {@code n} is negative
      */
+    @NotNull
     public LongStream skip(final long n) {
         if (n < 0) throw new IllegalArgumentException("n cannot be negative");
         if (n == 0) return this;
@@ -797,7 +842,7 @@ public final class LongStream implements Closeable {
      *
      * @param action  the action to be performed on each element
      */
-    public void forEach(LongConsumer action) {
+    public void forEach(@NotNull LongConsumer action) {
         while (iterator.hasNext()) {
             action.accept(iterator.nextLong());
         }
@@ -811,7 +856,7 @@ public final class LongStream implements Closeable {
      * @param action  the action to be performed on each element
      * @since 1.2.1
      */
-    public void forEachIndexed(IndexedLongConsumer action) {
+    public void forEachIndexed(@NotNull IndexedLongConsumer action) {
         forEachIndexed(0, 1, action);
     }
 
@@ -825,7 +870,8 @@ public final class LongStream implements Closeable {
      * @param action  the action to be performed on each element
      * @since 1.2.1
      */
-    public void forEachIndexed(int from, int step, IndexedLongConsumer action) {
+    public void forEachIndexed(int from, int step,
+                               @NotNull IndexedLongConsumer action) {
         int index = from;
         while (iterator.hasNext()) {
             action.accept(index, iterator.nextLong());
@@ -860,7 +906,7 @@ public final class LongStream implements Closeable {
      * @see #min()
      * @see #max()
      */
-    public long reduce(long identity, LongBinaryOperator accumulator) {
+    public long reduce(long identity, @NotNull LongBinaryOperator accumulator) {
         long result = identity;
         while (iterator.hasNext()) {
             final long value = iterator.nextLong();
@@ -882,7 +928,8 @@ public final class LongStream implements Closeable {
      * @return the result of the reduction
      * @see #reduce(com.annimon.stream.function.LongBinaryOperator)
      */
-    public OptionalLong reduce(LongBinaryOperator accumulator) {
+    @NotNull
+    public OptionalLong reduce(@NotNull LongBinaryOperator accumulator) {
         boolean foundAny = false;
         long result = 0;
         while (iterator.hasNext()) {
@@ -904,6 +951,7 @@ public final class LongStream implements Closeable {
      *
      * @return an array containing the elements of this stream
      */
+    @NotNull
     public long[] toArray() {
         return Operators.toLongArray(iterator);
     }
@@ -919,7 +967,9 @@ public final class LongStream implements Closeable {
      * @return the result of collect elements
      * @see Stream#collect(com.annimon.stream.function.Supplier, com.annimon.stream.function.BiConsumer)
      */
-    public <R> R collect(Supplier<R> supplier, ObjLongConsumer<R> accumulator) {
+    @Nullable
+    public <R> R collect(@NotNull Supplier<R> supplier,
+                         @NotNull ObjLongConsumer<R> accumulator) {
         final R result = supplier.get();
         while (iterator.hasNext()) {
             final long value = iterator.nextLong();
@@ -949,6 +999,7 @@ public final class LongStream implements Closeable {
      *
      * @return the minimum element
      */
+    @NotNull
     public OptionalLong min() {
         return reduce(new LongBinaryOperator() {
             @Override
@@ -966,6 +1017,7 @@ public final class LongStream implements Closeable {
      *
      * @return the maximum element
      */
+    @NotNull
     public OptionalLong max() {
         return reduce(new LongBinaryOperator() {
             @Override
@@ -1014,7 +1066,7 @@ public final class LongStream implements Closeable {
      * @return {@code true} if any elements of the stream match the provided
      *         predicate, otherwise {@code false}
      */
-    public boolean anyMatch(LongPredicate predicate) {
+    public boolean anyMatch(@NotNull LongPredicate predicate) {
         while (iterator.hasNext()) {
             if (predicate.test(iterator.nextLong()))
                 return true;
@@ -1045,7 +1097,7 @@ public final class LongStream implements Closeable {
      * @return {@code true} if either all elements of the stream match the
      *         provided predicate or the stream is empty, otherwise {@code false}
      */
-    public boolean allMatch(LongPredicate predicate) {
+    public boolean allMatch(@NotNull LongPredicate predicate) {
         while (iterator.hasNext()) {
             if (!predicate.test(iterator.nextLong()))
                 return false;
@@ -1076,7 +1128,7 @@ public final class LongStream implements Closeable {
      * @return {@code true} if either no elements of the stream match the
      *         provided predicate or the stream is empty, otherwise {@code false}
      */
-    public boolean noneMatch(LongPredicate predicate) {
+    public boolean noneMatch(@NotNull LongPredicate predicate) {
         while (iterator.hasNext()) {
             if (predicate.test(iterator.nextLong()))
                 return false;
@@ -1093,6 +1145,7 @@ public final class LongStream implements Closeable {
      * @return an {@code OptionalLong} with first element
      *         or {@code OptionalLong.empty()} if stream is empty
      */
+    @NotNull
     public OptionalLong findFirst() {
         if (iterator.hasNext()) {
             return OptionalLong.of(iterator.nextLong());
@@ -1110,6 +1163,7 @@ public final class LongStream implements Closeable {
      *         or {@code OptionalLong.empty()} if the stream is empty
      * @since 1.1.8
      */
+    @NotNull
     public OptionalLong findLast() {
         return reduce(new LongBinaryOperator() {
             @Override
@@ -1177,6 +1231,7 @@ public final class LongStream implements Closeable {
      *         or {@code OptionalLong.empty()} if stream is empty
      * @throws IllegalStateException if stream contains more than one element
      */
+    @NotNull
     public OptionalLong findSingle() {
         if (!iterator.hasNext()) {
             return OptionalLong.empty();
@@ -1198,7 +1253,8 @@ public final class LongStream implements Closeable {
      * @return the new stream with the close handler
      * @since 1.1.8
      */
-    public LongStream onClose(final Runnable closeHandler) {
+    @NotNull
+    public LongStream onClose(@NotNull final Runnable closeHandler) {
         Objects.requireNonNull(closeHandler);
         final Params newParams;
         if (params == null) {
