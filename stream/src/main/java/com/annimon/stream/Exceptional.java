@@ -43,6 +43,7 @@ public class Exceptional<T> {
      */
     @NotNull
     public static <T> Exceptional<T> of(@NotNull ThrowableSupplier<T, Throwable> supplier) {
+        Objects.requireNonNull(supplier);
         try {
             return new Exceptional<T>(supplier.get(), null);
         } catch (Throwable throwable) {
@@ -60,6 +61,7 @@ public class Exceptional<T> {
     @NotNull
     @Contract("_ -> new")
     public static <T> Exceptional<T> of(@NotNull Throwable throwable) {
+        Objects.requireNonNull(throwable);
         return new Exceptional<T>(null, throwable);
     }
 
