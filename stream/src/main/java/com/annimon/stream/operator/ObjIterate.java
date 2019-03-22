@@ -2,8 +2,8 @@ package com.annimon.stream.operator;
 
 import com.annimon.stream.function.UnaryOperator;
 import com.annimon.stream.iterator.LsaIterator;
-import jdk.internal.jline.internal.Nullable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ObjIterate<T> extends LsaIterator<T> {
 
