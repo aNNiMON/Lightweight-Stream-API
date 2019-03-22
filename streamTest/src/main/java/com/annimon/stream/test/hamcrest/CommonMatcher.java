@@ -23,6 +23,7 @@ public class CommonMatcher {
 
     public static class PrivateConstructorsMatcher extends BaseMatcher<Class<?>> {
 
+        @SuppressWarnings("deprecation")
         @Override
         public boolean matches(Object item) {
             final Class<?> clazz = (Class<?>) item;
@@ -31,6 +32,7 @@ public class CommonMatcher {
                     return false;
                 }
 
+                // isAccessible deprecated since Java 9. For Java 6 this warning can be ignored.
                 boolean isAccessible = constructor.isAccessible();
                 try {
                     constructor.setAccessible(true);
