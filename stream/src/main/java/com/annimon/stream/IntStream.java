@@ -1302,15 +1302,7 @@ public final class IntStream implements Closeable {
     @NotNull
     public IntStream onClose(@NotNull final Runnable closeHandler) {
         Objects.requireNonNull(closeHandler);
-        final Params newParams;
-        if (params == null) {
-            newParams = new Params();
-            newParams.closeHandler = closeHandler;
-        } else {
-            newParams = params;
-            final Runnable firstHandler = newParams.closeHandler;
-            newParams.closeHandler = Compose.runnables(firstHandler, closeHandler);
-        }
+        final Params newParams = Params.wrapWithCloseHandler(params, closeHandler);
         return new IntStream(newParams, iterator);
     }
 
