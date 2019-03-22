@@ -24,6 +24,7 @@ public final class PrimitiveExtIterator {
             return hasNext;
         }
 
+        @SuppressWarnings("ResultOfMethodCallIgnored")
         @Override
         public int nextInt() {
             if (!isInit) {

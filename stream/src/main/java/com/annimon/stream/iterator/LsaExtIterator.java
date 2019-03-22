@@ -23,6 +23,7 @@ public abstract class LsaExtIterator<T> implements Iterator<T> {
         return hasNext;
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public T next() {
         if (!isInit) {

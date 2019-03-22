@@ -19,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @param <T> the type of the inner value
  */
+@SuppressWarnings("WeakerAccess")
 public class Optional<T> {
 
     private static final Optional<?> EMPTY = new Optional();

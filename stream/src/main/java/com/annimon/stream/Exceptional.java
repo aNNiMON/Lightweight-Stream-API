@@ -32,6 +32,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @param <T> the type of the inner value
  */
+@SuppressWarnings({"WeakerAccess", "UnusedReturnValue"})
 public class Exceptional<T> {
 
     /**

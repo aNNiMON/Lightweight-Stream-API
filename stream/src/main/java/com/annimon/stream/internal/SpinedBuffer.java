@@ -7,6 +7,7 @@ import com.annimon.stream.iterator.PrimitiveIterator;
 import java.util.Arrays;
 import java.util.Iterator;
 
+@SuppressWarnings({"WeakerAccess", "SameParameterValue"})
 final class SpinedBuffer {
 
     /**
@@ -27,7 +28,7 @@ final class SpinedBuffer {
     /**
      * Minimum array size for array-of-chunks.
      */
-    static final int MIN_SPINE_SIZE = 8;
+    private static final int MIN_SPINE_SIZE = 8;
 
     private SpinedBuffer() {
     }

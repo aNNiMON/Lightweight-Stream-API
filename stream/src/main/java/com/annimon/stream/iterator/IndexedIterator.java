@@ -8,6 +8,7 @@ import java.util.Iterator;
  * @param <T> the type of the iterator elements
  * @since 1.1.6
  */
+@SuppressWarnings("WeakerAccess")
 public class IndexedIterator<T> implements Iterator<T> {
 
     private final Iterator<? extends T> iterator;

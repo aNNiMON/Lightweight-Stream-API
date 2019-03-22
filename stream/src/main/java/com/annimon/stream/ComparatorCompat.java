@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @since 1.1.6
  */
+@SuppressWarnings("WeakerAccess")
 public final class ComparatorCompat<T> implements Comparator<T> {
 
     private static final ComparatorCompat<Comparable<Object>>

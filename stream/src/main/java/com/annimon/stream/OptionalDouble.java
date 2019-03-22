@@ -19,7 +19,6 @@ import org.jetbrains.annotations.Nullable;
  * @since 1.1.4
  * @see Optional
  */
-@SuppressWarnings("WeakerAccess")
 public final class OptionalDouble {
 
     private static final OptionalDouble EMPTY = new OptionalDouble();

@@ -19,7 +19,6 @@ import org.jetbrains.annotations.Nullable;
  * @since 1.1.4
  * @see Stream
  */
-@SuppressWarnings("WeakerAccess")
 public final class LongStream implements Closeable {
 
     /**

@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Common operations with Object.
  */
+@SuppressWarnings("WeakerAccess")
 public final class Objects {
 
     private Objects() { }

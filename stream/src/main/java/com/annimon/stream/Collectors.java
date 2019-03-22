@@ -19,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @see Collector
  */
+@SuppressWarnings({"WeakerAccess", "unused", "RedundantTypeArguments"})
 public final class Collectors {
 
     private static final Supplier<long[]> LONG_2ELEMENTS_ARRAY_SUPPLIER = new Supplier<long[]>() {

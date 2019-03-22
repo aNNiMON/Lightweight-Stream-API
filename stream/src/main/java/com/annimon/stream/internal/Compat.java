@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Compatibility methods for Android API &lt; 9.
  */
+@SuppressWarnings("WeakerAccess")
 public final class Compat {
 
     static final long MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
@@ -25,7 +26,6 @@ public final class Compat {
         }
     }
 
-    @SafeVarargs
     public static <E> E[] newArray(int length, E... array) {
         try {
             return Arrays.copyOf(array, length);

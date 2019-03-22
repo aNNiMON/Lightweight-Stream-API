@@ -18,7 +18,6 @@ import org.jetbrains.annotations.Nullable;
  * If a value is present, {@code isPresent()} will return {@code true} and
  * {@code getAsInt()} will return the value.
  */
-@SuppressWarnings("WeakerAccess")
 public final class OptionalInt {
     /**
      * Common instance for {@code empty()}.

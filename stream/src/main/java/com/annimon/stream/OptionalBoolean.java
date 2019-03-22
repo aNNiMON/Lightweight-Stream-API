@@ -16,7 +16,6 @@ import org.jetbrains.annotations.Nullable;
  * @since 1.1.8
  * @see Optional
  */
-@SuppressWarnings("WeakerAccess")
 public final class OptionalBoolean {
 
     private static final OptionalBoolean EMPTY = new OptionalBoolean();

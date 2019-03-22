@@ -23,6 +23,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @param <T> the type of the stream elements
  */
+@SuppressWarnings("RedundantTypeArguments")
 public class Stream<T> implements Closeable {
 
     /**

@@ -18,7 +18,6 @@ import org.jetbrains.annotations.Nullable;
  * @since 1.1.4
  * @see Optional
  */
-@SuppressWarnings("WeakerAccess")
 public final class OptionalLong {
 
     private static final OptionalLong EMPTY = new OptionalLong();

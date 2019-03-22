@@ -17,7 +17,6 @@ import org.jetbrains.annotations.Nullable;
  * A sequence of primitive int-valued elements supporting sequential operations. This is the {@code int}
  * primitive specialization of {@link Stream}.
  */
-@SuppressWarnings("WeakerAccess")
 public final class IntStream implements Closeable {
 
     /**
