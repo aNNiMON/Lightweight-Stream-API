@@ -40,6 +40,7 @@ public class Exceptional<T> {
      * @param <T> the type of value
      * @param supplier  a supplier function
      * @return an {@code Exceptional}
+     * @throws NullPointerException if {@code supplier} is null
      */
     @NotNull
     public static <T> Exceptional<T> of(@NotNull ThrowableSupplier<T, Throwable> supplier) {

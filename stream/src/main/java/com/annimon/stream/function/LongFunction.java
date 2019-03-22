@@ -1,5 +1,9 @@
 package com.annimon.stream.function;
 
+import com.annimon.stream.Objects;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Represents a function which produces result from {@code long}-valued input argument.
  *
@@ -33,7 +37,7 @@ public interface LongFunction<R> {
          * @see #safe(com.annimon.stream.function.ThrowableLongFunction, java.lang.Object)
          */
         public static <R> LongFunction<R> safe(
-                ThrowableLongFunction<? extends R, Throwable> throwableFunction) {
+                @NotNull ThrowableLongFunction<? extends R, Throwable> throwableFunction) {
             return Util.<R>safe(throwableFunction, null);
         }
 
@@ -48,8 +52,9 @@ public interface LongFunction<R> {
          * @since 1.1.7
          */
         public static <R> LongFunction<R> safe(
-                final ThrowableLongFunction<? extends R, Throwable> throwableFunction,
-                final R resultIfFailed) {
+                @NotNull final ThrowableLongFunction<? extends R, Throwable> throwableFunction,
+                @Nullable final R resultIfFailed) {
+            Objects.requireNonNull(throwableFunction);
             return new LongFunction<R>() {
 
                 @Override

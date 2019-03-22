@@ -1,6 +1,7 @@
 package com.annimon.stream.function;
 
 import com.annimon.stream.Objects;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a function which produces result from index and input argument.
@@ -32,7 +33,7 @@ public interface IndexedDoubleFunction<R> {
          * @throws NullPointerException if {@code function} is null
          */
         public static <R> IndexedDoubleFunction<R> wrap(
-                final DoubleFunction<? extends R> function) {
+                @NotNull final DoubleFunction<? extends R> function) {
             Objects.requireNonNull(function);
             return new IndexedDoubleFunction<R>() {
                 @Override

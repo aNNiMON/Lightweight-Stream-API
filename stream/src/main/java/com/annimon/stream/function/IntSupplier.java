@@ -1,5 +1,8 @@
 package com.annimon.stream.function;
 
+import com.annimon.stream.Objects;
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Represents a supplier of {@code int}-valued results.  This is the
  * {@code int}-producing primitive specialization of {@link Supplier}.
@@ -29,7 +32,8 @@ public interface IntSupplier {
          * @since 1.1.7
          * @see #safe(com.annimon.stream.function.ThrowableIntSupplier, int)
          */
-        public static IntSupplier safe(ThrowableIntSupplier<Throwable> throwableSupplier) {
+        public static IntSupplier safe(
+                @NotNull ThrowableIntSupplier<Throwable> throwableSupplier) {
             return safe(throwableSupplier, 0);
         }
 
@@ -43,8 +47,9 @@ public interface IntSupplier {
          * @since 1.1.7
          */
         public static IntSupplier safe(
-                final ThrowableIntSupplier<Throwable> throwableSupplier,
+                @NotNull final ThrowableIntSupplier<Throwable> throwableSupplier,
                 final int resultIfFailed) {
+            Objects.requireNonNull(throwableSupplier);
             return new IntSupplier() {
 
                 @Override

@@ -1,5 +1,9 @@
 package com.annimon.stream.function;
 
+import com.annimon.stream.Objects;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Represents a function which supply a result.
  *
@@ -28,7 +32,8 @@ public interface Supplier<T> {
          * @since 1.1.7
          * @see #safe(com.annimon.stream.function.ThrowableSupplier, java.lang.Object)
          */
-        public static <T> Supplier<T> safe(ThrowableSupplier<? extends T, Throwable> throwableSupplier) {
+        public static <T> Supplier<T> safe(
+                @NotNull ThrowableSupplier<? extends T, Throwable> throwableSupplier) {
             return Util.<T>safe(throwableSupplier, null);
         }
 
@@ -43,8 +48,9 @@ public interface Supplier<T> {
          * @since 1.1.7
          */
         public static <T> Supplier<T> safe(
-                final ThrowableSupplier<? extends T, Throwable> throwableSupplier,
-                final T resultIfFailed) {
+                @NotNull final ThrowableSupplier<? extends T, Throwable> throwableSupplier,
+                @Nullable final T resultIfFailed) {
+            Objects.requireNonNull(throwableSupplier);
             return new Supplier<T>() {
 
                 @Override

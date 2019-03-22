@@ -1,5 +1,8 @@
 package com.annimon.stream.function;
 
+import com.annimon.stream.Objects;
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Represents a supplier of {@code long}-valued results.
  *
@@ -28,7 +31,7 @@ public interface LongSupplier {
          * @since 1.1.7
          * @see #safe(com.annimon.stream.function.ThrowableLongSupplier, long)
          */
-        public static LongSupplier safe(ThrowableLongSupplier<Throwable> throwableSupplier) {
+        public static LongSupplier safe(@NotNull ThrowableLongSupplier<Throwable> throwableSupplier) {
             return safe(throwableSupplier, 0L);
         }
 
@@ -42,8 +45,9 @@ public interface LongSupplier {
          * @since 1.1.7
          */
         public static LongSupplier safe(
-                final ThrowableLongSupplier<Throwable> throwableSupplier,
+                @NotNull final ThrowableLongSupplier<Throwable> throwableSupplier,
                 final long resultIfFailed) {
+            Objects.requireNonNull(throwableSupplier);
             return new LongSupplier() {
 
                 @Override

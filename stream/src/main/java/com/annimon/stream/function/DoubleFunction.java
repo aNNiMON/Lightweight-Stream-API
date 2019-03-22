@@ -1,5 +1,9 @@
 package com.annimon.stream.function;
 
+import com.annimon.stream.Objects;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Represents a function which produces result from {@code double}-valued input argument.
  *
@@ -33,7 +37,7 @@ public interface DoubleFunction<R> {
          * @see #safe(com.annimon.stream.function.ThrowableDoubleFunction, java.lang.Object)
          */
         public static <R> DoubleFunction<R> safe(
-                ThrowableDoubleFunction<? extends R, Throwable> throwableFunction) {
+                @NotNull ThrowableDoubleFunction<? extends R, Throwable> throwableFunction) {
             return Util.<R>safe(throwableFunction, null);
         }
 
@@ -48,8 +52,9 @@ public interface DoubleFunction<R> {
          * @since 1.1.7
          */
         public static <R> DoubleFunction<R> safe(
-                final ThrowableDoubleFunction<? extends R, Throwable> throwableFunction,
-                final R resultIfFailed) {
+                @NotNull final ThrowableDoubleFunction<? extends R, Throwable> throwableFunction,
+                @Nullable final R resultIfFailed) {
+            Objects.requireNonNull(throwableFunction);
             return new DoubleFunction<R>() {
 
                 @Override

@@ -1,5 +1,9 @@
 package com.annimon.stream.function;
 
+import com.annimon.stream.Objects;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Represents an operation on a {@code double}-valued input argument.
  *
@@ -29,7 +33,11 @@ public interface DoubleConsumer {
          * @return a composed {@code DoubleConsumer}
          * @throws NullPointerException if {@code c1} or {@code c2} is null
          */
-        public static DoubleConsumer andThen(final DoubleConsumer c1, final DoubleConsumer c2) {
+        public static DoubleConsumer andThen(
+                @NotNull final DoubleConsumer c1,
+                @NotNull final DoubleConsumer c2) {
+            Objects.requireNonNull(c1, "c1");
+            Objects.requireNonNull(c2, "c2");
             return new DoubleConsumer() {
                 @Override
                 public void accept(double value) {
@@ -48,7 +56,8 @@ public interface DoubleConsumer {
          * @since 1.1.7
          * @see #safe(com.annimon.stream.function.ThrowableDoubleConsumer, com.annimon.stream.function.DoubleConsumer)
          */
-        public static DoubleConsumer safe(ThrowableDoubleConsumer<Throwable> throwableConsumer) {
+        public static DoubleConsumer safe(
+                @NotNull ThrowableDoubleConsumer<Throwable> throwableConsumer) {
             return safe(throwableConsumer, null);
         }
 
@@ -63,8 +72,9 @@ public interface DoubleConsumer {
          * @see #safe(com.annimon.stream.function.ThrowableDoubleConsumer)
          */
         public static DoubleConsumer safe(
-                final ThrowableDoubleConsumer<Throwable> throwableConsumer,
-                final DoubleConsumer onFailedConsumer) {
+                @NotNull final ThrowableDoubleConsumer<Throwable> throwableConsumer,
+                @Nullable final DoubleConsumer onFailedConsumer) {
+            Objects.requireNonNull(throwableConsumer);
             return new DoubleConsumer() {
 
                 @Override

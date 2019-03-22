@@ -2,6 +2,7 @@ package com.annimon.stream.function;
 
 import com.annimon.stream.Objects;
 import java.util.Arrays;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a predicate (function with boolean type result).
@@ -31,7 +32,11 @@ public interface Predicate<T> {
          * @return a composed {@code Predicate}
          * @throws NullPointerException if {@code p1} or {@code p2} is null
          */
-        public static <T> Predicate<T> and(final Predicate<? super T> p1, final Predicate<? super T> p2) {
+        public static <T> Predicate<T> and(
+                @NotNull final Predicate<? super T> p1,
+                @NotNull final Predicate<? super T> p2) {
+            Objects.requireNonNull(p1, "predicate1");
+            Objects.requireNonNull(p2, "predicate2");
             return new Predicate<T>() {
                 @Override
                 public boolean test(T value) {
@@ -52,12 +57,12 @@ public interface Predicate<T> {
          * @since 1.2.1
          */
         public static <T> Predicate<T> and(
-                final Predicate<? super T> p1,
-                final Predicate<? super T> p2,
-                final Predicate<? super T>... rest) {
-            Objects.requireNonNull(p1);
-            Objects.requireNonNull(p2);
-            Objects.requireNonNull(rest);
+                @NotNull final Predicate<? super T> p1,
+                @NotNull final Predicate<? super T> p2,
+                @NotNull final Predicate<? super T>... rest) {
+            Objects.requireNonNull(p1, "predicate1");
+            Objects.requireNonNull(p2, "predicate2");
+            Objects.requireNonNull(rest, "rest");
             Objects.requireNonNullElements(Arrays.asList(rest));
             return new Predicate<T>() {
                 @Override
@@ -81,7 +86,11 @@ public interface Predicate<T> {
          * @return a composed {@code Predicate}
          * @throws NullPointerException if {@code p1} or {@code p2} is null
          */
-        public static <T> Predicate<T> or(final Predicate<? super T> p1, final Predicate<? super T> p2) {
+        public static <T> Predicate<T> or(
+                @NotNull final Predicate<? super T> p1,
+                @NotNull final Predicate<? super T> p2) {
+            Objects.requireNonNull(p1, "predicate1");
+            Objects.requireNonNull(p2, "predicate2");
             return new Predicate<T>() {
                 @Override
                 public boolean test(T value) {
@@ -101,12 +110,12 @@ public interface Predicate<T> {
          * @throws NullPointerException if any of predicates are null
          */
         public static <T> Predicate<T> or(
-                final Predicate<? super T> p1,
-                final Predicate<? super T> p2,
-                final Predicate<? super T>... rest) {
-            Objects.requireNonNull(p1);
-            Objects.requireNonNull(p2);
-            Objects.requireNonNull(rest);
+                @NotNull final Predicate<? super T> p1,
+                @NotNull final Predicate<? super T> p2,
+                @NotNull final Predicate<? super T>... rest) {
+            Objects.requireNonNull(p1, "predicate1");
+            Objects.requireNonNull(p2, "predicate2");
+            Objects.requireNonNull(rest, "rest");
             Objects.requireNonNullElements(Arrays.asList(rest));
             return new Predicate<T>() {
                 @Override
@@ -130,7 +139,11 @@ public interface Predicate<T> {
          * @return a composed {@code Predicate}
          * @throws NullPointerException if {@code p1} or {@code p2} is null
          */
-        public static <T> Predicate<T> xor(final Predicate<? super T> p1, final Predicate<? super T> p2) {
+        public static <T> Predicate<T> xor(
+                @NotNull final Predicate<? super T> p1,
+                @NotNull final Predicate<? super T> p2) {
+            Objects.requireNonNull(p1, "predicate1");
+            Objects.requireNonNull(p2, "predicate2");
             return new Predicate<T>() {
                 @Override
                 public boolean test(T value) {
@@ -143,15 +156,16 @@ public interface Predicate<T> {
          * Applies logical negation to predicate.
          *
          * @param <T> the type of the input to the function
-         * @param p1  the predicate to be negated
+         * @param predicate  the predicate to be negated
          * @return a composed {@code Predicate}
          * @throws NullPointerException if {@code p1} is null
          */
-        public static <T> Predicate<T> negate(final Predicate<? super T> p1) {
+        public static <T> Predicate<T> negate(@NotNull final Predicate<? super T> predicate) {
+            Objects.requireNonNull(predicate);
             return new Predicate<T>() {
                 @Override
                 public boolean test(T value) {
-                    return !p1.test(value);
+                    return !predicate.test(value);
                 }
             };
         }
@@ -178,7 +192,8 @@ public interface Predicate<T> {
          * @param throwablePredicate  the predicate that may throw an exception
          * @return a {@code Predicate} or {@code false} if exception was thrown
          */
-        public static <T> Predicate<T> safe(ThrowablePredicate<? super T, Throwable> throwablePredicate) {
+        public static <T> Predicate<T> safe(
+                @NotNull ThrowablePredicate<? super T, Throwable> throwablePredicate) {
             return safe(throwablePredicate, false);
         }
 
@@ -192,8 +207,9 @@ public interface Predicate<T> {
          * @throws NullPointerException if {@code throwablePredicate} is null
          */
         public static <T> Predicate<T> safe(
-                final ThrowablePredicate<? super T, Throwable> throwablePredicate,
+                @NotNull final ThrowablePredicate<? super T, Throwable> throwablePredicate,
                 final boolean resultIfFailed) {
+            Objects.requireNonNull(throwablePredicate);
             return new Predicate<T>() {
 
                 @Override
