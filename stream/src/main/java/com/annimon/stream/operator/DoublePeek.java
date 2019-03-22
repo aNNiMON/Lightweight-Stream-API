@@ -2,13 +2,16 @@ package com.annimon.stream.operator;
 
 import com.annimon.stream.function.DoubleConsumer;
 import com.annimon.stream.iterator.PrimitiveIterator;
+import org.jetbrains.annotations.NotNull;
 
 public class DoublePeek extends PrimitiveIterator.OfDouble {
 
     private final PrimitiveIterator.OfDouble iterator;
     private final DoubleConsumer action;
 
-    public DoublePeek(PrimitiveIterator.OfDouble iterator, DoubleConsumer action) {
+    public DoublePeek(
+            @NotNull PrimitiveIterator.OfDouble iterator,
+            @NotNull DoubleConsumer action) {
         this.iterator = iterator;
         this.action = action;
     }

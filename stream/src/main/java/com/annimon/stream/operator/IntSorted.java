@@ -4,6 +4,7 @@ import com.annimon.stream.internal.Operators;
 import com.annimon.stream.iterator.PrimitiveExtIterator;
 import com.annimon.stream.iterator.PrimitiveIterator;
 import java.util.Arrays;
+import org.jetbrains.annotations.NotNull;
 
 public class IntSorted extends PrimitiveExtIterator.OfInt {
 
@@ -11,7 +12,7 @@ public class IntSorted extends PrimitiveExtIterator.OfInt {
     private int index;
     private int[] array;
 
-    public IntSorted(PrimitiveIterator.OfInt iterator) {
+    public IntSorted(@NotNull PrimitiveIterator.OfInt iterator) {
         this.iterator = iterator;
         index = 0;
     }

@@ -3,6 +3,7 @@ package com.annimon.stream.operator;
 import com.annimon.stream.function.DoublePredicate;
 import com.annimon.stream.iterator.PrimitiveIterator;
 import java.util.NoSuchElementException;
+import org.jetbrains.annotations.NotNull;
 
 public class DoubleFilter extends PrimitiveIterator.OfDouble {
 
@@ -11,7 +12,9 @@ public class DoubleFilter extends PrimitiveIterator.OfDouble {
     private boolean hasNext, hasNextEvaluated;
     private double next;
 
-    public DoubleFilter(PrimitiveIterator.OfDouble iterator, DoublePredicate predicate) {
+    public DoubleFilter(
+            @NotNull PrimitiveIterator.OfDouble iterator,
+            @NotNull DoublePredicate predicate) {
         this.iterator = iterator;
         this.predicate = predicate;
     }

@@ -3,6 +3,7 @@ package com.annimon.stream.operator;
 import com.annimon.stream.function.IntBinaryOperator;
 import com.annimon.stream.iterator.PrimitiveExtIterator;
 import com.annimon.stream.iterator.PrimitiveIterator;
+import org.jetbrains.annotations.NotNull;
 
 public class IntScanIdentity extends PrimitiveExtIterator.OfInt {
 
@@ -10,7 +11,10 @@ public class IntScanIdentity extends PrimitiveExtIterator.OfInt {
     private final int identity;
     private final IntBinaryOperator accumulator;
 
-    public IntScanIdentity(PrimitiveIterator.OfInt iterator, int identity, IntBinaryOperator accumulator) {
+    public IntScanIdentity(
+            @NotNull PrimitiveIterator.OfInt iterator,
+            int identity,
+            @NotNull IntBinaryOperator accumulator) {
         this.iterator = iterator;
         this.identity = identity;
         this.accumulator = accumulator;

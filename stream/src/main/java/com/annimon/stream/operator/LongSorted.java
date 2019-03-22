@@ -4,6 +4,7 @@ import com.annimon.stream.internal.Operators;
 import com.annimon.stream.iterator.PrimitiveExtIterator;
 import com.annimon.stream.iterator.PrimitiveIterator;
 import java.util.Arrays;
+import org.jetbrains.annotations.NotNull;
 
 public class LongSorted extends PrimitiveExtIterator.OfLong {
 
@@ -11,7 +12,7 @@ public class LongSorted extends PrimitiveExtIterator.OfLong {
     private int index;
     private long[] array;
 
-    public LongSorted(PrimitiveIterator.OfLong iterator) {
+    public LongSorted(@NotNull PrimitiveIterator.OfLong iterator) {
         this.iterator = iterator;
         index = 0;
     }

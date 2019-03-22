@@ -3,6 +3,7 @@ package com.annimon.stream.operator;
 import com.annimon.stream.function.IntPredicate;
 import com.annimon.stream.iterator.PrimitiveIterator;
 import java.util.NoSuchElementException;
+import org.jetbrains.annotations.NotNull;
 
 public class IntFilter extends PrimitiveIterator.OfInt {
 
@@ -11,7 +12,9 @@ public class IntFilter extends PrimitiveIterator.OfInt {
     private boolean hasNext, hasNextEvaluated;
     private int next;
 
-    public IntFilter(PrimitiveIterator.OfInt iterator, IntPredicate predicate) {
+    public IntFilter(
+            @NotNull PrimitiveIterator.OfInt iterator,
+            @NotNull IntPredicate predicate) {
         this.iterator = iterator;
         this.predicate = predicate;
     }

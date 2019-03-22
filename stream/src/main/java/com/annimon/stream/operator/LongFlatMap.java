@@ -4,6 +4,7 @@ import com.annimon.stream.LongStream;
 import com.annimon.stream.function.LongFunction;
 import com.annimon.stream.iterator.PrimitiveIterator;
 import java.util.NoSuchElementException;
+import org.jetbrains.annotations.NotNull;
 
 public class LongFlatMap extends PrimitiveIterator.OfLong {
 
@@ -12,7 +13,9 @@ public class LongFlatMap extends PrimitiveIterator.OfLong {
     private PrimitiveIterator.OfLong inner;
     private LongStream innerStream;
 
-    public LongFlatMap(PrimitiveIterator.OfLong iterator, LongFunction<? extends LongStream> mapper) {
+    public LongFlatMap(
+            @NotNull PrimitiveIterator.OfLong iterator,
+            @NotNull LongFunction<? extends LongStream> mapper) {
         this.iterator = iterator;
         this.mapper = mapper;
     }

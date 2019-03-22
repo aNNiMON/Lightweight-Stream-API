@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Queue;
+import org.jetbrains.annotations.NotNull;
 
 public class ObjSlidingWindow<T> extends LsaIterator<List<T>> {
 
@@ -14,7 +15,9 @@ public class ObjSlidingWindow<T> extends LsaIterator<List<T>> {
     private final int windowSize;
     private final int stepWidth;
 
-    public ObjSlidingWindow(Iterator<? extends T> iterator, int windowSize, int stepWidth) {
+    public ObjSlidingWindow(
+            @NotNull Iterator<? extends T> iterator,
+            int windowSize, int stepWidth) {
         this.iterator = iterator;
         this.windowSize = windowSize;
         this.stepWidth = stepWidth;

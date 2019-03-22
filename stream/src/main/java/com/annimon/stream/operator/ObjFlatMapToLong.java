@@ -5,6 +5,7 @@ import com.annimon.stream.function.Function;
 import com.annimon.stream.iterator.PrimitiveExtIterator;
 import com.annimon.stream.iterator.PrimitiveIterator;
 import java.util.Iterator;
+import org.jetbrains.annotations.NotNull;
 
 public class ObjFlatMapToLong<T> extends PrimitiveExtIterator.OfLong {
 
@@ -12,8 +13,9 @@ public class ObjFlatMapToLong<T> extends PrimitiveExtIterator.OfLong {
     private final Function<? super T, ? extends LongStream> mapper;
     private PrimitiveIterator.OfLong inner;
 
-    public ObjFlatMapToLong(Iterator<? extends T> iterator,
-            Function<? super T, ? extends LongStream> mapper) {
+    public ObjFlatMapToLong(
+            @NotNull Iterator<? extends T> iterator,
+            @NotNull Function<? super T, ? extends LongStream> mapper) {
         this.iterator = iterator;
         this.mapper = mapper;
     }

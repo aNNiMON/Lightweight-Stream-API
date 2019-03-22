@@ -1,13 +1,14 @@
 package com.annimon.stream.operator;
 
 import com.annimon.stream.iterator.PrimitiveIterator;
+import org.jetbrains.annotations.NotNull;
 
 public class DoubleArray extends PrimitiveIterator.OfDouble {
 
     private final double[] values;
     private int index;
 
-    public DoubleArray(double[] values) {
+    public DoubleArray(@NotNull double[] values) {
         this.values = values;
         index = 0;
     }

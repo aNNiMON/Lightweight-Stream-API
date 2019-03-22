@@ -2,6 +2,7 @@ package com.annimon.stream.operator;
 
 import com.annimon.stream.iterator.PrimitiveIterator;
 import java.util.NoSuchElementException;
+import org.jetbrains.annotations.NotNull;
 
 public class IntCodePoints extends PrimitiveIterator.OfInt {
 
@@ -10,7 +11,7 @@ public class IntCodePoints extends PrimitiveIterator.OfInt {
     private int current;
     private int length;
 
-    public IntCodePoints(CharSequence charSequence) {
+    public IntCodePoints(@NotNull CharSequence charSequence) {
         this.charSequence = charSequence;
         isString = (charSequence instanceof String);
         current = 0;

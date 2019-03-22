@@ -3,6 +3,7 @@ package com.annimon.stream.operator;
 import com.annimon.stream.function.LongPredicate;
 import com.annimon.stream.iterator.PrimitiveIterator;
 import java.util.NoSuchElementException;
+import org.jetbrains.annotations.NotNull;
 
 public class LongFilter extends PrimitiveIterator.OfLong {
 
@@ -11,7 +12,9 @@ public class LongFilter extends PrimitiveIterator.OfLong {
     private boolean hasNext, hasNextEvaluated;
     private long next;
 
-    public LongFilter(PrimitiveIterator.OfLong iterator, LongPredicate predicate) {
+    public LongFilter(
+            @NotNull PrimitiveIterator.OfLong iterator,
+            @NotNull LongPredicate predicate) {
         this.iterator = iterator;
         this.predicate = predicate;
     }

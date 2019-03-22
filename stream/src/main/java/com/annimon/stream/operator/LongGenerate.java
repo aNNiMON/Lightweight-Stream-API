@@ -2,12 +2,13 @@ package com.annimon.stream.operator;
 
 import com.annimon.stream.function.LongSupplier;
 import com.annimon.stream.iterator.PrimitiveIterator;
+import org.jetbrains.annotations.NotNull;
 
 public class LongGenerate extends PrimitiveIterator.OfLong {
 
     private final LongSupplier supplier;
 
-    public LongGenerate(LongSupplier supplier) {
+    public LongGenerate(@NotNull LongSupplier supplier) {
         this.supplier = supplier;
     }
 

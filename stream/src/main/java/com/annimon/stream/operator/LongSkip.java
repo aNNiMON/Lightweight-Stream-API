@@ -1,6 +1,7 @@
 package com.annimon.stream.operator;
 
 import com.annimon.stream.iterator.PrimitiveIterator;
+import org.jetbrains.annotations.NotNull;
 
 public class LongSkip extends PrimitiveIterator.OfLong {
 
@@ -8,7 +9,7 @@ public class LongSkip extends PrimitiveIterator.OfLong {
     private final long n;
     private long skipped;
 
-    public LongSkip(PrimitiveIterator.OfLong iterator, long n) {
+    public LongSkip(@NotNull PrimitiveIterator.OfLong iterator, long n) {
         this.iterator = iterator;
         this.n = n;
         skipped = 0;

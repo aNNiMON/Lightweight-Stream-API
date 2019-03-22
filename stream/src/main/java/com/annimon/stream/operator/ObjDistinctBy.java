@@ -5,6 +5,7 @@ import com.annimon.stream.iterator.LsaExtIterator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import org.jetbrains.annotations.NotNull;
 
 public class ObjDistinctBy<T, K> extends LsaExtIterator<T> {
 
@@ -12,7 +13,9 @@ public class ObjDistinctBy<T, K> extends LsaExtIterator<T> {
     private final Function<? super T, ? extends K> classifier;
     private final Set<K> set;
 
-    public ObjDistinctBy(Iterator<? extends T> iterator, Function<? super T, ? extends K> classifier) {
+    public ObjDistinctBy(
+            @NotNull Iterator<? extends T> iterator,
+            @NotNull Function<? super T, ? extends K> classifier) {
         this.iterator = iterator;
         this.classifier = classifier;
         set = new HashSet<K>();

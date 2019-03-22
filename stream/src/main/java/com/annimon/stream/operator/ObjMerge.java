@@ -5,6 +5,7 @@ import com.annimon.stream.iterator.LsaIterator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
+import org.jetbrains.annotations.NotNull;
 
 public class ObjMerge<T> extends LsaIterator<T> {
 
@@ -18,8 +19,10 @@ public class ObjMerge<T> extends LsaIterator<T> {
     private final Queue<T> buffer1;
     private final Queue<T> buffer2;
 
-    public ObjMerge(Iterator<? extends T> iterator1, Iterator<? extends T> iterator2,
-                    BiFunction<? super T, ? super T, MergeResult> selector) {
+    public ObjMerge(
+            @NotNull Iterator<? extends T> iterator1,
+            @NotNull Iterator<? extends T> iterator2,
+            @NotNull BiFunction<? super T, ? super T, MergeResult> selector) {
         this.iterator1 = iterator1;
         this.iterator2 = iterator2;
         this.selector = selector;

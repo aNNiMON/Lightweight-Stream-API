@@ -2,6 +2,7 @@ package com.annimon.stream.operator;
 
 import com.annimon.stream.iterator.LsaExtIterator;
 import java.util.Iterator;
+import org.jetbrains.annotations.NotNull;
 
 public class ObjConcat<T> extends LsaExtIterator<T> {
 
@@ -9,7 +10,9 @@ public class ObjConcat<T> extends LsaExtIterator<T> {
     private final Iterator<? extends T> iterator2;
     private boolean firstStreamIsCurrent;
 
-    public ObjConcat(Iterator<? extends T> iterator1, Iterator<? extends T> iterator2) {
+    public ObjConcat(
+            @NotNull Iterator<? extends T> iterator1,
+            @NotNull Iterator<? extends T> iterator2) {
         this.iterator1 = iterator1;
         this.iterator2 = iterator2;
         firstStreamIsCurrent = true;
