@@ -1,5 +1,9 @@
 package com.annimon.stream.function;
 
+import com.annimon.stream.Objects;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Represents an operation that accepts a single {@code int}-valued argument and
  * returns no result.  This is the primitive type specialization of
@@ -33,7 +37,11 @@ public interface IntConsumer {
          * @return a composed {@code IntConsumer}
          * @throws NullPointerException if {@code c1} or {@code c2} is null
          */
-        public static IntConsumer andThen(final IntConsumer c1, final IntConsumer c2) {
+        public static IntConsumer andThen(
+                @NotNull final IntConsumer c1,
+                @NotNull final IntConsumer c2) {
+            Objects.requireNonNull(c1, "c1");
+            Objects.requireNonNull(c2, "c2");
             return new IntConsumer() {
                 @Override
                 public void accept(int value) {
@@ -52,7 +60,7 @@ public interface IntConsumer {
          * @since 1.1.7
          * @see #safe(com.annimon.stream.function.ThrowableIntConsumer, com.annimon.stream.function.IntConsumer)
          */
-        public static IntConsumer safe(ThrowableIntConsumer<Throwable> throwableConsumer) {
+        public static IntConsumer safe(@NotNull ThrowableIntConsumer<Throwable> throwableConsumer) {
             return safe(throwableConsumer, null);
         }
 
@@ -67,8 +75,9 @@ public interface IntConsumer {
          * @see #safe(com.annimon.stream.function.ThrowableIntConsumer)
          */
         public static IntConsumer safe(
-                final ThrowableIntConsumer<Throwable> throwableConsumer,
-                final IntConsumer onFailedConsumer) {
+                @NotNull final ThrowableIntConsumer<Throwable> throwableConsumer,
+                @Nullable final IntConsumer onFailedConsumer) {
+            Objects.requireNonNull(throwableConsumer);
             return new IntConsumer() {
 
                 @Override

@@ -1,13 +1,14 @@
 package com.annimon.stream.operator;
 
 import com.annimon.stream.iterator.PrimitiveIterator;
+import org.jetbrains.annotations.NotNull;
 
 public class LongArray extends PrimitiveIterator.OfLong {
 
     private final long[] values;
     private int index;
 
-    public LongArray(long[] values) {
+    public LongArray(@NotNull long[] values) {
         this.values = values;
         index = 0;
     }

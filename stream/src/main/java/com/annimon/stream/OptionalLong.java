@@ -9,6 +9,8 @@ import com.annimon.stream.function.LongToIntFunction;
 import com.annimon.stream.function.LongUnaryOperator;
 import com.annimon.stream.function.Supplier;
 import java.util.NoSuchElementException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A container object which may or may not contain a {@code long} value.
@@ -26,6 +28,7 @@ public final class OptionalLong {
      *
      * @return an empty {@code OptionalLong}
      */
+    @NotNull
     public static OptionalLong empty() {
         return EMPTY;
     }
@@ -36,6 +39,7 @@ public final class OptionalLong {
      * @param value  the value to be present
      * @return an {@code OptionalLong} with the value present
      */
+    @NotNull
     public static OptionalLong of(long value) {
         return new OptionalLong(value);
     }
@@ -47,7 +51,8 @@ public final class OptionalLong {
      * @return an {@code OptionalLong}
      * @since 1.2.1
      */
-    public static OptionalLong ofNullable(Long value) {
+    @NotNull
+    public static OptionalLong ofNullable(@Nullable Long value) {
         return value == null ? EMPTY : new OptionalLong(value);
     }
 
@@ -103,7 +108,7 @@ public final class OptionalLong {
      * @param consumer  the consumer function to be executed if a value is present
      * @throws NullPointerException if value is present and {@code consumer} is null
      */
-    public void ifPresent(LongConsumer consumer) {
+    public void ifPresent(@NotNull LongConsumer consumer) {
         if (isPresent) {
             consumer.accept(value);
         }
@@ -118,7 +123,7 @@ public final class OptionalLong {
      * @throws NullPointerException if a value is present and the given consumer function is null,
      *         or no value is present and the given empty-based action is null.
      */
-    public void ifPresentOrElse(LongConsumer consumer, Runnable emptyAction) {
+    public void ifPresentOrElse(@NotNull LongConsumer consumer, @NotNull Runnable emptyAction) {
         if (isPresent) {
             consumer.accept(value);
         } else {
@@ -134,7 +139,8 @@ public final class OptionalLong {
      * @return this {@code OptionalLong}
      * @see #ifPresent(com.annimon.stream.function.LongConsumer)
      */
-    public OptionalLong executeIfPresent(LongConsumer consumer) {
+    @NotNull
+    public OptionalLong executeIfPresent(@NotNull LongConsumer consumer) {
         ifPresent(consumer);
         return this;
     }
@@ -145,7 +151,8 @@ public final class OptionalLong {
      * @param action  action that invokes if value absent
      * @return this {@code OptionalLong}
      */
-    public OptionalLong executeIfAbsent(Runnable action) {
+    @NotNull
+    public OptionalLong executeIfAbsent(@NotNull Runnable action) {
         if (!isPresent()) {
             action.run();
         }
@@ -161,7 +168,8 @@ public final class OptionalLong {
      * @throws NullPointerException if {@code function} is null
      * @since 1.1.9
      */
-    public <R> R custom(Function<OptionalLong, R> function) {
+    @Nullable
+    public <R> R custom(@NotNull Function<OptionalLong, R> function) {
         Objects.requireNonNull(function);
         return function.apply(this);
     }
@@ -173,7 +181,8 @@ public final class OptionalLong {
      * @return this {@code OptionalLong} if the value is present and matches predicate,
      *         otherwise an empty {@code OptionalLong}
      */
-    public OptionalLong filter(LongPredicate predicate) {
+    @NotNull
+    public OptionalLong filter(@NotNull LongPredicate predicate) {
         if (!isPresent()) return this;
         return predicate.test(value) ? this : OptionalLong.empty();
     }
@@ -186,7 +195,8 @@ public final class OptionalLong {
      *              otherwise an empty {@code OptionalLong}
      * @since 1.1.9
      */
-    public OptionalLong filterNot(LongPredicate predicate) {
+    @NotNull
+    public OptionalLong filterNot(@NotNull LongPredicate predicate) {
         return filter(LongPredicate.Util.negate(predicate));
     }
 
@@ -199,7 +209,8 @@ public final class OptionalLong {
      * @throws NullPointerException if value is present and
      *         {@code mapper} is {@code null}
      */
-    public OptionalLong map(LongUnaryOperator mapper) {
+    @NotNull
+    public OptionalLong map(@NotNull LongUnaryOperator mapper) {
         if (!isPresent()) {
             return empty();
         }
@@ -217,7 +228,8 @@ public final class OptionalLong {
      * @throws NullPointerException if value is present and
      *         {@code mapper} is {@code null}
      */
-    public <U> Optional<U> mapToObj(LongFunction<U> mapper) {
+    @NotNull
+    public <U> Optional<U> mapToObj(@NotNull LongFunction<U> mapper) {
         if (!isPresent()) {
             return Optional.empty();
         }
@@ -234,7 +246,8 @@ public final class OptionalLong {
      * @throws NullPointerException if value is present and
      *         {@code mapper} is {@code null}
      */
-    public OptionalInt mapToInt(LongToIntFunction mapper) {
+    @NotNull
+    public OptionalInt mapToInt(@NotNull LongToIntFunction mapper) {
         if (!isPresent()) {
             return OptionalInt.empty();
         }
@@ -248,6 +261,7 @@ public final class OptionalLong {
      *
      * @return the optional value as an {@code LongStream}
      */
+    @NotNull
     public LongStream stream() {
         if (!isPresent()) {
             return LongStream.empty();
@@ -265,7 +279,8 @@ public final class OptionalLong {
      * @throws NullPointerException if value is not present and
      *         {@code supplier} or value produced by it is {@code null}
      */
-    public OptionalLong or(Supplier<OptionalLong> supplier) {
+    @NotNull
+    public OptionalLong or(@NotNull Supplier<OptionalLong> supplier) {
         if (isPresent()) return this;
         Objects.requireNonNull(supplier);
         return Objects.requireNonNull(supplier.get());
@@ -288,7 +303,7 @@ public final class OptionalLong {
      * @return the value if present otherwise the result of {@code other.getAsLong()}
      * @throws NullPointerException if value is not present and {@code other} is null
      */
-    public long orElseGet(LongSupplier other) {
+    public long orElseGet(@NotNull LongSupplier other) {
         return isPresent ? value : other.getAsLong();
     }
 
@@ -314,7 +329,7 @@ public final class OptionalLong {
      * @return inner value if present
      * @throws X if inner value is not present
      */
-    public <X extends Throwable> long orElseThrow(Supplier<X> exceptionSupplier) throws X {
+    public <X extends Throwable> long orElseThrow(@NotNull Supplier<X> exceptionSupplier) throws X {
         if (isPresent) {
             return value;
         } else {
@@ -340,6 +355,7 @@ public final class OptionalLong {
         return isPresent ? Objects.hashCode(value) : 0;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return isPresent

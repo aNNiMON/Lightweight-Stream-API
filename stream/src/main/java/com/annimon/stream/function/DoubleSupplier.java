@@ -1,5 +1,8 @@
 package com.annimon.stream.function;
 
+import com.annimon.stream.Objects;
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Represents a supplier of {@code double}-valued results.
  *
@@ -28,7 +31,8 @@ public interface DoubleSupplier {
          * @since 1.1.7
          * @see #safe(com.annimon.stream.function.ThrowableDoubleSupplier, double)
          */
-        public static DoubleSupplier safe(ThrowableDoubleSupplier<Throwable> throwableSupplier) {
+        public static DoubleSupplier safe(
+                @NotNull ThrowableDoubleSupplier<Throwable> throwableSupplier) {
             return safe(throwableSupplier, 0.0);
         }
 
@@ -42,8 +46,9 @@ public interface DoubleSupplier {
          * @since 1.1.7
          */
         public static DoubleSupplier safe(
-                final ThrowableDoubleSupplier<Throwable> throwableSupplier,
+                @NotNull final ThrowableDoubleSupplier<Throwable> throwableSupplier,
                 final double resultIfFailed) {
+            Objects.requireNonNull(throwableSupplier);
             return new DoubleSupplier() {
 
                 @Override

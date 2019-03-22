@@ -4,6 +4,7 @@ import com.annimon.stream.Stream;
 import com.annimon.stream.function.Function;
 import com.annimon.stream.iterator.LsaExtIterator;
 import java.util.Iterator;
+import org.jetbrains.annotations.NotNull;
 
 public class ObjFlatMap<T, R> extends LsaExtIterator<R> {
 
@@ -12,8 +13,9 @@ public class ObjFlatMap<T, R> extends LsaExtIterator<R> {
     private Iterator<? extends R> inner;
     private Stream<? extends R> innerStream;
 
-    public ObjFlatMap(Iterator<? extends T> iterator,
-            Function<? super T, ? extends Stream<? extends R>> mapper) {
+    public ObjFlatMap(
+            @NotNull Iterator<? extends T> iterator,
+            @NotNull Function<? super T, ? extends Stream<? extends R>> mapper) {
         this.iterator = iterator;
         this.mapper = mapper;
     }

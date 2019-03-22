@@ -10,6 +10,9 @@ import com.annimon.stream.function.ToLongFunction;
 import com.annimon.stream.function.ToBooleanFunction;
 
 import java.util.NoSuchElementException;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A container object which may or may not contain a non-null value.
@@ -29,7 +32,9 @@ public class Optional<T> {
      * @throws NullPointerException if value is null
      * @see #ofNullable(java.lang.Object)
      */
-    public static <T> Optional<T> of(T value) {
+    @NotNull
+    @Contract("_ -> new")
+    public static <T> Optional<T> of(@NotNull T value) {
         return new Optional<T>(value);
     }
 
@@ -41,7 +46,8 @@ public class Optional<T> {
      * @return an {@code Optional}
      * @see #of(java.lang.Object)
      */
-    public static <T> Optional<T> ofNullable(T value) {
+    @NotNull
+    public static <T> Optional<T> ofNullable(@Nullable T value) {
         return value == null ? Optional.<T>empty() : of(value);
     }
 
@@ -51,11 +57,14 @@ public class Optional<T> {
      * @param <T> the type of value
      * @return an {@code Optional}
      */
+    @NotNull
+    @Contract(pure = true)
     @SuppressWarnings("unchecked")
     public static <T> Optional<T> empty() {
         return (Optional<T>) EMPTY;
     }
 
+    @Nullable
     private final T value;
 
     private Optional() {
@@ -75,6 +84,7 @@ public class Optional<T> {
      * @throws NoSuchElementException if value is not present
      * @see #orElseThrow()
      */
+    @NotNull
     public T get() {
         return orElseThrow();
     }
@@ -103,7 +113,7 @@ public class Optional<T> {
      *
      * @param consumer  the consumer function
      */
-    public void ifPresent(Consumer<? super T> consumer) {
+    public void ifPresent(@NotNull Consumer<? super T> consumer) {
         if (value != null)
             consumer.accept(value);
     }
@@ -117,7 +127,7 @@ public class Optional<T> {
      * @throws NullPointerException if a value is present and the given consumer function is null,
      *         or no value is present and the given empty-based action is null.
      */
-    public void ifPresentOrElse(Consumer<? super T> consumer, Runnable emptyAction) {
+    public void ifPresentOrElse(@NotNull Consumer<? super T> consumer, @NotNull Runnable emptyAction) {
         if (value != null) {
             consumer.accept(value);
         } else {
@@ -134,7 +144,8 @@ public class Optional<T> {
      * @see #ifPresent(com.annimon.stream.function.Consumer)
      * @since 1.1.2
      */
-    public Optional<T> executeIfPresent(Consumer<? super T> consumer) {
+    @NotNull
+    public Optional<T> executeIfPresent(@NotNull Consumer<? super T> consumer) {
         ifPresent(consumer);
         return this;
     }
@@ -146,7 +157,8 @@ public class Optional<T> {
      * @return this {@code Optional}
      * @since 1.1.2
      */
-    public Optional<T> executeIfAbsent(Runnable action) {
+    @NotNull
+    public Optional<T> executeIfAbsent(@NotNull Runnable action) {
         if (value == null)
             action.run();
         return this;
@@ -161,7 +173,8 @@ public class Optional<T> {
      * @throws NullPointerException if {@code function} is null
      * @since 1.1.9
      */
-    public <R> R custom(Function<Optional<T>, R> function) {
+    @Nullable
+    public <R> R custom(@NotNull Function<Optional<T>, R> function) {
         Objects.requireNonNull(function);
         return function.apply(this);
     }
@@ -173,7 +186,8 @@ public class Optional<T> {
      * @return this {@code Optional} if the value is present and matches predicate,
      *              otherwise an empty {@code Optional}
      */
-    public Optional<T> filter(Predicate<? super T> predicate) {
+    @NotNull
+    public Optional<T> filter(@NotNull Predicate<? super T> predicate) {
         if (!isPresent()) return this;
         return predicate.test(value) ? this : Optional.<T>empty();
     }
@@ -186,7 +200,8 @@ public class Optional<T> {
      *              otherwise an empty {@code Optional}
      * @since 1.1.9
      */
-    public Optional<T> filterNot(Predicate<? super T> predicate) {
+    @NotNull
+    public Optional<T> filterNot(@NotNull Predicate<? super T> predicate) {
         return filter(Predicate.Util.negate(predicate));
     }
 
@@ -200,7 +215,8 @@ public class Optional<T> {
      * @throws NullPointerException if value is present and
      *         {@code mapper} is {@code null}
      */
-    public <U> Optional<U> map(Function<? super T, ? extends U> mapper) {
+    @NotNull
+    public <U> Optional<U> map(@NotNull Function<? super T, ? extends U> mapper) {
         if (!isPresent()) return empty();
         return Optional.ofNullable(mapper.apply(value));
     }
@@ -215,7 +231,8 @@ public class Optional<T> {
      *         {@code mapper} is {@code null}
      * @since 1.1.3
      */
-    public OptionalInt mapToInt(ToIntFunction<? super T> mapper) {
+    @NotNull
+    public OptionalInt mapToInt(@NotNull ToIntFunction<? super T> mapper) {
         if (!isPresent()) return OptionalInt.empty();
         return OptionalInt.of(mapper.applyAsInt(value));
     }
@@ -230,7 +247,8 @@ public class Optional<T> {
      *         {@code mapper} is {@code null}
      * @since 1.1.4
      */
-    public OptionalLong mapToLong(ToLongFunction<? super T> mapper) {
+    @NotNull
+    public OptionalLong mapToLong(@NotNull ToLongFunction<? super T> mapper) {
         if (!isPresent()) return OptionalLong.empty();
         return OptionalLong.of(mapper.applyAsLong(value));
     }
@@ -245,7 +263,8 @@ public class Optional<T> {
      *         {@code mapper} is {@code null}
      * @since 1.1.4
      */
-    public OptionalDouble mapToDouble(ToDoubleFunction<? super T> mapper) {
+    @NotNull
+    public OptionalDouble mapToDouble(@NotNull ToDoubleFunction<? super T> mapper) {
         if (!isPresent()) return OptionalDouble.empty();
         return OptionalDouble.of(mapper.applyAsDouble(value));
     }
@@ -259,7 +278,8 @@ public class Optional<T> {
      * @throws NullPointerException if value is present and
      *         {@code mapper} is {@code null}
      */
-    public OptionalBoolean mapToBoolean(ToBooleanFunction<? super T> mapper) {
+    @NotNull
+    public OptionalBoolean mapToBoolean(@NotNull ToBooleanFunction<? super T> mapper) {
         if (!isPresent()) return OptionalBoolean.empty();
         return OptionalBoolean.of(mapper.applyAsBoolean(value));
     }
@@ -271,7 +291,8 @@ public class Optional<T> {
      * @param mapper  mapping function
      * @return an {@code Optional} with transformed value if present, otherwise an empty {@code Optional}
      */
-    public <U> Optional<U> flatMap(Function<? super T, Optional<U>> mapper) {
+    @NotNull
+    public <U> Optional<U> flatMap(@NotNull Function<? super T, Optional<U>> mapper) {
         if (!isPresent()) return empty();
         return Objects.requireNonNull(mapper.apply(value));
     }
@@ -281,6 +302,7 @@ public class Optional<T> {
      *
      * @return the optional value as a {@code Stream}
      */
+    @NotNull
     @SuppressWarnings("unchecked")
     public Stream<T> stream() {
         if (!isPresent()) return Stream.empty();
@@ -294,8 +316,9 @@ public class Optional<T> {
      * @param clazz a class which instance should be selected
      * @return an {@code Optional} with value of type class if present, otherwise an empty {@code Optional}
      */
+    @NotNull
     @SuppressWarnings("unchecked")
-    public <R> Optional<R> select(Class<R> clazz) {
+    public <R> Optional<R> select(@NotNull Class<R> clazz) {
         Objects.requireNonNull(clazz);
         if (!isPresent()) return empty();
         return (Optional<R>) Optional.ofNullable(clazz.isInstance(value) ? value : null);
@@ -311,7 +334,8 @@ public class Optional<T> {
      * @throws NullPointerException if value is not present and
      *         {@code supplier} or value produced by it is {@code null}
      */
-    public Optional<T> or(Supplier<Optional<T>> supplier) {
+    @NotNull
+    public Optional<T> or(@NotNull Supplier<Optional<T>> supplier) {
         if (isPresent()) return this;
         Objects.requireNonNull(supplier);
         return Objects.requireNonNull(supplier.get());
@@ -323,7 +347,8 @@ public class Optional<T> {
      * @param other  the value to be returned if inner value is not present
      * @return inner value if present, otherwise {@code other}
      */
-    public T orElse(T other) {
+    @Nullable
+    public T orElse(@Nullable T other) {
         return value != null ? value : other;
     }
 
@@ -333,7 +358,8 @@ public class Optional<T> {
      * @param other  supplier function that produces value if inner value is not present
      * @return inner value if present, otherwise value produced by supplier function
      */
-    public T orElseGet(Supplier<? extends T> other) {
+    @Nullable
+    public T orElseGet(@NotNull Supplier<? extends T> other) {
         return value != null ? value : other.get();
     }
 
@@ -344,6 +370,7 @@ public class Optional<T> {
      * @throws NoSuchElementException if inner value is not present
      * @since 1.2.0
      */
+    @NotNull
     public T orElseThrow() {
         if (value == null) {
             throw new NoSuchElementException("No value present");
@@ -359,7 +386,8 @@ public class Optional<T> {
      * @return inner value if present
      * @throws X if inner value is not present
      */
-    public <X extends Throwable> T orElseThrow(Supplier<? extends X> exc) throws X {
+    @NotNull
+    public <X extends Throwable> T orElseThrow(@NotNull Supplier<? extends X> exc) throws X {
         if (value != null) return value;
         else throw exc.get();
     }
@@ -383,6 +411,7 @@ public class Optional<T> {
         return Objects.hashCode(value);
     }
 
+    @NotNull
     @Override
     public String toString() {
         return value != null

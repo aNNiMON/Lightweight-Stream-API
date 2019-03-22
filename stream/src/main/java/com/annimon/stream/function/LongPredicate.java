@@ -1,5 +1,8 @@
 package com.annimon.stream.function;
 
+import com.annimon.stream.Objects;
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Represents a {@code long}-valued predicate (function with boolean type result).
  *
@@ -28,7 +31,11 @@ public interface LongPredicate {
          * @return a composed {@code LongPredicate}
          * @throws NullPointerException if {@code p1} or {@code p2} is null
          */
-        public static LongPredicate and(final LongPredicate p1, final LongPredicate p2) {
+        public static LongPredicate and(
+                @NotNull final LongPredicate p1,
+                @NotNull final LongPredicate p2) {
+            Objects.requireNonNull(p1, "predicate1");
+            Objects.requireNonNull(p2, "predicate2");
             return new LongPredicate() {
                 @Override
                 public boolean test(long value) {
@@ -45,7 +52,11 @@ public interface LongPredicate {
          * @return a composed {@code LongPredicate}
          * @throws NullPointerException if {@code p1} or {@code p2} is null
          */
-        public static LongPredicate or(final LongPredicate p1, final LongPredicate p2) {
+        public static LongPredicate or(
+                @NotNull final LongPredicate p1,
+                @NotNull final LongPredicate p2) {
+            Objects.requireNonNull(p1, "predicate1");
+            Objects.requireNonNull(p2, "predicate2");
             return new LongPredicate() {
                 @Override
                 public boolean test(long value) {
@@ -62,7 +73,11 @@ public interface LongPredicate {
          * @return a composed {@code LongPredicate}
          * @throws NullPointerException if {@code p1} or {@code p2} is null
          */
-        public static LongPredicate xor(final LongPredicate p1, final LongPredicate p2) {
+        public static LongPredicate xor(
+                @NotNull final LongPredicate p1,
+                @NotNull final LongPredicate p2) {
+            Objects.requireNonNull(p1, "predicate1");
+            Objects.requireNonNull(p2, "predicate2");
             return new LongPredicate() {
                 @Override
                 public boolean test(long value) {
@@ -78,7 +93,8 @@ public interface LongPredicate {
          * @return a composed {@code LongPredicate}
          * @throws NullPointerException if {@code p1} is null
          */
-        public static LongPredicate negate(final LongPredicate p1) {
+        public static LongPredicate negate(@NotNull final LongPredicate p1) {
+            Objects.requireNonNull(p1);
             return new LongPredicate() {
                 @Override
                 public boolean test(long value) {
@@ -95,7 +111,7 @@ public interface LongPredicate {
          * @since 1.1.7
          * @see #safe(com.annimon.stream.function.ThrowableLongPredicate, boolean)
          */
-        public static LongPredicate safe(ThrowableLongPredicate<Throwable> throwablePredicate) {
+        public static LongPredicate safe(@NotNull ThrowableLongPredicate<Throwable> throwablePredicate) {
             return safe(throwablePredicate, false);
         }
 
@@ -109,8 +125,9 @@ public interface LongPredicate {
          * @since 1.1.7
          */
         public static LongPredicate safe(
-                final ThrowableLongPredicate<Throwable> throwablePredicate,
+                @NotNull final ThrowableLongPredicate<Throwable> throwablePredicate,
                 final boolean resultIfFailed) {
+            Objects.requireNonNull(throwablePredicate);
             return new LongPredicate() {
 
                 @Override

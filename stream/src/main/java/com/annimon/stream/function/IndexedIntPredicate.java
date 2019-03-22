@@ -1,6 +1,7 @@
 package com.annimon.stream.function;
 
 import com.annimon.stream.Objects;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a predicate (function with boolean type result) with additional index argument.
@@ -29,7 +30,7 @@ public interface IndexedIntPredicate {
          * @return a wrapped {@code IndexedIntPredicate}
          * @throws NullPointerException if {@code predicate} is null
          */
-        public static IndexedIntPredicate wrap(final IntPredicate predicate) {
+        public static IndexedIntPredicate wrap(@NotNull final IntPredicate predicate) {
             Objects.requireNonNull(predicate);
             return new IndexedIntPredicate() {
                 @Override

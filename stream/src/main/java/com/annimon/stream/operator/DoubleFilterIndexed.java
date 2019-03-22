@@ -4,6 +4,7 @@ import com.annimon.stream.function.IndexedDoublePredicate;
 import com.annimon.stream.iterator.PrimitiveIndexedIterator;
 import com.annimon.stream.iterator.PrimitiveIterator;
 import java.util.NoSuchElementException;
+import org.jetbrains.annotations.NotNull;
 
 public class DoubleFilterIndexed extends PrimitiveIterator.OfDouble {
 
@@ -12,7 +13,9 @@ public class DoubleFilterIndexed extends PrimitiveIterator.OfDouble {
     private boolean hasNext, hasNextEvaluated;
     private double next;
 
-    public DoubleFilterIndexed(PrimitiveIndexedIterator.OfDouble iterator, IndexedDoublePredicate predicate) {
+    public DoubleFilterIndexed(
+            @NotNull PrimitiveIndexedIterator.OfDouble iterator,
+            @NotNull IndexedDoublePredicate predicate) {
         this.iterator = iterator;
         this.predicate = predicate;
     }

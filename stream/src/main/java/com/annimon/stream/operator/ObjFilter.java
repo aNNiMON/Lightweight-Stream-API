@@ -3,6 +3,7 @@ package com.annimon.stream.operator;
 import com.annimon.stream.function.Predicate;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import org.jetbrains.annotations.NotNull;
 
 public class ObjFilter<T> implements Iterator<T> {
 
@@ -11,7 +12,9 @@ public class ObjFilter<T> implements Iterator<T> {
     private boolean hasNext, hasNextEvaluated;
     private T next;
 
-    public ObjFilter(Iterator<? extends T> iterator, Predicate<? super T> predicate) {
+    public ObjFilter(
+            @NotNull Iterator<? extends T> iterator,
+            @NotNull Predicate<? super T> predicate) {
         this.iterator = iterator;
         this.predicate = predicate;
     }

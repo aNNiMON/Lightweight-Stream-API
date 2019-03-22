@@ -4,6 +4,7 @@ import com.annimon.stream.DoubleStream;
 import com.annimon.stream.function.DoubleFunction;
 import com.annimon.stream.iterator.PrimitiveIterator;
 import java.util.NoSuchElementException;
+import org.jetbrains.annotations.NotNull;
 
 public class DoubleFlatMap extends PrimitiveIterator.OfDouble {
 
@@ -12,7 +13,9 @@ public class DoubleFlatMap extends PrimitiveIterator.OfDouble {
     private PrimitiveIterator.OfDouble inner;
     private DoubleStream innerStream;
 
-    public DoubleFlatMap(PrimitiveIterator.OfDouble iterator, DoubleFunction<? extends DoubleStream> mapper) {
+    public DoubleFlatMap(
+            @NotNull PrimitiveIterator.OfDouble iterator,
+            @NotNull DoubleFunction<? extends DoubleStream> mapper) {
         this.iterator = iterator;
         this.mapper = mapper;
     }

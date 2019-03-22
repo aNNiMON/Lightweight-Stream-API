@@ -1,5 +1,8 @@
 package com.annimon.stream.function;
 
+import com.annimon.stream.Objects;
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Represents a predicate (function with boolean type result).
  */
@@ -25,7 +28,11 @@ public interface IntPredicate {
          * @return a composed {@code IntPredicate}
          * @throws NullPointerException if {@code p1} or {@code p2} is null
          */
-        public static IntPredicate and(final IntPredicate p1, final IntPredicate p2) {
+        public static IntPredicate and(
+                @NotNull final IntPredicate p1,
+                @NotNull final IntPredicate p2) {
+            Objects.requireNonNull(p1, "predicate1");
+            Objects.requireNonNull(p2, "predicate2");
             return new IntPredicate() {
                 @Override
                 public boolean test(int value) {
@@ -42,7 +49,11 @@ public interface IntPredicate {
          * @return a composed {@code IntPredicate}
          * @throws NullPointerException if {@code p1} or {@code p2} is null
          */
-        public static IntPredicate or(final IntPredicate p1, final IntPredicate p2) {
+        public static IntPredicate or(
+                @NotNull final IntPredicate p1,
+                @NotNull final IntPredicate p2) {
+            Objects.requireNonNull(p1, "predicate1");
+            Objects.requireNonNull(p2, "predicate2");
             return new IntPredicate() {
                 @Override
                 public boolean test(int value) {
@@ -59,7 +70,11 @@ public interface IntPredicate {
          * @return a composed {@code IntPredicate}
          * @throws NullPointerException if {@code p1} or {@code p2} is null
          */
-        public static IntPredicate xor(final IntPredicate p1, final IntPredicate p2) {
+        public static IntPredicate xor(
+                @NotNull final IntPredicate p1,
+                @NotNull final IntPredicate p2) {
+            Objects.requireNonNull(p1, "predicate1");
+            Objects.requireNonNull(p2, "predicate2");
             return new IntPredicate() {
                 @Override
                 public boolean test(int value) {
@@ -75,7 +90,8 @@ public interface IntPredicate {
          * @return a composed {@code IntPredicate}
          * @throws NullPointerException if {@code p1} is null
          */
-        public static IntPredicate negate(final IntPredicate p1) {
+        public static IntPredicate negate(@NotNull final IntPredicate p1) {
+            Objects.requireNonNull(p1);
             return new IntPredicate() {
                 @Override
                 public boolean test(int value) {
@@ -92,7 +108,7 @@ public interface IntPredicate {
          * @since 1.1.7
          * @see #safe(com.annimon.stream.function.ThrowableIntPredicate, boolean)
          */
-        public static IntPredicate safe(ThrowableIntPredicate<Throwable> throwablePredicate) {
+        public static IntPredicate safe(@NotNull ThrowableIntPredicate<Throwable> throwablePredicate) {
             return safe(throwablePredicate, false);
         }
 
@@ -106,8 +122,9 @@ public interface IntPredicate {
          * @since 1.1.7
          */
         public static IntPredicate safe(
-                final ThrowableIntPredicate<Throwable> throwablePredicate,
+                @NotNull final ThrowableIntPredicate<Throwable> throwablePredicate,
                 final boolean resultIfFailed) {
+            Objects.requireNonNull(throwablePredicate);
             return new IntPredicate() {
 
                 @Override

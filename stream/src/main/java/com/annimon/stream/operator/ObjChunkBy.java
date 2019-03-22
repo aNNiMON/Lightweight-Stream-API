@@ -5,6 +5,7 @@ import com.annimon.stream.iterator.LsaIterator;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 public class ObjChunkBy<T, K> extends LsaIterator<List<T>> {
 
@@ -13,7 +14,9 @@ public class ObjChunkBy<T, K> extends LsaIterator<List<T>> {
     private T next;
     private boolean peekedNext;
 
-    public ObjChunkBy(Iterator<? extends T> iterator, Function<? super T, ? extends K> classifier) {
+    public ObjChunkBy(
+            @NotNull Iterator<? extends T> iterator,
+            @NotNull Function<? super T, ? extends K> classifier) {
         this.iterator = iterator;
         this.classifier = classifier;
     }

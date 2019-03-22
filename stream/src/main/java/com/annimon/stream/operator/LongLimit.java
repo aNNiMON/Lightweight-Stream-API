@@ -1,6 +1,7 @@
 package com.annimon.stream.operator;
 
 import com.annimon.stream.iterator.PrimitiveIterator;
+import org.jetbrains.annotations.NotNull;
 
 public class LongLimit extends PrimitiveIterator.OfLong {
 
@@ -8,7 +9,7 @@ public class LongLimit extends PrimitiveIterator.OfLong {
     private final long maxSize;
     private long index;
 
-    public LongLimit(PrimitiveIterator.OfLong iterator, long maxSize) {
+    public LongLimit(@NotNull PrimitiveIterator.OfLong iterator, long maxSize) {
         this.iterator = iterator;
         this.maxSize = maxSize;
         index = 0;

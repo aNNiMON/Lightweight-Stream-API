@@ -5,6 +5,9 @@ import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Supplier;
 import com.annimon.stream.function.ThrowableFunction;
 import com.annimon.stream.function.ThrowableSupplier;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A container for values which provided by {@code ThrowableSupplier}.
@@ -37,8 +40,11 @@ public class Exceptional<T> {
      * @param <T> the type of value
      * @param supplier  a supplier function
      * @return an {@code Exceptional}
+     * @throws NullPointerException if {@code supplier} is null
      */
-    public static <T> Exceptional<T> of(ThrowableSupplier<T, Throwable> supplier) {
+    @NotNull
+    public static <T> Exceptional<T> of(@NotNull ThrowableSupplier<T, Throwable> supplier) {
+        Objects.requireNonNull(supplier);
         try {
             return new Exceptional<T>(supplier.get(), null);
         } catch (Throwable throwable) {
@@ -53,14 +59,17 @@ public class Exceptional<T> {
      * @param throwable  throwable instance
      * @return an {@code Exceptional}
      */
-    public static <T> Exceptional<T> of(Throwable throwable) {
+    @NotNull
+    @Contract("_ -> new")
+    public static <T> Exceptional<T> of(@NotNull Throwable throwable) {
+        Objects.requireNonNull(throwable);
         return new Exceptional<T>(null, throwable);
     }
 
     private final T value;
     private final Throwable throwable;
 
-    private Exceptional(T value, Throwable throwable) {
+    private Exceptional(@Nullable T value, @Nullable Throwable throwable) {
         this.value = value;
         this.throwable = throwable;
     }
@@ -70,6 +79,7 @@ public class Exceptional<T> {
      *
      * @return inner value.
      */
+    @Nullable
     public T get() {
         return value;
     }
@@ -89,7 +99,8 @@ public class Exceptional<T> {
      * @param other  the value to be returned if there were any exception
      * @return inner value if there were no exceptions, otherwise {@code other}
      */
-    public T getOrElse(T other) {
+    @Nullable
+    public T getOrElse(@Nullable T other) {
         return throwable == null ? value : other;
     }
 
@@ -100,7 +111,8 @@ public class Exceptional<T> {
      * @return inner value if there were no exceptions, otherwise value produced by supplier function
      * @since 1.1.9
      */
-    public T getOrElse(Supplier<? extends T> other) {
+    @Nullable
+    public T getOrElse(@NotNull Supplier<? extends T> other) {
         return throwable == null ? value : other.get();
     }
 
@@ -109,6 +121,7 @@ public class Exceptional<T> {
      *
      * @return an {@code Optional}
      */
+    @NotNull
     public Optional<T> getOptional() {
         return Optional.ofNullable(value);
     }
@@ -118,6 +131,7 @@ public class Exceptional<T> {
      *
      * @return exception
      */
+    @Nullable
     public Throwable getException() {
         return throwable;
     }
@@ -128,6 +142,7 @@ public class Exceptional<T> {
      * @return inner value if there were no exceptions
      * @throws Throwable that was thrown in supplier function
      */
+    @Nullable
     public T getOrThrow() throws Throwable {
         if (throwable != null) {
             throw throwable;
@@ -141,6 +156,7 @@ public class Exceptional<T> {
      * @return inner value if there were no exceptions
      * @throws RuntimeException with wrapped exception which was thrown in supplier function
      */
+    @Nullable
     public T getOrThrowRuntimeException() throws RuntimeException {
         if (throwable != null) {
             throw new RuntimeException(throwable);
@@ -156,7 +172,8 @@ public class Exceptional<T> {
      * @return inner value if there were no exceptions
      * @throws E if there were exceptions in supplier function
      */
-    public <E extends Throwable> T getOrThrow(E exception) throws E {
+    @Nullable
+    public <E extends Throwable> T getOrThrow(@NotNull E exception) throws E {
         if (throwable != null) {
             exception.initCause(throwable);
             throw exception;
@@ -173,7 +190,8 @@ public class Exceptional<T> {
      *         an {@code Exceptional} produced by supplier function
      * @throws NullPointerException if {@code supplier} or its result is null
      */
-    public Exceptional<T> or(Supplier<Exceptional<T>> supplier) {
+    @NotNull
+    public Exceptional<T> or(@NotNull Supplier<Exceptional<T>> supplier) {
         if (throwable == null) return this;
 
         Objects.requireNonNull(supplier);
@@ -189,7 +207,8 @@ public class Exceptional<T> {
      * @throws NullPointerException if {@code function} is null
      * @since 1.1.9
      */
-    public <R> R custom(Function<Exceptional<T>, R> function) {
+    @Nullable
+    public <R> R custom(@NotNull Function<Exceptional<T>, R> function) {
         Objects.requireNonNull(function);
         return function.apply(this);
     }
@@ -202,7 +221,8 @@ public class Exceptional<T> {
      * @return an {@code Exceptional} with transformed value if there were no exceptions
      * @throws NullPointerException if {@code mapper} is null
      */
-    public <U> Exceptional<U> map(ThrowableFunction<? super T, ? extends U, Throwable> mapper) {
+    @NotNull
+    public <U> Exceptional<U> map(@NotNull ThrowableFunction<? super T, ? extends U, Throwable> mapper) {
         if (throwable != null) {
             return of(throwable);
         }
@@ -221,7 +241,8 @@ public class Exceptional<T> {
      * @return this {@code Exceptional}
      * @since 1.1.2
      */
-    public Exceptional<T> ifPresent(Consumer<? super T> consumer) {
+    @NotNull
+    public Exceptional<T> ifPresent(@NotNull Consumer<? super T> consumer) {
         if (throwable == null) {
             consumer.accept(value);
         }
@@ -234,7 +255,8 @@ public class Exceptional<T> {
      * @param consumer  a consumer function
      * @return an {@code Exceptional}
      */
-    public Exceptional<T> ifException(Consumer<Throwable> consumer) {
+    @NotNull
+    public Exceptional<T> ifException(@NotNull Consumer<Throwable> consumer) {
         if (throwable != null) {
             consumer.accept(throwable);
         }
@@ -249,8 +271,9 @@ public class Exceptional<T> {
      * @param consumer  a consumer function
      * @return an {@code Exceptional}
      */
+    @NotNull
     @SuppressWarnings("unchecked")
-    public <E extends Throwable> Exceptional<T> ifExceptionIs(Class<E> throwableClass, Consumer<? super E> consumer) {
+    public <E extends Throwable> Exceptional<T> ifExceptionIs(@NotNull Class<E> throwableClass, @NotNull Consumer<? super E> consumer) {
         if ( (throwable != null) &&
                 (throwableClass.isAssignableFrom(throwable.getClass())) ) {
             consumer.accept((E) throwable);
@@ -268,7 +291,8 @@ public class Exceptional<T> {
      * @throws NullPointerException if {@code function} is null
      * @since 1.1.2
      */
-    public Exceptional<T> recover(final ThrowableFunction<Throwable, ? extends T, Throwable> function) {
+    @NotNull
+    public Exceptional<T> recover(@NotNull final ThrowableFunction<Throwable, ? extends T, Throwable> function) {
         if (throwable == null) return this;
 
         Objects.requireNonNull(function);
@@ -289,7 +313,8 @@ public class Exceptional<T> {
      * @throws NullPointerException if {@code function} or produced result is null
      * @since 1.1.2
      */
-    public Exceptional<T> recoverWith(final Function<Throwable, ? extends Exceptional<T>> function) {
+    @NotNull
+    public Exceptional<T> recoverWith(@NotNull final Function<Throwable, ? extends Exceptional<T>> function) {
         if (throwable == null) return this;
 
         Objects.requireNonNull(function);
@@ -316,6 +341,7 @@ public class Exceptional<T> {
         return Objects.hash(value, throwable);
     }
 
+    @NotNull
     @Override
     public String toString() {
         return throwable == null

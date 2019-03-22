@@ -1,5 +1,9 @@
 package com.annimon.stream.function;
 
+import com.annimon.stream.Objects;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Represents an operation on a {@code long}-valued input argument.
  *
@@ -29,7 +33,11 @@ public interface LongConsumer {
          * @return a composed {@code LongConsumer}
          * @throws NullPointerException if {@code c1} or {@code c2} is null
          */
-        public static LongConsumer andThen(final LongConsumer c1, final LongConsumer c2) {
+        public static LongConsumer andThen(
+                @NotNull final LongConsumer c1,
+                @NotNull final LongConsumer c2) {
+            Objects.requireNonNull(c1, "c1");
+            Objects.requireNonNull(c2, "c2");
             return new LongConsumer() {
                 @Override
                 public void accept(long value) {
@@ -48,7 +56,8 @@ public interface LongConsumer {
          * @since 1.1.7
          * @see #safe(com.annimon.stream.function.ThrowableLongConsumer, com.annimon.stream.function.LongConsumer)
          */
-        public static LongConsumer safe(ThrowableLongConsumer<Throwable> throwableConsumer) {
+        public static LongConsumer safe(
+                @NotNull ThrowableLongConsumer<Throwable> throwableConsumer) {
             return safe(throwableConsumer, null);
         }
 
@@ -63,8 +72,9 @@ public interface LongConsumer {
          * @see #safe(com.annimon.stream.function.ThrowableLongConsumer)
          */
         public static LongConsumer safe(
-                final ThrowableLongConsumer<Throwable> throwableConsumer,
-                final LongConsumer onFailedConsumer) {
+                @NotNull final ThrowableLongConsumer<Throwable> throwableConsumer,
+                @Nullable final LongConsumer onFailedConsumer) {
+            Objects.requireNonNull(throwableConsumer);
             return new LongConsumer() {
 
                 @Override

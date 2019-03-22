@@ -1,6 +1,7 @@
 package com.annimon.stream.function;
 
 import com.annimon.stream.Objects;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an operation on index and input {@code double}-valued operand
@@ -32,7 +33,7 @@ public interface IndexedDoubleUnaryOperator {
          * @throws NullPointerException if {@code function} is null
          */
         public static IndexedDoubleUnaryOperator wrap(
-                final DoubleUnaryOperator function) {
+                @NotNull final DoubleUnaryOperator function) {
             Objects.requireNonNull(function);
             return new IndexedDoubleUnaryOperator() {
                 @Override

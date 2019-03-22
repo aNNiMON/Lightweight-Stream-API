@@ -4,6 +4,7 @@ import com.annimon.stream.function.IndexedIntPredicate;
 import com.annimon.stream.iterator.PrimitiveIndexedIterator;
 import com.annimon.stream.iterator.PrimitiveIterator;
 import java.util.NoSuchElementException;
+import org.jetbrains.annotations.NotNull;
 
 public class IntFilterIndexed extends PrimitiveIterator.OfInt {
 
@@ -12,7 +13,9 @@ public class IntFilterIndexed extends PrimitiveIterator.OfInt {
     private boolean hasNext, hasNextEvaluated;
     private int next;
 
-    public IntFilterIndexed(PrimitiveIndexedIterator.OfInt iterator, IndexedIntPredicate predicate) {
+    public IntFilterIndexed(
+            @NotNull PrimitiveIndexedIterator.OfInt iterator,
+            @NotNull IndexedIntPredicate predicate) {
         this.iterator = iterator;
         this.predicate = predicate;
     }

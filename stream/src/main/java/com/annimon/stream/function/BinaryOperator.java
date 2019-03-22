@@ -2,6 +2,7 @@ package com.annimon.stream.function;
 
 import com.annimon.stream.Objects;
 import java.util.Comparator;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an operation on two operands that produces a result of the
@@ -24,7 +25,8 @@ public interface BinaryOperator<T> extends BiFunction<T, T, T> {
          *         according to the supplied {@code Comparator}
          * @throws NullPointerException if the argument is null
          */
-        public static <T> BinaryOperator<T> minBy(final Comparator<? super T> comparator) {
+        public static <T> BinaryOperator<T> minBy(
+                @NotNull final Comparator<? super T> comparator) {
             Objects.requireNonNull(comparator);
             return new BinaryOperator<T>() {
                 @Override

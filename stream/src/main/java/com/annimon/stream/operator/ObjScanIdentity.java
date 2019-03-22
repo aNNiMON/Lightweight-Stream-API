@@ -3,6 +3,8 @@ package com.annimon.stream.operator;
 import com.annimon.stream.function.BiFunction;
 import com.annimon.stream.iterator.LsaExtIterator;
 import java.util.Iterator;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ObjScanIdentity<T, R> extends LsaExtIterator<R> {
 
@@ -10,8 +12,10 @@ public class ObjScanIdentity<T, R> extends LsaExtIterator<R> {
     private final R identity;
     private final BiFunction<? super R, ? super T, ? extends R> accumulator;
 
-    public ObjScanIdentity(Iterator<? extends T> iterator, R identity,
-            BiFunction<? super R, ? super T, ? extends R> accumulator) {
+    public ObjScanIdentity(
+            @NotNull Iterator<? extends T> iterator,
+            @Nullable R identity,
+            @NotNull BiFunction<? super R, ? super T, ? extends R> accumulator) {
         this.iterator = iterator;
         this.identity = identity;
         this.accumulator = accumulator;

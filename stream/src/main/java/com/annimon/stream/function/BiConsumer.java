@@ -1,5 +1,7 @@
 package com.annimon.stream.function;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Represents an operation on two input arguments.
  *
@@ -34,8 +36,8 @@ public interface BiConsumer<T, U> {
          * @throws NullPointerException if {@code c1} or {@code c2} is null
          */
         public static <T, U> BiConsumer<T, U> andThen(
-                final BiConsumer<? super T, ? super U> c1,
-                final BiConsumer<? super T, ? super U> c2) {
+                @NotNull final BiConsumer<? super T, ? super U> c1,
+                @NotNull final BiConsumer<? super T, ? super U> c2) {
             return new BiConsumer<T, U>() {
                 @Override
                 public void accept(T t, U u) {

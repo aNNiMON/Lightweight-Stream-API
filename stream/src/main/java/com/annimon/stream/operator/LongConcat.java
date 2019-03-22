@@ -1,6 +1,7 @@
 package com.annimon.stream.operator;
 
 import com.annimon.stream.iterator.PrimitiveIterator;
+import org.jetbrains.annotations.NotNull;
 
 public class LongConcat extends PrimitiveIterator.OfLong {
 
@@ -8,7 +9,9 @@ public class LongConcat extends PrimitiveIterator.OfLong {
     private final PrimitiveIterator.OfLong iterator2;
     private boolean firstStreamIsCurrent;
 
-    public LongConcat(PrimitiveIterator.OfLong iterator1, PrimitiveIterator.OfLong iterator2) {
+    public LongConcat(
+            @NotNull PrimitiveIterator.OfLong iterator1,
+            @NotNull PrimitiveIterator.OfLong iterator2) {
         this.iterator1 = iterator1;
         this.iterator2 = iterator2;
         firstStreamIsCurrent = true;

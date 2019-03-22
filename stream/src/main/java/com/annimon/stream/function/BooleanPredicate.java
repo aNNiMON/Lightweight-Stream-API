@@ -1,5 +1,8 @@
 package com.annimon.stream.function;
 
+import com.annimon.stream.Objects;
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Represents a {@code boolean}-valued predicate (function with boolean type result).
  *
@@ -43,7 +46,11 @@ public interface BooleanPredicate {
          * @return a composed {@code BooleanPredicate}
          * @throws NullPointerException if {@code p1} or {@code p2} is null
          */
-        public static BooleanPredicate and(final BooleanPredicate p1, final BooleanPredicate p2) {
+        public static BooleanPredicate and(
+                @NotNull final BooleanPredicate p1,
+                @NotNull final BooleanPredicate p2) {
+            Objects.requireNonNull(p1, "predicate1");
+            Objects.requireNonNull(p2, "predicate2");
             return new BooleanPredicate() {
                 @Override
                 public boolean test(boolean value) {
@@ -60,7 +67,11 @@ public interface BooleanPredicate {
          * @return a composed {@code BooleanPredicate}
          * @throws NullPointerException if {@code p1} or {@code p2} is null
          */
-        public static BooleanPredicate or(final BooleanPredicate p1, final BooleanPredicate p2) {
+        public static BooleanPredicate or(
+                @NotNull final BooleanPredicate p1,
+                @NotNull final BooleanPredicate p2) {
+            Objects.requireNonNull(p1, "predicate1");
+            Objects.requireNonNull(p2, "predicate2");
             return new BooleanPredicate() {
                 @Override
                 public boolean test(boolean value) {
@@ -77,7 +88,11 @@ public interface BooleanPredicate {
          * @return a composed {@code BooleanPredicate}
          * @throws NullPointerException if {@code p1} or {@code p2} is null
          */
-        public static BooleanPredicate xor(final BooleanPredicate p1, final BooleanPredicate p2) {
+        public static BooleanPredicate xor(
+                @NotNull final BooleanPredicate p1,
+                @NotNull final BooleanPredicate p2) {
+            Objects.requireNonNull(p1, "predicate1");
+            Objects.requireNonNull(p2, "predicate2");
             return new BooleanPredicate() {
                 @Override
                 public boolean test(boolean value) {
@@ -93,7 +108,8 @@ public interface BooleanPredicate {
          * @return a composed {@code BooleanPredicate}
          * @throws NullPointerException if {@code p1} is null
          */
-        public static BooleanPredicate negate(final BooleanPredicate p1) {
+        public static BooleanPredicate negate(@NotNull final BooleanPredicate p1) {
+            Objects.requireNonNull(p1);
             return new BooleanPredicate() {
                 @Override
                 public boolean test(boolean value) {

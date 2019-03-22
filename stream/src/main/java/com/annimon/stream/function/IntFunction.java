@@ -1,5 +1,9 @@
 package com.annimon.stream.function;
 
+import com.annimon.stream.Objects;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Represents a function that accepts an int-valued argument and produces a
  * result.  This is the {@code int}-consuming primitive specialization for
@@ -37,7 +41,7 @@ public interface IntFunction<R> {
          * @see #safe(com.annimon.stream.function.ThrowableIntFunction, java.lang.Object)
          */
         public static <R> IntFunction<R> safe(
-                ThrowableIntFunction<? extends R, Throwable> throwableFunction) {
+                @NotNull ThrowableIntFunction<? extends R, Throwable> throwableFunction) {
             return Util.<R>safe(throwableFunction, null);
         }
 
@@ -52,8 +56,9 @@ public interface IntFunction<R> {
          * @since 1.1.7
          */
         public static <R> IntFunction<R> safe(
-                final ThrowableIntFunction<? extends R, Throwable> throwableFunction,
-                final R resultIfFailed) {
+                @NotNull final ThrowableIntFunction<? extends R, Throwable> throwableFunction,
+                @Nullable final R resultIfFailed) {
+            Objects.requireNonNull(throwableFunction);
             return new IntFunction<R>() {
 
                 @Override

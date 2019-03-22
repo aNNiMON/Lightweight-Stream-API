@@ -1,6 +1,7 @@
 package com.annimon.stream.function;
 
 import com.annimon.stream.Objects;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a function which produces result from index and two input arguments.
@@ -37,7 +38,7 @@ public interface IndexedBiFunction<T, U, R> {
          * @throws NullPointerException if {@code function} is null
          */
         public static <T, U, R> IndexedBiFunction<T, U, R> wrap(
-                final BiFunction<? super T, ? super U, ? extends R> function) {
+                @NotNull final BiFunction<? super T, ? super U, ? extends R> function) {
             Objects.requireNonNull(function);
             return new IndexedBiFunction<T, U, R>() {
 

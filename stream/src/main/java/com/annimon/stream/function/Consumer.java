@@ -1,6 +1,8 @@
 package com.annimon.stream.function;
 
 import com.annimon.stream.Objects;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents an operation on input argument.
@@ -32,7 +34,11 @@ public interface Consumer<T> {
          * @return a composed {@code Consumer}
          * @throws NullPointerException if {@code c1} or {@code c2} is null
          */
-        public static <T> Consumer<T> andThen(final Consumer<? super T> c1, final Consumer<? super T> c2) {
+        public static <T> Consumer<T> andThen(
+                @NotNull final Consumer<? super T> c1,
+                @NotNull final Consumer<? super T> c2) {
+            Objects.requireNonNull(c1, "c1");
+            Objects.requireNonNull(c2, "c2");
             return new Consumer<T>() {
                 @Override
                 public void accept(T value) {
@@ -51,7 +57,8 @@ public interface Consumer<T> {
          * @throws NullPointerException if {@code throwableConsumer} is null
          * @see #safe(com.annimon.stream.function.ThrowableConsumer, com.annimon.stream.function.Consumer)
          */
-        public static <T> Consumer<T> safe(ThrowableConsumer<? super T, Throwable> throwableConsumer) {
+        public static <T> Consumer<T> safe(
+                @NotNull ThrowableConsumer<? super T, Throwable> throwableConsumer) {
             return safe(throwableConsumer, null);
         }
 
@@ -66,8 +73,9 @@ public interface Consumer<T> {
          * @see #safe(com.annimon.stream.function.ThrowableConsumer)
          */
         public static <T> Consumer<T> safe(
-                final ThrowableConsumer<? super T, Throwable> throwableConsumer,
-                final Consumer<? super T> onFailedConsumer) {
+                @NotNull final ThrowableConsumer<? super T, Throwable> throwableConsumer,
+                @Nullable final Consumer<? super T> onFailedConsumer) {
+            Objects.requireNonNull(throwableConsumer);
             return new Consumer<T>() {
 
                 @Override

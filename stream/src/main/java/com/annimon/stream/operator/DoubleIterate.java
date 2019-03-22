@@ -2,13 +2,14 @@ package com.annimon.stream.operator;
 
 import com.annimon.stream.function.DoubleUnaryOperator;
 import com.annimon.stream.iterator.PrimitiveIterator;
+import org.jetbrains.annotations.NotNull;
 
 public class DoubleIterate extends PrimitiveIterator.OfDouble {
 
     private final DoubleUnaryOperator op;
     private double current;
 
-    public DoubleIterate(double seed, DoubleUnaryOperator f) {
+    public DoubleIterate(double seed, @NotNull DoubleUnaryOperator f) {
         this.op = f;
         current = seed;
     }

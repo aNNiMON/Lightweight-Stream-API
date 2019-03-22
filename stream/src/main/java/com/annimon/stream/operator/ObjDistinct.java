@@ -4,13 +4,14 @@ import com.annimon.stream.iterator.LsaExtIterator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import org.jetbrains.annotations.NotNull;
 
 public class ObjDistinct<T> extends LsaExtIterator<T> {
 
     private final Iterator<? extends T> iterator;
     private final Set<T> set;
 
-    public ObjDistinct(Iterator<? extends T> iterator) {
+    public ObjDistinct(@NotNull Iterator<? extends T> iterator) {
         this.iterator = iterator;
         set = new HashSet<T>();
     }

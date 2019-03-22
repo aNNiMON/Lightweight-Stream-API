@@ -5,6 +5,9 @@ import com.annimon.stream.function.Supplier;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Common operations with Object.
@@ -20,7 +23,8 @@ public final class Objects {
      * @param b  an object
      * @return {@code true} if objects are equals, {@code false} otherwise
      */
-    public static boolean equals(Object a, Object b) {
+    @Contract(pure = true)
+    public static boolean equals(@Nullable Object a, @Nullable Object b) {
         return (a == b) || (a != null && a.equals(b));
     }
 
@@ -34,7 +38,8 @@ public final class Objects {
      * @see Objects#equals(Object, Object)
      * @since 1.2.0
      */
-    public static boolean deepEquals(Object a, Object b) {
+    @Contract(pure = true)
+    public static boolean deepEquals(@Nullable Object a, @Nullable Object b) {
         return (a == b)
                 || (a != null && b != null)
                 && Arrays.deepEquals(new Object[] { a }, new Object[] { b });
@@ -46,7 +51,8 @@ public final class Objects {
      * @param o  an object
      * @return the hash code
      */
-    public static int hashCode(Object o) {
+    @Contract(pure = true)
+    public static int hashCode(@Nullable Object o) {
         return o != null ? o.hashCode() : 0;
     }
 
@@ -56,7 +62,8 @@ public final class Objects {
      * @param values  the values
      * @return the hash code
      */
-    public static int hash(Object... values) {
+    @Contract(pure = true)
+    public static int hash(@Nullable Object... values) {
         if (values == null) return 0;
 
         int result = 1;
@@ -72,7 +79,9 @@ public final class Objects {
      * @param nullDefault  a string to return if object is null
      * @return a result of calling {@code toString} on object or {@code nullDefault} if object is null.
      */
-    public static String toString(Object o, String nullDefault) {
+    @NotNull
+    @Contract("null, _ -> param2")
+    public static String toString(@Nullable Object o, @NotNull String nullDefault) {
         return (o != null) ? o.toString() : nullDefault;
     }
 
@@ -85,7 +94,8 @@ public final class Objects {
      * @param c  the comparator
      * @return comparing result
      */
-    public static <T> int compare(T a, T b, Comparator<? super T> c) {
+    @Contract(pure = true)
+    public static <T> int compare(@Nullable T a, @Nullable T b, @NotNull Comparator<? super T> c) {
         return (a == b) ? 0 : c.compare(a, b);
     }
 
@@ -97,6 +107,7 @@ public final class Objects {
      * @return comparing result
      * @since 1.1.6
      */
+    @Contract(pure = true)
     public static int compareInt(int x, int y) {
         return (x < y) ? -1 : ((x == y) ? 0 : 1);
     }
@@ -109,6 +120,7 @@ public final class Objects {
      * @return comparing result
      * @since 1.1.6
      */
+    @Contract(pure = true)
     public static int compareLong(long x, long y) {
         return (x < y) ? -1 : ((x == y) ? 0 : 1);
     }
@@ -122,7 +134,9 @@ public final class Objects {
      * @throws NullPointerException if object is {@code null}
      * @see #requireNonNull(java.lang.Object, java.lang.String)
      */
-    public static <T> T requireNonNull(T obj) {
+    @NotNull
+    @Contract(value = "null -> fail; !null -> param1", pure = true)
+    public static <T> T requireNonNull(@Nullable T obj) {
         if (obj == null)
             throw new NullPointerException();
         else return obj;
@@ -138,7 +152,9 @@ public final class Objects {
      * @throws NullPointerException if object is {@code null}
      * @see #requireNonNull(java.lang.Object)
      */
-    public static <T> T requireNonNull(T obj, String message) {
+    @NotNull
+    @Contract(value = "null, _ -> fail; !null, _ -> param1", pure = true)
+    public static <T> T requireNonNull(@Nullable T obj, @NotNull String message) {
         if (obj == null)
             throw new NullPointerException(message);
         else return obj;
@@ -156,7 +172,9 @@ public final class Objects {
      * @see #requireNonNull(java.lang.Object)
      * @since 1.2.0
      */
-    public static <T> T requireNonNull(T obj, Supplier<String> messageSupplier) {
+    @NotNull
+    @Contract("null, _ -> fail; !null, _ -> param1")
+    public static <T> T requireNonNull(@Nullable T obj, @NotNull Supplier<String> messageSupplier) {
         if (obj == null)
             throw new NullPointerException(messageSupplier.get());
         else return obj;
@@ -174,7 +192,9 @@ public final class Objects {
      *         the non-{@code null} second object otherwise.
      * @since 1.2.0
      */
-    public static <T> T requireNonNullElse(T obj, T defaultObj) {
+    @NotNull
+    @Contract(value = "!null, _ -> param1; null, !null -> param2; null, null -> fail", pure = true)
+    public static <T> T requireNonNullElse(@Nullable T obj, @NotNull T defaultObj) {
         return (obj != null) ? obj : requireNonNull(defaultObj, "defaultObj");
     }
 
@@ -190,7 +210,9 @@ public final class Objects {
      *         the non-{@code null} supplier's result otherwise
      * @since 1.2.0
      */
-    public static <T> T requireNonNullElseGet(T obj, Supplier<? extends T> supplier) {
+    @NotNull
+    @Contract("!null, _ -> param1; null, null -> fail")
+    public static <T> T requireNonNullElseGet(@Nullable T obj, @NotNull Supplier<? extends T> supplier) {
         if (obj != null) return obj;
         final T suppliedObj = requireNonNull(supplier, "supplier").get();
         return requireNonNull(suppliedObj, "supplier.get()");
@@ -205,7 +227,9 @@ public final class Objects {
      * @throws NullPointerException if collection or its elements are {@code null}
      * @since 1.2.0
      */
-    public static <T> Collection<T> requireNonNullElements(Collection<T> collection) {
+    @NotNull
+    @Contract("null -> fail; !null -> param1")
+    public static <T> Collection<T> requireNonNullElements(@NotNull Collection<T> collection) {
         requireNonNull(collection);
         for (T t : collection) {
             requireNonNull(t);
@@ -221,7 +245,8 @@ public final class Objects {
      * @see Predicate
      * @since 1.2.0
      */
-    public static boolean isNull(Object obj) {
+    @Contract(value = "null -> true; !null -> false", pure = true)
+    public static boolean isNull(@Nullable Object obj) {
         return obj == null;
     }
 
@@ -234,7 +259,8 @@ public final class Objects {
      * @see Predicate.Util#notNull()
      * @since 1.2.0
      */
-    public static boolean nonNull(Object obj) {
+    @Contract(value = "null -> false; !null -> true", pure = true)
+    public static boolean nonNull(@Nullable Object obj) {
         return obj != null;
     }
 }

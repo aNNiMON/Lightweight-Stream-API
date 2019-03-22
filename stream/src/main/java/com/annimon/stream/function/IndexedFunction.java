@@ -1,6 +1,7 @@
 package com.annimon.stream.function;
 
 import com.annimon.stream.Objects;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a function which produces result from index and input argument.
@@ -34,7 +35,7 @@ public interface IndexedFunction<T, R> {
          * @throws NullPointerException if {@code function} is null
          */
         public static <T, R> IndexedFunction<T, R> wrap(
-                final Function<? super T, ? extends R> function) {
+                @NotNull final Function<? super T, ? extends R> function) {
             Objects.requireNonNull(function);
             return new IndexedFunction<T, R>() {
 

@@ -1,6 +1,7 @@
 package com.annimon.stream.operator;
 
 import com.annimon.stream.iterator.PrimitiveIterator;
+import org.jetbrains.annotations.NotNull;
 
 public class DoubleLimit extends PrimitiveIterator.OfDouble {
 
@@ -8,7 +9,7 @@ public class DoubleLimit extends PrimitiveIterator.OfDouble {
     private final long maxSize;
     private long index;
 
-    public DoubleLimit(PrimitiveIterator.OfDouble iterator, long maxSize) {
+    public DoubleLimit(@NotNull PrimitiveIterator.OfDouble iterator, long maxSize) {
         this.iterator = iterator;
         this.maxSize = maxSize;
         index = 0;

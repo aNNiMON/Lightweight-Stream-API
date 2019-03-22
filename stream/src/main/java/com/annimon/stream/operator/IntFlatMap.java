@@ -4,6 +4,7 @@ import com.annimon.stream.IntStream;
 import com.annimon.stream.function.IntFunction;
 import com.annimon.stream.iterator.PrimitiveIterator;
 import java.util.NoSuchElementException;
+import org.jetbrains.annotations.NotNull;
 
 public class IntFlatMap extends PrimitiveIterator.OfInt {
 
@@ -12,7 +13,9 @@ public class IntFlatMap extends PrimitiveIterator.OfInt {
     private PrimitiveIterator.OfInt inner;
     private IntStream innerStream;
 
-    public IntFlatMap(PrimitiveIterator.OfInt iterator, IntFunction<? extends IntStream> mapper) {
+    public IntFlatMap(
+            @NotNull PrimitiveIterator.OfInt iterator,
+            @NotNull IntFunction<? extends IntStream> mapper) {
         this.iterator = iterator;
         this.mapper = mapper;
     }

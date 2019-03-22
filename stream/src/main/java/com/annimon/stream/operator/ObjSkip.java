@@ -2,6 +2,7 @@ package com.annimon.stream.operator;
 
 import com.annimon.stream.iterator.LsaIterator;
 import java.util.Iterator;
+import org.jetbrains.annotations.NotNull;
 
 public class ObjSkip<T> extends LsaIterator<T> {
 
@@ -9,7 +10,7 @@ public class ObjSkip<T> extends LsaIterator<T> {
     private final long n;
     private long skipped;
 
-    public ObjSkip(Iterator<? extends T> iterator, long n) {
+    public ObjSkip(@NotNull Iterator<? extends T> iterator, long n) {
         this.iterator = iterator;
         this.n = n;
         skipped = 0;

@@ -1,6 +1,7 @@
 package com.annimon.stream.function;
 
 import com.annimon.stream.Objects;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an operation on index and input argument.
@@ -31,7 +32,11 @@ public interface IndexedIntConsumer {
          * @return a composed {@code IndexedIntConsumer}
          * @throws NullPointerException if {@code c1} or {@code c2} is null
          */
-        public static IndexedIntConsumer andThen(final IndexedIntConsumer c1, final IndexedIntConsumer c2) {
+        public static IndexedIntConsumer andThen(
+                @NotNull final IndexedIntConsumer c1,
+                @NotNull final IndexedIntConsumer c2) {
+            Objects.requireNonNull(c1, "c1");
+            Objects.requireNonNull(c2, "c2");
             return new IndexedIntConsumer() {
                 @Override
                 public void accept(int index, int value) {

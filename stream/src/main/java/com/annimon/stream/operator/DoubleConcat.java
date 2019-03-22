@@ -1,6 +1,7 @@
 package com.annimon.stream.operator;
 
 import com.annimon.stream.iterator.PrimitiveIterator;
+import org.jetbrains.annotations.NotNull;
 
 public class DoubleConcat extends PrimitiveIterator.OfDouble {
 
@@ -8,7 +9,9 @@ public class DoubleConcat extends PrimitiveIterator.OfDouble {
     private final PrimitiveIterator.OfDouble iterator2;
     private boolean firstStreamIsCurrent;
 
-    public DoubleConcat(PrimitiveIterator.OfDouble iterator1, PrimitiveIterator.OfDouble iterator2) {
+    public DoubleConcat(
+            @NotNull PrimitiveIterator.OfDouble iterator1,
+            @NotNull PrimitiveIterator.OfDouble iterator2) {
         this.iterator1 = iterator1;
         this.iterator2 = iterator2;
         firstStreamIsCurrent = true;

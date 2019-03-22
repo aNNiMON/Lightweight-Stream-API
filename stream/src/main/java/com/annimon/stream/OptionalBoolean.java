@@ -7,6 +7,8 @@ import com.annimon.stream.function.BooleanSupplier;
 import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Supplier;
 import java.util.NoSuchElementException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A container object which may or may not contain a {@code boolean} value.
@@ -26,6 +28,7 @@ public final class OptionalBoolean {
      *
      * @return an empty {@code OptionalBoolean}
      */
+    @NotNull
     public static OptionalBoolean empty() {
         return EMPTY;
     }
@@ -36,6 +39,7 @@ public final class OptionalBoolean {
      * @param value  the value to be present
      * @return an {@code OptionalBoolean} with the value present
      */
+    @NotNull
     public static OptionalBoolean of(boolean value) {
         return value ? TRUE : FALSE;
     }
@@ -47,7 +51,8 @@ public final class OptionalBoolean {
      * @return an {@code OptionalBoolean}
      * @since 1.2.1
      */
-    public static OptionalBoolean ofNullable(Boolean value) {
+    @NotNull
+    public static OptionalBoolean ofNullable(@Nullable Boolean value) {
         return value == null ? EMPTY : of(value);
     }
 
@@ -103,7 +108,7 @@ public final class OptionalBoolean {
      * @param consumer  the consumer function to be executed if a value is present
      * @throws NullPointerException if value is present and {@code consumer} is null
      */
-    public void ifPresent(BooleanConsumer consumer) {
+    public void ifPresent(@NotNull BooleanConsumer consumer) {
         if (isPresent) {
             consumer.accept(value);
         }
@@ -118,7 +123,7 @@ public final class OptionalBoolean {
      * @throws NullPointerException if a value is present and the given consumer function is null,
      *         or no value is present and the given empty-based action is null.
      */
-    public void ifPresentOrElse(BooleanConsumer consumer, Runnable emptyAction) {
+    public void ifPresentOrElse(@NotNull BooleanConsumer consumer, @NotNull Runnable emptyAction) {
         if (isPresent) {
             consumer.accept(value);
         } else {
@@ -134,7 +139,8 @@ public final class OptionalBoolean {
      * @return this {@code OptionalBoolean}
      * @see #ifPresent(BooleanConsumer)
      */
-    public OptionalBoolean executeIfPresent(BooleanConsumer consumer) {
+    @NotNull
+    public OptionalBoolean executeIfPresent(@NotNull BooleanConsumer consumer) {
         ifPresent(consumer);
         return this;
     }
@@ -145,7 +151,8 @@ public final class OptionalBoolean {
      * @param action  action that invokes if value absent
      * @return this {@code OptionalBoolean}
      */
-    public OptionalBoolean executeIfAbsent(Runnable action) {
+    @NotNull
+    public OptionalBoolean executeIfAbsent(@NotNull Runnable action) {
         if (!isPresent()) {
             action.run();
         }
@@ -161,7 +168,8 @@ public final class OptionalBoolean {
      * @throws NullPointerException if {@code function} is null
      * @since 1.1.9
      */
-    public <R> R custom(Function<OptionalBoolean, R> function) {
+    @Nullable
+    public <R> R custom(@NotNull Function<OptionalBoolean, R> function) {
         Objects.requireNonNull(function);
         return function.apply(this);
     }
@@ -173,7 +181,8 @@ public final class OptionalBoolean {
      * @return this {@code OptionalBoolean} if the value is present and matches predicate,
      *         otherwise an empty {@code OptionalBoolean}
      */
-    public OptionalBoolean filter(BooleanPredicate predicate) {
+    @NotNull
+    public OptionalBoolean filter(@NotNull BooleanPredicate predicate) {
         if (!isPresent()) return this;
         return predicate.test(value) ? this : OptionalBoolean.empty();
     }
@@ -186,7 +195,8 @@ public final class OptionalBoolean {
      *              otherwise an empty {@code OptionalBoolean}
      * @since 1.1.9
      */
-    public OptionalBoolean filterNot(BooleanPredicate predicate) {
+    @NotNull
+    public OptionalBoolean filterNot(@NotNull BooleanPredicate predicate) {
         return filter(BooleanPredicate.Util.negate(predicate));
     }
 
@@ -199,7 +209,8 @@ public final class OptionalBoolean {
      * @throws NullPointerException if value is present and
      *         {@code mapper} is {@code null}
      */
-    public OptionalBoolean map(BooleanPredicate mapper) {
+    @NotNull
+    public OptionalBoolean map(@NotNull BooleanPredicate mapper) {
         if (!isPresent()) {
             return empty();
         }
@@ -217,7 +228,8 @@ public final class OptionalBoolean {
      * @throws NullPointerException if value is present and
      *         {@code mapper} is {@code null}
      */
-    public <U> Optional<U> mapToObj(BooleanFunction<U> mapper) {
+    @NotNull
+    public <U> Optional<U> mapToObj(@NotNull BooleanFunction<U> mapper) {
         if (!isPresent()) {
             return Optional.empty();
         }
@@ -235,7 +247,8 @@ public final class OptionalBoolean {
      * @throws NullPointerException if value is not present and
      *         {@code supplier} or value produced by it is {@code null}
      */
-    public OptionalBoolean or(Supplier<OptionalBoolean> supplier) {
+    @NotNull
+    public OptionalBoolean or(@NotNull Supplier<OptionalBoolean> supplier) {
         if (isPresent()) return this;
         Objects.requireNonNull(supplier);
         return Objects.requireNonNull(supplier.get());
@@ -258,7 +271,7 @@ public final class OptionalBoolean {
      * @return the value if present otherwise the result of {@code other.getAsBoolean()}
      * @throws NullPointerException if value is not present and {@code other} is null
      */
-    public boolean orElseGet(BooleanSupplier other) {
+    public boolean orElseGet(@NotNull BooleanSupplier other) {
         return isPresent ? value : other.getAsBoolean();
     }
 
@@ -284,7 +297,7 @@ public final class OptionalBoolean {
      * @return inner value if present
      * @throws X if inner value is not present
      */
-    public <X extends Throwable> boolean orElseThrow(Supplier<X> exceptionSupplier) throws X {
+    public <X extends Throwable> boolean orElseThrow(@NotNull Supplier<X> exceptionSupplier) throws X {
         if (isPresent) {
             return value;
         } else {
@@ -310,6 +323,7 @@ public final class OptionalBoolean {
         return isPresent ? (value ? 1231 : 1237) : 0;
     }
 
+    @NotNull
     @Override
     public String toString() {
         return isPresent
