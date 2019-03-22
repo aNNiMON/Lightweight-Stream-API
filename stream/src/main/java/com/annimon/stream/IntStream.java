@@ -640,7 +640,7 @@ public final class IntStream implements Closeable {
      * @return the new {@code IntStream}
      */
     @NotNull
-    public IntStream sorted(@NotNull Comparator<Integer> comparator) {
+    public IntStream sorted(@Nullable Comparator<Integer> comparator) {
         return boxed().sorted(comparator).mapToInt(UNBOX_FUNCTION);
     }
 

@@ -619,7 +619,7 @@ public final class LongStream implements Closeable {
      * @return the new {@code LongStream}
      */
     @NotNull
-    public LongStream sorted(@NotNull Comparator<Long> comparator) {
+    public LongStream sorted(@Nullable Comparator<Long> comparator) {
         return boxed().sorted(comparator).mapToLong(UNBOX_FUNCTION);
     }
 

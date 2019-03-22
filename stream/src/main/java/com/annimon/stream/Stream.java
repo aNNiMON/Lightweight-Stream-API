@@ -1048,7 +1048,7 @@ public class Stream<T> implements Closeable {
      * @return the new stream
      */
     @NotNull
-    public Stream<T> sorted(@NotNull final Comparator<? super T> comparator) {
+    public Stream<T> sorted(@Nullable final Comparator<? super T> comparator) {
         return new Stream<T>(params, new ObjSorted<T>(iterator, comparator));
     }
 

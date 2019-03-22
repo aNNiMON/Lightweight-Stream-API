@@ -583,7 +583,7 @@ public final class DoubleStream implements Closeable {
      * @return the new {@code DoubleStream}
      */
     @NotNull
-    public DoubleStream sorted(@NotNull Comparator<Double> comparator) {
+    public DoubleStream sorted(@Nullable Comparator<Double> comparator) {
         return boxed().sorted(comparator).mapToDouble(UNBOX_FUNCTION);
     }
 

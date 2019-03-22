@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ObjSorted<T> extends LsaExtIterator<T> {
 
@@ -16,7 +17,7 @@ public class ObjSorted<T> extends LsaExtIterator<T> {
 
     public ObjSorted(
             @NotNull Iterator<? extends T> iterator,
-            @NotNull Comparator<? super T> comparator) {
+            @Nullable Comparator<? super T> comparator) {
         this.iterator = iterator;
         this.comparator = comparator;
     }

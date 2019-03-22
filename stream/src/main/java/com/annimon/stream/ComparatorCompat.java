@@ -66,7 +66,7 @@ public final class ComparatorCompat<T> implements Comparator<T> {
      * @throws NullPointerException if {@code comparator} is null
      */
     @NotNull
-    public static <T> Comparator<T> reversed(Comparator<T> comparator) {
+    public static <T> Comparator<T> reversed(@Nullable Comparator<T> comparator) {
         return Collections.reverseOrder(comparator);
     }
 
@@ -243,7 +243,7 @@ public final class ComparatorCompat<T> implements Comparator<T> {
      * @return a comparator
      */
     @NotNull
-    public static <T> ComparatorCompat<T> nullsFirst(Comparator<? super T> comparator) {
+    public static <T> ComparatorCompat<T> nullsFirst(@Nullable Comparator<? super T> comparator) {
         return nullsComparator(true, comparator);
     }
 
@@ -269,7 +269,7 @@ public final class ComparatorCompat<T> implements Comparator<T> {
      * @return a comparator
      */
     @NotNull
-    public static <T> ComparatorCompat<T> nullsLast(Comparator<? super T> comparator) {
+    public static <T> ComparatorCompat<T> nullsLast(@Nullable Comparator<? super T> comparator) {
         return nullsComparator(false, comparator);
     }
 
