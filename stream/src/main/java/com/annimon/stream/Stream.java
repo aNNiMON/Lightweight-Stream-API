@@ -1825,9 +1825,7 @@ public class Stream<T> implements Closeable {
             final T value = iterator.next();
             collector.accumulator().accept(container, value);
         }
-        if (collector.finisher() != null)
-            return collector.finisher().apply(container);
-        return Collectors.<A, R>castIdentity().apply(container);
+        return collector.finisher().apply(container);
     }
 
     /**
