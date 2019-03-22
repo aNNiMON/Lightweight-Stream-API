@@ -875,13 +875,12 @@ public final class Collectors {
      */
     @NotNull
     public static <T, A, IR, OR> Collector<T, A, OR> collectingAndThen(
-            @NotNull Collector<T, A, IR> c, Function<IR, OR> finisher) {
-        Function<A, IR> downstreamFinisher = c.finisher();
-        if (downstreamFinisher == null) {
-            downstreamFinisher = castIdentity();
-        }
+            @NotNull Collector<T, A, IR> c,
+            @NotNull Function<IR, OR> finisher) {
+        Objects.requireNonNull(c);
+        Objects.requireNonNull(finisher);
         return new CollectorsImpl<T, A, OR>(c.supplier(), c.accumulator(),
-                Function.Util.andThen(downstreamFinisher, finisher));
+                Function.Util.andThen(c.finisher(), finisher));
     }
 
     /**
@@ -944,24 +943,21 @@ public final class Collectors {
 
         @SuppressWarnings("unchecked")
         final Function<A, A> downstreamFinisher = (Function<A, A>) downstream.finisher();
-        Function<Map<K, A>, M> finisher = null;
-        if (downstreamFinisher != null) {
-            finisher = new Function<Map<K, A>, M>() {
-                @NotNull
-                @Override
-                public M apply(@NotNull Map<K, A> map) {
-                    // Update values of a map by a finisher function
-                    for (Map.Entry<K, A> entry : map.entrySet()) {
-                        A value = entry.getValue();
-                        value = downstreamFinisher.apply(value);
-                        entry.setValue(value);
-                    }
-                    @SuppressWarnings("unchecked")
-                    M castedMap = (M) map;
-                    return castedMap;
+        Function<Map<K, A>, M> finisher = new Function<Map<K, A>, M>() {
+            @NotNull
+            @Override
+            public M apply(@NotNull Map<K, A> map) {
+                // Update values of a map by a finisher function
+                for (Map.Entry<K, A> entry : map.entrySet()) {
+                    A value = entry.getValue();
+                    value = downstreamFinisher.apply(value);
+                    entry.setValue(value);
                 }
-            };
-        }
+                @SuppressWarnings("unchecked")
+                M castedMap = (M) map;
+                return castedMap;
+            }
+        };
 
         @SuppressWarnings("unchecked")
         Supplier<Map<K, A>> castedMapFactory = (Supplier<Map<K, A>>) mapFactory;
@@ -1042,10 +1038,7 @@ public final class Collectors {
                     @NotNull
                     @Override
                     public Map<Boolean, D> apply(@NotNull Tuple2<A> container) {
-                        final Function<A, D> downstreamFinisher = downstream.finisher();
-                        final Function<A, D> finisher = downstreamFinisher == null
-                                ? Collectors.<A, D>castIdentity()
-                                : downstreamFinisher;
+                        final Function<A, D> finisher = downstream.finisher();
                         Map<Boolean, D> result = new HashMap<Boolean, D>(2);
                         result.put(Boolean.TRUE, finisher.apply(container.a));
                         result.put(Boolean.FALSE, finisher.apply(container.b));
@@ -1218,7 +1211,7 @@ public final class Collectors {
         private final Function<A, R> finisher;
 
         public CollectorsImpl(Supplier<A> supplier, BiConsumer<A, T> accumulator) {
-            this(supplier, accumulator, null);
+            this(supplier, accumulator, Collectors.<A, R>castIdentity());
         }
 
         public CollectorsImpl(Supplier<A> supplier, BiConsumer<A, T> accumulator, Function<A, R> finisher) {
