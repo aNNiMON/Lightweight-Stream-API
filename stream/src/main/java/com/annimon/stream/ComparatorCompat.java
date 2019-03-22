@@ -332,15 +332,7 @@ public final class ComparatorCompat<T> implements Comparator<T> {
      */
     @NotNull
     public ComparatorCompat<T> thenComparing(@NotNull final Comparator<? super T> other) {
-        Objects.requireNonNull(other);
-        return new ComparatorCompat<T>(new Comparator<T>() {
-
-            @Override
-            public int compare(T t1, T t2) {
-                final int result = comparator.compare(t1, t2);
-                return (result != 0) ? result : other.compare(t1, t2);
-            }
-        });
+        return new ComparatorCompat<T>(thenComparing(comparator, other));
     }
 
     /**
