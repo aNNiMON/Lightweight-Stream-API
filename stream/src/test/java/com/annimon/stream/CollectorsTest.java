@@ -1,15 +1,8 @@
 package com.annimon.stream;
 
-import com.annimon.stream.function.BinaryOperator;
-import com.annimon.stream.function.Function;
-import com.annimon.stream.function.IntSupplier;
-import com.annimon.stream.function.Predicate;
-import com.annimon.stream.function.Supplier;
-import com.annimon.stream.function.ToDoubleFunction;
-import com.annimon.stream.function.ToIntFunction;
-import com.annimon.stream.function.ToLongFunction;
-import com.annimon.stream.function.UnaryOperator;
+import com.annimon.stream.function.*;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
+import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -834,6 +827,47 @@ public class CollectorsTest {
                         })
         );
         assertThat(result, instanceOf(LinkedList.class));
+    }
+
+    @Test
+    public void testTeeingAverage() {
+        final ToIntFunction<Integer> toInt = new ToIntFunction<Integer>() {
+            @Override
+            public int applyAsInt(Integer t) {
+                return t;
+            }
+        };
+
+        double result = Stream.of(1, 2, 3, 4, 5)
+                .collect(Collectors.teeing(
+                        Collectors.summingInt(toInt),
+                        Collectors.<Integer>counting(),
+                        new BiFunction<Integer, Long, Double>() {
+                            @Override
+                            public Double apply(Integer sum, Long count) {
+                                return sum / count.doubleValue();
+                            }
+                        }
+                ));
+        assertThat(result, closeTo(3, 0.01));
+    }
+
+    @Test
+    public void testTeeingMultipleContainers() {
+        Map.Entry<List<Integer>, Set<Integer>> result = Stream.of(1, 2, 2, 3, 4, 1, 3, 5)
+                .collect(Collectors.teeing(
+                        Collectors.<Integer>toList(),
+                        Collectors.<Integer>toSet(),
+                        new BiFunction<List<Integer>, Set<Integer>, Map.Entry<List<Integer>, Set<Integer>>>() {
+                            @Override
+                            public Map.Entry<List<Integer>, Set<Integer>> apply(
+                                    List<Integer> value1, Set<Integer> value2) {
+                                return new AbstractMap.SimpleEntry<List<Integer>, Set<Integer>>(value1, value2);
+                            }
+                        }
+                ));
+        assertThat(result.getKey(), contains(1, 2, 2, 3, 4, 1, 3, 5));
+        assertThat(result.getValue(), containsInAnyOrder(1, 2, 3, 4, 5));
     }
 
     @Test

@@ -2,6 +2,7 @@ package com.annimon.stream;
 
 import com.annimon.stream.function.*;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -1049,6 +1050,83 @@ public final class Collectors {
                         result.put(Boolean.TRUE, finisher.apply(container.a));
                         result.put(Boolean.FALSE, finisher.apply(container.b));
                         return result;
+                    }
+                }
+        );
+    }
+
+
+    /**
+     * Returns a {@code Collector} that composites two collectors.
+     * Each element is processed by two specified collectors,
+     * then their results are merged using the merge function into the final result.
+     *
+     * @param <T> the type of the input elements
+     * @param <R1> the result type of the first collector
+     * @param <R2> the result type of the second collector
+     * @param <R> the type of the final result
+     * @param downstream1  the first collector
+     * @param downstream2  the second collector
+     * @param merger  the function which merges two results into the single one
+     * @return a {@code Collector}
+     * @since 1.2.2
+     */
+    @NotNull
+    public static <T, R1, R2, R> Collector<T, ?, R> teeing(
+            @NotNull final Collector<? super T, ?, R1> downstream1,
+            @NotNull final Collector<? super T, ?, R2> downstream2,
+            @NotNull final BiFunction<? super R1, ? super R2, R> merger) {
+        return teeingImpl(downstream1, downstream2, merger);
+    }
+
+    private static <T, A1, A2, R1, R2, R> Collector<T, ?, R> teeingImpl(
+            @NotNull final Collector<? super T, A1, R1> downstream1,
+            @NotNull final Collector<? super T, A2, R2> downstream2,
+            @NotNull final BiFunction<? super R1, ? super R2, R> merger) {
+
+        Objects.requireNonNull(downstream1, "downstream1");
+        Objects.requireNonNull(downstream2, "downstream2");
+        Objects.requireNonNull(merger, "merger");
+
+        final Supplier<A1> supplier1 =
+                Objects.requireNonNull(downstream1.supplier(), "downstream1 supplier");
+        final Supplier<A2> supplier2 =
+                Objects.requireNonNull(downstream2.supplier(), "downstream2 supplier");
+
+        final BiConsumer<A1, ? super T> acc1 =
+                Objects.requireNonNull(downstream1.accumulator(), "downstream1 accumulator");
+        final BiConsumer<A2, ? super T> acc2 =
+                Objects.requireNonNull(downstream2.accumulator(), "downstream2 accumulator");
+
+        final Function<A1, R1> finisher1 =
+                Objects.requireNonNull(downstream1.finisher(), "downstream1 finisher");
+        final Function<A2, R2> finisher2 =
+                Objects.requireNonNull(downstream2.finisher(), "downstream2 finisher");
+
+        return new CollectorsImpl<T, Map.Entry<A1, A2>, R>(
+                new Supplier<Map.Entry<A1, A2>>() {
+                    @NotNull
+                    @Override
+                    public Map.Entry<A1, A2> get() {
+                        return new AbstractMap.SimpleEntry<A1, A2>(
+                                supplier1.get(),
+                                supplier2.get());
+                    }
+                },
+                new BiConsumer<Map.Entry<A1, A2>, T>() {
+                    @Override
+                    public void accept(@NotNull Map.Entry<A1, A2> entry, T t) {
+                        acc1.accept(entry.getKey(), t);
+                        acc2.accept(entry.getValue(), t);
+                    }
+                },
+                new Function<Map.Entry<A1, A2>, R>() {
+                    @NotNull
+                    @Override
+                    public R apply(@NotNull Map.Entry<A1, A2> entry) {
+                        return merger.apply(
+                                finisher1.apply(entry.getKey()),
+                                finisher2.apply(entry.getValue()));
                     }
                 }
         );
