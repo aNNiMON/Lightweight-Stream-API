@@ -7,6 +7,10 @@ plugins {
 }
 
 def publishedProjects = subprojects.findAll { it.path != ':test' }
+def jacocoExclusions = [
+        '**/com/annimon/stream/internal/Compat**',
+        '**/com/annimon/stream/test/hamcrest/CommonMatcher**'
+]
 
 allprojects {
     repositories {
@@ -35,10 +39,7 @@ subprojects {
 
         afterEvaluate {
             classDirectories = files(classDirectories.files.collect {
-                fileTree(dir: it, exclude: [
-                        '**/com/annimon/stream/internal/Compat**',
-                        '**/com/annimon/stream/test/hamcrest/CommonMatcher**'
-                ])
+                fileTree(dir: it, exclude: jacocoExclusions)
             })
         }
     }
@@ -94,6 +95,8 @@ sonarqube {
         property "sonar.projectName", "Lightweight-Stream-API"
         property "sonar.projectKey", "lightweight-stream-api"
         property "sonar.host.url", "https://sonarcloud.io"
+        property 'sonar.jacoco.reportPath', "stream/build/jacoco/jacocoMerge.exec"
+        property 'sonar.coverage.exclusions', jacocoExclusions
     }
 }
 
