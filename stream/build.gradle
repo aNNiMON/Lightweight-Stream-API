@@ -26,9 +26,9 @@ dependencies {
     testImplementation project(':streamTest')
 }
 
-cobertura {
-    coverageExcludes = ['.*com\\.annimon\\.stream\\.internal\\.Compat.*']
-}
+//cobertura {
+//    coverageExcludes = ['.*com\\.annimon\\.stream\\.internal\\.Compat.*']
+//}
 
 jmh {
     benchmarkMode = ['Throughput']
