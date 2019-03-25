@@ -77,7 +77,7 @@ subprojects {
 
 coveralls {
     sourceDirs = subprojects.sourceSets.main.allSource.srcDirs.flatten()
-    jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
+    jacocoReportPath = "stream/build/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
 }
 
 test.dependsOn(rootProject.subprojects.collect { ":${it.name}:jacocoRootReport" })
