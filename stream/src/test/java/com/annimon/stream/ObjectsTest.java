@@ -73,7 +73,7 @@ public class ObjectsTest {
     @SuppressWarnings("ConfusingArgumentToVarargsMethod")
     @Test
     public void testHashOnNull() {
-        assertEquals(0, Objects.hash(null));
+        assertEquals(0, Objects.hash((Object[]) null));
     }
 
     @Test
