@@ -281,16 +281,18 @@ public class ExceptionalTest {
                 .getOrThrow();
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testIfPresent() {
+        final Integer[] data = { 0 };
         Exceptional
                 .of(tenSupplier)
                 .ifPresent(new Consumer<Integer>() {
                     @Override
                     public void accept(Integer value) {
-                        throw new RuntimeException();
+                        data[0] = value;
                     }
                 });
+        assertThat(data[0], is(10));
     }
 
     @Test
@@ -323,6 +325,18 @@ public class ExceptionalTest {
                         }
                     });
         }
+    }
+
+    @Test
+    public void testIfExceptionOnNormalState() {
+        Exceptional
+                .of(tenSupplier)
+                .ifException(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable value) {
+                        fail();
+                    }
+                });
     }
 
     @Test
@@ -378,6 +392,20 @@ public class ExceptionalTest {
         assertEquals(10, value);
     }
 
+    @Test
+    public void testRecoverOnNormalState() {
+        int value = Exceptional
+                .of(tenSupplier)
+                .recover(new ThrowableFunction<Throwable, Integer, Throwable>() {
+                    @Override
+                    public Integer apply(Throwable throwable) {
+                        return 20;
+                    }
+                })
+                .get();
+        assertEquals(10, value);
+    }
+
     @Test(expected = FileNotFoundException.class)
     public void testRecoverError() throws Throwable {
         Exceptional
@@ -425,6 +453,25 @@ public class ExceptionalTest {
                 })
                 .get();
         assertEquals(10, value);
+    }
+
+    @Test
+    public void testRecoverWithOnNormalState() {
+        int value = Exceptional
+                .of(new ThrowableSupplier<Integer, Throwable>() {
+                    @Override
+                    public Integer get() throws Throwable {
+                        return 42;
+                    }
+                })
+                .recoverWith(new Function<Throwable, Exceptional<Integer>>() {
+                    @Override
+                    public Exceptional<Integer> apply(Throwable throwable) {
+                        return Exceptional.of(tenSupplier);
+                    }
+                })
+                .get();
+        assertEquals(42, value);
     }
 
     @Test(expected = IOException.class)

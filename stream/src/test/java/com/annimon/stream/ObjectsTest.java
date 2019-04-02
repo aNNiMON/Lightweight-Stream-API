@@ -70,6 +70,12 @@ public class ObjectsTest {
         assertEquals(initial, Objects.hash(value, "test", 10, true, value, null, 50));
     }
 
+    @SuppressWarnings("ConfusingArgumentToVarargsMethod")
+    @Test
+    public void testHashOnNull() {
+        assertEquals(0, Objects.hash(null));
+    }
+
     @Test
     public void testToString() {
         assertEquals("10", Objects.toString(10, ""));

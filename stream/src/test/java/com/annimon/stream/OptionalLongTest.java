@@ -85,8 +85,9 @@ public class OptionalLongTest {
         });
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testIfPresentOrElseWhenValueAbsent() {
+        final Integer[] data = { 0 };
         OptionalLong.empty().ifPresentOrElse(new LongConsumer() {
             @Override
             public void accept(long value) {
@@ -95,9 +96,10 @@ public class OptionalLongTest {
         }, new Runnable() {
             @Override
             public void run() {
-                throw new RuntimeException();
+                data[0] = 1;
             }
         });
+        assertThat(data[0], is(1));
     }
 
     @Test
@@ -164,15 +166,17 @@ public class OptionalLongTest {
                 });
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testExecuteIfAbsent() {
+        final Integer[] data = { 0 };
         OptionalLong.empty()
                 .executeIfAbsent(new Runnable() {
                     @Override
                     public void run() {
-                        throw new RuntimeException();
+                        data[0] = 1;
                     }
                 });
+        assertThat(data[0], is(1));
     }
 
     @Test

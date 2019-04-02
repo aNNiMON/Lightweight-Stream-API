@@ -43,10 +43,11 @@ public final class IntPairTest {
         assertEquals(p1, p3);
     }
 
+    @SuppressWarnings({"ConstantConditions", "SimplifiableJUnitAssertion"})
     @Test
     public void testEqualsWithNull() {
         final IntPair<String> p = new IntPair<String>(1, "first");
-        assertNotEquals(null, p);
+        assertFalse(p.equals(null));
     }
 
     @Test

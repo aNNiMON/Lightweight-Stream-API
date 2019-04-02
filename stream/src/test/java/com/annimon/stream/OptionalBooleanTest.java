@@ -83,8 +83,9 @@ public class OptionalBooleanTest {
         });
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testIfPresentOrElseWhenValueAbsent() {
+        final boolean[] data = { false };
         OptionalBoolean.empty().ifPresentOrElse(new BooleanConsumer() {
             @Override
             public void accept(boolean value) {
@@ -93,9 +94,10 @@ public class OptionalBooleanTest {
         }, new Runnable() {
             @Override
             public void run() {
-                throw new RuntimeException();
+                data[0] = true;
             }
         });
+        assertTrue(data[0]);
     }
 
     @Test
@@ -162,15 +164,17 @@ public class OptionalBooleanTest {
                 });
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testExecuteIfAbsent() {
+        final boolean[] data = { false };
         OptionalBoolean.empty()
                 .executeIfAbsent(new Runnable() {
                     @Override
                     public void run() {
-                        throw new RuntimeException();
+                        data[0] = true;
                     }
                 });
+        assertTrue(data[0]);
     }
 
     @Test
@@ -339,6 +343,11 @@ public class OptionalBooleanTest {
 
     @Test
     public void testOrElse() {
+        assertTrue(OptionalBoolean.of(true).orElse(false));
+    }
+
+    @Test
+    public void testOrElseOnEmptyOptional() {
         assertTrue(OptionalBoolean.empty().orElse(true));
         assertFalse(OptionalBoolean.empty().orElse(false));
     }
@@ -395,7 +404,6 @@ public class OptionalBooleanTest {
         });
     }
 
-    @SuppressWarnings("EqualsBetweenInconvertibleTypes")
     @Test
     public void testEquals() {
         assertEquals(OptionalBoolean.empty(), OptionalBoolean.empty());
@@ -429,6 +437,7 @@ public class OptionalBooleanTest {
     @Test
     public void testToString() {
         assertEquals(OptionalBoolean.empty().toString(), "OptionalBoolean.empty");
+        assertEquals(OptionalBoolean.of(false).toString(), "OptionalBoolean[false]");
         assertEquals(OptionalBoolean.of(true).toString(), "OptionalBoolean[true]");
     }
 
