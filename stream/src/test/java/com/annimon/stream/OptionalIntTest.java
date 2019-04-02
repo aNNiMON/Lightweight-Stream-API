@@ -88,8 +88,9 @@ public class OptionalIntTest {
         });
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testIfPresentOrElseWhenValueAbsent() {
+        final Integer[] data = { 0 };
         OptionalInt.empty().ifPresentOrElse(new IntConsumer() {
             @Override
             public void accept(int value) {
@@ -98,9 +99,10 @@ public class OptionalIntTest {
         }, new Runnable() {
             @Override
             public void run() {
-                throw new RuntimeException();
+                data[0] = 1;
             }
         });
+        assertThat(data[0], is(1));
     }
 
     @Test
@@ -167,15 +169,17 @@ public class OptionalIntTest {
                 });
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testExecuteIfAbsent() {
+        final Integer[] data = { 0 };
         OptionalInt.empty()
                 .executeIfAbsent(new Runnable() {
                     @Override
                     public void run() {
-                        throw new RuntimeException();
+                        data[0] = 1;
                     }
                 });
+        assertThat(data[0], is(1));
     }
 
     @Test

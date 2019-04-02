@@ -86,8 +86,9 @@ public class OptionalDoubleTest {
         });
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testIfPresentOrElseWhenValueAbsent() {
+        final Integer[] data = { 0 };
         OptionalDouble.empty().ifPresentOrElse(new DoubleConsumer() {
             @Override
             public void accept(double value) {
@@ -96,9 +97,10 @@ public class OptionalDoubleTest {
         }, new Runnable() {
             @Override
             public void run() {
-                throw new RuntimeException();
+                data[0] = 1;
             }
         });
+        assertThat(data[0], is(1));
     }
 
     @Test
@@ -165,15 +167,17 @@ public class OptionalDoubleTest {
                 });
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testExecuteIfAbsent() {
+        final Integer[] data = { 0 };
         OptionalDouble.empty()
                 .executeIfAbsent(new Runnable() {
                     @Override
                     public void run() {
-                        throw new RuntimeException();
+                       data[0] = 1;
                     }
                 });
+        assertThat(data[0], is(1));
     }
 
     @Test
