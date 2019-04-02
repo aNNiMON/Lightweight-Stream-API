@@ -436,9 +436,9 @@ public class OptionalBooleanTest {
 
     @Test
     public void testToString() {
-        assertEquals(OptionalBoolean.empty().toString(), "OptionalBoolean.empty");
-        assertEquals(OptionalBoolean.of(false).toString(), "OptionalBoolean[false]");
-        assertEquals(OptionalBoolean.of(true).toString(), "OptionalBoolean[true]");
+        assertEquals("OptionalBoolean.empty", OptionalBoolean.empty().toString());
+        assertEquals("OptionalBoolean[false]", OptionalBoolean.of(false).toString());
+        assertEquals("OptionalBoolean[true]", OptionalBoolean.of(true).toString());
     }
 
 }

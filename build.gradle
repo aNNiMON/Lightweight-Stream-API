@@ -8,8 +8,10 @@ plugins {
 
 def publishedProjects = subprojects.findAll { it.path != ':test' }
 def jacocoExclusions = [
+        '.*com/annimon/stream/internal/Compat.*',
         '**/com/annimon/stream/internal/Compat**',
-        '**/com/annimon/stream/test/hamcrest/CommonMatcher**'
+        '.*com/annimon/stream/test/hamcrest/CommonMatcher.*',
+        'com/annimon/stream/test/hamcrest/CommonMatcher**'
 ]
 
 allprojects {
@@ -26,6 +28,15 @@ allprojects {
 }
 
 subprojects {
+    jacocoTestCoverageVerification {
+        afterEvaluate {
+            classDirectories = files(classDirectories.files.collect {
+                fileTree(dir: it, exclude: jacocoExclusions)
+            })
+        }
+    }
+    check.dependsOn jacocoTestCoverageVerification
+
     jacocoTestReport {
         additionalSourceDirs = files(sourceSets.main.allSource.srcDirs)
         classDirectories =  files(sourceSets.main.output)
