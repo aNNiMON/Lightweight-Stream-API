@@ -21,7 +21,7 @@ public class DoubleTakeUntil extends PrimitiveExtIterator.OfDouble {
     protected void nextIteration() {
         hasNext = iterator.hasNext() && !(isInit && stopPredicate.test(next));
         if (hasNext) {
-            next = iterator.next();
+            next = iterator.nextDouble();
         }
     }
 }

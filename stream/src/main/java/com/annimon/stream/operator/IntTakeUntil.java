@@ -21,7 +21,7 @@ public class IntTakeUntil extends PrimitiveExtIterator.OfInt {
     protected void nextIteration() {
         hasNext = iterator.hasNext() && !(isInit && stopPredicate.test(next));
         if (hasNext) {
-            next = iterator.next();
+            next = iterator.nextInt();
         }
     }
 }

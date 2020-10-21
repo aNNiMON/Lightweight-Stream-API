@@ -30,7 +30,7 @@ public class IntScanIdentity extends PrimitiveExtIterator.OfInt {
         }
         hasNext = iterator.hasNext();
         if (hasNext) {
-            final int current = iterator.next();
+            final int current = iterator.nextInt();
             next = accumulator.applyAsInt(next, current);
         }
     }

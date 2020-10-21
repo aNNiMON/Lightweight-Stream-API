@@ -30,7 +30,7 @@ public class LongScanIdentity extends PrimitiveExtIterator.OfLong {
         }
         hasNext = iterator.hasNext();
         if (hasNext) {
-            final long current = iterator.next();
+            final long current = iterator.nextLong();
             next = accumulator.applyAsLong(next, current);
         }
     }

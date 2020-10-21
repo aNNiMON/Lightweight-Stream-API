@@ -30,7 +30,7 @@ public class DoubleScanIdentity extends PrimitiveExtIterator.OfDouble {
         }
         hasNext = iterator.hasNext();
         if (hasNext) {
-            final double current = iterator.next();
+            final double current = iterator.nextDouble();
             next = accumulator.applyAsDouble(next, current);
         }
     }

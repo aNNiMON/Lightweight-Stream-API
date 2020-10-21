@@ -21,7 +21,7 @@ public class IntScan extends PrimitiveExtIterator.OfInt {
     protected void nextIteration() {
         hasNext = iterator.hasNext();
         if (hasNext) {
-            final int current = iterator.next();
+            final int current = iterator.nextInt();
             if (isInit) {
                 next = accumulator.applyAsInt(next, current);
             } else {

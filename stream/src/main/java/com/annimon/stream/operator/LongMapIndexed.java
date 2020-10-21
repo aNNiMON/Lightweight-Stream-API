@@ -24,6 +24,6 @@ public class LongMapIndexed extends PrimitiveIterator.OfLong {
 
     @Override
     public long nextLong() {
-        return mapper.applyAsLong(iterator.getIndex(), iterator.next());
+        return mapper.applyAsLong(iterator.getIndex(), iterator.nextLong());
     }
 }

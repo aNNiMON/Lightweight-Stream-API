@@ -22,7 +22,7 @@ public class DoubleDropWhile extends PrimitiveExtIterator.OfDouble {
         if (!isInit) {
             // Skip first time
             while (hasNext = iterator.hasNext()) {
-                next = iterator.next();
+                next = iterator.nextDouble();
                 if (!predicate.test(next)) {
                     return;
                 }
@@ -32,6 +32,6 @@ public class DoubleDropWhile extends PrimitiveExtIterator.OfDouble {
         hasNext = hasNext && iterator.hasNext();
         if (!hasNext) return;
 
-        next = iterator.next();
+        next = iterator.nextDouble();
     }
 }

@@ -44,7 +44,7 @@ public class DoubleFilterIndexed extends PrimitiveIterator.OfDouble {
     private void nextIteration() {
         while (iterator.hasNext()) {
             final int index = iterator.getIndex();
-            next = iterator.next();
+            next = iterator.nextDouble();
             if (predicate.test(index, next)) {
                 hasNext = true;
                 return;

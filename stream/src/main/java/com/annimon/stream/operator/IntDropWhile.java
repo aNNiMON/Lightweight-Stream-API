@@ -22,7 +22,7 @@ public class IntDropWhile extends PrimitiveExtIterator.OfInt {
         if (!isInit) {
             // Skip first time
             while (hasNext = iterator.hasNext()) {
-                next = iterator.next();
+                next = iterator.nextInt();
                 if (!predicate.test(next)) {
                     return;
                 }
@@ -32,6 +32,6 @@ public class IntDropWhile extends PrimitiveExtIterator.OfInt {
         hasNext = hasNext && iterator.hasNext();
         if (!hasNext) return;
 
-        next = iterator.next();
+        next = iterator.nextInt();
     }
 }

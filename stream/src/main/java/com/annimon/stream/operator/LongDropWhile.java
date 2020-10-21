@@ -22,7 +22,7 @@ public class LongDropWhile extends PrimitiveExtIterator.OfLong {
         if (!isInit) {
             // Skip first time
             while (hasNext = iterator.hasNext()) {
-                next = iterator.next();
+                next = iterator.nextLong();
                 if (!predicate.test(next)) {
                     return;
                 }
@@ -32,6 +32,6 @@ public class LongDropWhile extends PrimitiveExtIterator.OfLong {
         hasNext = hasNext && iterator.hasNext();
         if (!hasNext) return;
 
-        next = iterator.next();
+        next = iterator.nextLong();
     }
 }

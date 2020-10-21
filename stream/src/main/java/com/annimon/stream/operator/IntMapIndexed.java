@@ -24,6 +24,6 @@ public class IntMapIndexed extends PrimitiveIterator.OfInt {
 
     @Override
     public int nextInt() {
-        return mapper.applyAsInt(iterator.getIndex(), iterator.next());
+        return mapper.applyAsInt(iterator.getIndex(), iterator.nextInt());
     }
 }

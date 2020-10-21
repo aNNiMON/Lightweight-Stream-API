@@ -44,7 +44,7 @@ public class IntFilterIndexed extends PrimitiveIterator.OfInt {
     private void nextIteration() {
         while (iterator.hasNext()) {
             final int index = iterator.getIndex();
-            next = iterator.next();
+            next = iterator.nextInt();
             if (predicate.test(index, next)) {
                 hasNext = true;
                 return;

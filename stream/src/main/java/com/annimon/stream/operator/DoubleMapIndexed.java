@@ -24,6 +24,6 @@ public class DoubleMapIndexed extends PrimitiveIterator.OfDouble {
 
     @Override
     public double nextDouble() {
-        return mapper.applyAsDouble(iterator.getIndex(), iterator.next());
+        return mapper.applyAsDouble(iterator.getIndex(), iterator.nextDouble());
     }
 }

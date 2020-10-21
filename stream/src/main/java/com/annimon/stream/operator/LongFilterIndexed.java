@@ -44,7 +44,7 @@ public class LongFilterIndexed extends PrimitiveIterator.OfLong {
     private void nextIteration() {
         while (iterator.hasNext()) {
             final int index = iterator.getIndex();
-            next = iterator.next();
+            next = iterator.nextLong();
             if (predicate.test(index, next)) {
                 hasNext = true;
                 return;
