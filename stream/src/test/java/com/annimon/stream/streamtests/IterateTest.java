@@ -5,14 +5,16 @@ import com.annimon.stream.Stream;
 import com.annimon.stream.function.BinaryOperator;
 import com.annimon.stream.function.Predicate;
 import com.annimon.stream.function.UnaryOperator;
+import com.annimon.stream.test.hamcrest.OptionalMatcher;
 import java.math.BigInteger;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.OptionalMatcher.isPresent;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.assertElements;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 
 public final class IterateTest {
 
@@ -36,6 +38,7 @@ public final class IterateTest {
         assertEquals(new BigInteger("1267650600228229401496703205375"), sum);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test(expected = NullPointerException.class)
     public void testIterateNull() {
         Stream.iterate(1, null);
@@ -79,5 +82,36 @@ public final class IterateTest {
                 .custom(assertElements(contains(
                         0, 5, 10, 15
                 )));
+    }
+
+    @Test
+    public void testIterateIssue186() {
+        AtomicInteger result = Stream.iterate(
+                new AtomicInteger(0),
+                new Predicate<AtomicInteger>() {
+                    @Override
+                    public boolean test(AtomicInteger s) {
+                        return s.incrementAndGet() < 3;
+                    }
+                },
+                UnaryOperator.Util.<AtomicInteger>identity())
+                .findFirst()
+                .orElseThrow();
+        assertEquals(1, result.get());
+    }
+
+    @Test
+    public void testIterateIssue186OnEmptyStream() {
+        Optional<AtomicInteger> result = Stream.iterate(
+                new AtomicInteger(0),
+                new Predicate<AtomicInteger>() {
+                    @Override
+                    public boolean test(AtomicInteger s) {
+                        return s.incrementAndGet() < 0;
+                    }
+                },
+                UnaryOperator.Util.<AtomicInteger>identity())
+                .findFirst();
+        assertThat(result, OptionalMatcher.isEmpty());
     }
 }

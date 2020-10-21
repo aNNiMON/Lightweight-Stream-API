@@ -3,6 +3,7 @@ package com.annimon.stream.intstreamtests;
 import com.annimon.stream.IntStream;
 import com.annimon.stream.function.IntPredicate;
 import com.annimon.stream.function.IntUnaryOperator;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.IntStreamMatcher.assertElements;
 import static org.hamcrest.Matchers.arrayContaining;
@@ -24,6 +25,7 @@ public final class IterateTest {
         assertTrue(IntStream.iterate(1, operator).iterator().hasNext());
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test(expected = NullPointerException.class)
     public void testStreamIterateNull() {
         IntStream.iterate(0, null);
@@ -47,5 +49,24 @@ public final class IterateTest {
                 .custom(assertElements(arrayContaining(
                         0, 5, 10, 15
                 )));
+    }
+
+    @Test
+    public void testIterateIssue186() {
+        final AtomicInteger ai = new AtomicInteger(0);
+        int result = IntStream.iterate(
+                0,
+                new IntPredicate() {
+                    @Override
+                    public boolean test(int value) {
+                        value = ai.incrementAndGet();
+                        return value < 3;
+                    }
+                },
+                IntUnaryOperator.Util.identity())
+                .findFirst()
+                .orElseThrow();
+        assertEquals(0, result);
+        assertEquals(1, ai.get());
     }
 }
