@@ -2032,6 +2032,23 @@ public class Stream<T> implements Closeable {
     }
 
     /**
+     * Returns the first element if stream is not empty,
+     * otherwise returns {@code other}.
+     *
+     * <p>This is a short-circuiting terminal operation.
+     *
+     * @return first element or {@code other} if stream is empty
+     * @since 1.2.2
+     */
+    @Nullable
+    public T findFirstOrElse(@Nullable T other) {
+        if (iterator.hasNext()) {
+            return iterator.next();
+        }
+        return other;
+    }
+
+    /**
      * Returns the last element wrapped by {@code Optional} class.
      * If stream is empty, returns {@code Optional.empty()}.
      *

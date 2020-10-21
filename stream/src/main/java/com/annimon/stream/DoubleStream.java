@@ -1136,6 +1136,23 @@ public final class DoubleStream implements Closeable {
     }
 
     /**
+     * Returns the first element if stream is not empty,
+     * otherwise returns {@code other}.
+     *
+     * <p>This is a short-circuiting terminal operation.
+     *
+     * @return first element or {@code other} if stream is empty
+     * @since 1.2.2
+     */
+    public double findFirstOrElse(double other) {
+        if (iterator.hasNext()) {
+            return iterator.nextDouble();
+        } else {
+            return other;
+        }
+    }
+
+    /**
      * Returns the last element wrapped by {@code OptionalDouble} class.
      * If stream is empty, returns {@code OptionalDouble.empty()}.
      *
