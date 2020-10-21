@@ -202,6 +202,7 @@ public final class DoubleStream implements Closeable {
      * @return the new concatenated stream
      * @throws NullPointerException if {@code a} or {@code b}
      *         or {@code rest} is null
+     * @since 1.2.2
      */
     @NotNull
     public static DoubleStream concat(

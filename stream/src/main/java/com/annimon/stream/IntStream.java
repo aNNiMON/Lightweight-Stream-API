@@ -261,6 +261,7 @@ public final class IntStream implements Closeable {
      * @return the new concatenated stream
      * @throws NullPointerException if {@code a} or {@code b}
      *         or {@code rest} is null
+     * @since 1.2.2
      */
     @NotNull
     public static IntStream concat(
