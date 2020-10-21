@@ -5,7 +5,7 @@ import com.annimon.stream.function.IntFunction;
 import com.annimon.stream.function.IntPredicate;
 import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class OnCloseTest {

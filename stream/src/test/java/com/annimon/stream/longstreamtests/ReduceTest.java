@@ -5,8 +5,8 @@ import com.annimon.stream.function.LongBinaryOperator;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.OptionalLongMatcher.hasValue;
 import static com.annimon.stream.test.hamcrest.OptionalLongMatcher.isEmpty;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 
 public final class ReduceTest {
 

@@ -1,7 +1,6 @@
 package com.annimon.stream;
 
 import com.annimon.stream.function.*;
-
 import java.lang.reflect.Array;
 import java.util.Comparator;
 import java.util.Iterator;

@@ -1,10 +1,11 @@
 package com.annimon.stream.function;
 
-import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
-import static org.junit.Assert.*;
 import org.junit.Test;
+import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests {@code Consumer}.

@@ -5,9 +5,9 @@ import com.annimon.stream.LongStream;
 import com.annimon.stream.function.LongToDoubleFunction;
 import com.annimon.stream.test.hamcrest.DoubleStreamMatcher;
 import org.junit.Test;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.array;
 import static org.hamcrest.Matchers.closeTo;
-import static org.junit.Assert.assertThat;
 
 public final class MapToDoubleTest {
 

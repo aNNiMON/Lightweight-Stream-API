@@ -12,12 +12,14 @@ import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.OptionalBooleanMatcher.hasValue;
 import static com.annimon.stream.test.hamcrest.OptionalBooleanMatcher.isEmpty;
 import static com.annimon.stream.test.hamcrest.OptionalBooleanMatcher.isPresent;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
 /**
  * Tests for {@link OptionalBoolean}
  */
+@SuppressWarnings("ConstantConditions")
 public class OptionalBooleanTest {
 
     @Test
@@ -36,6 +38,7 @@ public class OptionalBooleanTest {
         assertThat(OptionalBoolean.ofNullable(null), isEmpty());
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test(expected = NoSuchElementException.class)
     public void testGetOnEmptyOptional() {
         OptionalBoolean.empty().getAsBoolean();
@@ -222,6 +225,7 @@ public class OptionalBooleanTest {
     @Test
     public void testFilter() {
         final BooleanPredicate predicate = new BooleanPredicate() {
+            @SuppressWarnings("PointlessBooleanExpression")
             @Override
             public boolean test(boolean value) {
                 return value || false;
@@ -244,6 +248,7 @@ public class OptionalBooleanTest {
     @Test
     public void testFilterNot() {
         final BooleanPredicate predicate = new BooleanPredicate() {
+            @SuppressWarnings("PointlessBooleanExpression")
             @Override
             public boolean test(boolean value) {
                 return value || false;
@@ -375,6 +380,7 @@ public class OptionalBooleanTest {
         assertTrue(value);
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test(expected = NoSuchElementException.class)
     public void testOrElseThrowOnEmptyOptional() {
         OptionalBoolean.empty().orElseThrow();
@@ -404,6 +410,7 @@ public class OptionalBooleanTest {
         });
     }
 
+    @SuppressWarnings("AssertBetweenInconvertibleTypes")
     @Test
     public void testEquals() {
         assertEquals(OptionalBoolean.empty(), OptionalBoolean.empty());

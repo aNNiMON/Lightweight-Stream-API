@@ -6,9 +6,9 @@ import com.annimon.stream.Stream;
 import com.annimon.stream.test.hamcrest.OptionalMatcher;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.OptionalMatcher.isPresent;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
 
 public final class FindFirstTest {
 

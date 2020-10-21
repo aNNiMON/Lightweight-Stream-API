@@ -9,15 +9,18 @@ import com.annimon.stream.function.UnaryOperator;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
 import org.junit.Test;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.*;
 
 /**
  * Tests {@code Exceptional}.
  *
  * @see com.annimon.stream.Exceptional
  */
+@SuppressWarnings("ConstantConditions")
 public class ExceptionalTest {
 
     @Test
@@ -106,7 +109,7 @@ public class ExceptionalTest {
     }
 
     @Test
-    public void testGetOrThrowRuntimeExceptionWithoutException() throws Throwable {
+    public void testGetOrThrowRuntimeExceptionWithoutException() {
         int value = Exceptional
                 .of(tenSupplier)
                 .getOrThrowRuntimeException();
@@ -114,14 +117,14 @@ public class ExceptionalTest {
     }
 
     @Test(expected = RuntimeException.class)
-    public void testGetOrThrowRuntimeExceptionWithException() throws Throwable {
+    public void testGetOrThrowRuntimeExceptionWithException() {
         Exceptional
                 .of(ioExceptionSupplier)
                 .getOrThrowRuntimeException();
     }
 
     @Test
-    public void testGetOrThrowNewExceptionWithoutException() throws Throwable {
+    public void testGetOrThrowNewExceptionWithoutException() {
         int value = Exceptional
                 .of(tenSupplier)
                 .getOrThrow(new ArithmeticException());
@@ -129,7 +132,7 @@ public class ExceptionalTest {
     }
 
     @Test(expected = ArithmeticException.class)
-    public void testGetOrThrowNewExceptionWithException() throws Throwable {
+    public void testGetOrThrowNewExceptionWithException() {
         Exceptional
                 .of(ioExceptionSupplier)
                 .getOrThrow(new ArithmeticException());
@@ -192,7 +195,7 @@ public class ExceptionalTest {
                 return exceptional
                         .map(new ThrowableFunction<Integer, Integer, Throwable>() {
                             @Override
-                            public Integer apply(Integer integer) throws Throwable {
+                            public Integer apply(Integer integer) {
                                 return integer + 1;
                             }
                         });
@@ -217,7 +220,7 @@ public class ExceptionalTest {
             public Integer apply(Exceptional<Integer> exceptional) {
                 return exceptional.map(new ThrowableFunction<Integer, Integer, Throwable>() {
                     @Override
-                    public Integer apply(Integer integer) throws Throwable {
+                    public Integer apply(Integer integer) {
                         return integer + 1;
                     }
                 }).getOrElse(0);
@@ -239,7 +242,7 @@ public class ExceptionalTest {
                 .of(tenSupplier)
                 .map(new ThrowableFunction<Integer, String, Throwable>() {
                     @Override
-                    public String apply(Integer value) throws Throwable {
+                    public String apply(Integer value) {
                         return Integer.toString(value);
                     }
                 })
@@ -253,7 +256,7 @@ public class ExceptionalTest {
                 .of(tenSupplier)
                 .map(new ThrowableFunction<Integer, String, Throwable>() {
                     @Override
-                    public String apply(Integer value) throws Throwable {
+                    public String apply(Integer value) {
                         throw new NumberFormatException();
                     }
                 })
@@ -274,7 +277,7 @@ public class ExceptionalTest {
                 .of(ioExceptionSupplier)
                 .map(new ThrowableFunction<Integer, String, Throwable>() {
                     @Override
-                    public String apply(Integer value) throws Throwable {
+                    public String apply(Integer value) {
                         return Integer.toString(value);
                     }
                 })
@@ -432,7 +435,7 @@ public class ExceptionalTest {
                 })
                 .recover(new ThrowableFunction<Throwable, Integer, Throwable>() {
                     @Override
-                    public Integer apply(Throwable throwable) throws IOException {
+                    public Integer apply(Throwable throwable) {
                         assertThat(throwable, instanceOf(FileNotFoundException.class));
                         return 10;
                     }
@@ -460,7 +463,7 @@ public class ExceptionalTest {
         int value = Exceptional
                 .of(new ThrowableSupplier<Integer, Throwable>() {
                     @Override
-                    public Integer get() throws Throwable {
+                    public Integer get() {
                         return 42;
                     }
                 })
@@ -513,6 +516,7 @@ public class ExceptionalTest {
         assertEquals(ten1, ten3);
     }
 
+    @SuppressWarnings({"EqualsBetweenInconvertibleTypes", "SimplifiableAssertion"})
     @Test
     public void testEqualsWithDifferentTypes() {
         final Exceptional<Integer> ten1 = Exceptional.of(tenSupplier);
@@ -524,7 +528,7 @@ public class ExceptionalTest {
         final Exceptional<Integer> ten1 = Exceptional.of(tenSupplier);
         final Exceptional<Byte> tenByte = Exceptional.of(new ThrowableSupplier<Byte, Throwable>() {
             @Override
-            public Byte get() throws Throwable {
+            public Byte get() {
                 return (byte) 10;
             }
         });
@@ -570,7 +574,7 @@ public class ExceptionalTest {
     public void testHashCodeWithDifferentGenericType() {
         final Exceptional<Byte> tenByte = Exceptional.of(new ThrowableSupplier<Byte, Throwable>() {
             @Override
-            public Byte get() throws Throwable {
+            public Byte get() {
                 return (byte) 10;
             }
         });
@@ -592,7 +596,7 @@ public class ExceptionalTest {
     private static final ThrowableSupplier<Integer, Throwable> tenSupplier
             = new ThrowableSupplier<Integer, Throwable>() {
         @Override
-        public Integer get() throws IOException {
+        public Integer get() {
             return 10;
         }
     };

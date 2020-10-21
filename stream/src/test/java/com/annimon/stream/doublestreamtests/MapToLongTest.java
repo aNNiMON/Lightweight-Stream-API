@@ -3,8 +3,8 @@ package com.annimon.stream.doublestreamtests;
 import com.annimon.stream.DoubleStream;
 import com.annimon.stream.function.DoubleToLongFunction;
 import org.junit.Test;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 
 public final class MapToLongTest {
 

@@ -14,13 +14,15 @@ import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.OptionalDoubleMatcher.hasValueThat;
 import static com.annimon.stream.test.hamcrest.OptionalDoubleMatcher.isEmpty;
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
 /**
  * Tests for {@link OptionalDouble}
  */
+@SuppressWarnings("ConstantConditions")
 public class OptionalDoubleTest {
 
     @Test
@@ -39,6 +41,7 @@ public class OptionalDoubleTest {
         assertThat(OptionalDouble.ofNullable(null), isEmpty());
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test(expected = NoSuchElementException.class)
     public void testGetOnEmptyOptional() {
         OptionalDouble.empty().getAsDouble();
@@ -408,6 +411,7 @@ public class OptionalDoubleTest {
         assertThat(value, closeTo(10.123, 0.0001));
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test(expected = NoSuchElementException.class)
     public void testOrElseThrowOnEmptyOptional() {
         OptionalDouble.empty().orElseThrow();
@@ -437,7 +441,7 @@ public class OptionalDoubleTest {
         });
     }
 
-    @SuppressWarnings("EqualsBetweenInconvertibleTypes")
+    @SuppressWarnings("AssertBetweenInconvertibleTypes")
     @Test
     public void testEquals() {
         assertEquals(OptionalDouble.empty(), OptionalDouble.empty());

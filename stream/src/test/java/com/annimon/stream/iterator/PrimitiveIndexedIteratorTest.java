@@ -1,11 +1,15 @@
 package com.annimon.stream.iterator;
 
-import com.annimon.stream.iterator.PrimitiveIterators.*;
+import com.annimon.stream.iterator.PrimitiveIterators.OfDouble;
+import com.annimon.stream.iterator.PrimitiveIterators.OfInt;
+import com.annimon.stream.iterator.PrimitiveIterators.OfLong;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class PrimitiveIndexedIteratorTest {
 

@@ -10,12 +10,12 @@ import static com.annimon.stream.test.hamcrest.OptionalLongMatcher.isEmpty;
 import static com.annimon.stream.test.hamcrest.OptionalLongMatcher.isPresent;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class OptionalLongMatcherTest {
 
     @Test
-    public void testPrivateConstructor() throws Exception {
+    public void testPrivateConstructor() {
         assertThat(OptionalLongMatcher.class, hasOnlyPrivateConstructors());
     }
 

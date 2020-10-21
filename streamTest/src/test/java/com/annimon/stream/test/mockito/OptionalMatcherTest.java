@@ -3,16 +3,14 @@ package com.annimon.stream.test.mockito;
 import com.annimon.stream.Optional;
 import com.annimon.stream.test.mockito.OptionalMatcher.EmptyOptionalMatcher;
 import com.annimon.stream.test.mockito.OptionalMatcher.PresentOptionalMatcher;
-
 import org.junit.Test;
 import org.mockito.Mockito;
-
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static com.annimon.stream.test.mockito.OptionalMatcher.anyEmptyOptional;
 import static com.annimon.stream.test.mockito.OptionalMatcher.anyPresentOptional;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -27,7 +25,7 @@ public final class OptionalMatcherTest {
     private static final Optional<String> EMPTY_STRING_OPTIONAL = Optional.empty();
 
     @Test
-    public void testPrivateConstructor() throws Exception {
+    public void testPrivateConstructor() {
         assertThat(OptionalMatcher.class, hasOnlyPrivateConstructors());
     }
 

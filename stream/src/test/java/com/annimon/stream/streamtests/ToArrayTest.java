@@ -3,10 +3,10 @@ package com.annimon.stream.streamtests;
 import com.annimon.stream.Functions;
 import com.annimon.stream.Stream;
 import org.junit.Test;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public final class ToArrayTest {

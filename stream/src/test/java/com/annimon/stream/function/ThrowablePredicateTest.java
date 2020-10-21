@@ -1,8 +1,8 @@
 package com.annimon.stream.function;
 
 import java.io.IOException;
-import static org.junit.Assert.*;
 import org.junit.Test;
+import static org.junit.Assert.assertFalse;
 
 /**
  * Tests {@code ThrowablePredicate}.

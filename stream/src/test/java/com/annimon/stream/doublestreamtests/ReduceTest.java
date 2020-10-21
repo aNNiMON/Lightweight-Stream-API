@@ -5,8 +5,8 @@ import com.annimon.stream.function.DoubleBinaryOperator;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.OptionalDoubleMatcher.hasValueThat;
 import static com.annimon.stream.test.hamcrest.OptionalDoubleMatcher.isEmpty;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
-import static org.junit.Assert.assertThat;
 
 public final class ReduceTest {
 

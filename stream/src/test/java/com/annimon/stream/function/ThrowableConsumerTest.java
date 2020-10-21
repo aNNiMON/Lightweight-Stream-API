@@ -3,8 +3,8 @@ package com.annimon.stream.function;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import static org.junit.Assert.*;
 import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests {@code ThrowableConsumer}.

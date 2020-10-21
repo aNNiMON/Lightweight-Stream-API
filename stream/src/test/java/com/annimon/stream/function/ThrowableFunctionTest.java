@@ -1,7 +1,7 @@
 package com.annimon.stream.function;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests {@code ThrowableFunction}.

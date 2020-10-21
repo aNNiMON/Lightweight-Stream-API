@@ -4,9 +4,9 @@ import com.annimon.stream.CustomOperators;
 import com.annimon.stream.LongStream;
 import com.annimon.stream.function.LongBinaryOperator;
 import org.junit.Test;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 
 public final class CustomTest {
 

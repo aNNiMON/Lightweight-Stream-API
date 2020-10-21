@@ -4,8 +4,8 @@ import com.annimon.stream.LongStream;
 import com.annimon.stream.function.LongSupplier;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.LongStreamMatcher.elements;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.arrayContaining;
-import static org.junit.Assert.assertThat;
 
 public final class GenerateTest {
 

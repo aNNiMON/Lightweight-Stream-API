@@ -4,8 +4,8 @@ import com.annimon.stream.DoubleStream;
 import com.annimon.stream.function.DoubleSupplier;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.DoubleStreamMatcher.elements;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.arrayContaining;
-import static org.junit.Assert.assertThat;
 
 public final class GenerateTest {
 

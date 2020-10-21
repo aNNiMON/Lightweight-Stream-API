@@ -6,7 +6,7 @@ import com.annimon.stream.OptionalLong;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.OptionalLongMatcher.hasValue;
 import static com.annimon.stream.test.hamcrest.OptionalLongMatcher.isEmpty;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public final class FindSingleTest {
 

@@ -2,8 +2,8 @@ package com.annimon.stream.streamtests;
 
 import com.annimon.stream.Stream;
 import org.junit.Test;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
-import static org.junit.Assert.assertThat;
 
 public final class ToListTest {
 

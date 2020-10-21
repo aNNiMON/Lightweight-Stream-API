@@ -16,15 +16,15 @@ import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.arrayContaining;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class LongStreamMatcherTest {
 
     @Test
-    public void testPrivateConstructor() throws Exception {
+    public void testPrivateConstructor() {
         assertThat(LongStreamMatcher.class, hasOnlyPrivateConstructors());
     }
 
@@ -108,8 +108,6 @@ public class LongStreamMatcherTest {
     public void testAssertElementsOperator() {
         LongStream.of(-813, 123456, Integer.MAX_VALUE)
                 .custom(LongStreamMatcher.assertElements(
-                        arrayContaining(new Long[] {
-                            -813L, 123456L, (long) Integer.MAX_VALUE
-                        })));
+                        arrayContaining(-813L, 123456L, (long) Integer.MAX_VALUE)));
     }
 }

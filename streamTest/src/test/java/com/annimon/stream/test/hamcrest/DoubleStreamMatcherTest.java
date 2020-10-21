@@ -16,15 +16,15 @@ import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.arrayContaining;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class DoubleStreamMatcherTest {
 
     @Test
-    public void testPrivateConstructor() throws Exception {
+    public void testPrivateConstructor() {
         assertThat(DoubleStreamMatcher.class, hasOnlyPrivateConstructors());
     }
 
@@ -108,8 +108,6 @@ public class DoubleStreamMatcherTest {
     public void testAssertElementsOperator() {
         DoubleStream.of(-0.987, 1.234, Math.PI, 1.618)
                 .custom(DoubleStreamMatcher.assertElements(
-                        arrayContaining(new Double[] {
-                            -0.987, 1.234, Math.PI, 1.618
-                        })));
+                        arrayContaining(-0.987, 1.234, Math.PI, 1.618)));
     }
 }

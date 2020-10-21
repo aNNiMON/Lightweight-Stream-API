@@ -10,12 +10,12 @@ import static com.annimon.stream.test.hamcrest.OptionalBooleanMatcher.isEmpty;
 import static com.annimon.stream.test.hamcrest.OptionalBooleanMatcher.isPresent;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class OptionalBooleanMatcherTest {
 
     @Test
-    public void testPrivateConstructor() throws Exception {
+    public void testPrivateConstructor() {
         assertThat(OptionalBooleanMatcher.class, hasOnlyPrivateConstructors());
     }
 

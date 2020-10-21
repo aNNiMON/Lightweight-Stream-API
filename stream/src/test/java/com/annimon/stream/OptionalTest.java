@@ -19,15 +19,20 @@ import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.OptionalMatcher.hasValue;
 import static com.annimon.stream.test.hamcrest.OptionalMatcher.isEmpty;
 import static com.annimon.stream.test.hamcrest.OptionalMatcher.isPresent;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.fail;
 
 /**
  * Tests {@code Optional}.
  *
  * @see com.annimon.stream.Optional
  */
+@SuppressWarnings("ConstantConditions")
 public final class OptionalTest {
 
     private static Student student;
@@ -557,12 +562,14 @@ public final class OptionalTest {
         assertEquals(s1, s3);
     }
 
+    @SuppressWarnings({"EqualsBetweenInconvertibleTypes", "SimplifiableAssertion"})
     @Test
     public void testEqualsWithDifferentTypes() {
         final Optional<Integer> optInt = Optional.of(10);
         assertFalse(optInt.equals(10));
     }
 
+    @SuppressWarnings("AssertBetweenInconvertibleTypes")
     @Test
     public void testEqualsWithDifferentGenericTypes() {
         final Optional<Student> s1 = Optional.of(student);

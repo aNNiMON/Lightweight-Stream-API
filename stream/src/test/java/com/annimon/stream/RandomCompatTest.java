@@ -6,9 +6,12 @@ import com.annimon.stream.function.LongConsumer;
 import java.security.SecureRandom;
 import java.util.Random;
 import org.junit.Test;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.instanceOf;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 public class RandomCompatTest {
 

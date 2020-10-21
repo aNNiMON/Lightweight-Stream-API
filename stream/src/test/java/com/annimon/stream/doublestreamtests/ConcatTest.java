@@ -4,8 +4,8 @@ import com.annimon.stream.DoubleStream;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.DoubleStreamMatcher.assertElements;
 import static com.annimon.stream.test.hamcrest.DoubleStreamMatcher.isEmpty;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.arrayContaining;
-import static org.junit.Assert.assertThat;
 
 public final class ConcatTest {
 

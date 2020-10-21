@@ -5,8 +5,8 @@ import com.annimon.stream.IntStream;
 import com.annimon.stream.function.IntBinaryOperator;
 import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
-import static org.junit.Assert.assertThat;
 
 public final class CustomTest {
 

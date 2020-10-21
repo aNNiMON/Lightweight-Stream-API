@@ -16,13 +16,17 @@ import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.hasValue;
 import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.isEmpty;
 import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.isPresent;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.fail;
 
 /**
  * Tests for {@link OptionalInt}
  */
+@SuppressWarnings("ConstantConditions")
 public class OptionalIntTest {
 
     @Test
@@ -41,6 +45,7 @@ public class OptionalIntTest {
         assertThat(OptionalInt.ofNullable(null), isEmpty());
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test(expected = NoSuchElementException.class)
     public void testGetOnEmptyOptional() {
         OptionalInt.empty().getAsInt();
@@ -409,6 +414,7 @@ public class OptionalIntTest {
         assertEquals(10, value);
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test(expected = NoSuchElementException.class)
     public void testOrElseThrowOnEmptyOptional() {
         OptionalInt.empty().orElseThrow();
@@ -438,7 +444,7 @@ public class OptionalIntTest {
         }));
     }
 
-    @SuppressWarnings("EqualsBetweenInconvertibleTypes")
+    @SuppressWarnings("AssertBetweenInconvertibleTypes")
     @Test
     public void testEquals() {
         assertEquals(OptionalInt.empty(), OptionalInt.empty());

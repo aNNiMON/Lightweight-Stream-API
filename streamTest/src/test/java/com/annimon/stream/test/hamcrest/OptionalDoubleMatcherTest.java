@@ -8,16 +8,16 @@ import static com.annimon.stream.test.hamcrest.OptionalDoubleMatcher.hasValue;
 import static com.annimon.stream.test.hamcrest.OptionalDoubleMatcher.hasValueThat;
 import static com.annimon.stream.test.hamcrest.OptionalDoubleMatcher.isEmpty;
 import static com.annimon.stream.test.hamcrest.OptionalDoubleMatcher.isPresent;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertThat;
 
 public class OptionalDoubleMatcherTest {
 
     @Test
-    public void testPrivateConstructor() throws Exception {
+    public void testPrivateConstructor() {
         assertThat(OptionalDoubleMatcher.class, hasOnlyPrivateConstructors());
     }
 

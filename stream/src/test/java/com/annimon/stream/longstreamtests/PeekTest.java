@@ -4,8 +4,8 @@ import com.annimon.stream.LongStream;
 import com.annimon.stream.function.LongConsumer;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.LongStreamMatcher.assertIsEmpty;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 public final class PeekTest {

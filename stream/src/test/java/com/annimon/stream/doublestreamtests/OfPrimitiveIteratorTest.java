@@ -4,9 +4,9 @@ import com.annimon.stream.DoubleStream;
 import com.annimon.stream.iterator.PrimitiveIterator;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.DoubleStreamMatcher.elements;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.Matchers.closeTo;
-import static org.junit.Assert.assertThat;
 
 public final class OfPrimitiveIteratorTest {
 

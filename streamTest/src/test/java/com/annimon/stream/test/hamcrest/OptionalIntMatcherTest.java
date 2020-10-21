@@ -1,23 +1,21 @@
 package com.annimon.stream.test.hamcrest;
 
 import com.annimon.stream.OptionalInt;
-
 import org.junit.Test;
-
 import static com.annimon.stream.test.hamcrest.CommonMatcher.description;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
-import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.isEmpty;
-import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.isPresent;
 import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.hasValue;
 import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.hasValueThat;
+import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.isEmpty;
+import static com.annimon.stream.test.hamcrest.OptionalIntMatcher.isPresent;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class OptionalIntMatcherTest {
 
     @Test
-    public void testPrivateConstructor() throws Exception {
+    public void testPrivateConstructor() {
         assertThat(OptionalIntMatcher.class, hasOnlyPrivateConstructors());
     }
 

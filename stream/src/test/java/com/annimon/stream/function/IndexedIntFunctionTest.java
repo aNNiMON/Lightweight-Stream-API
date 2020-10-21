@@ -2,10 +2,9 @@ package com.annimon.stream.function;
 
 import com.annimon.stream.Functions;
 import org.junit.Test;
-
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 
 /**
  * Tests {@code IndexedIntFunction}.

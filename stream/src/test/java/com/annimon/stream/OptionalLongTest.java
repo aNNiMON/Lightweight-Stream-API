@@ -14,12 +14,16 @@ import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.OptionalLongMatcher.hasValue;
 import static com.annimon.stream.test.hamcrest.OptionalLongMatcher.isEmpty;
 import static com.annimon.stream.test.hamcrest.OptionalLongMatcher.isPresent;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.fail;
 
 /**
  * Tests for {@link OptionalLong}
  */
+@SuppressWarnings("ConstantConditions")
 public class OptionalLongTest {
 
     @Test
@@ -38,6 +42,7 @@ public class OptionalLongTest {
         assertThat(OptionalLong.ofNullable(null), isEmpty());
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test(expected = NoSuchElementException.class)
     public void testGetOnEmptyOptional() {
         OptionalLong.empty().getAsLong();
@@ -390,6 +395,7 @@ public class OptionalLongTest {
         assertEquals(10, value);
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Test(expected = NoSuchElementException.class)
     public void testOrElseThrowOnEmptyOptional() {
         OptionalLong.empty().orElseThrow();
@@ -419,7 +425,7 @@ public class OptionalLongTest {
         }));
     }
 
-    @SuppressWarnings("EqualsBetweenInconvertibleTypes")
+    @SuppressWarnings("AssertBetweenInconvertibleTypes")
     @Test
     public void testEquals() {
         assertEquals(OptionalLong.empty(), OptionalLong.empty());

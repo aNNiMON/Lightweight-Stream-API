@@ -1,10 +1,8 @@
 package com.annimon.stream.streamtests;
 
 import com.annimon.stream.Stream;
-import org.junit.Test;
-
 import java.util.List;
-
+import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public final class EqualsOnlyTest {

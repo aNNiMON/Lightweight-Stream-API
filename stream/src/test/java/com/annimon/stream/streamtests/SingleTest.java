@@ -4,8 +4,8 @@ import com.annimon.stream.Functions;
 import com.annimon.stream.Stream;
 import java.util.NoSuchElementException;
 import org.junit.Test;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
 
 public final class SingleTest {
 
