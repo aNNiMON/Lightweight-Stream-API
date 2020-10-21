@@ -8,7 +8,10 @@ import com.annimon.stream.iterator.PrimitiveIndexedIterator;
 import com.annimon.stream.iterator.PrimitiveIterator;
 import com.annimon.stream.operator.*;
 import java.io.Closeable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -158,7 +161,7 @@ public final class DoubleStream implements Closeable {
     }
 
     /**
-     * Concatenates two streams.
+     * Lazily concatenates two streams.
      *
      * <p>Example:
      * <pre>
@@ -180,6 +183,48 @@ public final class DoubleStream implements Closeable {
         Objects.requireNonNull(b);
         DoubleStream result = new DoubleStream(new DoubleConcat(a.iterator, b.iterator));
         return result.onClose(Compose.closeables(a, b));
+    }
+
+    /**
+     * Lazily concatenates three or more streams.
+     *
+     * <p>Example:
+     * <pre>
+     * stream a: [1, 2, 3, 4]
+     * stream b: [5, 6]
+     * stream c: [7]
+     * stream d: [8, 9, 10]
+     * result:   [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+     * </pre>
+     *
+     * @param a  the first stream
+     * @param b  the second stream
+     * @return the new concatenated stream
+     * @throws NullPointerException if {@code a} or {@code b}
+     *         or {@code rest} is null
+     */
+    @NotNull
+    public static DoubleStream concat(
+            @NotNull final DoubleStream a,
+            @NotNull final DoubleStream b,
+            @NotNull final DoubleStream... rest) {
+        Objects.requireNonNull(a);
+        Objects.requireNonNull(b);
+        Objects.requireNonNull(rest);
+
+        final List<PrimitiveIterator.OfDouble> iterators =
+                new ArrayList<PrimitiveIterator.OfDouble>(rest.length + 2);
+        final List<Closeable> closeables =
+                new ArrayList<Closeable>(rest.length + 2);
+        Collections.addAll(iterators, a.iterator, b.iterator);
+        Collections.addAll(closeables, a, b);
+        for (final DoubleStream stream : rest) {
+            iterators.add(stream.iterator);
+            closeables.add(stream);
+        }
+
+        DoubleStream result = new DoubleStream(new DoubleConcat(iterators));
+        return result.onClose(Compose.closeables(closeables));
     }
 
 

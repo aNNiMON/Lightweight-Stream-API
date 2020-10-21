@@ -1,35 +1,44 @@
 package com.annimon.stream.operator;
 
+import com.annimon.stream.iterator.PrimitiveExtIterator;
 import com.annimon.stream.iterator.PrimitiveIterator;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
-public class IntConcat extends PrimitiveIterator.OfInt {
+public class IntConcat extends PrimitiveExtIterator.OfInt {
 
-    private final PrimitiveIterator.OfInt iterator1;
-    private final PrimitiveIterator.OfInt iterator2;
-    private boolean firstStreamIsCurrent;
+    private final List<? extends PrimitiveIterator.OfInt> iterators;
+    private final int iteratorsCount;
+    private int iteratorIndex;
 
     public IntConcat(
             @NotNull PrimitiveIterator.OfInt iterator1,
             @NotNull PrimitiveIterator.OfInt iterator2) {
-        this.iterator1 = iterator1;
-        this.iterator2 = iterator2;
-        firstStreamIsCurrent = true;
+        iterators = Arrays.asList(iterator1, iterator2);
+        iteratorsCount = 2;
+        iteratorIndex = 0;
     }
 
+    public IntConcat(@NotNull List<? extends PrimitiveIterator.OfInt> iterators) {
+        this.iterators = new ArrayList<PrimitiveIterator.OfInt>(iterators);
+        iteratorsCount = iterators.size();
+        iteratorIndex = 0;
+    }
+
+
     @Override
-    public boolean hasNext() {
-        if (firstStreamIsCurrent) {
-            if (iterator1.hasNext()) {
-                return true;
+    protected void nextIteration() {
+        while (iteratorIndex < iteratorsCount) {
+            PrimitiveIterator.OfInt currentIterator = iterators.get(iteratorIndex);
+            if (currentIterator.hasNext()) {
+                next = currentIterator.nextInt();
+                hasNext = true;
+                return;
             }
-            firstStreamIsCurrent = false;
+            iteratorIndex++;
         }
-        return iterator2.hasNext();
-    }
-
-    @Override
-    public int nextInt() {
-        return firstStreamIsCurrent ? iterator1.nextInt() : iterator2.nextInt();
+        hasNext = false;
     }
 }

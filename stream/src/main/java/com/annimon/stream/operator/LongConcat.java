@@ -1,35 +1,44 @@
 package com.annimon.stream.operator;
 
+import com.annimon.stream.iterator.PrimitiveExtIterator;
 import com.annimon.stream.iterator.PrimitiveIterator;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
-public class LongConcat extends PrimitiveIterator.OfLong {
+public class LongConcat extends PrimitiveExtIterator.OfLong {
 
-    private final PrimitiveIterator.OfLong iterator1;
-    private final PrimitiveIterator.OfLong iterator2;
-    private boolean firstStreamIsCurrent;
+    private final List<? extends PrimitiveIterator.OfLong> iterators;
+    private final int iteratorsCount;
+    private int iteratorIndex;
 
     public LongConcat(
             @NotNull PrimitiveIterator.OfLong iterator1,
             @NotNull PrimitiveIterator.OfLong iterator2) {
-        this.iterator1 = iterator1;
-        this.iterator2 = iterator2;
-        firstStreamIsCurrent = true;
+        iterators = Arrays.asList(iterator1, iterator2);
+        iteratorsCount = 2;
+        iteratorIndex = 0;
     }
 
+    public LongConcat(@NotNull List<? extends PrimitiveIterator.OfLong> iterators) {
+        this.iterators = new ArrayList<PrimitiveIterator.OfLong>(iterators);
+        iteratorsCount = iterators.size();
+        iteratorIndex = 0;
+    }
+
+
     @Override
-    public boolean hasNext() {
-        if (firstStreamIsCurrent) {
-            if (iterator1.hasNext()) {
-                return true;
+    protected void nextIteration() {
+        while (iteratorIndex < iteratorsCount) {
+            PrimitiveIterator.OfLong currentIterator = iterators.get(iteratorIndex);
+            if (currentIterator.hasNext()) {
+                next = currentIterator.nextLong();
+                hasNext = true;
+                return;
             }
-            firstStreamIsCurrent = false;
+            iteratorIndex++;
         }
-        return iterator2.hasNext();
-    }
-
-    @Override
-    public long nextLong() {
-        return firstStreamIsCurrent ? iterator1.nextLong() : iterator2.nextLong();
+        hasNext = false;
     }
 }

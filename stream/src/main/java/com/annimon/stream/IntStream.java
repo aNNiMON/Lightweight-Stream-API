@@ -8,7 +8,10 @@ import com.annimon.stream.iterator.PrimitiveIndexedIterator;
 import com.annimon.stream.iterator.PrimitiveIterator;
 import com.annimon.stream.operator.*;
 import java.io.Closeable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -226,8 +229,8 @@ public final class IntStream implements Closeable {
      * result:   [1, 2, 3, 4, 5, 6]
      * </pre>
      *
-     * @param a the first stream
-     * @param b the second stream
+     * @param a  the first stream
+     * @param b  the second stream
      * @return the concatenation of the two input streams
      * @throws NullPointerException if {@code a} or {@code b} is null
      */
@@ -240,6 +243,49 @@ public final class IntStream implements Closeable {
         IntStream result = new IntStream(new IntConcat(a.iterator, b.iterator));
         return result.onClose(Compose.closeables(a, b));
     }
+
+    /**
+     * Lazily concatenates three or more streams.
+     *
+     * <p>Example:
+     * <pre>
+     * stream a: [1, 2, 3, 4]
+     * stream b: [5, 6]
+     * stream c: [7]
+     * stream d: [8, 9, 10]
+     * result:   [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+     * </pre>
+     *
+     * @param a  the first stream
+     * @param b  the second stream
+     * @return the new concatenated stream
+     * @throws NullPointerException if {@code a} or {@code b}
+     *         or {@code rest} is null
+     */
+    @NotNull
+    public static IntStream concat(
+            @NotNull final IntStream a,
+            @NotNull final IntStream b,
+            @NotNull final IntStream... rest) {
+        Objects.requireNonNull(a);
+        Objects.requireNonNull(b);
+        Objects.requireNonNull(rest);
+
+        final List<PrimitiveIterator.OfInt> iterators =
+                new ArrayList<PrimitiveIterator.OfInt>(rest.length + 2);
+        final List<Closeable> closeables =
+                new ArrayList<Closeable>(rest.length + 2);
+        Collections.addAll(iterators, a.iterator, b.iterator);
+        Collections.addAll(closeables, a, b);
+        for (final IntStream stream : rest) {
+            iterators.add(stream.iterator);
+            closeables.add(stream);
+        }
+
+        IntStream result = new IntStream(new IntConcat(iterators));
+        return result.onClose(Compose.closeables(closeables));
+    }
+
 
     private final PrimitiveIterator.OfInt iterator;
     private final Params params;

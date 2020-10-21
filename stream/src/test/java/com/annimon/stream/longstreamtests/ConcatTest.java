@@ -37,13 +37,43 @@ public final class ConcatTest {
                 )));
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test(expected = NullPointerException.class)
     public void testStreamConcatNullA() {
         LongStream.concat(null, LongStream.empty());
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Test(expected = NullPointerException.class)
     public void testStreamConcatNullB() {
         LongStream.concat(LongStream.empty(), null);
+    }
+
+    @Test
+    public void testConcat3Streams() {
+        LongStream a1 = LongStream.of(1, 2, 3);
+        LongStream b1 = LongStream.of(4);
+        LongStream c1 = LongStream.of(5, 6);
+        LongStream.concat(a1, b1, c1)
+                .custom(assertElements(arrayContaining(
+                        1L, 2L, 3L,
+                        4L,
+                        5L, 6L
+                )));
+
+        LongStream a2 = LongStream.of(1, 2, 3);
+        LongStream b2 = LongStream.empty();
+        LongStream c2 = LongStream.of(5, 6);
+        LongStream.concat(a2, b2, c2)
+                .custom(assertElements(arrayContaining(
+                        1L, 2L, 3L,
+                        // empty
+                        5L, 6L
+                )));
+
+        LongStream a3 = LongStream.empty();
+        LongStream b3 = LongStream.empty();
+        LongStream c3 = LongStream.empty();
+        LongStream.concat(a3, b3, c3).custom(assertIsEmpty());
     }
 }
