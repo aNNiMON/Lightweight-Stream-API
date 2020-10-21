@@ -293,7 +293,7 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Concatenates two streams.
+     * Lazily concatenates two streams.
      *
      * <p>Example:
      * <pre>
@@ -316,6 +316,51 @@ public class Stream<T> implements Closeable {
         Objects.requireNonNull(stream2);
         Stream<T> result = new Stream<T>(new ObjConcat<T>(stream1.iterator, stream2.iterator));
         return result.onClose(Compose.closeables(stream1, stream2));
+    }
+
+    /**
+     * Lazily concatenates three or more streams.
+     *
+     * <p>Example:
+     * <pre>
+     * stream 1: [1, 2, 3, 4]
+     * stream 2: [5, 6]
+     * stream 3: [7]
+     * stream 4: [8, 9, 10]
+     * result:   [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+     * </pre>
+     *
+     * @param <T> The type of stream elements
+     * @param stream1  the first stream
+     * @param stream2  the second stream
+     * @param rest  the rest streams
+     * @return the new concatenated stream
+     * @throws NullPointerException if {@code stream1} or {@code stream2}
+     *         or {@code rest} is null
+     * @since 1.2.2
+     */
+    @NotNull
+    public static <T> Stream<T> concat(
+            @NotNull Stream<? extends T> stream1,
+            @NotNull Stream<? extends T> stream2,
+            @NotNull Stream<? extends T>... rest) {
+        Objects.requireNonNull(stream1);
+        Objects.requireNonNull(stream2);
+        Objects.requireNonNull(rest);
+
+        final List<Iterator<? extends T>> iterators =
+                new ArrayList<Iterator<? extends T>>(rest.length + 2);
+        final List<Closeable> closeables =
+                new ArrayList<Closeable>(rest.length + 2);
+        Collections.addAll(iterators, stream1.iterator, stream2.iterator);
+        Collections.addAll(closeables, stream1, stream2);
+        for (final Stream<? extends T> stream : rest) {
+            iterators.add(stream.iterator);
+            closeables.add(stream);
+        }
+
+        Stream<T> result = new Stream<T>(new ObjConcat<T>(iterators));
+        return result.onClose(Compose.closeables(closeables));
     }
 
     /**
@@ -342,6 +387,44 @@ public class Stream<T> implements Closeable {
         Objects.requireNonNull(iterator1);
         Objects.requireNonNull(iterator2);
         return new Stream<T>(new ObjConcat<T>(iterator1, iterator2));
+    }
+
+    /**
+     * Concatenates three or more iterators to a stream.
+     *
+     * <p>Example:
+     * <pre>
+     * iterator 1: [1, 2, 3, 4]
+     * iterator 2: [5, 6]
+     * iterator 3: [7]
+     * iterator 4: [8, 9, 10]
+     * result:     [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+     * </pre>
+     *
+     * @param <T> The type of iterator elements
+     * @param iterator1  the first iterator
+     * @param iterator2  the second iterator
+     * @param rest  the rest iterators
+     * @return the new concatenated stream
+     * @throws NullPointerException if {@code iterator1} or {@code iterator2}
+     *         or {@code rest} is null
+     * @since 1.2.2
+     */
+    @NotNull
+    public static <T> Stream<T> concat(
+            @NotNull Iterator<? extends T> iterator1,
+            @NotNull Iterator<? extends T> iterator2,
+            @NotNull Iterator<? extends T>... rest) {
+        Objects.requireNonNull(iterator1);
+        Objects.requireNonNull(iterator2);
+        Objects.requireNonNull(rest);
+
+        final List<Iterator<? extends T>> iterators =
+                new ArrayList<Iterator<? extends T>>(rest.length + 2);
+        Collections.addAll(iterators, iterator1, iterator2);
+        Collections.addAll(iterators, rest);
+
+        return new Stream<T>(new ObjConcat<T>(iterators));
     }
 
     /**
