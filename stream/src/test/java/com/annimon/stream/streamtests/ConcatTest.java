@@ -3,13 +3,31 @@ package com.annimon.stream.streamtests;
 import com.annimon.stream.Functions;
 import com.annimon.stream.Stream;
 import com.annimon.stream.function.Function;
+import com.annimon.stream.test.hamcrest.StreamMatcher;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.assertElements;
 import static org.hamcrest.Matchers.contains;
 
+@SuppressWarnings("unchecked")
 public final class ConcatTest {
+
+    @Test
+    public void testConcat0Streams() {
+        Stream.concat(Collections.<Stream<String>>emptyList())
+                .custom(StreamMatcher.<String>assertIsEmpty());
+    }
+
+    @Test
+    public void testConcat1Stream() {
+        Stream<String> stream1 = Stream.of("a", "b", "c", "d");
+        Stream.concat(Collections.singletonList(stream1))
+                .custom(assertElements(contains(
+                        "a", "b", "c", "d"
+                )));
+    }
 
     @Test
     public void testConcat2Streams() {
@@ -27,7 +45,7 @@ public final class ConcatTest {
         Stream<String> stream1 = Stream.of("a", "b", "c", "d");
         Stream<String> stream2 = Stream.of("e", "f", "g", "h");
         Stream<String> stream3 = Stream.of("i", "j", "k", "l");
-        Stream.concat(stream1, stream2, stream3)
+        Stream.concat(Arrays.asList(stream1, stream2, stream3))
                 .custom(assertElements(contains(
                         "a", "b", "c", "d",
                         "e", "f", "g", "h",
@@ -63,7 +81,7 @@ public final class ConcatTest {
         Stream<Integer> stream2 = Stream.range(5, 10).filter(Functions.remainder(1));
         Stream<Integer> stream3 = Stream.range(10, 15).filter(Functions.remainder(1));
         Stream<Integer> stream4 = Stream.range(15, 20).filter(Functions.remainder(1));
-        Stream.concat(stream1, stream2, stream3, stream4)
+        Stream.concat(Arrays.asList(stream1, stream2, stream3, stream4))
                 .custom(assertElements(contains(
                         0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
                         10, 11, 12, 13, 14, 15, 16, 17, 18, 19

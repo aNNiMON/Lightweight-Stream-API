@@ -319,7 +319,7 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Lazily concatenates three or more streams.
+     * Lazily concatenates a {@code List} of streams.
      *
      * <p>Example:
      * <pre>
@@ -331,30 +331,22 @@ public class Stream<T> implements Closeable {
      * </pre>
      *
      * @param <T> The type of stream elements
-     * @param stream1  the first stream
-     * @param stream2  the second stream
-     * @param rest  the rest streams
+     * @param streams  the list of streams
      * @return the new concatenated stream
-     * @throws NullPointerException if {@code stream1} or {@code stream2}
-     *         or {@code rest} is null
+     * @throws NullPointerException if {@code streams} is null
      * @since 1.2.2
      */
     @NotNull
     public static <T> Stream<T> concat(
-            @NotNull Stream<? extends T> stream1,
-            @NotNull Stream<? extends T> stream2,
-            @NotNull Stream<? extends T>... rest) {
-        Objects.requireNonNull(stream1);
-        Objects.requireNonNull(stream2);
-        Objects.requireNonNull(rest);
+            @NotNull List<? extends Stream<? extends T>> streams) {
+        Objects.requireNonNull(streams);
 
+        final int size = streams.size();
         final List<Iterator<? extends T>> iterators =
-                new ArrayList<Iterator<? extends T>>(rest.length + 2);
+                new ArrayList<Iterator<? extends T>>(size);
         final List<Closeable> closeables =
-                new ArrayList<Closeable>(rest.length + 2);
-        Collections.addAll(iterators, stream1.iterator, stream2.iterator);
-        Collections.addAll(closeables, stream1, stream2);
-        for (final Stream<? extends T> stream : rest) {
+                new ArrayList<Closeable>(size);
+        for (final Stream<? extends T> stream : streams) {
             iterators.add(stream.iterator);
             closeables.add(stream);
         }
@@ -411,6 +403,7 @@ public class Stream<T> implements Closeable {
      * @since 1.2.2
      */
     @NotNull
+    @SuppressWarnings("unchecked")
     public static <T> Stream<T> concat(
             @NotNull Iterator<? extends T> iterator1,
             @NotNull Iterator<? extends T> iterator2,
