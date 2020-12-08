@@ -396,6 +396,50 @@ public final class IntStream implements Closeable {
     }
 
     /**
+     * Prepends given {@code IntStream} to current and returns a new stream.
+     *
+     * This is similar to {@code IntStream.concat(stream, this)}
+     *
+     * <p>Example:
+     * <pre>
+     * current: [1, 2, 3]
+     * stream:  [4, 5, 6]
+     * result:  [4, 5, 6, 1, 2, 3]
+     * </pre>
+     *
+     * @param stream  the stream to prepend
+     * @return the new stream
+     * @since 1.2.2
+     * @see #concat(IntStream, IntStream)
+     */
+    @NotNull
+    public IntStream prepend(@NotNull IntStream stream) {
+        return IntStream.concat(stream, this);
+    }
+
+    /**
+     * Appends given {@code IntStream} to current and returns a new stream.
+     *
+     * This is similar to {@code IntStream.concat(this, stream)}
+     *
+     * <p>Example:
+     * <pre>
+     * current: [1, 2, 3]
+     * stream:  [4, 5, 6]
+     * result:  [1, 2, 3, 4, 5, 6]
+     * </pre>
+     *
+     * @param stream  the stream to append
+     * @return the new stream
+     * @since 1.2.2
+     * @see #concat(IntStream, IntStream)
+     */
+    @NotNull
+    public IntStream append(@NotNull IntStream stream) {
+        return IntStream.concat(this, stream);
+    }
+
+    /**
      * Returns a stream consisting of the elements of this stream that match
      * the given predicate.
      *

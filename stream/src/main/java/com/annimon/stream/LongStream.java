@@ -383,6 +383,50 @@ public final class LongStream implements Closeable {
     }
 
     /**
+     * Prepends given {@code LongStream} to current and returns a new stream.
+     *
+     * This is similar to {@code LongStream.concat(stream, this)}
+     *
+     * <p>Example:
+     * <pre>
+     * current: [1, 2, 3]
+     * stream:  [4, 5, 6]
+     * result:  [4, 5, 6, 1, 2, 3]
+     * </pre>
+     *
+     * @param stream  the stream to prepend
+     * @return the new stream
+     * @since 1.2.2
+     * @see #concat(LongStream, LongStream)
+     */
+    @NotNull
+    public LongStream prepend(@NotNull LongStream stream) {
+        return LongStream.concat(stream, this);
+    }
+
+    /**
+     * Appends given {@code LongStream} to current and returns a new stream.
+     *
+     * This is similar to {@code LongStream.concat(this, stream)}
+     *
+     * <p>Example:
+     * <pre>
+     * current: [1, 2, 3]
+     * stream:  [4, 5, 6]
+     * result:  [1, 2, 3, 4, 5, 6]
+     * </pre>
+     *
+     * @param stream  the stream to append
+     * @return the new stream
+     * @since 1.2.2
+     * @see #concat(LongStream, LongStream)
+     */
+    @NotNull
+    public LongStream append(@NotNull LongStream stream) {
+        return LongStream.concat(this, stream);
+    }
+
+    /**
      * Returns {@code LongStream} with elements that satisfy the given predicate.
      *
      * <p> This is an intermediate operation.
