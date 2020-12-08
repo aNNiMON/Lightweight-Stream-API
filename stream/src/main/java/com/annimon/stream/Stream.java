@@ -648,6 +648,50 @@ public class Stream<T> implements Closeable {
     }
 
     /**
+     * Prepends given {@code Stream} to current and returns a new stream.
+     *
+     * This is similar to {@code Stream.concat(stream, this)}
+     *
+     * <p>Example:
+     * <pre>
+     * current: [1, 2, 3]
+     * stream:  [4, 5, 6]
+     * result:  [4, 5, 6, 1, 2, 3]
+     * </pre>
+     *
+     * @param stream  the stream to prepend
+     * @return the new stream
+     * @since 1.2.2
+     * @see #concat(Stream, Stream)
+     */
+    @NotNull
+    public Stream<T> prepend(@NotNull Stream<? extends T> stream) {
+        return Stream.concat(stream, this);
+    }
+
+    /**
+     * Appends given {@code Stream} to current and returns a new stream.
+     *
+     * This is similar to {@code Stream.concat(this, stream)}
+     *
+     * <p>Example:
+     * <pre>
+     * current: [1, 2, 3]
+     * stream:  [4, 5, 6]
+     * result:  [1, 2, 3, 4, 5, 6]
+     * </pre>
+     *
+     * @param stream  the stream to append
+     * @return the new stream
+     * @since 1.2.2
+     * @see #concat(Stream, Stream)
+     */
+    @NotNull
+    public Stream<T> append(@NotNull Stream<? extends T> stream) {
+        return Stream.concat(this, stream);
+    }
+
+    /**
      * Returns {@code Stream} with elements that satisfy the given predicate.
      *
      * <p>This is an intermediate operation.
