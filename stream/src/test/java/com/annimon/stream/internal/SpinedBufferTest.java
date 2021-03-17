@@ -1,8 +1,10 @@
 package com.annimon.stream.internal;
 
+import com.annimon.stream.function.IntFunction;
 import com.annimon.stream.iterator.PrimitiveIterator;
+import java.util.Iterator;
 import org.junit.Test;
-import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
+import static com.annimon.stream.Functions.arrayGenerator;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
 import static org.junit.Assert.assertEquals;
@@ -14,6 +16,12 @@ import static org.junit.Assert.assertTrue;
  * Tests for {@link SpinedBuffer}
 */
 public class SpinedBufferTest {
+
+    @Test
+    public void testEmptyConstructor() {
+        SpinedBuffer.Of<String> b = new SpinedBuffer.Of<String>();
+        assertEquals(SpinedBuffer.MIN_CHUNK_SIZE, b.capacity());
+    }
 
     @Test
     public void testOfIntEmptyConstructor() {
@@ -33,6 +41,17 @@ public class SpinedBufferTest {
         assertEquals(SpinedBuffer.MIN_CHUNK_SIZE, b.capacity());
     }
 
+
+    @Test
+    public void testConstructorCapacity() {
+        SpinedBuffer.Of<String> b = new SpinedBuffer.Of<String>(1);
+        assertEquals(SpinedBuffer.MIN_CHUNK_SIZE, b.capacity());
+        SpinedBuffer.Of<String> b2 = new SpinedBuffer.Of<String>(33);
+        assertEquals(64, b2.capacity());
+
+        SpinedBuffer.Of<String> b3 = new SpinedBuffer.Of<String>(1735);
+        assertEquals(0, b3.capacity() % SpinedBuffer.MIN_CHUNK_SIZE);
+    }
 
     @Test
     public void testOfIntConstructorCapacity() {
@@ -69,6 +88,11 @@ public class SpinedBufferTest {
 
 
     @Test(expected = IllegalArgumentException.class)
+    public void testConstructorInvalidCapacity() {
+        new SpinedBuffer.Of<String>(-5);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void testOfIntConstructorInvalidCapacity() {
         new SpinedBuffer.OfInt(-5);
     }
@@ -84,6 +108,18 @@ public class SpinedBufferTest {
     }
 
 
+    @Test
+    public void testEmpty() {
+        SpinedBuffer.Of<String> b = new SpinedBuffer.Of<String>();
+        assertTrue(b.isEmpty());
+
+        SpinedBuffer.Of<String> b2 = new SpinedBuffer.Of<String>(32);
+        assertTrue(b.isEmpty());
+
+        b2.accept("a");
+        assertFalse(b2.isEmpty());
+    }
+ 
     @Test
     public void testIntEmpty() {
         SpinedBuffer.OfInt b = new SpinedBuffer.OfInt();
@@ -120,6 +156,27 @@ public class SpinedBufferTest {
         assertFalse(b2.isEmpty());
     }
 
+
+    @Test
+    public void testCount() {
+        SpinedBuffer.Of<String> b = new SpinedBuffer.Of<String>();
+        assertEquals(0, b.count());
+
+        b.accept("a");
+        b.accept("b");
+        b.accept("c");
+
+        assertEquals(3, b.count());
+        for(char ch = 'd'; ch < 'q'; ch++) {
+            b.accept(String.valueOf(ch));
+        }
+
+        assertEquals(16, b.count());
+
+        b.accept("q");
+
+        assertEquals(17, b.count());
+    }
 
     @Test
     public void testIntCount() {
@@ -189,6 +246,26 @@ public class SpinedBufferTest {
 
 
     @Test
+    public void testAccept() {
+        SpinedBuffer.Of<String> b = new SpinedBuffer.Of<String>();
+
+        for(int i = 0; i < 1000; i++)
+            b.accept(Integer.toString(i));
+
+        assertEquals(b.count(), 1000);
+        assertEquals(b.capacity(), 1024);
+
+        for(int i = 0; i < 1000; i++) {
+            String s = Integer.toString(i);
+            assertEquals(s, b.get(i));
+        }
+
+        SpinedBuffer.Of<String> b2 = new SpinedBuffer.Of<String>();
+        b2.accept("abc");
+        assertEquals(b2.get(0), "abc");
+    }
+
+    @Test
     public void testIntAccept() {
         SpinedBuffer.OfInt b = new SpinedBuffer.OfInt();
 
@@ -244,12 +321,19 @@ public class SpinedBufferTest {
 
 
     @Test(expected = IndexOutOfBoundsException.class)
+    public void testGetOutOfBounds() {
+        SpinedBuffer.Of<String> b = new SpinedBuffer.Of<String>();
+        for (int i = 0; i < 5; i++)
+            b.accept("a");
+        // test when special case - one chunk(<16 elements) present
+        b.get(10);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
     public void testIntGetOutOfBounds() {
         SpinedBuffer.OfInt b = new SpinedBuffer.OfInt();
-
-        for(int i = 0; i < 5; i++)
+        for (int i = 0; i < 5; i++)
             b.accept(i);
-
         // test when special case - one chunk(<16 elements) present
         b.get(10);
     }
@@ -257,10 +341,8 @@ public class SpinedBufferTest {
     @Test(expected = IndexOutOfBoundsException.class)
     public void testLongGetOutOfBounds() {
         SpinedBuffer.OfLong b = new SpinedBuffer.OfLong();
-
-        for(long i = 0; i < 5; i++)
+        for (long i = 0; i < 5; i++)
             b.accept(i);
-
         // test when special case - one chunk(<16 elements) present
         b.get(10);
     }
@@ -268,22 +350,27 @@ public class SpinedBufferTest {
     @Test(expected = IndexOutOfBoundsException.class)
     public void testDoubleGetOutOfBounds() {
         SpinedBuffer.OfDouble b = new SpinedBuffer.OfDouble();
-
-        for(int i = 0; i < 5; i++)
+        for (int i = 0; i < 5; i++)
             b.accept(i);
-
         // test when special case - one chunk(<16 elements) present
         b.get(10);
     }
 
 
     @Test(expected = IndexOutOfBoundsException.class)
+    public void testGetOutOfBounds2() {
+        SpinedBuffer.Of<String> b = new SpinedBuffer.Of<String>();
+        for (int i = 0; i < 32; i++)
+            b.accept("a");
+        // test when spine(several chunks, >16 elements)
+        b.get(40);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
     public void testIntGetOutOfBounds2() {
         SpinedBuffer.OfInt b = new SpinedBuffer.OfInt();
-
-        for(int i = 0; i < 32; i++)
+        for (int i = 0; i < 32; i++)
             b.accept(i);
-
         // test when spine(several chunks, >16 elements)
         b.get(40);
     }
@@ -291,10 +378,8 @@ public class SpinedBufferTest {
     @Test(expected = IndexOutOfBoundsException.class)
     public void testLongGetOutOfBounds2() {
         SpinedBuffer.OfLong b = new SpinedBuffer.OfLong();
-
-        for(long i = 0; i < 32; i++)
+        for (long i = 0; i < 32; i++)
             b.accept(i);
-
         // test when spine(several chunks, >16 elements)
         b.get(40);
     }
@@ -302,26 +387,33 @@ public class SpinedBufferTest {
     @Test(expected = IndexOutOfBoundsException.class)
     public void testDoubleGetOutOfBounds2() {
         SpinedBuffer.OfDouble b = new SpinedBuffer.OfDouble();
-
-        for(int i = 0; i < 32; i++)
+        for (int i = 0; i < 32; i++)
             b.accept(i);
-
         // test when spine(several chunks, >16 elements)
         b.get(40);
     }
 
 
+    @SuppressWarnings("RedundantCast")
+    @Test
+    public void testEnsureCapacity() {
+        SpinedBuffer.Of<String> b = new SpinedBuffer.Of<String>();
+        int m = SpinedBuffer.MIN_CHUNK_POWER;
+        int count = (1<<m) + (1<<m) + (1<<m+1) + (1<<m+2) + (1<<m + 3) + (1<<m+4) + (1<<m+5) + (1<<m+6);
+        for (int i = 0; i < count; i++)
+            b.accept("a");
+        b.accept("b");
+
+        assertEquals(16, ((Object[][])b.spine).length);
+    }
+
     @Test
     public void testIntEnsureCapacity() {
         SpinedBuffer.OfInt b = new SpinedBuffer.OfInt();
-
         int m = SpinedBuffer.MIN_CHUNK_POWER;
-
-        int count = (1<<m)+ (1<<m) + (1<<m+1) + (1<<m+2) + (1<<m + 3) + (1<<m+4) + (1<<m+5) + (1<<m+6);
-
-        for(int i = 0; i < count; i++)
+        int count = (1<<m) + (1<<m) + (1<<m+1) + (1<<m+2) + (1<<m + 3) + (1<<m+4) + (1<<m+5) + (1<<m+6);
+        for (int i = 0; i < count; i++)
             b.accept(i);
-
         b.accept(42);
 
         assertEquals(16, b.spine.length);
@@ -330,14 +422,10 @@ public class SpinedBufferTest {
     @Test
     public void testLongEnsureCapacity() {
         SpinedBuffer.OfLong b = new SpinedBuffer.OfLong();
-
         long m = SpinedBuffer.MIN_CHUNK_POWER;
-
-        long count = (1<<m)+ (1<<m) + (1<<m+1) + (1<<m+2) + (1<<m + 3) + (1<<m+4) + (1<<m+5) + (1<<m+6);
-
-        for(long i = 0; i < count; i++)
+        long count = (1<<m) + (1<<m) + (1<<m+1) + (1<<m+2) + (1<<m + 3) + (1<<m+4) + (1<<m+5) + (1<<m+6);
+        for (long i = 0; i < count; i++)
             b.accept(i);
-
         b.accept(42);
 
         assertEquals(16, b.spine.length);
@@ -346,14 +434,10 @@ public class SpinedBufferTest {
     @Test
     public void testDoubleEnsureCapacity() {
         SpinedBuffer.OfDouble b = new SpinedBuffer.OfDouble();
-
         int m = SpinedBuffer.MIN_CHUNK_POWER;
-
-        int count = (1<<m)+ (1<<m) + (1<<m+1) + (1<<m+2) + (1<<m + 3) + (1<<m+4) + (1<<m+5) + (1<<m+6);
-
-        for(int i = 0; i < count; i++)
+        int count = (1<<m) + (1<<m) + (1<<m+1) + (1<<m+2) + (1<<m + 3) + (1<<m+4) + (1<<m+5) + (1<<m+6);
+        for (int i = 0; i < count; i++)
             b.accept(i);
-
         b.accept(42);
 
         assertEquals(16, b.spine.length);
@@ -361,23 +445,38 @@ public class SpinedBufferTest {
 
 
     @Test(expected = IndexOutOfBoundsException.class)
-    public void testIntChunkForUnreachableEndException() {
-        SpinedBuffer.OfInt b = new SpinedBuffer.OfInt() {
+    public void testChunkForUnreachableEndException() {
+        SpinedBuffer.Of<String> b = new SpinedBuffer.Of<String>() {
             @Override
             public long count() {
                 long superCount = super.count();
-
-                if(superCount == 200)
+                if (superCount == 200)
                     return 1024;
-
                 return superCount;
             }
         };
 
         // fill some data to fill first chunk and a bit more
-        for(int i = 0; i < 200; i++)
-            b.accept(i);
+        for (int i = 0; i < 200; i++)
+            b.accept("a");
+        b.chunkFor(300);
+    }
 
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testIntChunkForUnreachableEndException() {
+        SpinedBuffer.OfInt b = new SpinedBuffer.OfInt() {
+            @Override
+            public long count() {
+                long superCount = super.count();
+                if (superCount == 200)
+                    return 1024;
+                return superCount;
+            }
+        };
+
+        // fill some data to fill first chunk and a bit more
+        for (int i = 0; i < 200; i++)
+            b.accept(i);
         b.chunkFor(300);
     }
 
@@ -387,18 +486,15 @@ public class SpinedBufferTest {
             @Override
             public long count() {
                 long superCount = super.count();
-
-                if(superCount == 200)
+                if (superCount == 200)
                     return 1024;
-
                 return superCount;
             }
         };
 
         // fill some data to fill first chunk and a bit more
-        for(long i = 0; i < 200; i++)
+        for (long i = 0; i < 200; i++)
             b.accept(i);
-
         b.chunkFor(300);
     }
 
@@ -408,44 +504,57 @@ public class SpinedBufferTest {
             @Override
             public long count() {
                 long superCount = super.count();
-
-                if(superCount == 200)
+                if (superCount == 200)
                     return 1024;
-
                 return superCount;
             }
         };
 
         // fill some data to fill first chunk and a bit more
-        for(int i = 0; i < 200; i++)
+        for (int i = 0; i < 200; i++)
             b.accept(i);
-
         b.chunkFor(300);
     }
 
+
+    @Test
+    public void testToArray() {
+        SpinedBuffer.Of<String> e = new SpinedBuffer.Of<String>();
+        IntFunction<String[]> arrayFactory = arrayGenerator(String[].class);
+
+        String[] empty = e.asArray(arrayFactory);
+        assertEquals(empty.length, 0);
+
+        e.accept("a");
+        String[] single = e.asArray(arrayFactory);
+        assertEquals(single.length, 1);
+
+        SpinedBuffer.Of<String> b = new SpinedBuffer.Of<String>();
+        for (int i = 0; i < 52; i++)
+            b.accept(Integer.toString(i*2));
+        String[] strings = b.asArray(arrayFactory);
+        for (int i = 0; i < 52; i++) {
+            String s = Integer.toString(i*2);
+            assertEquals(s, strings[i]);
+        }
+    }
 
     @Test
     public void testIntToArray() {
         SpinedBuffer.OfInt e = new SpinedBuffer.OfInt();
 
         int[] empty = e.asPrimitiveArray();
-
         assertEquals(empty.length, 0);
 
         e.accept(42);
-
         int[] single = e.asPrimitiveArray();
-
         assertEquals(single.length, 1);
 
         SpinedBuffer.OfInt b = new SpinedBuffer.OfInt();
-
-        for(int i = 0; i < 52; i++)
+        for (int i = 0; i < 52; i++)
             b.accept(i*2);
-
         int[] ints = b.asPrimitiveArray();
-
-        for(int i = 0; i < 52; i++)
+        for (int i = 0; i < 52; i++)
             assertEquals(i*2, ints[i]);
     }
 
@@ -454,23 +563,17 @@ public class SpinedBufferTest {
         SpinedBuffer.OfLong e = new SpinedBuffer.OfLong();
 
         long[] empty = e.asPrimitiveArray();
-
         assertEquals(empty.length, 0);
 
         e.accept(42);
-
         long[] single = e.asPrimitiveArray();
-
         assertEquals(single.length, 1);
 
         SpinedBuffer.OfLong b = new SpinedBuffer.OfLong();
-
-        for(long i = 0; i < 52; i++)
+        for (long i = 0; i < 52; i++)
             b.accept(i*2);
-
         long[] longs = b.asPrimitiveArray();
-
-        for(int i = 0; i < 52; i++)
+        for (int i = 0; i < 52; i++)
             assertEquals(i*2, longs[i]);
     }
 
@@ -479,26 +582,31 @@ public class SpinedBufferTest {
         SpinedBuffer.OfDouble e = new SpinedBuffer.OfDouble();
 
         double[] empty = e.asPrimitiveArray();
-
         assertEquals(empty.length, 0);
 
         e.accept(42);
-
         double[] single = e.asPrimitiveArray();
-
         assertEquals(single.length, 1);
 
         SpinedBuffer.OfDouble b = new SpinedBuffer.OfDouble();
-
-        for(int i = 0; i < 52; i++)
+        for (int i = 0; i < 52; i++)
             b.accept(i*2);
-
         double[] doubles = b.asPrimitiveArray();
-
-        for(int i = 0; i < 52; i++)
+        for (int i = 0; i < 52; i++)
             assertThat(doubles[i], closeTo(i * 2, 0.0001));
     }
 
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testToArrayTooBig() {
+        SpinedBuffer.Of<String> b = new SpinedBuffer.Of<String>() {
+            @Override
+            public long count() {
+                return Compat.MAX_ARRAY_SIZE;
+            }
+        };
+        b.asArray(arrayGenerator(String[].class));
+    }
 
     @Test(expected = IllegalArgumentException.class)
     public void testIntToArrayTooBig() {
@@ -508,7 +616,6 @@ public class SpinedBufferTest {
                 return Compat.MAX_ARRAY_SIZE;
             }
         };
-
         b.asPrimitiveArray();
     }
 
@@ -520,7 +627,6 @@ public class SpinedBufferTest {
                 return Compat.MAX_ARRAY_SIZE;
             }
         };
-
         b.asPrimitiveArray();
     }
 
@@ -532,37 +638,50 @@ public class SpinedBufferTest {
                 return Compat.MAX_ARRAY_SIZE;
             }
         };
-
         b.asPrimitiveArray();
     }
 
 
     @Test
+    public void testClear() {
+        SpinedBuffer.Of<String> b = new SpinedBuffer.Of<String>();
+        for (int i = 0; i < 1024; i++)
+            b.accept("a");
+        b.clear();
+        assertNull(b.spine);
+        assertEquals(0, b.elementIndex);
+        assertEquals(0, b.spineIndex);
+
+        SpinedBuffer.Of<String> b2 = new SpinedBuffer.Of<String>();
+        b2.accept("a");
+        b2.clear();
+        assertEquals(0, b2.elementIndex);
+        assertEquals(0, b2.spineIndex);
+
+        SpinedBuffer.Of<String> b3 = new SpinedBuffer.Of<String>();
+        b3.clear();
+        assertEquals(0, b3.count());
+        assertEquals(0, b3.elementIndex);
+    }
+
+    @Test
     public void testIntClear() {
         SpinedBuffer.OfInt b = new SpinedBuffer.OfInt();
-
-        for(int i = 0; i < 1024; i++)
+        for (int i = 0; i < 1024; i++)
             b.accept(i);
-
         b.clear();
-
         assertNull(b.spine);
         assertEquals(0, b.elementIndex);
         assertEquals(0, b.spineIndex);
 
         SpinedBuffer.OfInt b2 = new SpinedBuffer.OfInt();
-
         b2.accept(42);
-
         b2.clear();
-
         assertEquals(0, b2.elementIndex);
         assertEquals(0, b2.spineIndex);
 
         SpinedBuffer.OfInt b3 = new SpinedBuffer.OfInt();
-
         b3.clear();
-
         assertEquals(0, b3.count());
         assertEquals(0, b3.elementIndex);
     }
@@ -570,29 +689,21 @@ public class SpinedBufferTest {
     @Test
     public void testLongClear() {
         SpinedBuffer.OfLong b = new SpinedBuffer.OfLong();
-
-        for(long i = 0; i < 1024; i++)
+        for (long i = 0; i < 1024; i++)
             b.accept(i);
-
         b.clear();
-
         assertNull(b.spine);
         assertEquals(0, b.elementIndex);
         assertEquals(0, b.spineIndex);
 
         SpinedBuffer.OfLong b2 = new SpinedBuffer.OfLong();
-
         b2.accept(42);
-
         b2.clear();
-
         assertEquals(0, b2.elementIndex);
         assertEquals(0, b2.spineIndex);
 
         SpinedBuffer.OfLong b3 = new SpinedBuffer.OfLong();
-
         b3.clear();
-
         assertEquals(0, b3.count());
         assertEquals(0, b3.elementIndex);
     }
@@ -600,77 +711,74 @@ public class SpinedBufferTest {
     @Test
     public void testDoubleClear() {
         SpinedBuffer.OfDouble b = new SpinedBuffer.OfDouble();
-
-        for(int i = 0; i < 1024; i++)
+        for (int i = 0; i < 1024; i++)
             b.accept(i);
-
         b.clear();
-
         assertNull(b.spine);
         assertEquals(0, b.elementIndex);
         assertEquals(0, b.spineIndex);
 
         SpinedBuffer.OfDouble b2 = new SpinedBuffer.OfDouble();
-
         b2.accept(42);
-
         b2.clear();
-
         assertEquals(0, b2.elementIndex);
         assertEquals(0, b2.spineIndex);
 
         SpinedBuffer.OfDouble b3 = new SpinedBuffer.OfDouble();
-
         b3.clear();
-
         assertEquals(0, b3.count());
         assertEquals(0, b3.elementIndex);
     }
 
 
     @Test
+    public void testCopyInto() {
+        SpinedBuffer.Of<String> b = new SpinedBuffer.Of<String>();
+        String[] array = { "", "", "", "" };
+
+        b.copyInto(array, 0);
+        assertEquals("", array[0]);
+
+        b.accept("a");
+        b.copyInto(array, 0);
+        assertEquals("a", array[0]);
+
+        b.accept("b");
+        b.copyInto(array, 1);
+        assertEquals("b", array[2]);
+    }
+
+    @Test
     public void testIntCopyInto() {
         SpinedBuffer.OfInt b = new SpinedBuffer.OfInt();
-
         int[] array = new int[4];
 
         b.copyInto(array, 0);
-
         assertEquals(0, array[0]);
 
         b.accept(7);
-
         b.copyInto(array, 0);
-
         assertEquals(7, array[0]);
 
         b.accept(9);
-
         b.copyInto(array, 1);
-
         assertEquals(9, array[2]);
     }
 
     @Test
-    public void testLongCopyLongo() {
+    public void testLongCopyInto() {
         SpinedBuffer.OfLong b = new SpinedBuffer.OfLong();
-
         long[] array = new long[4];
 
         b.copyInto(array, 0);
-
         assertEquals(0, array[0]);
 
         b.accept(7);
-
         b.copyInto(array, 0);
-
         assertEquals(7, array[0]);
 
         b.accept(9);
-
         b.copyInto(array, 1);
-
         assertEquals(9, array[2]);
     }
 
@@ -693,111 +801,119 @@ public class SpinedBufferTest {
 
 
     @Test(expected = IndexOutOfBoundsException.class)
-    public void testIntCopyIntoNotFit() {
-        SpinedBuffer.OfInt b = new SpinedBuffer.OfInt();
-
-        for(int i = 0; i < 64; i++)
-            b.accept(i);
-
-        int[] array = new int[10];
-
+    public void testCopyIntoNotFit() {
+        SpinedBuffer.Of<String> b = new SpinedBuffer.Of<String>();
+        for (int i = 0; i < 64; i++)
+            b.accept("a");
+        String[] array = new String[10];
         b.copyInto(array, 0);
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
-    public void testLongCopyLongoNotFit() {
-        SpinedBuffer.OfLong b = new SpinedBuffer.OfLong();
-
-        for(long i = 0; i < 64; i++)
+    public void testIntCopyIntoNotFit() {
+        SpinedBuffer.OfInt b = new SpinedBuffer.OfInt();
+        for (int i = 0; i < 64; i++)
             b.accept(i);
+        int[] array = new int[10];
+        b.copyInto(array, 0);
+    }
 
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testLongCopyIntoNotFit() {
+        SpinedBuffer.OfLong b = new SpinedBuffer.OfLong();
+        for (long i = 0; i < 64; i++)
+            b.accept(i);
         long[] array = new long[10];
-
         b.copyInto(array, 0);
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void testDoubleCopyIntoNotFit() {
         SpinedBuffer.OfDouble b = new SpinedBuffer.OfDouble();
-
-        for(int i = 0; i < 64; i++)
+        for (int i = 0; i < 64; i++)
             b.accept(i);
-
         double[] array = new double[10];
-
         b.copyInto(array, 0);
     }
 
 
     @Test
+    public void testIterator() {
+        SpinedBuffer.Of<Integer> b = new SpinedBuffer.Of<Integer>();
+        for (int i = 0; i < 255; i++)
+            b.accept(i);
+        for (Integer i : b) {
+            assertTrue(i >= 0);
+            assertTrue(i < 255);
+        }
+
+        Iterator<Integer> iterator = b.iterator();
+        int sum = 0;
+        while (iterator.hasNext()) {
+            sum += iterator.next();
+        }
+        assertEquals(32385, sum);
+    }
+
+    @Test
     public void testIntIterator() {
         SpinedBuffer.OfInt b = new SpinedBuffer.OfInt();
-
-        for(int i = 0; i < 255; i++)
+        for (int i = 0; i < 255; i++)
             b.accept(i);
-
-        for(Integer i: b) {
+        for (Integer i : b) {
             assertTrue(i >= 0);
             assertTrue(i < 255);
         }
 
         PrimitiveIterator.OfInt iterator = b.iterator();
-
-        int sum2 = 0;
-
-        while(iterator.hasNext()) {
-            sum2 += iterator.nextInt();
+        int sum = 0;
+        while (iterator.hasNext()) {
+            sum += iterator.nextInt();
         }
-
-        assertEquals(32385, sum2);
+        assertEquals(32385, sum);
     }
 
     @Test
     public void testLongIterator() {
         SpinedBuffer.OfLong b = new SpinedBuffer.OfLong();
-
-        for(long i = 0; i < 255; i++)
+        for (long i = 0; i < 255; i++)
             b.accept(i);
-
-        for(Long i : b) {
+        for (Long i : b) {
             assertTrue(i >= 0);
             assertTrue(i < 255);
         }
 
         PrimitiveIterator.OfLong iterator = b.iterator();
-
-        long sum2 = 0;
-
+        long sum = 0;
         while(iterator.hasNext()) {
-            sum2 += iterator.nextLong();
+            sum += iterator.nextLong();
         }
-
-        assertEquals(32385, sum2);
+        assertEquals(32385, sum);
     }
 
     @Test
     public void testDoubleIterator() {
         SpinedBuffer.OfDouble b = new SpinedBuffer.OfDouble();
-
-        for(int i = 0; i < 255; i++)
+        for (int i = 0; i < 255; i++)
             b.accept(i);
-
-        for(Double i : b) {
+        for (Double i : b) {
             assertTrue(i >= 0);
             assertTrue(i < 255);
         }
 
         PrimitiveIterator.OfDouble iterator = b.iterator();
-
-        int sum2 = 0;
-
+        int sum = 0;
         while(iterator.hasNext()) {
-            sum2 += iterator.nextDouble();
+            sum += iterator.nextDouble();
         }
-
-        assertEquals(32385, sum2);
+        assertEquals(32385, sum);
     }
 
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testIteratorRemove() {
+        new SpinedBuffer.Of<String>().iterator().remove();
+    }
 
     @Test(expected = UnsupportedOperationException.class)
     public void testIntIteratorRemove() {
@@ -812,11 +928,5 @@ public class SpinedBufferTest {
     @Test(expected = UnsupportedOperationException.class)
     public void testDoubleIteratorRemove() {
         new SpinedBuffer.OfDouble().iterator().remove();
-    }
-
-
-    @Test
-    public void testPrivateConstructor() {
-        assertThat(SpinedBuffer.class, hasOnlyPrivateConstructors());
     }
 }
