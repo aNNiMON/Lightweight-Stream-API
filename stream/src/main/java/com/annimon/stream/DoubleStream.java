@@ -4,6 +4,7 @@ import com.annimon.stream.function.*;
 import com.annimon.stream.internal.Compose;
 import com.annimon.stream.internal.Operators;
 import com.annimon.stream.internal.Params;
+import com.annimon.stream.internal.SpinedBuffer;
 import com.annimon.stream.iterator.PrimitiveIndexedIterator;
 import com.annimon.stream.iterator.PrimitiveIterator;
 import com.annimon.stream.operator.*;
@@ -617,6 +618,48 @@ public final class DoubleStream implements Closeable {
     @NotNull
     public DoubleStream flatMap(@NotNull final DoubleFunction<? extends DoubleStream> mapper) {
         return new DoubleStream(params, new DoubleFlatMap(iterator, mapper));
+    }
+
+    /**
+     * Returns a stream consisting of the results of replacing each element of
+     * this stream with the contents of a mapped stream produced by applying
+     * the provided mapping function to each element.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @param mapper  the mapper function used to apply to each element for producing replacing elements
+     * @return the new stream
+     * @since 1.2.2
+     * @see Stream#mapMulti(com.annimon.stream.function.BiConsumer)
+     * @see DoubleStream#flatMap(com.annimon.stream.function.DoubleFunction)
+     */
+    @NotNull
+    public DoubleStream mapMulti(@NotNull final DoubleMapMultiConsumer mapper) {
+        return flatMap(new DoubleFunction<DoubleStream>() {
+            @Override
+            public DoubleStream apply(double value) {
+                SpinedBuffer.OfDouble buffer = new SpinedBuffer.OfDouble();
+                mapper.accept(value, buffer);
+                return DoubleStream.of(buffer.iterator());
+            }
+        });
+    }
+
+    /**
+     * Represents an operation on two input arguments.
+     *
+     * @since 1.2.2
+     * @see #mapMulti(com.annimon.stream.DoubleStream.DoubleMapMultiConsumer)
+     */
+    public interface DoubleMapMultiConsumer {
+        /**
+         * Replaces the given {@code value} with zero or more values
+         * by feeding the mapped values to the {@code consumer} consumer.
+         *
+         * @param value  the double value coming from upstream
+         * @param consumer  a {@code DoubleConsumer} accepting the mapped values
+         */
+        void accept(double value, DoubleConsumer consumer);
     }
 
     /**

@@ -4,6 +4,7 @@ import com.annimon.stream.function.*;
 import com.annimon.stream.internal.Compose;
 import com.annimon.stream.internal.Operators;
 import com.annimon.stream.internal.Params;
+import com.annimon.stream.internal.SpinedBuffer;
 import com.annimon.stream.iterator.PrimitiveIndexedIterator;
 import com.annimon.stream.iterator.PrimitiveIterator;
 import com.annimon.stream.operator.*;
@@ -653,6 +654,48 @@ public final class LongStream implements Closeable {
     @NotNull
     public LongStream flatMap(@NotNull final LongFunction<? extends LongStream> mapper) {
         return new LongStream(params, new LongFlatMap(iterator, mapper));
+    }
+
+    /**
+     * Returns a stream consisting of the results of replacing each element of
+     * this stream with the contents of a mapped stream produced by applying
+     * the provided mapping function to each element.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @param mapper  the mapper function used to apply to each element for producing replacing elements
+     * @return the new stream
+     * @since 1.2.2
+     * @see Stream#mapMulti(com.annimon.stream.function.BiConsumer)
+     * @see LongStream#flatMap(com.annimon.stream.function.LongFunction)
+     */
+    @NotNull
+    public LongStream mapMulti(@NotNull final LongStream.LongMapMultiConsumer mapper) {
+        return flatMap(new LongFunction<LongStream>() {
+            @Override
+            public LongStream apply(long value) {
+                SpinedBuffer.OfLong buffer = new SpinedBuffer.OfLong();
+                mapper.accept(value, buffer);
+                return LongStream.of(buffer.iterator());
+            }
+        });
+    }
+
+    /**
+     * Represents an operation on two input arguments.
+     *
+     * @since 1.2.2
+     * @see #mapMulti(com.annimon.stream.LongStream.LongMapMultiConsumer)
+     */
+    public interface LongMapMultiConsumer {
+        /**
+         * Replaces the given {@code value} with zero or more values
+         * by feeding the mapped values to the {@code consumer} consumer.
+         *
+         * @param value  the long value coming from upstream
+         * @param consumer  a {@code LongConsumer} accepting the mapped values
+         */
+        void accept(long value, LongConsumer consumer);
     }
 
     /**

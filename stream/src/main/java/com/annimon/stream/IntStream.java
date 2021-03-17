@@ -4,6 +4,7 @@ import com.annimon.stream.function.*;
 import com.annimon.stream.internal.Compose;
 import com.annimon.stream.internal.Operators;
 import com.annimon.stream.internal.Params;
+import com.annimon.stream.internal.SpinedBuffer;
 import com.annimon.stream.iterator.PrimitiveIndexedIterator;
 import com.annimon.stream.iterator.PrimitiveIterator;
 import com.annimon.stream.operator.*;
@@ -673,6 +674,48 @@ public final class IntStream implements Closeable {
     @NotNull
     public IntStream flatMap(@NotNull final IntFunction<? extends IntStream> mapper) {
         return new IntStream(params, new IntFlatMap(iterator, mapper));
+    }
+
+    /**
+     * Returns a stream consisting of the results of replacing each element of
+     * this stream with the contents of a mapped stream produced by applying
+     * the provided mapping function to each element.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @param mapper  the mapper function used to apply to each element for producing replacing elements
+     * @return the new stream
+     * @since 1.2.2
+     * @see Stream#mapMulti(com.annimon.stream.function.BiConsumer)
+     * @see IntStream#flatMap(com.annimon.stream.function.IntFunction)
+     */
+    @NotNull
+    public IntStream mapMulti(@NotNull final IntStream.IntMapMultiConsumer mapper) {
+        return flatMap(new IntFunction<IntStream>() {
+            @Override
+            public IntStream apply(int value) {
+                SpinedBuffer.OfInt buffer = new SpinedBuffer.OfInt();
+                mapper.accept(value, buffer);
+                return IntStream.of(buffer.iterator());
+            }
+        });
+    }
+
+    /**
+     * Represents an operation on two input arguments.
+     *
+     * @since 1.2.2
+     * @see #mapMulti(com.annimon.stream.IntStream.IntMapMultiConsumer)
+     */
+    public interface IntMapMultiConsumer {
+        /**
+         * Replaces the given {@code value} with zero or more values
+         * by feeding the mapped values to the {@code consumer} consumer.
+         *
+         * @param value  the int value coming from upstream
+         * @param consumer  an {@code IntConsumer} accepting the mapped values
+         */
+        void accept(int value, IntConsumer consumer);
     }
 
     /**
