@@ -4,6 +4,7 @@ import com.annimon.stream.function.*;
 import com.annimon.stream.internal.Compose;
 import com.annimon.stream.internal.Operators;
 import com.annimon.stream.internal.Params;
+import com.annimon.stream.internal.SpinedBuffer;
 import com.annimon.stream.iterator.IndexedIterator;
 import com.annimon.stream.iterator.LazyIterator;
 import com.annimon.stream.operator.*;
@@ -1032,6 +1033,123 @@ public class Stream<T> implements Closeable {
     @NotNull
     public DoubleStream flatMapToDouble(@NotNull final Function<? super T, ? extends DoubleStream> mapper) {
         return new DoubleStream(params, new ObjFlatMapToDouble<T>(iterator, mapper));
+    }
+
+    /**
+     * Returns a stream consisting of the results of replacing each element of
+     * this stream with zero or more elements,
+     * that passed to the provided consumer function.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * <p>Example:
+     * <pre>
+     * stream: [1, 2, 3, 4]
+     * mapper: (a, consumer) -&gt; {
+     *   consumer.accept(a);
+     *   consumer.accept(-a);
+     * }
+     * result: [1, -1, 2, -2, 3, -3, 4, -4]
+     *
+     * stream: [1, 2, 3, 4]
+     * mapper: (a, consumer) -&gt; {
+     *   if (a % 2 == 0)
+     *     consumer.accept(a * 2);
+     * }
+     * result: [4, 8]
+     * </pre>
+     *
+     * @param <R> the type of elements in resulting stream
+     * @param mapper  the mapper function used to apply to each element for producing replacing elements
+     * @return the new stream
+     * @since 1.2.2
+     * @see #flatMap(com.annimon.stream.function.Function)
+     */
+    @NotNull
+    public <R> Stream<R> mapMulti(@NotNull final BiConsumer<? super T, ? super Consumer<R>> mapper) {
+        return flatMap(new Function<T, Stream<? extends R>>() {
+            @Override
+            public Stream<? extends R> apply(T t) {
+                SpinedBuffer.Of<R> buffer = new SpinedBuffer.Of<R>();
+                mapper.accept(t, buffer);
+                return of(buffer.iterator());
+            }
+        });
+    }
+
+    /**
+     * Returns a stream consisting of the results of replacing each element of
+     * this stream with zero or more elements,
+     * that passed to the provided consumer function.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @param mapper  the mapper function used to apply to each element for producing replacing elements
+     * @return the new stream
+     * @since 1.2.2
+     * @see #mapMulti(com.annimon.stream.function.BiConsumer)
+     * @see #flatMapToInt(com.annimon.stream.function.Function)
+     */
+    @NotNull
+    public IntStream mapMultiToInt(@NotNull final BiConsumer<? super T, ? super IntConsumer> mapper) {
+        return flatMapToInt(new Function<T, IntStream>() {
+            @Override
+            public IntStream apply(T t) {
+                SpinedBuffer.OfInt buffer = new SpinedBuffer.OfInt();
+                mapper.accept(t, buffer);
+                return IntStream.of(buffer.iterator());
+            }
+        });
+    }
+
+    /**
+     * Returns a stream consisting of the results of replacing each element of
+     * this stream with zero or more elements,
+     * that passed to the provided consumer function.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @param mapper  the mapper function used to apply to each element for producing replacing elements
+     * @return the new stream
+     * @since 1.2.2
+     * @see #mapMulti(com.annimon.stream.function.BiConsumer)
+     * @see #flatMapToLong(com.annimon.stream.function.Function)
+     */
+    @NotNull
+    public LongStream mapMultiToLong(@NotNull final BiConsumer<? super T, ? super LongConsumer> mapper) {
+        return flatMapToLong(new Function<T, LongStream>() {
+            @Override
+            public LongStream apply(T t) {
+                SpinedBuffer.OfLong buffer = new SpinedBuffer.OfLong();
+                mapper.accept(t, buffer);
+                return LongStream.of(buffer.iterator());
+            }
+        });
+    }
+
+    /**
+     * Returns a stream consisting of the results of replacing each element of
+     * this stream with zero or more elements,
+     * that passed to the provided consumer function.
+     *
+     * <p>This is an intermediate operation.
+     *
+     * @param mapper  the mapper function used to apply to each element for producing replacing elements
+     * @return the new stream
+     * @since 1.2.2
+     * @see #mapMulti(com.annimon.stream.function.BiConsumer)
+     * @see #flatMapToDouble(com.annimon.stream.function.Function)
+     */
+    @NotNull
+    public DoubleStream mapMultiToDouble(@NotNull final BiConsumer<? super T, ? super DoubleConsumer> mapper) {
+        return flatMapToDouble(new Function<T, DoubleStream>() {
+            @Override
+            public DoubleStream apply(T t) {
+                SpinedBuffer.OfDouble buffer = new SpinedBuffer.OfDouble();
+                mapper.accept(t, buffer);
+                return DoubleStream.of(buffer.iterator());
+            }
+        });
     }
 
     /**
