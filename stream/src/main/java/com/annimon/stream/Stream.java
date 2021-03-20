@@ -2275,6 +2275,7 @@ public class Stream<T> implements Closeable {
      *
      * <p>This is a short-circuiting terminal operation.
      *
+     * @param other  the value to be returned if stream is empty
      * @return first element or {@code other} if stream is empty
      * @since 1.2.2
      */

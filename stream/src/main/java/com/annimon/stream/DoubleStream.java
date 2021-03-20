@@ -200,6 +200,7 @@ public final class DoubleStream implements Closeable {
      *
      * @param a  the first stream
      * @param b  the second stream
+     * @param rest  the rest of streams
      * @return the new concatenated stream
      * @throws NullPointerException if {@code a} or {@code b}
      *         or {@code rest} is null
@@ -1274,6 +1275,7 @@ public final class DoubleStream implements Closeable {
      *
      * <p>This is a short-circuiting terminal operation.
      *
+     * @param other  the value to be returned if stream is empty
      * @return first element or {@code other} if stream is empty
      * @since 1.2.2
      */

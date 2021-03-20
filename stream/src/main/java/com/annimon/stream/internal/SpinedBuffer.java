@@ -93,6 +93,7 @@ public abstract class SpinedBuffer<E, T_ARR> implements Iterable<E> {
 
     /**
      * Is the buffer currently empty?
+     * @return true, if buffer is empty
      */
     public boolean isEmpty() {
         return (spineIndex == 0) && (elementIndex == 0);
@@ -100,6 +101,7 @@ public abstract class SpinedBuffer<E, T_ARR> implements Iterable<E> {
 
     /**
      * How many elements are currently in the buffer?
+     * @return a number of elements in buffer
      */
     public long count() {
         return (spineIndex == 0)
