@@ -22,6 +22,7 @@ public class CommonMatcherTest {
         assertThat(matcher, description(is("has only private constructors")));
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testDescription() {
         Matcher<?> matcher = description(is("test"));

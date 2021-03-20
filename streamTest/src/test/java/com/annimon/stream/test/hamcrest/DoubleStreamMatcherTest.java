@@ -57,6 +57,7 @@ public class DoubleStreamMatcherTest {
         assertThat(null, hasElements());
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testElements() {
         final DoubleStream stream = DoubleStream.of(-0.987, 1.234, Math.PI, 1.618);

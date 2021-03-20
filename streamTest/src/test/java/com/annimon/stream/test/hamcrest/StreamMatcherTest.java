@@ -54,6 +54,7 @@ public class StreamMatcherTest {
         assertThat(null, hasElements());
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testElements() {
         final Stream<Integer> stream = Stream.range(0, 5);

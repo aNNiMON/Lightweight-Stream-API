@@ -57,6 +57,7 @@ public class LongStreamMatcherTest {
         assertThat(null, hasElements());
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testElements() {
         final LongStream stream = LongStream.of(-813, 123456, Integer.MAX_VALUE);

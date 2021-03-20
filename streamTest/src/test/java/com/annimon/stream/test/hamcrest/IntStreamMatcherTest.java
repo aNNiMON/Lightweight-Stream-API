@@ -57,6 +57,7 @@ public class IntStreamMatcherTest {
         assertThat(null, hasElements());
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testElements() {
         final IntStream stream = IntStream.of(-813, 123456, Short.MAX_VALUE);

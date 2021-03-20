@@ -13,6 +13,7 @@ public class ObjConcat<T> extends LsaExtIterator<T> {
     private final int iteratorsCount;
     private int iteratorIndex;
 
+    @SuppressWarnings("unchecked")
     public ObjConcat(
             @NotNull Iterator<? extends T> iterator1,
             @NotNull Iterator<? extends T> iterator2) {
