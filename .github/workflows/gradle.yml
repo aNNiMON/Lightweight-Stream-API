@@ -29,3 +29,6 @@ jobs:
         restore-keys: ${{ env.GRADLE_CACHE_KEY }}
     - name: Build
       run: chmod +x gradlew && ./gradlew -Dsonar.organization="annimon-github" jacocoTestReport coveralls sonarqube
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
