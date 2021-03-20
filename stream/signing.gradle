@@ -15,6 +15,95 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 }
 
 artifacts {
+    archives jar
     archives sourcesJar
     archives javadocJar
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            customizePom(pom)
+            artifactId = 'stream'
+            groupId = group
+
+            from components.java
+
+            artifact sourcesJar
+            artifact javadocJar
+
+            // create the sign pom artifact
+            pom.withXml {
+                def pomFile = file("${project.buildDir}/generated.pom")
+                writeTo(pomFile)
+                def pomAscFile = signing.sign(pomFile).signatureFiles[0]
+                artifact pomAscFile
+            }
+        }
+    }
+    repositories {
+        maven {
+            url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+            credentials {
+                username sonatypeUsername
+                password sonatypePassword
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.maven
+}
+
+def customizePom(pom) {
+    pom.withXml {
+        def root = asNode()
+
+        // eliminate test-scoped dependencies (no need in maven central POMs)
+        root.dependencies.removeAll { dep ->
+            dep.scope == "test"
+        }
+
+        // add all items necessary for maven central publication
+        root.children().last() + {
+            resolveStrategy = DELEGATE_FIRST
+
+            name "Lightweight-Stream-API"
+            description 'Stream API from Java 8 rewritten on iterators for Java 7 and below'
+            url 'https://github.com/aNNiMON/Lightweight-Stream-API'
+
+            developers {
+                developer {
+                    id 'annimon'
+                    name 'Victor Melnik'
+                }
+            }
+
+            licenses {
+                license {
+                    name 'The Apache License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+
+            scm {
+                url 'https://github.com/aNNiMON/Lightweight-Stream-API'
+                connection 'scm:git:git://github.com/aNNiMON/Lightweight-Stream-API.git'
+                developerConnection 'scm:git:ssh://git@github.com:aNNiMON/Lightweight-Stream-API.git'
+            }
+
+            issueManagement {
+                system 'GitHub'
+                url 'https://github.com/aNNiMON/Lightweight-Stream-API/issues'
+            }
+        }
+    }
+}
+
+model {
+    tasks.generatePomFileForMavenPublication {
+        destination = file("$buildDir/generated.pom")
+    }
 }

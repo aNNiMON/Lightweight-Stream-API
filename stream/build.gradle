@@ -1,9 +1,10 @@
 apply plugin: 'java-library'
 apply plugin: 'maven-publish'
 apply plugin: 'me.champeau.gradle.jmh'
+apply from: '../versions.gradle'
 
 archivesBaseName = 'stream'
-version = '1.2.1-SNAPSHOT'
+version = ext.libVersion
 group = 'com.annimon'
 ext.isReleaseVersion = !version.contains("SNAPSHOT")
 
