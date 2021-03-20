@@ -27,8 +27,14 @@ jobs:
         path: ~/.gradle/caches
         key: ${{ env.GRADLE_CACHE_KEY }}
         restore-keys: ${{ env.GRADLE_CACHE_KEY }}
-    - name: Build
-      run: chmod +x gradlew && ./gradlew -Dsonar.organization="annimon-github" jacocoTestReport coveralls sonarqube
+    - name: Build Java 8
+      run: chmod +x gradlew && ./gradlew test
+      if: matrix.java == 8
+    - name: Build Java 11
+      run: chmod +x gradlew && ./gradlew jacocoTestReport coveralls
       env:
+        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      if: matrix.java != 8
+    
