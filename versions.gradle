@@ -1,3 +1,3 @@
 ext {
-  libVersion = "1.2.2-SNAPSHOT"
+  libVersion = "1.2.3-SNAPSHOT"
 }

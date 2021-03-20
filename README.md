@@ -1,7 +1,6 @@
 Lightweight-Stream-API
 ======================
 
-[![Join the chat at https://gitter.im/aNNiMON/Lightweight-Stream-API](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/aNNiMON/Lightweight-Stream-API?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Coverage Status](https://coveralls.io/repos/aNNiMON/Lightweight-Stream-API/badge.svg?branch=master&service=github)](https://coveralls.io/github/aNNiMON/Lightweight-Stream-API?branch=master)
 [![SonarCloud Status](https://sonarcloud.io/api/project_badges/measure?project=lightweight-stream-api&metric=alert_status)](https://sonarcloud.io/dashboard?id=lightweight-stream-api)
 [![SonarCloud Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=lightweight-stream-api&metric=sqale_rating)](https://sonarcloud.io/dashboard/?id=lightweight-stream-api)  
@@ -188,7 +187,7 @@ Download [latest release](https://github.com/aNNiMON/Lightweight-Stream-API/rele
 <dependency>
   <groupId>com.annimon</groupId>
   <artifactId>stream</artifactId>
-  <version>1.2.1</version>
+  <version>1.2.2</version>
 </dependency>
 ```
 or Gradle:
@@ -196,7 +195,7 @@ or Gradle:
 ```groovy
 dependencies {
   ...
-  implementation 'com.annimon:stream:1.2.1'
+  implementation 'com.annimon:stream:1.2.2'
   ...
 }
 ```
