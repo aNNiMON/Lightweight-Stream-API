@@ -40,6 +40,9 @@ jmh {
 }
 
 // maven signing
+if (System.getenv('JITPACK')) {
+    apply from: 'jitpack.gradle'
+}
 if (ext.isReleaseVersion) {
     apply from: 'signing.gradle'
 }

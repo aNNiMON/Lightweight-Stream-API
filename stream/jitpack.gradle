@@ -1,0 +1,44 @@
+publishing {
+    publications {
+        maven(MavenPublication) {
+            customizePom(pom)
+            artifactId = 'stream'
+            groupId = group
+
+            from components.java
+
+            artifact sourcesJar
+            artifact javadocJar
+
+            // create the sign pom artifact
+            pom.withXml {
+                writeTo(file("${project.buildDir}/generated.pom"))
+            }
+        }
+    }
+}
+
+def customizePom(pom) {
+    pom.withXml {
+        def root = asNode()
+
+        // eliminate test-scoped dependencies (no need in maven central POMs)
+        root.dependencies.removeAll { dep ->
+            dep.scope == "test"
+        }
+
+        // add all items necessary for maven central publication
+        root.children().last() + {
+            resolveStrategy = DELEGATE_FIRST
+            name "Lightweight-Stream-API"
+            description 'Stream API from Java 8 rewritten on iterators for Java 7 and below'
+            url 'https://github.com/aNNiMON/Lightweight-Stream-API'
+        }
+    }
+}
+
+model {
+    tasks.generatePomFileForMavenPublication {
+        destination = file("$buildDir/generated.pom")
+    }
+}
