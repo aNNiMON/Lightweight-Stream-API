@@ -22,7 +22,7 @@ public class IteratorIssueTest {
         for (int i = 0; i < count; i++) {
             data.add(i);
         }
-        Stream stream = Stream.of(data.iterator())
+        Stream<Integer> stream = Stream.of(data.iterator())
                 .filter(Functions.remainder(2));
         for (int i = 0; i < count; i++) {
             data.add(count + i);
@@ -37,7 +37,7 @@ public class IteratorIssueTest {
         for (int i = 0; i < count; i++) {
             data.add(i);
         }
-        Stream stream = Stream.of(new CustomIterator<Integer>(data))
+        Stream<Integer> stream = Stream.of(new CustomIterator<Integer>(data))
                 .filter(Functions.remainder(2));
         for (int i = 0; i < count; i++) {
             data.add(count + i);
@@ -52,7 +52,7 @@ public class IteratorIssueTest {
         for (int i = 0; i < count; i++) {
             data.add(i);
         }
-        Stream stream = Stream.of(data)
+        Stream<Integer> stream = Stream.of(data)
                 .filter(Functions.remainder(2));
         for (int i = 0; i < count; i++) {
             data.add(count + i);

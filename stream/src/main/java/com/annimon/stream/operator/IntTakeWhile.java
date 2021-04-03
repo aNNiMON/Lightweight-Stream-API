@@ -10,37 +10,53 @@ public class IntTakeWhile extends PrimitiveIterator.OfInt {
     private final PrimitiveIterator.OfInt iterator;
     private final IntPredicate predicate;
     private int next;
-    private boolean hasNextInitialized, hasNext;
+    private boolean nextPresent;
+    private boolean hasNextComputed, hasNext;
 
     public IntTakeWhile(
             @NotNull PrimitiveIterator.OfInt iterator,
             @NotNull IntPredicate predicate) {
         this.iterator = iterator;
         this.predicate = predicate;
-        hasNextInitialized = false;
-        hasNext = true;
     }
 
     @Override
     public boolean hasNext() {
-        if (hasNextInitialized && !hasNext) {
-            return false;
+        if (hasNextComputed) {
+            return hasNext;
         }
-        hasNextInitialized = true;
         hasNext = iterator.hasNext();
+        hasNextComputed = true;
         if (hasNext) {
-            next = iterator.nextInt();
-            hasNext = predicate.test(next);
+            // Retrieve and cache next element for further next() operation
+            nextPresent = getNextAndTest();
         }
         return hasNext;
     }
 
     @Override
     public int nextInt() {
-        if (hasNextInitialized && !hasNext) {
+        if (hasNextComputed && !hasNext) {
             throw new NoSuchElementException();
         }
-        return next;
+        hasNextComputed = false;
+        if (nextPresent) {
+            // Return cached value that was previously retrieved in hasNext()
+            nextPresent = false;
+            return next;
+        }
+        if (getNextAndTest()) {
+            return next;
+        } else {
+            hasNextComputed = true;
+            throw new NoSuchElementException();
+        }
+    }
+
+    private boolean getNextAndTest() {
+        next = iterator.nextInt();
+        hasNext = predicate.test(next);
+        return hasNext;
     }
 }
 

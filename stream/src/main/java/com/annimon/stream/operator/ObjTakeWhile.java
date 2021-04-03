@@ -10,15 +10,14 @@ public class ObjTakeWhile<T> implements Iterator<T> {
     private final Iterator<? extends T> iterator;
     private final Predicate<? super T> predicate;
     private T next;
-    private boolean hasNextInitialized, hasNext;
+    private boolean nextPresent;
+    private boolean hasNextComputed, hasNext;
 
     public ObjTakeWhile(
             @NotNull Iterator<? extends T> iterator,
             @NotNull Predicate<? super T> predicate) {
         this.iterator = iterator;
         this.predicate = predicate;
-        hasNextInitialized = false;
-        hasNext = true;
     }
 
     @Override
@@ -28,23 +27,42 @@ public class ObjTakeWhile<T> implements Iterator<T> {
 
     @Override
     public boolean hasNext() {
-        if (hasNextInitialized && !hasNext) {
-            return false;
+        if (hasNextComputed) {
+            return hasNext;
         }
-        hasNextInitialized = true;
         hasNext = iterator.hasNext();
+        hasNextComputed = true;
         if (hasNext) {
-            next = iterator.next();
-            hasNext = predicate.test(next);
+            // Retrieve and cache next element for further next() operation
+            nextPresent = getNextAndTest();
         }
         return hasNext;
     }
 
     @Override
-    public final T next() {
-        if (hasNextInitialized && !hasNext) {
+    public T next() {
+        if (hasNextComputed && !hasNext) {
+            next = null;
             throw new NoSuchElementException();
         }
-        return next;
+        hasNextComputed = false;
+        if (nextPresent) {
+            // Return cached value that was previously retrieved in hasNext()
+            nextPresent = false;
+            return next;
+        }
+        if (getNextAndTest()) {
+            return next;
+        } else {
+            next = null;
+            hasNextComputed = true;
+            throw new NoSuchElementException();
+        }
+    }
+
+    private boolean getNextAndTest() {
+        next = iterator.next();
+        hasNext = predicate.test(next);
+        return hasNext;
     }
 }

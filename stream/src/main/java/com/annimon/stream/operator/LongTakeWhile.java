@@ -10,36 +10,52 @@ public class LongTakeWhile extends PrimitiveIterator.OfLong {
     private final PrimitiveIterator.OfLong iterator;
     private final LongPredicate predicate;
     private long next;
-    private boolean hasNextInitialized, hasNext;
+    private boolean nextPresent;
+    private boolean hasNextComputed, hasNext;
 
     public LongTakeWhile(
             @NotNull PrimitiveIterator.OfLong iterator,
             @NotNull LongPredicate predicate) {
         this.iterator = iterator;
         this.predicate = predicate;
-        hasNextInitialized = false;
-        hasNext = true;
     }
 
     @Override
     public boolean hasNext() {
-        if (hasNextInitialized && !hasNext) {
-            return false;
+        if (hasNextComputed) {
+            return hasNext;
         }
-        hasNextInitialized = true;
         hasNext = iterator.hasNext();
+        hasNextComputed = true;
         if (hasNext) {
-            next = iterator.nextLong();
-            hasNext = predicate.test(next);
+            // Retrieve and cache next element for further next() operation
+            nextPresent = getNextAndTest();
         }
         return hasNext;
     }
 
     @Override
     public long nextLong() {
-        if (hasNextInitialized && !hasNext) {
+        if (hasNextComputed && !hasNext) {
             throw new NoSuchElementException();
         }
-        return next;
+        hasNextComputed = false;
+        if (nextPresent) {
+            // Return cached value that was previously retrieved in hasNext()
+            nextPresent = false;
+            return next;
+        }
+        if (getNextAndTest()) {
+            return next;
+        } else {
+            hasNextComputed = true;
+            throw new NoSuchElementException();
+        }
+    }
+
+    private boolean getNextAndTest() {
+        next = iterator.nextLong();
+        hasNext = predicate.test(next);
+        return hasNext;
     }
 }

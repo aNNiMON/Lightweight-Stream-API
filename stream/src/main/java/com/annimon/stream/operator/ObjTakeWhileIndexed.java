@@ -11,15 +11,14 @@ public class ObjTakeWhileIndexed<T> implements Iterator<T> {
     private final IndexedIterator<? extends T> iterator;
     private final IndexedPredicate<? super T> predicate;
     private T next;
-    private boolean hasNextInitialized, hasNext;
+    private boolean nextPresent;
+    private boolean hasNextComputed, hasNext;
 
     public ObjTakeWhileIndexed(
             @NotNull IndexedIterator<? extends T> iterator,
             @NotNull IndexedPredicate<? super T> predicate) {
         this.iterator = iterator;
         this.predicate = predicate;
-        hasNextInitialized = false;
-        hasNext = true;
     }
 
     @Override
@@ -29,24 +28,43 @@ public class ObjTakeWhileIndexed<T> implements Iterator<T> {
 
     @Override
     public boolean hasNext() {
-        if (hasNextInitialized && !hasNext) {
-            return false;
+        if (hasNextComputed) {
+            return hasNext;
         }
-        hasNextInitialized = true;
         hasNext = iterator.hasNext();
+        hasNextComputed = true;
         if (hasNext) {
-            int nextIndex = iterator.getIndex();
-            next = iterator.next();
-            hasNext = predicate.test(nextIndex, next);
+            // Retrieve and cache next element for further next() operation
+            nextPresent = getNextAndTest();
         }
         return hasNext;
     }
 
     @Override
     public T next() {
-        if (hasNextInitialized && !hasNext) {
+        if (hasNextComputed && !hasNext) {
+            next = null;
             throw new NoSuchElementException();
         }
-        return next;
+        hasNextComputed = false;
+        if (nextPresent) {
+            // Return cached value that was previously retrieved in hasNext()
+            nextPresent = false;
+            return next;
+        }
+        if (getNextAndTest()) {
+            return next;
+        } else {
+            next = null;
+            hasNextComputed = true;
+            throw new NoSuchElementException();
+        }
+    }
+
+    private boolean getNextAndTest() {
+        int nextIndex = iterator.getIndex();
+        next = iterator.next();
+        hasNext = predicate.test(nextIndex, next);
+        return hasNext;
     }
 }
