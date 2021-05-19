@@ -16,7 +16,7 @@ if (!hasProperty('mainClass')) {
 }
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
