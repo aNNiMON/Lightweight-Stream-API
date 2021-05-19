@@ -56,6 +56,7 @@ public interface Predicate<T> {
          * @throws NullPointerException if any of predicates are null
          * @since 1.2.1
          */
+        @SafeVarargs
         public static <T> Predicate<T> and(
                 @NotNull final Predicate<? super T> p1,
                 @NotNull final Predicate<? super T> p2,
@@ -109,6 +110,7 @@ public interface Predicate<T> {
          * @return a composed {@code Predicate}
          * @throws NullPointerException if any of predicates are null
          */
+        @SafeVarargs
         public static <T> Predicate<T> or(
                 @NotNull final Predicate<? super T> p1,
                 @NotNull final Predicate<? super T> p2,

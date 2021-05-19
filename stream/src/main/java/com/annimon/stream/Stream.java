@@ -90,6 +90,7 @@ public class Stream<T> implements Closeable {
      * @throws NullPointerException if {@code elements} is null
      */
     @NotNull
+    @SafeVarargs
     public static <T> Stream<T> of(@NotNull final T... elements) {
         Objects.requireNonNull(elements);
         if (elements.length == 0) {
