@@ -3,6 +3,7 @@ package com.annimon.stream.internal;
 import com.annimon.stream.function.IntFunction;
 import com.annimon.stream.iterator.PrimitiveIterator;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +22,6 @@ public final class Operators {
     }
 
     @NotNull
-    @SuppressWarnings("unchecked")
     public static <T, R> R[] toArray(@NotNull Iterator<? extends T> iterator,
                                      @NotNull IntFunction<R[]> generator) {
         final List<T> container = Operators.<T>toList(iterator);
@@ -29,13 +29,17 @@ public final class Operators {
 
         Compat.checkMaxArraySize(size);
 
-        //noinspection unchecked
-        T[] source = container.toArray(Compat.<T>newArray(size));
+        T[] source = container.toArray(newArray(size));
         R[] boxed = generator.apply(size);
 
         //noinspection SuspiciousSystemArraycopy
         System.arraycopy(source, 0, boxed, 0, size);
         return boxed;
+    }
+
+    @SafeVarargs
+    private static <E> E[] newArray(int length, E... array) {
+        return Arrays.copyOf(array, length);
     }
 
     @NotNull

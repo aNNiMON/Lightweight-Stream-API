@@ -1,7 +1,7 @@
 package com.annimon.stream.operator;
 
-import com.annimon.stream.internal.Compat;
 import com.annimon.stream.iterator.LsaIterator;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -21,7 +21,7 @@ public class ObjSlidingWindow<T> extends LsaIterator<List<T>> {
         this.iterator = iterator;
         this.windowSize = windowSize;
         this.stepWidth = stepWidth;
-        queue = Compat.queue();
+        queue = new ArrayDeque<>();
     }
 
     @Override
@@ -38,7 +38,7 @@ public class ObjSlidingWindow<T> extends LsaIterator<List<T>> {
         }
 
         // the elements that are currently in the queue are the elements of our current window
-        List<T> list = new ArrayList<T>(queue);
+        List<T> list = new ArrayList<>(queue);
 
         // remove stepWidth elements from the queue
         final int pollCount = Math.min(queue.size(), stepWidth);
