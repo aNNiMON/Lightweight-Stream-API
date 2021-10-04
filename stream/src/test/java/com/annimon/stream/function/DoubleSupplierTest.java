@@ -1,5 +1,9 @@
 package com.annimon.stream.function;
 
+import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.closeTo;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -7,9 +11,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.closeTo;
 
 /**
  * Tests {@code DoubleSupplier}.

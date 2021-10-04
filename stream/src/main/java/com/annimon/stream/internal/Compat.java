@@ -7,9 +7,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Compatibility methods for Android API &lt; 9.
- */
+/** Compatibility methods for Android API &lt; 9. */
 @SuppressWarnings("WeakerAccess")
 public final class Compat {
 

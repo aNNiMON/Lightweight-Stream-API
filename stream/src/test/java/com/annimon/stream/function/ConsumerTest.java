@@ -1,33 +1,34 @@
 package com.annimon.stream.function;
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import org.junit.Test;
+
 /**
  * Tests {@code Consumer}.
- * 
+ *
  * @see com.annimon.stream.function.Consumer
  */
 public class ConsumerTest {
-    
+
     @Test
     public void testAccept() {
         IntHolder holder = new IntHolder(10);
-        
+
         increment.accept(holder);
         assertEquals(11, holder.value);
-        
+
         increment.accept(holder);
         assertEquals(12, holder.value);
-        
+
         mulBy2.accept(holder);
         assertEquals(24, holder.value);
     }
-    
+
     @Test
     public void testAndThen() {
         Consumer<IntHolder> consumer = Consumer.Util.andThen(increment, mulBy2);
@@ -55,12 +56,15 @@ public class ConsumerTest {
     @Test
     public void testSafeWithOnFailedConsumer() {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream(5);
-        Consumer<OutputStream> consumer = Consumer.Util.safe(writer, new Consumer<OutputStream>() {
-            @Override
-            public void accept(OutputStream os) {
-                baos.write('<');
-            }
-        });
+        Consumer<OutputStream> consumer =
+                Consumer.Util.safe(
+                        writer,
+                        new Consumer<OutputStream>() {
+                            @Override
+                            public void accept(OutputStream os) {
+                                baos.write('<');
+                            }
+                        });
 
         consumer.accept(baos);
         consumer.accept(baos);
@@ -68,34 +72,36 @@ public class ConsumerTest {
         consumer.accept(null);
         assertEquals(">><<", baos.toString());
     }
-    
+
     @Test
     public void testPrivateConstructor() throws Exception {
         assertThat(Consumer.Util.class, hasOnlyPrivateConstructors());
     }
-    
-    private static final Consumer<IntHolder> increment = new Consumer<IntHolder>() {
-        @Override
-        public void accept(IntHolder holder) {
-            holder.value++;
-        }
-    };
-    
-    private static final Consumer<IntHolder> mulBy2 = new Consumer<IntHolder>() {
-        @Override
-        public void accept(IntHolder holder) {
-            holder.value *= 2;
-        }
-    };
 
-    private static final ThrowableConsumer<OutputStream, Throwable> writer
-            = new ThrowableConsumer<OutputStream, Throwable>() {
-        @Override
-        public void accept(OutputStream os) throws Throwable {
-            os.write('>');
-        }
-    };
-    
+    private static final Consumer<IntHolder> increment =
+            new Consumer<IntHolder>() {
+                @Override
+                public void accept(IntHolder holder) {
+                    holder.value++;
+                }
+            };
+
+    private static final Consumer<IntHolder> mulBy2 =
+            new Consumer<IntHolder>() {
+                @Override
+                public void accept(IntHolder holder) {
+                    holder.value *= 2;
+                }
+            };
+
+    private static final ThrowableConsumer<OutputStream, Throwable> writer =
+            new ThrowableConsumer<OutputStream, Throwable>() {
+                @Override
+                public void accept(OutputStream os) throws Throwable {
+                    os.write('>');
+                }
+            };
+
     static class IntHolder {
         int value;
 

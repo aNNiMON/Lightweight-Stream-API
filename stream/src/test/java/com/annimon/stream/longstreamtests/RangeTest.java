@@ -1,13 +1,14 @@
 package com.annimon.stream.longstreamtests;
 
-import com.annimon.stream.LongStream;
-import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.LongStreamMatcher.elements;
 import static com.annimon.stream.test.hamcrest.LongStreamMatcher.isEmpty;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
+
+import com.annimon.stream.LongStream;
+import org.junit.Test;
 
 public final class RangeTest {
 
@@ -54,13 +55,14 @@ public final class RangeTest {
 
     @Test(timeout = 1000)
     public void testStreamRangeClosedOnEqualValues() {
-        assertThat(LongStream.rangeClosed(Long.MIN_VALUE, Long.MIN_VALUE),
+        assertThat(
+                LongStream.rangeClosed(Long.MIN_VALUE, Long.MIN_VALUE),
                 elements(arrayContaining(Long.MIN_VALUE)));
 
-        assertThat(LongStream.rangeClosed(0, 0),
-                elements(arrayContaining(0L)));
+        assertThat(LongStream.rangeClosed(0, 0), elements(arrayContaining(0L)));
 
-        assertThat(LongStream.rangeClosed(Long.MAX_VALUE, Long.MAX_VALUE),
+        assertThat(
+                LongStream.rangeClosed(Long.MAX_VALUE, Long.MAX_VALUE),
                 elements(arrayContaining(Long.MAX_VALUE)));
     }
 

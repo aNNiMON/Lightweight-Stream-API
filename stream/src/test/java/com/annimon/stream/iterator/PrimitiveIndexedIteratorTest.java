@@ -1,15 +1,16 @@
 package com.annimon.stream.iterator;
 
-import com.annimon.stream.iterator.PrimitiveIterators.OfDouble;
-import com.annimon.stream.iterator.PrimitiveIterators.OfInt;
-import com.annimon.stream.iterator.PrimitiveIterators.OfLong;
-import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import com.annimon.stream.iterator.PrimitiveIterators.OfDouble;
+import com.annimon.stream.iterator.PrimitiveIterators.OfInt;
+import com.annimon.stream.iterator.PrimitiveIterators.OfLong;
+import org.junit.Test;
 
 public class PrimitiveIndexedIteratorTest {
 
@@ -20,8 +21,7 @@ public class PrimitiveIndexedIteratorTest {
 
     @Test
     public void testIntDefault() {
-        PrimitiveIndexedIterator.OfInt iterator = new PrimitiveIndexedIterator.OfInt(
-                new OfInt());
+        PrimitiveIndexedIterator.OfInt iterator = new PrimitiveIndexedIterator.OfInt(new OfInt());
 
         assertTrue(iterator.hasNext());
         assertThat(iterator.getIndex(), is(0));
@@ -40,8 +40,8 @@ public class PrimitiveIndexedIteratorTest {
 
     @Test
     public void testIntWithStartAndStep() {
-        PrimitiveIndexedIterator.OfInt iterator = new PrimitiveIndexedIterator.OfInt(
-                10, -2, new OfInt());
+        PrimitiveIndexedIterator.OfInt iterator =
+                new PrimitiveIndexedIterator.OfInt(10, -2, new OfInt());
 
         assertTrue(iterator.hasNext());
         assertThat(iterator.getIndex(), is(10));
@@ -65,10 +65,10 @@ public class PrimitiveIndexedIteratorTest {
         iterator.remove();
     }
 
-
     @Test
     public void testLongDefault() {
-        PrimitiveIndexedIterator.OfLong iterator = new PrimitiveIndexedIterator.OfLong(new OfLong());
+        PrimitiveIndexedIterator.OfLong iterator =
+                new PrimitiveIndexedIterator.OfLong(new OfLong());
 
         assertTrue(iterator.hasNext());
         assertThat(iterator.getIndex(), is(0));
@@ -87,8 +87,8 @@ public class PrimitiveIndexedIteratorTest {
 
     @Test
     public void testLongWithStartAndStep() {
-        PrimitiveIndexedIterator.OfLong iterator = new PrimitiveIndexedIterator.OfLong(
-                10, -2, new OfLong());
+        PrimitiveIndexedIterator.OfLong iterator =
+                new PrimitiveIndexedIterator.OfLong(10, -2, new OfLong());
 
         assertTrue(iterator.hasNext());
         assertThat(iterator.getIndex(), is(10));
@@ -107,15 +107,16 @@ public class PrimitiveIndexedIteratorTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void testLongRemove() {
-        PrimitiveIndexedIterator.OfLong iterator = new PrimitiveIndexedIterator.OfLong(new OfLong());
+        PrimitiveIndexedIterator.OfLong iterator =
+                new PrimitiveIndexedIterator.OfLong(new OfLong());
         iterator.next();
         iterator.remove();
     }
 
-
     @Test
     public void testDoubleDefault() {
-        PrimitiveIndexedIterator.OfDouble iterator = new PrimitiveIndexedIterator.OfDouble(new OfDouble());
+        PrimitiveIndexedIterator.OfDouble iterator =
+                new PrimitiveIndexedIterator.OfDouble(new OfDouble());
 
         assertTrue(iterator.hasNext());
         assertThat(iterator.getIndex(), is(0));
@@ -134,8 +135,8 @@ public class PrimitiveIndexedIteratorTest {
 
     @Test
     public void testDoubleWithStartAndStep() {
-        PrimitiveIndexedIterator.OfDouble iterator = new PrimitiveIndexedIterator.OfDouble(
-                10, -2, new OfDouble());
+        PrimitiveIndexedIterator.OfDouble iterator =
+                new PrimitiveIndexedIterator.OfDouble(10, -2, new OfDouble());
 
         assertTrue(iterator.hasNext());
         assertThat(iterator.getIndex(), is(10));
@@ -154,7 +155,8 @@ public class PrimitiveIndexedIteratorTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void testDoubleRemove() {
-        PrimitiveIndexedIterator.OfDouble iterator = new PrimitiveIndexedIterator.OfDouble(new OfDouble());
+        PrimitiveIndexedIterator.OfDouble iterator =
+                new PrimitiveIndexedIterator.OfDouble(new OfDouble());
         iterator.next();
         iterator.remove();
     }

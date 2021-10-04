@@ -15,22 +15,22 @@ public interface IndexedFunction<T, R> {
     /**
      * Applies this function to the given argument.
      *
-     * @param index  the index
-     * @param t  an argument
+     * @param index the index
+     * @param t an argument
      * @return the function result
      */
     R apply(int index, T t);
 
     class Util {
 
-        private Util() { }
+        private Util() {}
 
         /**
          * Wraps {@link Function} and returns {@code IndexedFunction}.
          *
          * @param <T> the type of the input argument
          * @param <R> the type of the result
-         * @param function  the function to wrap
+         * @param function the function to wrap
          * @return a wrapped {@code IndexedFunction}
          * @throws NullPointerException if {@code function} is null
          */
@@ -45,6 +45,5 @@ public interface IndexedFunction<T, R> {
                 }
             };
         }
-
     }
 }

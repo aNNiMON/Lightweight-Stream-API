@@ -1,11 +1,12 @@
 package com.annimon.stream.doublestreamtests;
 
-import com.annimon.stream.Functions;
-import com.annimon.stream.DoubleStream;
-import com.annimon.stream.test.hamcrest.DoubleStreamMatcher;
-import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.DoubleStreamMatcher.assertElements;
 import static org.hamcrest.Matchers.arrayContaining;
+
+import com.annimon.stream.DoubleStream;
+import com.annimon.stream.Functions;
+import com.annimon.stream.test.hamcrest.DoubleStreamMatcher;
+import org.junit.Test;
 
 public final class PrependTest {
 
@@ -17,23 +18,17 @@ public final class PrependTest {
 
         DoubleStream.of(1, 2)
                 .prepend(DoubleStream.empty())
-                .custom(assertElements(arrayContaining(
-                        1d, 2d
-                )));
+                .custom(assertElements(arrayContaining(1d, 2d)));
     }
 
     @Test
     public void testPrepend() {
         DoubleStream.empty()
                 .prepend(DoubleStream.of(0))
-                .custom(assertElements(arrayContaining(
-                        0d
-                )));
+                .custom(assertElements(arrayContaining(0d)));
         DoubleStream.of(1, 2)
                 .prepend(DoubleStream.of(0))
-                .custom(assertElements(arrayContaining(
-                        0d, 1d, 2d
-                )));
+                .custom(assertElements(arrayContaining(0d, 1d, 2d)));
     }
 
     @Test
@@ -41,15 +36,11 @@ public final class PrependTest {
         DoubleStream.of(1, 2, 3, 4, 5)
                 .filter(Functions.greaterThan(3))
                 .prepend(DoubleStream.of(1))
-                .custom(assertElements(arrayContaining(
-                        1d, 4d, 5d
-                )));
+                .custom(assertElements(arrayContaining(1d, 4d, 5d)));
         DoubleStream.of(1, 2, 3, 4, 5)
                 .filter(Functions.greaterThan(3))
                 .prepend(DoubleStream.of(1, 2, 3, 4).filterNot(Functions.greaterThan(2)))
-                .custom(assertElements(arrayContaining(
-                        1d, 2d, 4d, 5d
-                )));
+                .custom(assertElements(arrayContaining(1d, 2d, 4d, 5d)));
     }
 
     @Test
@@ -58,9 +49,7 @@ public final class PrependTest {
                 .prepend(DoubleStream.of(2))
                 .prepend(DoubleStream.of(3))
                 .prepend(DoubleStream.of(4))
-                .custom(assertElements(arrayContaining(
-                        4d, 3d, 2d, 1d
-                )));
+                .custom(assertElements(arrayContaining(4d, 3d, 2d, 1d)));
     }
 
     @Test
@@ -71,8 +60,6 @@ public final class PrependTest {
                 .filter(Functions.greaterThan(3))
                 .limit(4)
                 .prepend(DoubleStream.of(6, 7, 8, 9, 10).filter(Functions.greaterThan(8)))
-                .custom(assertElements(arrayContaining(
-                        9d, 10d, 4d, 5d, 4d, 5d
-                )));
+                .custom(assertElements(arrayContaining(9d, 10d, 4d, 5d, 4d, 5d)));
     }
 }

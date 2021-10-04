@@ -4,11 +4,10 @@ import com.annimon.stream.Objects;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents a supplier of {@code int}-valued results.  This is the
- * {@code int}-producing primitive specialization of {@link Supplier}.
+ * Represents a supplier of {@code int}-valued results. This is the {@code int}-producing primitive
+ * specialization of {@link Supplier}.
  *
- * <p>There is no requirement that a distinct result be returned each
- * time the supplier is invoked.
+ * <p>There is no requirement that a distinct result be returned each time the supplier is invoked.
  */
 public interface IntSupplier {
 
@@ -21,27 +20,26 @@ public interface IntSupplier {
 
     class Util {
 
-        private Util() { }
+        private Util() {}
 
         /**
          * Creates a safe {@code IntSupplier}.
          *
-         * @param throwableSupplier  the supplier that may throw an exception
+         * @param throwableSupplier the supplier that may throw an exception
          * @return an {@code IntSupplier}
          * @throws NullPointerException if {@code throwableSupplier} is null
          * @since 1.1.7
          * @see #safe(com.annimon.stream.function.ThrowableIntSupplier, int)
          */
-        public static IntSupplier safe(
-                @NotNull ThrowableIntSupplier<Throwable> throwableSupplier) {
+        public static IntSupplier safe(@NotNull ThrowableIntSupplier<Throwable> throwableSupplier) {
             return safe(throwableSupplier, 0);
         }
 
         /**
          * Creates a safe {@code IntSupplier}.
          *
-         * @param throwableSupplier  the supplier that may throw an exception
-         * @param resultIfFailed  the result which returned if exception was thrown
+         * @param throwableSupplier the supplier that may throw an exception
+         * @param resultIfFailed the result which returned if exception was thrown
          * @return an {@code IntSupplier}
          * @throws NullPointerException if {@code throwableSupplier} is null
          * @since 1.1.7
@@ -62,6 +60,5 @@ public interface IntSupplier {
                 }
             };
         }
-
     }
 }

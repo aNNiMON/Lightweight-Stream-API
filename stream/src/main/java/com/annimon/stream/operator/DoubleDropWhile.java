@@ -11,8 +11,7 @@ public class DoubleDropWhile extends PrimitiveExtIterator.OfDouble {
     private final DoublePredicate predicate;
 
     public DoubleDropWhile(
-            @NotNull PrimitiveIterator.OfDouble iterator,
-            @NotNull DoublePredicate predicate) {
+            @NotNull PrimitiveIterator.OfDouble iterator, @NotNull DoublePredicate predicate) {
         this.iterator = iterator;
         this.predicate = predicate;
     }

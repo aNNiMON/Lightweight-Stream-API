@@ -9,9 +9,7 @@ public class LongMap extends PrimitiveIterator.OfLong {
     private final PrimitiveIterator.OfLong iterator;
     private final LongUnaryOperator mapper;
 
-    public LongMap(
-            @NotNull PrimitiveIterator.OfLong iterator,
-            @NotNull LongUnaryOperator mapper) {
+    public LongMap(@NotNull PrimitiveIterator.OfLong iterator, @NotNull LongUnaryOperator mapper) {
         this.iterator = iterator;
         this.mapper = mapper;
     }

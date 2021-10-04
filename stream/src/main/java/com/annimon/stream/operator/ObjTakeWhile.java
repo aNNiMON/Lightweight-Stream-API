@@ -14,8 +14,7 @@ public class ObjTakeWhile<T> implements Iterator<T> {
     private boolean hasNextComputed, hasNext;
 
     public ObjTakeWhile(
-            @NotNull Iterator<? extends T> iterator,
-            @NotNull Predicate<? super T> predicate) {
+            @NotNull Iterator<? extends T> iterator, @NotNull Predicate<? super T> predicate) {
         this.iterator = iterator;
         this.predicate = predicate;
     }

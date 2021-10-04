@@ -1,8 +1,8 @@
 package com.annimon.stream.function;
 
 /**
- * Represents an operation on a single {@code long}-valued operand
- * that produces a {@code long}-valued result.
+ * Represents an operation on a single {@code long}-valued operand that produces a {@code
+ * long}-valued result.
  *
  * @since 1.1.4
  * @see UnaryOperator
@@ -19,7 +19,7 @@ public interface LongUnaryOperator {
 
     class Util {
 
-        private Util() { }
+        private Util() {}
 
         /**
          * Returns a unary operator that always returns its input argument.

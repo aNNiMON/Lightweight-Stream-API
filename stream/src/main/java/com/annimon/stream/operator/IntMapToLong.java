@@ -10,8 +10,7 @@ public class IntMapToLong extends PrimitiveIterator.OfLong {
     private final IntToLongFunction mapper;
 
     public IntMapToLong(
-            @NotNull PrimitiveIterator.OfInt iterator,
-            @NotNull IntToLongFunction mapper) {
+            @NotNull PrimitiveIterator.OfInt iterator, @NotNull IntToLongFunction mapper) {
         this.iterator = iterator;
         this.mapper = mapper;
     }

@@ -15,15 +15,15 @@ public interface BiFunction<T, U, R> {
     /**
      * Applies this function to the given arguments.
      *
-     * @param value1  the first argument
-     * @param value2  the second argument
+     * @param value1 the first argument
+     * @param value2 the second argument
      * @return the function result
      */
     R apply(T value1, U value2);
 
     class Util {
 
-        private Util() { }
+        private Util() {}
 
         /**
          * Composes {@code BiFunction} calls.
@@ -34,8 +34,8 @@ public interface BiFunction<T, U, R> {
          * @param <U> the type of the second argument
          * @param <R> the type of the result of the {@code BiFunction f1}
          * @param <V> the type of the result of composed function {@code f2}
-         * @param f1  the {@code BiFunction} which is called first
-         * @param f2  the function for transform {@code BiFunction f1} result to the type {@code V}
+         * @param f1 the {@code BiFunction} which is called first
+         * @param f2 the function for transform {@code BiFunction f1} result to the type {@code V}
          * @return the result of composed function
          * @throws NullPointerException if {@code f1} or {@code f2} is null
          */
@@ -54,16 +54,15 @@ public interface BiFunction<T, U, R> {
         }
 
         /**
-         * Returns a {@code BiFunction} that reverses the input arguments order
-         * of the specified {@code BiFunction}.
+         * Returns a {@code BiFunction} that reverses the input arguments order of the specified
+         * {@code BiFunction}.
          *
-         * @param <T> the type of the first argument of the given function
-         *            and the second argument of the reversed function
-         * @param <U> the type of the second argument of the given function
-         *            and the first argument of the reversed function
-         * @param <R> the type of the result of the given function
-         *            and of the reversed function
-         * @param function  the {@code BiFunction} to reverse arguments
+         * @param <T> the type of the first argument of the given function and the second argument
+         *     of the reversed function
+         * @param <U> the type of the second argument of the given function and the first argument
+         *     of the reversed function
+         * @param <R> the type of the result of the given function and of the reversed function
+         * @param function the {@code BiFunction} to reverse arguments
          * @return the reversed function
          * @throws NullPointerException if {@code function} is null
          * @since 1.1.6

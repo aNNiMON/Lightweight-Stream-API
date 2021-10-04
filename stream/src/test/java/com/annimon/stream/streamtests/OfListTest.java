@@ -1,12 +1,13 @@
 package com.annimon.stream.streamtests;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import com.annimon.stream.Collectors;
 import com.annimon.stream.Stream;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 
 public final class OfListTest {
 
@@ -18,8 +19,7 @@ public final class OfListTest {
         list.add("a");
         list.add(" test");
 
-        String result = Stream.of(list)
-                .collect(Collectors.joining());
+        String result = Stream.of(list).collect(Collectors.joining());
         assertThat(result, is("This is a test"));
     }
 }

@@ -11,8 +11,7 @@ public class IntTakeUntil extends PrimitiveExtIterator.OfInt {
     private final IntPredicate stopPredicate;
 
     public IntTakeUntil(
-            @NotNull PrimitiveIterator.OfInt iterator,
-            @NotNull IntPredicate stopPredicate) {
+            @NotNull PrimitiveIterator.OfInt iterator, @NotNull IntPredicate stopPredicate) {
         this.iterator = iterator;
         this.stopPredicate = stopPredicate;
     }

@@ -2,9 +2,7 @@ package com.annimon.stream.internal;
 
 import org.jetbrains.annotations.NotNull;
 
-/**
- * Parameters for streams.
- */
+/** Parameters for streams. */
 public final class Params {
 
     public Runnable closeHandler;

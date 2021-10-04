@@ -11,8 +11,7 @@ public class DoubleTakeUntil extends PrimitiveExtIterator.OfDouble {
     private final DoublePredicate stopPredicate;
 
     public DoubleTakeUntil(
-            @NotNull PrimitiveIterator.OfDouble iterator,
-            @NotNull DoublePredicate stopPredicate) {
+            @NotNull PrimitiveIterator.OfDouble iterator, @NotNull DoublePredicate stopPredicate) {
         this.iterator = iterator;
         this.stopPredicate = stopPredicate;
     }

@@ -20,13 +20,13 @@ public interface Supplier<T> {
 
     class Util {
 
-        private Util() { }
+        private Util() {}
 
         /**
          * Creates a safe {@code Supplier}.
          *
          * @param <T> the type of the result
-         * @param throwableSupplier  the supplier that may throw an exception
+         * @param throwableSupplier the supplier that may throw an exception
          * @return a {@code Supplier}
          * @throws NullPointerException if {@code throwableSupplier} is null
          * @since 1.1.7
@@ -41,8 +41,8 @@ public interface Supplier<T> {
          * Creates a safe {@code Supplier}.
          *
          * @param <T> the type of the result
-         * @param throwableSupplier  the supplier that may throw an exception
-         * @param resultIfFailed  the result which returned if exception was thrown
+         * @param throwableSupplier the supplier that may throw an exception
+         * @param resultIfFailed the result which returned if exception was thrown
          * @return a {@code Supplier}
          * @throws NullPointerException if {@code throwableSupplier} is null
          * @since 1.1.7
@@ -63,6 +63,5 @@ public interface Supplier<T> {
                 }
             };
         }
-
     }
 }

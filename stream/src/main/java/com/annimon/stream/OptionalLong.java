@@ -35,7 +35,7 @@ public final class OptionalLong {
     /**
      * Returns an {@code OptionalLong} with the specified value present.
      *
-     * @param value  the value to be present
+     * @param value the value to be present
      * @return an {@code OptionalLong} with the value present
      */
     @NotNull
@@ -44,7 +44,8 @@ public final class OptionalLong {
     }
 
     /**
-     * Returns an {@code OptionalLong} with the specified value, or empty {@code OptionalLong} if value is null.
+     * Returns an {@code OptionalLong} with the specified value, or empty {@code OptionalLong} if
+     * value is null.
      *
      * @param value the value which can be null
      * @return an {@code OptionalLong}
@@ -71,7 +72,7 @@ public final class OptionalLong {
     /**
      * Returns an inner value if present, otherwise throws {@code NoSuchElementException}.
      *
-     * Since 1.2.0 prefer {@link #orElseThrow()} method as it has readable name.
+     * <p>Since 1.2.0 prefer {@link #orElseThrow()} method as it has readable name.
      *
      * @return the inner value of this {@code OptionalLong}
      * @throws NoSuchElementException if there is no value present
@@ -104,7 +105,7 @@ public final class OptionalLong {
     /**
      * Invokes consumer function with value if present, otherwise does nothing.
      *
-     * @param consumer  the consumer function to be executed if a value is present
+     * @param consumer the consumer function to be executed if a value is present
      * @throws NullPointerException if value is present and {@code consumer} is null
      */
     public void ifPresent(@NotNull LongConsumer consumer) {
@@ -114,13 +115,13 @@ public final class OptionalLong {
     }
 
     /**
-     * If a value is present, performs the given action with the value,
-     * otherwise performs the empty-based action.
+     * If a value is present, performs the given action with the value, otherwise performs the
+     * empty-based action.
      *
-     * @param consumer  the consumer function to be executed, if a value is present
-     * @param emptyAction  the empty-based action to be performed, if no value is present
+     * @param consumer the consumer function to be executed, if a value is present
+     * @param emptyAction the empty-based action to be performed, if no value is present
      * @throws NullPointerException if a value is present and the given consumer function is null,
-     *         or no value is present and the given empty-based action is null.
+     *     or no value is present and the given empty-based action is null.
      */
     public void ifPresentOrElse(@NotNull LongConsumer consumer, @NotNull Runnable emptyAction) {
         if (isPresent) {
@@ -131,10 +132,10 @@ public final class OptionalLong {
     }
 
     /**
-     * Invokes consumer function with the value if present.
-     * This method same as {@code ifPresent}, but does not breaks chaining
+     * Invokes consumer function with the value if present. This method same as {@code ifPresent},
+     * but does not breaks chaining
      *
-     * @param consumer  consumer function
+     * @param consumer consumer function
      * @return this {@code OptionalLong}
      * @see #ifPresent(com.annimon.stream.function.LongConsumer)
      */
@@ -147,7 +148,7 @@ public final class OptionalLong {
     /**
      * Invokes action function if value is absent.
      *
-     * @param action  action that invokes if value absent
+     * @param action action that invokes if value absent
      * @return this {@code OptionalLong}
      */
     @NotNull
@@ -162,7 +163,7 @@ public final class OptionalLong {
      * Applies custom operator on {@code OptionalLong}.
      *
      * @param <R> the type of the result
-     * @param function  a transforming function
+     * @param function a transforming function
      * @return a result of the transforming function
      * @throws NullPointerException if {@code function} is null
      * @since 1.1.9
@@ -176,9 +177,9 @@ public final class OptionalLong {
     /**
      * Performs filtering on inner value if it is present.
      *
-     * @param predicate  a predicate function
-     * @return this {@code OptionalLong} if the value is present and matches predicate,
-     *         otherwise an empty {@code OptionalLong}
+     * @param predicate a predicate function
+     * @return this {@code OptionalLong} if the value is present and matches predicate, otherwise an
+     *     empty {@code OptionalLong}
      */
     @NotNull
     public OptionalLong filter(@NotNull LongPredicate predicate) {
@@ -189,9 +190,9 @@ public final class OptionalLong {
     /**
      * Performs negated filtering on inner value if it is present.
      *
-     * @param predicate  a predicate function
+     * @param predicate a predicate function
      * @return this {@code OptionalLong} if the value is present and doesn't matches predicate,
-     *              otherwise an empty {@code OptionalLong}
+     *     otherwise an empty {@code OptionalLong}
      * @since 1.1.9
      */
     @NotNull
@@ -202,11 +203,10 @@ public final class OptionalLong {
     /**
      * Invokes the given mapping function on inner value if present.
      *
-     * @param mapper  mapping function
-     * @return an {@code OptionalLong} with transformed value if present,
-     *         otherwise an empty {@code OptionalLong}
-     * @throws NullPointerException if value is present and
-     *         {@code mapper} is {@code null}
+     * @param mapper mapping function
+     * @return an {@code OptionalLong} with transformed value if present, otherwise an empty {@code
+     *     OptionalLong}
+     * @throws NullPointerException if value is present and {@code mapper} is {@code null}
      */
     @NotNull
     public OptionalLong map(@NotNull LongUnaryOperator mapper) {
@@ -221,11 +221,10 @@ public final class OptionalLong {
      * Invokes the given mapping function on inner value if present.
      *
      * @param <U> the type of result value
-     * @param mapper  mapping function
-     * @return an {@code Optional} with transformed value if present,
-     *         otherwise an empty {@code Optional}
-     * @throws NullPointerException if value is present and
-     *         {@code mapper} is {@code null}
+     * @param mapper mapping function
+     * @return an {@code Optional} with transformed value if present, otherwise an empty {@code
+     *     Optional}
+     * @throws NullPointerException if value is present and {@code mapper} is {@code null}
      */
     @NotNull
     public <U> Optional<U> mapToObj(@NotNull LongFunction<U> mapper) {
@@ -239,11 +238,10 @@ public final class OptionalLong {
     /**
      * Invokes the given mapping function on inner value if present.
      *
-     * @param mapper  mapping function
-     * @return an {@code OptionalInt} with transformed value if present,
-     *         otherwise an empty {@code OptionalInt}
-     * @throws NullPointerException if value is present and
-     *         {@code mapper} is {@code null}
+     * @param mapper mapping function
+     * @return an {@code OptionalInt} with transformed value if present, otherwise an empty {@code
+     *     OptionalInt}
+     * @throws NullPointerException if value is present and {@code mapper} is {@code null}
      */
     @NotNull
     public OptionalInt mapToInt(@NotNull LongToIntFunction mapper) {
@@ -255,8 +253,8 @@ public final class OptionalLong {
     }
 
     /**
-     * Wraps a value into {@code LongStream} if present,
-     * otherwise returns an empty {@code LongStream}.
+     * Wraps a value into {@code LongStream} if present, otherwise returns an empty {@code
+     * LongStream}.
      *
      * @return the optional value as an {@code LongStream}
      */
@@ -269,14 +267,14 @@ public final class OptionalLong {
     }
 
     /**
-     * Returns current {@code OptionalLong} if value is present, otherwise
-     * returns an {@code OptionalLong} produced by supplier function.
+     * Returns current {@code OptionalLong} if value is present, otherwise returns an {@code
+     * OptionalLong} produced by supplier function.
      *
-     * @param supplier  supplier function that produces an {@code OptionalLong} to be returned
-     * @return this {@code OptionalLong} if value is present, otherwise
-     *         an {@code OptionalLong} produced by supplier function
-     * @throws NullPointerException if value is not present and
-     *         {@code supplier} or value produced by it is {@code null}
+     * @param supplier supplier function that produces an {@code OptionalLong} to be returned
+     * @return this {@code OptionalLong} if value is present, otherwise an {@code OptionalLong}
+     *     produced by supplier function
+     * @throws NullPointerException if value is not present and {@code supplier} or value produced
+     *     by it is {@code null}
      */
     @NotNull
     public OptionalLong or(@NotNull Supplier<OptionalLong> supplier) {
@@ -288,7 +286,7 @@ public final class OptionalLong {
     /**
      * Returns inner value if present, otherwise returns {@code other}.
      *
-     * @param other  the value to be returned if there is no value present
+     * @param other the value to be returned if there is no value present
      * @return the value, if present, otherwise {@code other}
      */
     public long orElse(long other) {
@@ -298,7 +296,7 @@ public final class OptionalLong {
     /**
      * Returns the value if present, otherwise returns value produced by supplier function.
      *
-     * @param other  supplier function that produces value if inner value is not present
+     * @param other supplier function that produces value if inner value is not present
      * @return the value if present otherwise the result of {@code other.getAsLong()}
      * @throws NullPointerException if value is not present and {@code other} is null
      */
@@ -324,7 +322,7 @@ public final class OptionalLong {
      * Returns the value if present, otherwise throws an exception provided by supplier function.
      *
      * @param <X> the type of exception to be thrown
-     * @param exceptionSupplier  supplier function that produces an exception to be thrown
+     * @param exceptionSupplier supplier function that produces an exception to be thrown
      * @return inner value if present
      * @throws X if inner value is not present
      */
@@ -344,9 +342,7 @@ public final class OptionalLong {
         }
 
         OptionalLong other = (OptionalLong) obj;
-        return (isPresent && other.isPresent)
-                ? value == other.value
-                : isPresent == other.isPresent;
+        return (isPresent && other.isPresent) ? value == other.value : isPresent == other.isPresent;
     }
 
     @Override
@@ -357,8 +353,6 @@ public final class OptionalLong {
     @NotNull
     @Override
     public String toString() {
-        return isPresent
-                ? String.format("OptionalLong[%s]", value)
-                : "OptionalLong.empty";
+        return isPresent ? String.format("OptionalLong[%s]", value) : "OptionalLong.empty";
     }
 }

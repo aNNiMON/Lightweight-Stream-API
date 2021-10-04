@@ -15,8 +15,7 @@ public class ObjConcat<T> extends LsaExtIterator<T> {
 
     @SuppressWarnings("unchecked")
     public ObjConcat(
-            @NotNull Iterator<? extends T> iterator1,
-            @NotNull Iterator<? extends T> iterator2) {
+            @NotNull Iterator<? extends T> iterator1, @NotNull Iterator<? extends T> iterator2) {
         iterators = Arrays.asList(iterator1, iterator2);
         iteratorsCount = 2;
         iteratorIndex = 0;

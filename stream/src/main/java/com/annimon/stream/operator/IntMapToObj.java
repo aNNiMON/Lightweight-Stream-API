@@ -11,8 +11,7 @@ public class IntMapToObj<R> extends LsaIterator<R> {
     private final IntFunction<? extends R> mapper;
 
     public IntMapToObj(
-            @NotNull PrimitiveIterator.OfInt iterator,
-            @NotNull IntFunction<? extends R> mapper) {
+            @NotNull PrimitiveIterator.OfInt iterator, @NotNull IntFunction<? extends R> mapper) {
         this.iterator = iterator;
         this.mapper = mapper;
     }

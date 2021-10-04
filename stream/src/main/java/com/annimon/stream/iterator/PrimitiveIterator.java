@@ -3,13 +3,12 @@ package com.annimon.stream.iterator;
 import java.util.Iterator;
 
 /**
- * A base type for primitive specializations of {@link Iterator}.
- * Specialized subtypes are provided for {@link OfInt int},
- * {@link OfLong long} and {@link OfDouble double} values.
+ * A base type for primitive specializations of {@link Iterator}. Specialized subtypes are provided
+ * for {@link OfInt int}, {@link OfLong long} and {@link OfDouble double} values.
  */
 public final class PrimitiveIterator {
 
-    private PrimitiveIterator() { }
+    private PrimitiveIterator() {}
 
     public abstract static class OfInt implements Iterator<Integer> {
 

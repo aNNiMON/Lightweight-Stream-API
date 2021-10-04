@@ -1,13 +1,14 @@
 package com.annimon.stream.iterator;
 
-import java.util.NoSuchElementException;
-import org.junit.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import java.util.NoSuchElementException;
+import org.junit.Test;
 
 public class LsaExtIteratorTest {
 
@@ -74,5 +75,4 @@ public class LsaExtIteratorTest {
             next = Integer.toString(++index);
         }
     }
-
 }

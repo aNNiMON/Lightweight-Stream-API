@@ -12,7 +12,7 @@ public interface ToLongFunction<T> {
     /**
      * Applies this function to the given argument.
      *
-     * @param t  an argument
+     * @param t an argument
      * @return the function result
      */
     long applyAsLong(T t);

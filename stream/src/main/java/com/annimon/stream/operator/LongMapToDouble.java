@@ -10,8 +10,7 @@ public class LongMapToDouble extends PrimitiveIterator.OfDouble {
     private final LongToDoubleFunction mapper;
 
     public LongMapToDouble(
-            @NotNull PrimitiveIterator.OfLong iterator,
-            @NotNull LongToDoubleFunction mapper) {
+            @NotNull PrimitiveIterator.OfLong iterator, @NotNull LongToDoubleFunction mapper) {
         this.iterator = iterator;
         this.mapper = mapper;
     }

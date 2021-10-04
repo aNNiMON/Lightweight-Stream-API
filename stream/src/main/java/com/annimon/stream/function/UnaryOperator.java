@@ -1,15 +1,14 @@
 package com.annimon.stream.function;
 
 /**
- * Operation on a single operand that produces a result of the
- * same type as its operand.
+ * Operation on a single operand that produces a result of the same type as its operand.
  *
  * @param <T> the type of the operand and result of the operator
  */
 public interface UnaryOperator<T> extends Function<T, T> {
     class Util {
 
-        private Util() { }
+        private Util() {}
 
         /**
          * Returns a unary operator that always returns its input argument.

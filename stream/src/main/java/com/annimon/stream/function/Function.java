@@ -15,14 +15,14 @@ public interface Function<T, R> {
     /**
      * Applies this function to the given argument.
      *
-     * @param t  an argument
+     * @param t an argument
      * @return the function result
      */
     R apply(T t);
 
     class Util {
 
-        private Util() { }
+        private Util() {}
 
         /**
          * Composes {@code Function} calls.
@@ -32,8 +32,8 @@ public interface Function<T, R> {
          * @param <V> the type of the input argument of first function
          * @param <T> the type of the result of {@code f2} and input argument of {@code f1}
          * @param <R> the type of the result of composed function {@code f1}
-         * @param f1  the function for transform {@code Function f2} result to the type {@code R}
-         * @param f2  the {@code Function} which is called first
+         * @param f1 the function for transform {@code Function f2} result to the type {@code R}
+         * @param f2 the {@code Function} which is called first
          * @return the result of composed function
          * @throws NullPointerException if {@code f1} or {@code f2} is null
          * @see #andThen(com.annimon.stream.function.Function, com.annimon.stream.function.Function)
@@ -54,8 +54,8 @@ public interface Function<T, R> {
          * @param <T> the type of the input argument of first function
          * @param <R> the type of the result of {@code f1} and input argument of {@code f2}
          * @param <V> the type of the result of composed function {@code f2}
-         * @param f1  the {@code Function} which is called first
-         * @param f2  the function for transform {@code Function f1} result to the type {@code V}
+         * @param f1 the {@code Function} which is called first
+         * @param f2 the function for transform {@code Function f1} result to the type {@code V}
          * @return the result of composed function
          * @throws NullPointerException if {@code f1} or {@code f2} is null
          * @see #compose(com.annimon.stream.function.Function, com.annimon.stream.function.Function)
@@ -79,7 +79,7 @@ public interface Function<T, R> {
          *
          * @param <T> the type of the input of the function
          * @param <R> the type of the result of the function
-         * @param throwableFunction  the function that may throw an exception
+         * @param throwableFunction the function that may throw an exception
          * @return the function result or {@code null} if exception was thrown
          * @throws NullPointerException if {@code throwableFunction} is null
          * @see #safe(com.annimon.stream.function.ThrowableFunction, java.lang.Object)
@@ -94,14 +94,16 @@ public interface Function<T, R> {
          *
          * @param <T> the type of the input of the function
          * @param <R> the type of the result of the function
-         * @param throwableFunction  the function that may throw an exception
-         * @param resultIfFailed  the result which returned if exception was thrown
+         * @param throwableFunction the function that may throw an exception
+         * @param resultIfFailed the result which returned if exception was thrown
          * @return the function result or {@code resultIfFailed}
          * @throws NullPointerException if {@code throwableFunction} is null
          * @see #safe(com.annimon.stream.function.ThrowableFunction)
          */
         public static <T, R> Function<T, R> safe(
-                @NotNull final ThrowableFunction<? super T, ? extends R, Throwable> throwableFunction,
+                @NotNull
+                        final ThrowableFunction<? super T, ? extends R, Throwable>
+                                throwableFunction,
                 @Nullable final R resultIfFailed) {
             Objects.requireNonNull(throwableFunction);
             return new Function<T, R>() {
@@ -116,6 +118,5 @@ public interface Function<T, R> {
                 }
             };
         }
-
     }
 }

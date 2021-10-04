@@ -16,8 +16,7 @@ public class ObjSorted<T> extends LsaExtIterator<T> {
     private Iterator<T> sortedIterator;
 
     public ObjSorted(
-            @NotNull Iterator<? extends T> iterator,
-            @Nullable Comparator<? super T> comparator) {
+            @NotNull Iterator<? extends T> iterator, @Nullable Comparator<? super T> comparator) {
         this.iterator = iterator;
         this.comparator = comparator;
     }

@@ -1,11 +1,12 @@
 package com.annimon.stream.function;
 
-import com.annimon.stream.Functions;
-import com.annimon.stream.IntPair;
-import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
+
+import com.annimon.stream.Functions;
+import com.annimon.stream.IntPair;
+import org.junit.Test;
 
 /**
  * Tests {@code IndexedLongFunction}.
@@ -35,12 +36,12 @@ public class IndexedLongFunctionTest {
 
     private static final LongFunction<String> toString = Functions.convertLongToString();
 
-    private static final IndexedLongFunction<IntPair<String>>
-            wrapper = new IndexedLongFunction<IntPair<String>>() {
+    private static final IndexedLongFunction<IntPair<String>> wrapper =
+            new IndexedLongFunction<IntPair<String>>() {
 
-        @Override
-        public IntPair<String> apply(int index, long value) {
-            return new IntPair<String>(index, toString.apply(value));
-        }
-    };
+                @Override
+                public IntPair<String> apply(int index, long value) {
+                    return new IntPair<String>(index, toString.apply(value));
+                }
+            };
 }

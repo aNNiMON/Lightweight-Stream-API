@@ -1,10 +1,11 @@
 package com.annimon.stream.doublestreamtests;
 
-import com.annimon.stream.DoubleStream;
-import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.OptionalDoubleMatcher.hasValue;
 import static com.annimon.stream.test.hamcrest.OptionalDoubleMatcher.isEmpty;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import com.annimon.stream.DoubleStream;
+import org.junit.Test;
 
 public final class MinTest {
 

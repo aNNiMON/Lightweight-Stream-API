@@ -11,8 +11,7 @@ public class ObjTakeUntil<T> extends LsaExtIterator<T> {
     private final Predicate<? super T> stopPredicate;
 
     public ObjTakeUntil(
-            @NotNull Iterator<? extends T> iterator,
-            @NotNull Predicate<? super T> predicate) {
+            @NotNull Iterator<? extends T> iterator, @NotNull Predicate<? super T> predicate) {
         this.iterator = iterator;
         this.stopPredicate = predicate;
     }

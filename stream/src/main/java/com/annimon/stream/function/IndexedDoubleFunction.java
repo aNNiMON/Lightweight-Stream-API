@@ -14,21 +14,21 @@ public interface IndexedDoubleFunction<R> {
     /**
      * Applies this function to the given argument.
      *
-     * @param index  the index
-     * @param value  an argument
+     * @param index the index
+     * @param value an argument
      * @return the function result
      */
     R apply(int index, double value);
 
     class Util {
 
-        private Util() { }
+        private Util() {}
 
         /**
          * Wraps {@link DoubleFunction} and returns {@code IndexedDoubleFunction}.
          *
          * @param <R> the type of the result
-         * @param function  the function to wrap
+         * @param function the function to wrap
          * @return a wrapped {@code IndexedDoubleFunction}
          * @throws NullPointerException if {@code function} is null
          */
@@ -42,6 +42,5 @@ public interface IndexedDoubleFunction<R> {
                 }
             };
         }
-
     }
 }

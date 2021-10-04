@@ -1,15 +1,14 @@
 package com.annimon.stream.function;
 
-import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Tests {@code BooleanPredicate}.
- */
+import org.junit.Test;
+
+/** Tests {@code BooleanPredicate}. */
 public class BooleanPredicateTest {
 
     @Test
@@ -68,18 +67,20 @@ public class BooleanPredicateTest {
         assertFalse(trueAndNegated.test(true));
     }
 
-    private static final BooleanPredicate falseOr = new BooleanPredicate() {
-        @Override
-        public boolean test(boolean value) {
-            return false || value;
-        }
-    };
+    private static final BooleanPredicate falseOr =
+            new BooleanPredicate() {
+                @Override
+                public boolean test(boolean value) {
+                    return false || value;
+                }
+            };
 
-    private static final BooleanPredicate trueAnd = new BooleanPredicate() {
+    private static final BooleanPredicate trueAnd =
+            new BooleanPredicate() {
 
-        @Override
-        public boolean test(boolean value) {
-            return true && value;
-        }
-    };
+                @Override
+                public boolean test(boolean value) {
+                    return true && value;
+                }
+            };
 }

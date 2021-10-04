@@ -4,8 +4,8 @@ import com.annimon.stream.Objects;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents an operation on index and input {@code long}-valued operand
- * that produces a {@code long}-valued result.
+ * Represents an operation on index and input {@code long}-valued operand that produces a {@code
+ * long}-valued result.
  *
  * @since 1.2.1
  * @see LongUnaryOperator
@@ -15,25 +15,24 @@ public interface IndexedLongUnaryOperator {
     /**
      * Applies this operator to the given operand.
      *
-     * @param index  the index
-     * @param operand  the operand
+     * @param index the index
+     * @param operand the operand
      * @return the operator result
      */
     long applyAsLong(int index, long operand);
 
     class Util {
 
-        private Util() { }
+        private Util() {}
 
         /**
          * Wraps {@link LongUnaryOperator} and returns {@code IndexedLongUnaryOperator}.
          *
-         * @param function  the function to wrap
+         * @param function the function to wrap
          * @return a wrapped {@code IndexedLongUnaryOperator}
          * @throws NullPointerException if {@code function} is null
          */
-        public static IndexedLongUnaryOperator wrap(
-                @NotNull final LongUnaryOperator function) {
+        public static IndexedLongUnaryOperator wrap(@NotNull final LongUnaryOperator function) {
             Objects.requireNonNull(function);
             return new IndexedLongUnaryOperator() {
                 @Override

@@ -1,19 +1,19 @@
 package com.annimon.stream.longstreamtests;
 
+import static com.annimon.stream.test.hamcrest.OptionalLongMatcher.hasValue;
+import static com.annimon.stream.test.hamcrest.OptionalLongMatcher.isEmpty;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import com.annimon.stream.Functions;
 import com.annimon.stream.LongStream;
 import com.annimon.stream.OptionalLong;
 import org.junit.Test;
-import static com.annimon.stream.test.hamcrest.OptionalLongMatcher.hasValue;
-import static com.annimon.stream.test.hamcrest.OptionalLongMatcher.isEmpty;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public final class FindSingleTest {
 
     @Test
     public void testFindSingleOnEmptyStream() {
-        assertThat(LongStream.empty().findSingle(),
-                isEmpty());
+        assertThat(LongStream.empty().findSingle(), isEmpty());
     }
 
     @Test
@@ -28,26 +28,22 @@ public final class FindSingleTest {
 
     @Test
     public void testFindSingleAfterFilteringToEmptyStream() {
-        OptionalLong result = LongStream.of(5, 7, 9)
-                .filter(Functions.remainderLong(2))
-                .findSingle();
+        OptionalLong result =
+                LongStream.of(5, 7, 9).filter(Functions.remainderLong(2)).findSingle();
 
         assertThat(result, isEmpty());
     }
 
     @Test
     public void testFindSingleAfterFilteringToOneElementStream() {
-        OptionalLong result = LongStream.of(5, 10, -15)
-                .filter(Functions.remainderLong(2))
-                .findSingle();
+        OptionalLong result =
+                LongStream.of(5, 10, -15).filter(Functions.remainderLong(2)).findSingle();
 
         assertThat(result, hasValue(10L));
     }
 
     @Test(expected = IllegalStateException.class)
     public void testFindSingleAfterFilteringToMoreElementStream() {
-        LongStream.of(5, 10, -15, -20)
-                .filter(Functions.remainderLong(2))
-                .findSingle();
+        LongStream.of(5, 10, -15, -20).filter(Functions.remainderLong(2)).findSingle();
     }
 }

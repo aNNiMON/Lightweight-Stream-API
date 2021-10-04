@@ -1,13 +1,12 @@
 package com.annimon.stream.function;
 
-import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-/**
- * Tests {@link LongUnaryOperator}
- */
+import org.junit.Test;
+
+/** Tests {@link LongUnaryOperator} */
 public class LongUnaryOperatorTest {
 
     @Test

@@ -9,9 +9,7 @@ public class IntPeek extends PrimitiveIterator.OfInt {
     private final PrimitiveIterator.OfInt iterator;
     private final IntConsumer action;
 
-    public IntPeek(
-            @NotNull PrimitiveIterator.OfInt iterator,
-            @NotNull IntConsumer action) {
+    public IntPeek(@NotNull PrimitiveIterator.OfInt iterator, @NotNull IntConsumer action) {
         this.iterator = iterator;
         this.action = action;
     }

@@ -12,7 +12,7 @@ public interface ThrowableDoublePredicate<E extends Throwable> {
     /**
      * Tests the value for satisfying predicate.
      *
-     * @param value  the value to be tested
+     * @param value the value to be tested
      * @return {@code true} if the value matches the predicate, otherwise {@code false}
      * @throws E an exception
      */

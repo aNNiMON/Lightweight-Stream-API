@@ -17,7 +17,7 @@ public class IntArray extends PrimitiveIterator.OfInt {
     public boolean hasNext() {
         return index < values.length;
     }
-    
+
     @Override
     public int nextInt() {
         return values[index++];

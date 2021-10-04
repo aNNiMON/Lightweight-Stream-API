@@ -11,8 +11,7 @@ public class IntDropWhile extends PrimitiveExtIterator.OfInt {
     private final IntPredicate predicate;
 
     public IntDropWhile(
-            @NotNull PrimitiveIterator.OfInt iterator,
-            @NotNull IntPredicate predicate) {
+            @NotNull PrimitiveIterator.OfInt iterator, @NotNull IntPredicate predicate) {
         this.iterator = iterator;
         this.predicate = predicate;
     }

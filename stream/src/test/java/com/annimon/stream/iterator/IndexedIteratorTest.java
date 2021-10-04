@@ -1,20 +1,21 @@
 package com.annimon.stream.iterator;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import org.junit.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.junit.Test;
+
 public class IndexedIteratorTest {
 
     @Test
     public void testDefault() {
-        IndexedIterator<String> iterator = new IndexedIterator<String>(
-                Arrays.asList("a", "b", "c").iterator());
+        IndexedIterator<String> iterator =
+                new IndexedIterator<String>(Arrays.asList("a", "b", "c").iterator());
 
         assertTrue(iterator.hasNext());
         assertThat(iterator.getIndex(), is(0));
@@ -42,8 +43,8 @@ public class IndexedIteratorTest {
 
     @Test
     public void testWithStartAndStep() {
-        IndexedIterator<String> iterator = new IndexedIterator<String>(
-                100, -5, Arrays.asList("a", "b", "c").iterator());
+        IndexedIterator<String> iterator =
+                new IndexedIterator<String>(100, -5, Arrays.asList("a", "b", "c").iterator());
 
         assertTrue(iterator.hasNext());
         assertThat(iterator.getIndex(), is(100));

@@ -11,8 +11,7 @@ public class IntMapIndexed extends PrimitiveIterator.OfInt {
     private final IntBinaryOperator mapper;
 
     public IntMapIndexed(
-            @NotNull PrimitiveIndexedIterator.OfInt iterator,
-            @NotNull IntBinaryOperator mapper) {
+            @NotNull PrimitiveIndexedIterator.OfInt iterator, @NotNull IntBinaryOperator mapper) {
         this.iterator = iterator;
         this.mapper = mapper;
     }

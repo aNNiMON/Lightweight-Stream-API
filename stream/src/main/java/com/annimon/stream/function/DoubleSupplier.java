@@ -20,12 +20,12 @@ public interface DoubleSupplier {
 
     class Util {
 
-        private Util() { }
+        private Util() {}
 
         /**
          * Creates a safe {@code DoubleSupplier}.
          *
-         * @param throwableSupplier  the supplier that may throw an exception
+         * @param throwableSupplier the supplier that may throw an exception
          * @return a {@code DoubleSupplier}
          * @throws NullPointerException if {@code throwableSupplier} is null
          * @since 1.1.7
@@ -39,8 +39,8 @@ public interface DoubleSupplier {
         /**
          * Creates a safe {@code DoubleSupplier}.
          *
-         * @param throwableSupplier  the supplier that may throw an exception
-         * @param resultIfFailed  the result which returned if exception was thrown
+         * @param throwableSupplier the supplier that may throw an exception
+         * @param resultIfFailed the result which returned if exception was thrown
          * @return a {@code DoubleSupplier}
          * @throws NullPointerException if {@code throwableSupplier} is null
          * @since 1.1.7
@@ -61,6 +61,5 @@ public interface DoubleSupplier {
                 }
             };
         }
-
     }
 }

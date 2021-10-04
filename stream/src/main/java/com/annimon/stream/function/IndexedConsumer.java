@@ -15,25 +15,24 @@ public interface IndexedConsumer<T> {
     /**
      * Performs operation on argument.
      *
-     * @param index  the index
-     * @param t  the input argument
+     * @param index the index
+     * @param t the input argument
      */
     void accept(int index, T t);
 
     class Util {
 
-        private Util() { }
+        private Util() {}
 
         /**
          * Wraps a {@link Consumer} and returns {@code IndexedConsumer}.
          *
          * @param <T> the type of the input argument
-         * @param consumer  the consumer to wrap
+         * @param consumer the consumer to wrap
          * @return a wrapped {@code IndexedConsumer}
          * @throws NullPointerException if {@code consumer} is null
          */
-        public static <T> IndexedConsumer<T> wrap(
-                @NotNull final Consumer<? super T> consumer) {
+        public static <T> IndexedConsumer<T> wrap(@NotNull final Consumer<? super T> consumer) {
             Objects.requireNonNull(consumer);
             return new IndexedConsumer<T>() {
 
@@ -45,8 +44,8 @@ public interface IndexedConsumer<T> {
         }
 
         /**
-         * Returns an {@code IndexedConsumer} that accepts {@code IntConsumer}
-         * for index and {@code Consumer} for object.
+         * Returns an {@code IndexedConsumer} that accepts {@code IntConsumer} for index and {@code
+         * Consumer} for object.
          *
          * <pre><code>
          *  if (c1 != null)
@@ -56,13 +55,12 @@ public interface IndexedConsumer<T> {
          * </code></pre>
          *
          * @param <T> the type of the input
-         * @param c1  the {@code IntConsumer} for index, can be null
-         * @param c2  the {@code Consumer} for object, can be null
+         * @param c1 the {@code IntConsumer} for index, can be null
+         * @param c2 the {@code Consumer} for object, can be null
          * @return an {@code IndexedConsumer}
          */
         public static <T> IndexedConsumer<T> accept(
-                @Nullable final IntConsumer c1,
-                @Nullable final Consumer<? super T> c2) {
+                @Nullable final IntConsumer c1, @Nullable final Consumer<? super T> c2) {
             return new IndexedConsumer<T>() {
 
                 @Override
@@ -76,6 +74,5 @@ public interface IndexedConsumer<T> {
                 }
             };
         }
-
     }
 }

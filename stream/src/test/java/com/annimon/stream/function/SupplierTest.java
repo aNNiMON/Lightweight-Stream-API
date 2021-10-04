@@ -1,5 +1,13 @@
 package com.annimon.stream.function;
 
+import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import com.annimon.stream.Functions;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -8,13 +16,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Tests {@code Supplier}.
@@ -41,13 +42,14 @@ public class SupplierTest {
 
     @Test
     public void testGetString() {
-        Supplier<String> supplier = new Supplier<String>() {
+        Supplier<String> supplier =
+                new Supplier<String>() {
 
-            @Override
-            public String get() {
-                return "fantastic";
-            }
-        };
+                    @Override
+                    public String get() {
+                        return "fantastic";
+                    }
+                };
         assertEquals("fantastic", supplier.get());
     }
 
@@ -57,19 +59,19 @@ public class SupplierTest {
 
         assertThat(supplier.get(), instanceOf(StringBuilder.class));
         assertTrue(supplier.get().toString().isEmpty());
-
     }
 
     @Test
     public void testIncrement() {
-        Supplier<Integer> supplier = new Supplier<Integer>() {
-            private int counter = 0;
+        Supplier<Integer> supplier =
+                new Supplier<Integer>() {
+                    private int counter = 0;
 
-            @Override
-            public Integer get() {
-                return counter++;
-            }
-        };
+                    @Override
+                    public Integer get() {
+                        return counter++;
+                    }
+                };
         assertEquals(0, supplier.get().intValue());
         assertEquals(1, supplier.get().intValue());
         assertEquals(2, supplier.get().intValue());

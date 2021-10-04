@@ -18,7 +18,7 @@ import java.util.Iterator;
  */
 public final class CustomOperators {
 
-    private CustomOperators() { }
+    private CustomOperators() {}
 
     /**
      * Example of intermediate operator, that produces reversed stream.
@@ -58,19 +58,19 @@ public final class CustomOperators {
         }
     }
 
-    /**
-     * Example of terminal operator, that reduces stream to calculate sum on integer elements.
-     */
+    /** Example of terminal operator, that reduces stream to calculate sum on integer elements. */
     public static class Sum implements Function<Stream<Integer>, Integer> {
 
         @Override
         public Integer apply(Stream<Integer> stream) {
-            return stream.reduce(0, new BinaryOperator<Integer>() {
-                @Override
-                public Integer apply(Integer value1, Integer value2) {
-                    return value1 + value2;
-                }
-            });
+            return stream.reduce(
+                    0,
+                    new BinaryOperator<Integer>() {
+                        @Override
+                        public Integer apply(Integer value1, Integer value2) {
+                            return value1 + value2;
+                        }
+                    });
         }
     }
 
@@ -114,18 +114,19 @@ public final class CustomOperators {
         @Override
         public Stream<R> apply(final Stream<T> stream) {
             final Iterator<? extends T> iterator = stream.iterator();
-            return Stream.of(new LsaIterator<R>() {
+            return Stream.of(
+                    new LsaIterator<R>() {
 
-                @Override
-                public boolean hasNext() {
-                    return iterator.hasNext();
-                }
+                        @Override
+                        public boolean hasNext() {
+                            return iterator.hasNext();
+                        }
 
-                @Override
-                public R nextIteration() {
-                    return clazz.cast(iterator.next());
-                }
-            });
+                        @Override
+                        public R nextIteration() {
+                            return clazz.cast(iterator.next());
+                        }
+                    });
         }
     }
 
@@ -146,45 +147,43 @@ public final class CustomOperators {
         @Override
         public Stream<R> apply(final Stream<T> stream) {
             final Iterator<? extends T> iterator = stream.iterator();
-            return Stream.of(new LsaIterator<R>() {
+            return Stream.of(
+                    new LsaIterator<R>() {
 
-                private Iterator<? extends R> inner;
+                        private Iterator<? extends R> inner;
 
-                @Override
-                public boolean hasNext() {
-                    fillInnerIterator();
-                    return inner != null && inner.hasNext();
-                }
+                        @Override
+                        public boolean hasNext() {
+                            fillInnerIterator();
+                            return inner != null && inner.hasNext();
+                        }
 
-                @Override
-                public R nextIteration() {
-                    fillInnerIterator();
-                    return inner.next();
-                }
+                        @Override
+                        public R nextIteration() {
+                            fillInnerIterator();
+                            return inner.next();
+                        }
 
-                private void fillInnerIterator() {
-                    if ((inner != null) && inner.hasNext()) {
-                        return;
-                    }
-                    while (iterator.hasNext()) {
-                        final T arg = iterator.next();
-                        final Stream<? extends R> result = mapper.apply(arg);
-                        if (result != null) {
-                            inner = result.iterator();
-                            if (inner.hasNext()) {
+                        private void fillInnerIterator() {
+                            if ((inner != null) && inner.hasNext()) {
                                 return;
                             }
+                            while (iterator.hasNext()) {
+                                final T arg = iterator.next();
+                                final Stream<? extends R> result = mapper.apply(arg);
+                                if (result != null) {
+                                    inner = result.iterator();
+                                    if (inner.hasNext()) {
+                                        return;
+                                    }
+                                }
+                            }
                         }
-                    }
-                }
-
-            });
+                    });
         }
     }
 
-    /**
-     * Example of intermediate zip operator applying on two {@code IntStream}.
-     */
+    /** Example of intermediate zip operator applying on two {@code IntStream}. */
     public static class Zip implements Function<IntStream, IntStream> {
 
         private final IntStream secondStream;
@@ -199,24 +198,23 @@ public final class CustomOperators {
         public IntStream apply(IntStream firstStream) {
             final PrimitiveIterator.OfInt it1 = firstStream.iterator();
             final PrimitiveIterator.OfInt it2 = secondStream.iterator();
-            return IntStream.of(new PrimitiveIterator.OfInt() {
+            return IntStream.of(
+                    new PrimitiveIterator.OfInt() {
 
-                @Override
-                public boolean hasNext() {
-                    return it1.hasNext() && it2.hasNext();
-                }
+                        @Override
+                        public boolean hasNext() {
+                            return it1.hasNext() && it2.hasNext();
+                        }
 
-                @Override
-                public int nextInt() {
-                    return combiner.applyAsInt(it1.nextInt(), it2.nextInt());
-                }
-            });
+                        @Override
+                        public int nextInt() {
+                            return combiner.applyAsInt(it1.nextInt(), it2.nextInt());
+                        }
+                    });
         }
     }
 
-    /**
-     * Example of intermediate zip operator applying on two {@code LongStream}.
-     */
+    /** Example of intermediate zip operator applying on two {@code LongStream}. */
     public static class ZipLong implements Function<LongStream, LongStream> {
 
         private final LongStream secondStream;
@@ -231,24 +229,23 @@ public final class CustomOperators {
         public LongStream apply(LongStream firstStream) {
             final PrimitiveIterator.OfLong it1 = firstStream.iterator();
             final PrimitiveIterator.OfLong it2 = secondStream.iterator();
-            return LongStream.of(new PrimitiveIterator.OfLong() {
+            return LongStream.of(
+                    new PrimitiveIterator.OfLong() {
 
-                @Override
-                public boolean hasNext() {
-                    return it1.hasNext() && it2.hasNext();
-                }
+                        @Override
+                        public boolean hasNext() {
+                            return it1.hasNext() && it2.hasNext();
+                        }
 
-                @Override
-                public long nextLong() {
-                    return combiner.applyAsLong(it1.nextLong(), it2.nextLong());
-                }
-            });
+                        @Override
+                        public long nextLong() {
+                            return combiner.applyAsLong(it1.nextLong(), it2.nextLong());
+                        }
+                    });
         }
     }
 
-    /**
-     * Example of terminal operator that calculates arithmetic mean of values.
-     */
+    /** Example of terminal operator that calculates arithmetic mean of values. */
     public static class Average implements Function<IntStream, Double> {
 
         @Override
@@ -263,9 +260,7 @@ public final class CustomOperators {
         }
     }
 
-    /**
-     * Example of terminal operator that calculates arithmetic mean of values.
-     */
+    /** Example of terminal operator that calculates arithmetic mean of values. */
     public static class AverageLong implements Function<LongStream, Double> {
 
         @Override
@@ -297,24 +292,23 @@ public final class CustomOperators {
         public DoubleStream apply(DoubleStream firstStream) {
             final PrimitiveIterator.OfDouble it1 = firstStream.iterator();
             final PrimitiveIterator.OfInt it2 = secondStream.iterator();
-            return DoubleStream.of(new PrimitiveIterator.OfDouble() {
+            return DoubleStream.of(
+                    new PrimitiveIterator.OfDouble() {
 
-                @Override
-                public boolean hasNext() {
-                    return it1.hasNext() && it2.hasNext();
-                }
+                        @Override
+                        public boolean hasNext() {
+                            return it1.hasNext() && it2.hasNext();
+                        }
 
-                @Override
-                public double nextDouble() {
-                    return combiner.applyAsDouble(it1.nextDouble(), it2.nextInt());
-                }
-            });
+                        @Override
+                        public double nextDouble() {
+                            return combiner.applyAsDouble(it1.nextDouble(), it2.nextInt());
+                        }
+                    });
         }
     }
 
-    /**
-     * Example of terminal operator that calculates count, sum, and arithmetic mean of values.
-     */
+    /** Example of terminal operator that calculates count, sum, and arithmetic mean of values. */
     public static class DoubleSummaryStatistics implements Function<DoubleStream, double[]> {
 
         @Override

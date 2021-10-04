@@ -1,9 +1,10 @@
 package com.annimon.stream.function;
 
-import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
 
 /**
  * Tests {@code IndexedConsumer}.
@@ -30,13 +31,14 @@ public class IndexedConsumerTest {
 
     @Test
     public void testUtilWrap() {
-        IndexedConsumer<IntHolder> increment = IndexedConsumer.Util
-                .wrap(new Consumer<IntHolder>() {
-                    @Override
-                    public void accept(IntHolder t) {
-                        t.value++;
-                    }
-                });
+        IndexedConsumer<IntHolder> increment =
+                IndexedConsumer.Util.wrap(
+                        new Consumer<IntHolder>() {
+                            @Override
+                            public void accept(IntHolder t) {
+                                t.value++;
+                            }
+                        });
         IntHolder holder = new IntHolder(10);
 
         increment.accept(0, holder);
@@ -49,22 +51,24 @@ public class IndexedConsumerTest {
     @Test
     public void testUtilAccept() {
         final IntHolder holder = new IntHolder(0);
-        final IntConsumer intConsumer = new IntConsumer() {
-            @Override
-            public void accept(int value) {
-                holder.value -= value;
-            }
-        };
-        final Consumer<IntHolder> objectConsumer = new Consumer<IntHolder>() {
-            @Override
-            public void accept(IntHolder t) {
-                t.value++;
-            }
-        };
+        final IntConsumer intConsumer =
+                new IntConsumer() {
+                    @Override
+                    public void accept(int value) {
+                        holder.value -= value;
+                    }
+                };
+        final Consumer<IntHolder> objectConsumer =
+                new Consumer<IntHolder>() {
+                    @Override
+                    public void accept(IntHolder t) {
+                        t.value++;
+                    }
+                };
 
         holder.value = 10;
-        IndexedConsumer<IntHolder> consumer = IndexedConsumer.Util
-                .accept(intConsumer, objectConsumer);
+        IndexedConsumer<IntHolder> consumer =
+                IndexedConsumer.Util.accept(intConsumer, objectConsumer);
         // 10 - 0 + 1
         consumer.accept(0, holder);
         assertEquals(11, holder.value);
@@ -73,10 +77,9 @@ public class IndexedConsumerTest {
         consumer.accept(5, holder);
         assertEquals(7, holder.value);
 
-
         holder.value = 10;
-        IndexedConsumer<IntHolder> consumerObject = IndexedConsumer.Util
-                .accept(null, objectConsumer);
+        IndexedConsumer<IntHolder> consumerObject =
+                IndexedConsumer.Util.accept(null, objectConsumer);
         // 10 + 1
         consumerObject.accept(0, holder);
         assertEquals(11, holder.value);
@@ -85,10 +88,8 @@ public class IndexedConsumerTest {
         consumerObject.accept(5, holder);
         assertEquals(12, holder.value);
 
-
         holder.value = 10;
-        IndexedConsumer<IntHolder> consumerIndex = IndexedConsumer.Util
-                .accept(intConsumer, null);
+        IndexedConsumer<IntHolder> consumerIndex = IndexedConsumer.Util.accept(intConsumer, null);
         // 10 - 0
         consumerIndex.accept(0, holder);
         assertEquals(10, holder.value);
@@ -98,13 +99,13 @@ public class IndexedConsumerTest {
         assertEquals(5, holder.value);
     }
 
-    private static final IndexedConsumer<IntHolder>
-            adder = new IndexedConsumer<IntHolder>() {
-        @Override
-        public void accept(int index, IntHolder holder) {
-            holder.value += index;
-        }
-    };
+    private static final IndexedConsumer<IntHolder> adder =
+            new IndexedConsumer<IntHolder>() {
+                @Override
+                public void accept(int index, IntHolder holder) {
+                    holder.value += index;
+                }
+            };
 
     static class IntHolder {
         int value;

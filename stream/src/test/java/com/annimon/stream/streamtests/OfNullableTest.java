@@ -1,5 +1,11 @@
 package com.annimon.stream.streamtests;
 
+import static com.annimon.stream.test.hamcrest.StreamMatcher.assertElements;
+import static com.annimon.stream.test.hamcrest.StreamMatcher.elements;
+import static com.annimon.stream.test.hamcrest.StreamMatcher.isEmpty;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+
 import com.annimon.stream.Stream;
 import com.annimon.stream.function.Function;
 import java.util.Arrays;
@@ -8,11 +14,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.junit.Test;
-import static com.annimon.stream.test.hamcrest.StreamMatcher.assertElements;
-import static com.annimon.stream.test.hamcrest.StreamMatcher.elements;
-import static com.annimon.stream.test.hamcrest.StreamMatcher.isEmpty;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
 
 public final class OfNullableTest {
 
@@ -29,7 +30,7 @@ public final class OfNullableTest {
         String[] t = null;
         assertThat(Stream.ofNullable(t), isEmpty());
 
-        assertThat(Stream.ofNullable(new Integer[] { 1, 2, 3 }), elements(contains(1, 2, 3)));
+        assertThat(Stream.ofNullable(new Integer[] {1, 2, 3}), elements(contains(1, 2, 3)));
     }
 
     @Test
@@ -41,12 +42,13 @@ public final class OfNullableTest {
         map.put(1, 2);
         map.put(3, 4);
         Stream.ofNullable(map)
-                .flatMap(new Function<Map.Entry<Integer, Integer>, Stream<Integer>>() {
-                    @Override
-                    public Stream<Integer> apply(Map.Entry<Integer, Integer> e) {
-                        return Stream.of(e.getKey(), e.getValue());
-                    }
-                })
+                .flatMap(
+                        new Function<Map.Entry<Integer, Integer>, Stream<Integer>>() {
+                            @Override
+                            public Stream<Integer> apply(Map.Entry<Integer, Integer> e) {
+                                return Stream.of(e.getKey(), e.getValue());
+                            }
+                        })
                 .custom(assertElements(contains(1, 2, 3, 4)));
     }
 
@@ -54,7 +56,8 @@ public final class OfNullableTest {
     public void testStreamOfNullableWithIterator() {
         assertThat(Stream.ofNullable((Iterator<?>) null), isEmpty());
 
-        assertThat(Stream.ofNullable(Arrays.asList(5, 10, 15).iterator()),
+        assertThat(
+                Stream.ofNullable(Arrays.asList(5, 10, 15).iterator()),
                 elements(contains(5, 10, 15)));
     }
 
@@ -62,7 +65,6 @@ public final class OfNullableTest {
     public void testStreamOfNullableWithIterable() {
         assertThat(Stream.ofNullable((List<?>) null), isEmpty());
 
-        assertThat(Stream.ofNullable(Arrays.asList(5, 10, 15)),
-                elements(contains(5, 10, 15)));
+        assertThat(Stream.ofNullable(Arrays.asList(5, 10, 15)), elements(contains(5, 10, 15)));
     }
 }

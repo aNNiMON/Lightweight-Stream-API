@@ -15,14 +15,14 @@ public interface BooleanPredicate {
     /**
      * Tests the value for satisfying predicate.
      *
-     * @param value  the value to be tested
+     * @param value the value to be tested
      * @return {@code true} if the value matches the predicate, otherwise {@code false}
      */
     boolean test(boolean value);
 
     class Util {
 
-        private Util() { }
+        private Util() {}
 
         /**
          * Returns a predicate that always returns its input argument.
@@ -41,14 +41,13 @@ public interface BooleanPredicate {
         /**
          * Applies logical AND to predicates.
          *
-         * @param p1  the first predicate
-         * @param p2  the second predicate
+         * @param p1 the first predicate
+         * @param p2 the second predicate
          * @return a composed {@code BooleanPredicate}
          * @throws NullPointerException if {@code p1} or {@code p2} is null
          */
         public static BooleanPredicate and(
-                @NotNull final BooleanPredicate p1,
-                @NotNull final BooleanPredicate p2) {
+                @NotNull final BooleanPredicate p1, @NotNull final BooleanPredicate p2) {
             Objects.requireNonNull(p1, "predicate1");
             Objects.requireNonNull(p2, "predicate2");
             return new BooleanPredicate() {
@@ -62,14 +61,13 @@ public interface BooleanPredicate {
         /**
          * Applies logical OR to predicates.
          *
-         * @param p1  the first predicate
-         * @param p2  the second predicate
+         * @param p1 the first predicate
+         * @param p2 the second predicate
          * @return a composed {@code BooleanPredicate}
          * @throws NullPointerException if {@code p1} or {@code p2} is null
          */
         public static BooleanPredicate or(
-                @NotNull final BooleanPredicate p1,
-                @NotNull final BooleanPredicate p2) {
+                @NotNull final BooleanPredicate p1, @NotNull final BooleanPredicate p2) {
             Objects.requireNonNull(p1, "predicate1");
             Objects.requireNonNull(p2, "predicate2");
             return new BooleanPredicate() {
@@ -83,14 +81,13 @@ public interface BooleanPredicate {
         /**
          * Applies logical XOR to predicates.
          *
-         * @param p1  the first predicate
-         * @param p2  the second predicate
+         * @param p1 the first predicate
+         * @param p2 the second predicate
          * @return a composed {@code BooleanPredicate}
          * @throws NullPointerException if {@code p1} or {@code p2} is null
          */
         public static BooleanPredicate xor(
-                @NotNull final BooleanPredicate p1,
-                @NotNull final BooleanPredicate p2) {
+                @NotNull final BooleanPredicate p1, @NotNull final BooleanPredicate p2) {
             Objects.requireNonNull(p1, "predicate1");
             Objects.requireNonNull(p2, "predicate2");
             return new BooleanPredicate() {
@@ -104,7 +101,7 @@ public interface BooleanPredicate {
         /**
          * Applies logical negation to predicate.
          *
-         * @param p1  the predicate to be negated
+         * @param p1 the predicate to be negated
          * @return a composed {@code BooleanPredicate}
          * @throws NullPointerException if {@code p1} is null
          */
@@ -117,6 +114,5 @@ public interface BooleanPredicate {
                 }
             };
         }
-
     }
 }

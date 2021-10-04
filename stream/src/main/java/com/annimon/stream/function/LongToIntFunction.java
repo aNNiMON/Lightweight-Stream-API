@@ -11,7 +11,7 @@ public interface LongToIntFunction {
     /**
      * Applies this function to the given argument.
      *
-     * @param value  an argument
+     * @param value an argument
      * @return the function result
      */
     int applyAsInt(long value);

@@ -1,9 +1,10 @@
 package com.annimon.stream.function;
 
-import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
 
 /**
  * Tests {@code IndexedLongConsumer}.
@@ -20,20 +21,22 @@ public class IndexedLongConsumerTest {
     @Test
     public void testAndThen() {
         final long[] buffer = new long[] {1L, 2L, 4L, 8L};
-        IndexedLongConsumer addConsumer = new IndexedLongConsumer() {
-            @Override
-            public void accept(int index, long value) {
-                buffer[index] += value;
-            }
-        };
-        IndexedLongConsumer multiplyConsumer = new IndexedLongConsumer() {
-            @Override
-            public void accept(int index, long value) {
-                buffer[index] *= value;
-            }
-        };
-        IndexedLongConsumer consumer = IndexedLongConsumer.Util.andThen(
-                addConsumer, multiplyConsumer);
+        IndexedLongConsumer addConsumer =
+                new IndexedLongConsumer() {
+                    @Override
+                    public void accept(int index, long value) {
+                        buffer[index] += value;
+                    }
+                };
+        IndexedLongConsumer multiplyConsumer =
+                new IndexedLongConsumer() {
+                    @Override
+                    public void accept(int index, long value) {
+                        buffer[index] *= value;
+                    }
+                };
+        IndexedLongConsumer consumer =
+                IndexedLongConsumer.Util.andThen(addConsumer, multiplyConsumer);
 
         // 2 + 4 = 6; 6 * 4 = 24
         consumer.accept(1, 4L);
@@ -48,14 +51,14 @@ public class IndexedLongConsumerTest {
     public void testUtilAccept() {
         final IntHolder countHolder = new IntHolder();
         final LongHolder valueHolder = new LongHolder(10L);
-        final IntConsumer indexConsumer = new IntConsumer() {
-            @Override
-            public void accept(int index) {
-                countHolder.value++;
-            }
-        };
-        IndexedLongConsumer consumer = IndexedLongConsumer.Util
-                .accept(indexConsumer, valueHolder);
+        final IntConsumer indexConsumer =
+                new IntConsumer() {
+                    @Override
+                    public void accept(int index) {
+                        countHolder.value++;
+                    }
+                };
+        IndexedLongConsumer consumer = IndexedLongConsumer.Util.accept(indexConsumer, valueHolder);
 
         for (int i = 1; i < 11; i++) {
             consumer.accept(i, (long) i);
@@ -63,7 +66,6 @@ public class IndexedLongConsumerTest {
         }
         assertEquals(65, valueHolder.value);
     }
-
 
     private static class IntHolder {
         public int value;

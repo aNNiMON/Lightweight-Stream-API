@@ -46,13 +46,11 @@ public final class IntPair<T> {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null) return false;
-        if (getClass() != obj.getClass())
-            return false;
+        if (getClass() != obj.getClass()) return false;
         final IntPair<?> other = (IntPair<?>) obj;
-        if (this.first != other.first)
-            return false;
-        return !(this.second != other.second &&
-                (this.second == null || !this.second.equals(other.second)));
+        if (this.first != other.first) return false;
+        return !(this.second != other.second
+                && (this.second == null || !this.second.equals(other.second)));
     }
 
     @Override

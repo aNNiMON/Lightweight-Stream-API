@@ -1,8 +1,9 @@
 package com.annimon.stream.longstreamtests;
 
+import static org.junit.Assert.assertEquals;
+
 import com.annimon.stream.LongStream;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 
 public final class FindFirstOrElseTest {
 

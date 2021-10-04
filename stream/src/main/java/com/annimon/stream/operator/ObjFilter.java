@@ -13,8 +13,7 @@ public class ObjFilter<T> implements Iterator<T> {
     private T next;
 
     public ObjFilter(
-            @NotNull Iterator<? extends T> iterator,
-            @NotNull Predicate<? super T> predicate) {
+            @NotNull Iterator<? extends T> iterator, @NotNull Predicate<? super T> predicate) {
         this.iterator = iterator;
         this.predicate = predicate;
     }

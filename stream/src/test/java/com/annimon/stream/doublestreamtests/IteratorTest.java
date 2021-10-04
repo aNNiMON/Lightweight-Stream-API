@@ -1,10 +1,11 @@
 package com.annimon.stream.doublestreamtests;
 
-import com.annimon.stream.DoubleStream;
-import org.junit.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
 import static org.hamcrest.Matchers.is;
+
+import com.annimon.stream.DoubleStream;
+import org.junit.Test;
 
 public final class IteratorTest {
 

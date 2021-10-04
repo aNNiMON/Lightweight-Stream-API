@@ -12,7 +12,7 @@ public interface ThrowableConsumer<T, E extends Throwable> {
     /**
      * Performs operation on argument.
      *
-     * @param value  the input argument
+     * @param value the input argument
      * @throws E an exception
      */
     void accept(T value) throws E;

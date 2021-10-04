@@ -1,5 +1,10 @@
 package com.annimon.stream.function;
 
+import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.is;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -8,10 +13,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
-import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.is;
 
 /**
  * Tests {@code LongConsumer}.
@@ -23,8 +24,9 @@ public class LongConsumerTest {
     @Test
     public void testAndThen() {
         final List<Long> buffer = new ArrayList<Long>();
-        LongConsumer consumer = LongConsumer.Util.andThen(
-                new Multiplier(buffer, 10000000000L), new Multiplier(buffer, 2));
+        LongConsumer consumer =
+                LongConsumer.Util.andThen(
+                        new Multiplier(buffer, 10000000000L), new Multiplier(buffer, 2));
 
         // (10+1) (10*2)
         consumer.accept(10);
@@ -39,10 +41,12 @@ public class LongConsumerTest {
         consumer.accept(-10);
         consumer.accept(5);
         consumer.accept(118);
-        assertThat(buffer, contains(
-                -100000000000L, -20L,
-                50000000000L, 10L,
-                1180000000000L, 236L));
+        assertThat(
+                buffer,
+                contains(
+                        -100000000000L, -20L,
+                        50000000000L, 10L,
+                        1180000000000L, 236L));
     }
 
     @Test
@@ -68,12 +72,15 @@ public class LongConsumerTest {
     public void testSafeWithOnFailedConsumer() throws IOException {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream(30);
         final DataOutputStream dos = new DataOutputStream(baos);
-        LongConsumer consumer = LongConsumer.Util.safe(new UnsafeConsumer(dos), new LongConsumer() {
-            @Override
-            public void accept(long value) {
-                baos.write(0);
-            }
-        });
+        LongConsumer consumer =
+                LongConsumer.Util.safe(
+                        new UnsafeConsumer(dos),
+                        new LongConsumer() {
+                            @Override
+                            public void accept(long value) {
+                                baos.write(0);
+                            }
+                        });
 
         consumer.accept(10L);
         consumer.accept(20L);
@@ -128,5 +135,4 @@ public class LongConsumerTest {
             os.writeLong(value);
         }
     }
-
 }

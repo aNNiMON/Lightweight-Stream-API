@@ -35,7 +35,7 @@ public final class OptionalBoolean {
     /**
      * Returns an {@code OptionalBoolean} with the specified value present.
      *
-     * @param value  the value to be present
+     * @param value the value to be present
      * @return an {@code OptionalBoolean} with the value present
      */
     @NotNull
@@ -44,9 +44,10 @@ public final class OptionalBoolean {
     }
 
     /**
-     * Returns an {@code OptionalBoolean} with the specified value, or empty {@code OptionalBoolean} if value is null.
+     * Returns an {@code OptionalBoolean} with the specified value, or empty {@code OptionalBoolean}
+     * if value is null.
      *
-     * @param value  the value which can be null
+     * @param value the value which can be null
      * @return an {@code OptionalBoolean}
      * @since 1.2.1
      */
@@ -71,7 +72,7 @@ public final class OptionalBoolean {
     /**
      * Returns an inner value if present, otherwise throws {@code NoSuchElementException}.
      *
-     * Since 1.2.0 prefer {@link #orElseThrow()} method as it has readable name.
+     * <p>Since 1.2.0 prefer {@link #orElseThrow()} method as it has readable name.
      *
      * @return the inner value of this {@code OptionalBoolean}
      * @throws NoSuchElementException if there is no value present
@@ -104,7 +105,7 @@ public final class OptionalBoolean {
     /**
      * Invokes consumer function with value if present, otherwise does nothing.
      *
-     * @param consumer  the consumer function to be executed if a value is present
+     * @param consumer the consumer function to be executed if a value is present
      * @throws NullPointerException if value is present and {@code consumer} is null
      */
     public void ifPresent(@NotNull BooleanConsumer consumer) {
@@ -114,13 +115,13 @@ public final class OptionalBoolean {
     }
 
     /**
-     * If a value is present, performs the given action with the value,
-     * otherwise performs the empty-based action.
+     * If a value is present, performs the given action with the value, otherwise performs the
+     * empty-based action.
      *
-     * @param consumer  the consumer function to be executed, if a value is present
-     * @param emptyAction  the empty-based action to be performed, if no value is present
+     * @param consumer the consumer function to be executed, if a value is present
+     * @param emptyAction the empty-based action to be performed, if no value is present
      * @throws NullPointerException if a value is present and the given consumer function is null,
-     *         or no value is present and the given empty-based action is null.
+     *     or no value is present and the given empty-based action is null.
      */
     public void ifPresentOrElse(@NotNull BooleanConsumer consumer, @NotNull Runnable emptyAction) {
         if (isPresent) {
@@ -131,10 +132,10 @@ public final class OptionalBoolean {
     }
 
     /**
-     * Invokes consumer function with the value if present.
-     * This method same as {@code ifPresent}, but does not breaks chaining
+     * Invokes consumer function with the value if present. This method same as {@code ifPresent},
+     * but does not breaks chaining
      *
-     * @param consumer  consumer function
+     * @param consumer consumer function
      * @return this {@code OptionalBoolean}
      * @see #ifPresent(BooleanConsumer)
      */
@@ -147,7 +148,7 @@ public final class OptionalBoolean {
     /**
      * Invokes action function if value is absent.
      *
-     * @param action  action that invokes if value absent
+     * @param action action that invokes if value absent
      * @return this {@code OptionalBoolean}
      */
     @NotNull
@@ -162,7 +163,7 @@ public final class OptionalBoolean {
      * Applies custom operator on {@code OptionalBoolean}.
      *
      * @param <R> the type of the result
-     * @param function  a transforming function
+     * @param function a transforming function
      * @return a result of the transforming function
      * @throws NullPointerException if {@code function} is null
      * @since 1.1.9
@@ -176,9 +177,9 @@ public final class OptionalBoolean {
     /**
      * Performs filtering on inner value if it is present.
      *
-     * @param predicate  a predicate function
-     * @return this {@code OptionalBoolean} if the value is present and matches predicate,
-     *         otherwise an empty {@code OptionalBoolean}
+     * @param predicate a predicate function
+     * @return this {@code OptionalBoolean} if the value is present and matches predicate, otherwise
+     *     an empty {@code OptionalBoolean}
      */
     @NotNull
     public OptionalBoolean filter(@NotNull BooleanPredicate predicate) {
@@ -189,9 +190,9 @@ public final class OptionalBoolean {
     /**
      * Performs negated filtering on inner value if it is present.
      *
-     * @param predicate  a predicate function
+     * @param predicate a predicate function
      * @return this {@code OptionalBoolean} if the value is present and doesn't matches predicate,
-     *              otherwise an empty {@code OptionalBoolean}
+     *     otherwise an empty {@code OptionalBoolean}
      * @since 1.1.9
      */
     @NotNull
@@ -202,11 +203,10 @@ public final class OptionalBoolean {
     /**
      * Invokes the given mapping function on inner value if present.
      *
-     * @param mapper  mapping function
-     * @return an {@code OptionalBoolean} with transformed value if present,
-     *         otherwise an empty {@code OptionalBoolean}
-     * @throws NullPointerException if value is present and
-     *         {@code mapper} is {@code null}
+     * @param mapper mapping function
+     * @return an {@code OptionalBoolean} with transformed value if present, otherwise an empty
+     *     {@code OptionalBoolean}
+     * @throws NullPointerException if value is present and {@code mapper} is {@code null}
      */
     @NotNull
     public OptionalBoolean map(@NotNull BooleanPredicate mapper) {
@@ -221,11 +221,10 @@ public final class OptionalBoolean {
      * Invokes the given mapping function on inner value if present.
      *
      * @param <U> the type of result value
-     * @param mapper  mapping function
-     * @return an {@code Optional} with transformed value if present,
-     *         otherwise an empty {@code Optional}
-     * @throws NullPointerException if value is present and
-     *         {@code mapper} is {@code null}
+     * @param mapper mapping function
+     * @return an {@code Optional} with transformed value if present, otherwise an empty {@code
+     *     Optional}
+     * @throws NullPointerException if value is present and {@code mapper} is {@code null}
      */
     @NotNull
     public <U> Optional<U> mapToObj(@NotNull BooleanFunction<U> mapper) {
@@ -237,14 +236,14 @@ public final class OptionalBoolean {
     }
 
     /**
-     * Returns current {@code OptionalBoolean} if value is present, otherwise
-     * returns an {@code OptionalBoolean} produced by supplier function.
+     * Returns current {@code OptionalBoolean} if value is present, otherwise returns an {@code
+     * OptionalBoolean} produced by supplier function.
      *
-     * @param supplier  supplier function that produces an {@code OptionalBoolean} to be returned
-     * @return this {@code OptionalBoolean} if value is present, otherwise
-     *         an {@code OptionalBoolean} produced by supplier function
-     * @throws NullPointerException if value is not present and
-     *         {@code supplier} or value produced by it is {@code null}
+     * @param supplier supplier function that produces an {@code OptionalBoolean} to be returned
+     * @return this {@code OptionalBoolean} if value is present, otherwise an {@code
+     *     OptionalBoolean} produced by supplier function
+     * @throws NullPointerException if value is not present and {@code supplier} or value produced
+     *     by it is {@code null}
      */
     @NotNull
     public OptionalBoolean or(@NotNull Supplier<OptionalBoolean> supplier) {
@@ -256,7 +255,7 @@ public final class OptionalBoolean {
     /**
      * Returns inner value if present, otherwise returns {@code other}.
      *
-     * @param other  the value to be returned if there is no value present
+     * @param other the value to be returned if there is no value present
      * @return the value, if present, otherwise {@code other}
      */
     public boolean orElse(boolean other) {
@@ -266,7 +265,7 @@ public final class OptionalBoolean {
     /**
      * Returns the value if present, otherwise returns value produced by supplier function.
      *
-     * @param other  supplier function that produces value if inner value is not present
+     * @param other supplier function that produces value if inner value is not present
      * @return the value if present otherwise the result of {@code other.getAsBoolean()}
      * @throws NullPointerException if value is not present and {@code other} is null
      */
@@ -292,11 +291,12 @@ public final class OptionalBoolean {
      * Returns the value if present, otherwise throws an exception provided by supplier function.
      *
      * @param <X> the type of exception to be thrown
-     * @param exceptionSupplier  supplier function that produces an exception to be thrown
+     * @param exceptionSupplier supplier function that produces an exception to be thrown
      * @return inner value if present
      * @throws X if inner value is not present
      */
-    public <X extends Throwable> boolean orElseThrow(@NotNull Supplier<X> exceptionSupplier) throws X {
+    public <X extends Throwable> boolean orElseThrow(@NotNull Supplier<X> exceptionSupplier)
+            throws X {
         if (isPresent) {
             return value;
         } else {
@@ -312,9 +312,7 @@ public final class OptionalBoolean {
         }
 
         OptionalBoolean other = (OptionalBoolean) obj;
-        return (isPresent && other.isPresent)
-                ? value == other.value
-                : isPresent == other.isPresent;
+        return (isPresent && other.isPresent) ? value == other.value : isPresent == other.isPresent;
     }
 
     @Override

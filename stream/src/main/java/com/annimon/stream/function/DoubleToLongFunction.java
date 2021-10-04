@@ -11,7 +11,7 @@ public interface DoubleToLongFunction {
     /**
      * Applies this function to the given argument.
      *
-     * @param value  an argument
+     * @param value an argument
      * @return the function result
      */
     long applyAsLong(double value);

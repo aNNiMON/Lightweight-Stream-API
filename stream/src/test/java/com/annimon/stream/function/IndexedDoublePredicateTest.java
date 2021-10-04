@@ -1,11 +1,12 @@
 package com.annimon.stream.function;
 
-import com.annimon.stream.Functions;
-import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import com.annimon.stream.Functions;
+import org.junit.Test;
 
 /**
  * Tests {@code IndexedDoublePredicate}.
@@ -28,23 +29,21 @@ public class IndexedDoublePredicateTest {
 
     @Test
     public void testWrap() {
-        IndexedDoublePredicate predicate = IndexedDoublePredicate.Util
-                .wrap(greaterThan20);
+        IndexedDoublePredicate predicate = IndexedDoublePredicate.Util.wrap(greaterThan20);
 
         assertTrue(predicate.test(42, 30.0));
         assertFalse(predicate.test(19, 18.0));
         assertFalse(predicate.test(20, 20.0));
     }
 
-    private static final DoublePredicate
-            greaterThan20 = Functions.greaterThan(20.0);
+    private static final DoublePredicate greaterThan20 = Functions.greaterThan(20.0);
 
-    private static final IndexedDoublePredicate
-            areIndexAndValueGreaterThan20 = new IndexedDoublePredicate() {
+    private static final IndexedDoublePredicate areIndexAndValueGreaterThan20 =
+            new IndexedDoublePredicate() {
 
-        @Override
-        public boolean test(int index, double value) {
-            return greaterThan20.test(index) && greaterThan20.test(value);
-        }
-    };
+                @Override
+                public boolean test(int index, double value) {
+                    return greaterThan20.test(index) && greaterThan20.test(value);
+                }
+            };
 }

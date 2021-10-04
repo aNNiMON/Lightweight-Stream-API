@@ -1,14 +1,15 @@
 package com.annimon.stream.internal;
 
-import java.io.Closeable;
-import java.io.IOException;
-import java.util.Arrays;
-import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
+
+import java.io.Closeable;
+import java.io.IOException;
+import java.util.Arrays;
+import org.junit.Test;
 
 public class ComposeTest {
 
@@ -19,13 +20,14 @@ public class ComposeTest {
 
     @Test
     public void testComposeRunnables() {
-        final int[] counter = new int[] { 0 };
-        final Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                counter[0]++;
-            }
-        };
+        final int[] counter = new int[] {0};
+        final Runnable runnable =
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        counter[0]++;
+                    }
+                };
 
         Runnable composed = Compose.runnables(runnable, runnable);
         composed.run();
@@ -34,20 +36,22 @@ public class ComposeTest {
 
     @Test
     public void testComposeRunnablesWithExceptionOnFirst() {
-        final int[] counter = new int[] { 0 };
-        final Runnable runnable1 = new Runnable() {
-            @Override
-            public void run() {
-                counter[0]++;
-                throw new IllegalStateException("ok");
-            }
-        };
-        final Runnable runnable2 = new Runnable() {
-            @Override
-            public void run() {
-                counter[0]++;
-            }
-        };
+        final int[] counter = new int[] {0};
+        final Runnable runnable1 =
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        counter[0]++;
+                        throw new IllegalStateException("ok");
+                    }
+                };
+        final Runnable runnable2 =
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        counter[0]++;
+                    }
+                };
 
         Runnable composed = Compose.runnables(runnable1, runnable2);
         try {
@@ -60,21 +64,23 @@ public class ComposeTest {
 
     @Test
     public void testComposeRunnablesWithExceptionOnBoth() {
-        final int[] counter = new int[] { 0 };
-        final Runnable runnable1 = new Runnable() {
-            @Override
-            public void run() {
-                counter[0]++;
-                throw new IllegalStateException("1");
-            }
-        };
-        final Runnable runnable2 = new Runnable() {
-            @Override
-            public void run() {
-                counter[0]++;
-                throw new IllegalArgumentException("2");
-            }
-        };
+        final int[] counter = new int[] {0};
+        final Runnable runnable1 =
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        counter[0]++;
+                        throw new IllegalStateException("1");
+                    }
+                };
+        final Runnable runnable2 =
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        counter[0]++;
+                        throw new IllegalArgumentException("2");
+                    }
+                };
 
         Runnable composed = Compose.runnables(runnable1, runnable2);
         try {
@@ -89,21 +95,23 @@ public class ComposeTest {
 
     @Test
     public void testComposeRunnablesWithError() {
-        final int[] counter = new int[] { 0 };
-        final Runnable runnable1 = new Runnable() {
-            @Override
-            public void run() {
-                counter[0]++;
-                throw new AssertionError("1");
-            }
-        };
-        final Runnable runnable2 = new Runnable() {
-            @Override
-            public void run() {
-                counter[0]++;
-                throw new AssertionError("2");
-            }
-        };
+        final int[] counter = new int[] {0};
+        final Runnable runnable1 =
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        counter[0]++;
+                        throw new AssertionError("1");
+                    }
+                };
+        final Runnable runnable2 =
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        counter[0]++;
+                        throw new AssertionError("2");
+                    }
+                };
 
         Runnable composed = Compose.runnables(runnable1, runnable2);
         try {
@@ -114,16 +122,16 @@ public class ComposeTest {
         assertThat(counter[0], is(2));
     }
 
-
     @Test
     public void testComposeCloseables() {
-        final int[] counter = new int[] { 0 };
-        final Closeable closeable = new Closeable() {
-            @Override
-            public void close() {
-                counter[0]++;
-            }
-        };
+        final int[] counter = new int[] {0};
+        final Closeable closeable =
+                new Closeable() {
+                    @Override
+                    public void close() {
+                        counter[0]++;
+                    }
+                };
 
         Runnable composed = Compose.closeables(closeable, closeable);
         composed.run();
@@ -132,20 +140,22 @@ public class ComposeTest {
 
     @Test
     public void testComposeCloseablesWithExceptionOnFirst() {
-        final int[] counter = new int[] { 0 };
-        final Closeable closeable1 = new Closeable() {
-            @Override
-            public void close() {
-                counter[0]++;
-                throw new IllegalStateException("ok");
-            }
-        };
-        final Closeable closeable2 = new Closeable() {
-            @Override
-            public void close() {
-                counter[0]++;
-            }
-        };
+        final int[] counter = new int[] {0};
+        final Closeable closeable1 =
+                new Closeable() {
+                    @Override
+                    public void close() {
+                        counter[0]++;
+                        throw new IllegalStateException("ok");
+                    }
+                };
+        final Closeable closeable2 =
+                new Closeable() {
+                    @Override
+                    public void close() {
+                        counter[0]++;
+                    }
+                };
 
         Runnable composed = Compose.closeables(closeable1, closeable2);
         try {
@@ -158,20 +168,22 @@ public class ComposeTest {
 
     @Test
     public void testComposeCloseablesWithExceptionOnSecond() {
-        final int[] counter = new int[] { 0 };
-        final Closeable closeable1 = new Closeable() {
-            @Override
-            public void close() {
-                counter[0]++;
-            }
-        };
-        final Closeable closeable2 = new Closeable() {
-            @Override
-            public void close() {
-                counter[0]++;
-                throw new IllegalArgumentException("ok");
-            }
-        };
+        final int[] counter = new int[] {0};
+        final Closeable closeable1 =
+                new Closeable() {
+                    @Override
+                    public void close() {
+                        counter[0]++;
+                    }
+                };
+        final Closeable closeable2 =
+                new Closeable() {
+                    @Override
+                    public void close() {
+                        counter[0]++;
+                        throw new IllegalArgumentException("ok");
+                    }
+                };
 
         Runnable composed = Compose.closeables(closeable1, closeable2);
         try {
@@ -184,20 +196,22 @@ public class ComposeTest {
 
     @Test
     public void testComposeCloseablesWithWrappedExceptionOnSecond() {
-        final int[] counter = new int[] { 0 };
-        final Closeable closeable1 = new Closeable() {
-            @Override
-            public void close() {
-                counter[0]++;
-            }
-        };
-        final Closeable closeable2 = new Closeable() {
-            @Override
-            public void close() throws IOException {
-                counter[0]++;
-                throw new IOException("ok");
-            }
-        };
+        final int[] counter = new int[] {0};
+        final Closeable closeable1 =
+                new Closeable() {
+                    @Override
+                    public void close() {
+                        counter[0]++;
+                    }
+                };
+        final Closeable closeable2 =
+                new Closeable() {
+                    @Override
+                    public void close() throws IOException {
+                        counter[0]++;
+                        throw new IOException("ok");
+                    }
+                };
 
         Runnable composed = Compose.closeables(closeable1, closeable2);
         try {
@@ -211,21 +225,23 @@ public class ComposeTest {
 
     @Test
     public void testComposeCloseablesWithError() {
-        final int[] counter = new int[] { 0 };
-        final Closeable closeable1 = new Closeable() {
-            @Override
-            public void close() {
-                counter[0]++;
-                throw new AssertionError("1");
-            }
-        };
-        final Closeable closeable2 = new Closeable() {
-            @Override
-            public void close() {
-                counter[0]++;
-                throw new AssertionError("2");
-            }
-        };
+        final int[] counter = new int[] {0};
+        final Closeable closeable1 =
+                new Closeable() {
+                    @Override
+                    public void close() {
+                        counter[0]++;
+                        throw new AssertionError("1");
+                    }
+                };
+        final Closeable closeable2 =
+                new Closeable() {
+                    @Override
+                    public void close() {
+                        counter[0]++;
+                        throw new AssertionError("2");
+                    }
+                };
 
         Runnable composed = Compose.closeables(closeable1, closeable2);
         try {
@@ -238,20 +254,22 @@ public class ComposeTest {
 
     @Test
     public void testComposeCloseablesWithErrorOnSecond() {
-        final int[] counter = new int[] { 0 };
-        final Closeable closeable1 = new Closeable() {
-            @Override
-            public void close() {
-                counter[0]++;
-            }
-        };
-        final Closeable closeable2 = new Closeable() {
-            @Override
-            public void close() {
-                counter[0]++;
-                throw new AssertionError("ok");
-            }
-        };
+        final int[] counter = new int[] {0};
+        final Closeable closeable1 =
+                new Closeable() {
+                    @Override
+                    public void close() {
+                        counter[0]++;
+                    }
+                };
+        final Closeable closeable2 =
+                new Closeable() {
+                    @Override
+                    public void close() {
+                        counter[0]++;
+                        throw new AssertionError("ok");
+                    }
+                };
 
         Runnable composed = Compose.closeables(closeable1, closeable2);
         try {
@@ -264,39 +282,44 @@ public class ComposeTest {
 
     @Test
     public void testCompose4Closeables() {
-        final int[] counter = new int[] { 0 };
-        final Closeable closeable = new Closeable() {
-            @Override
-            public void close() {
-                counter[0]++;
-            }
-        };
+        final int[] counter = new int[] {0};
+        final Closeable closeable =
+                new Closeable() {
+                    @Override
+                    public void close() {
+                        counter[0]++;
+                    }
+                };
 
-        Runnable composed = Compose.closeables(Arrays.asList(
-                closeable, closeable, closeable, closeable));
+        Runnable composed =
+                Compose.closeables(Arrays.asList(closeable, closeable, closeable, closeable));
         composed.run();
         assertThat(counter[0], is(4));
     }
 
     @Test
     public void testCompose4CloseablesWithExceptionOnFirst() {
-        final int[] counter = new int[] { 0 };
-        final Closeable closeableExc = new Closeable() {
-            @Override
-            public void close() {
-                counter[0]++;
-                throw new IllegalStateException("ok");
-            }
-        };
-        final Closeable closeableNormal = new Closeable() {
-            @Override
-            public void close() {
-                counter[0]++;
-            }
-        };
+        final int[] counter = new int[] {0};
+        final Closeable closeableExc =
+                new Closeable() {
+                    @Override
+                    public void close() {
+                        counter[0]++;
+                        throw new IllegalStateException("ok");
+                    }
+                };
+        final Closeable closeableNormal =
+                new Closeable() {
+                    @Override
+                    public void close() {
+                        counter[0]++;
+                    }
+                };
 
-        Runnable composed = Compose.closeables(Arrays.asList(
-                closeableExc, closeableNormal, closeableNormal, closeableNormal));
+        Runnable composed =
+                Compose.closeables(
+                        Arrays.asList(
+                                closeableExc, closeableNormal, closeableNormal, closeableNormal));
         try {
             composed.run();
         } catch (IllegalStateException ex) {
@@ -307,23 +330,27 @@ public class ComposeTest {
 
     @Test
     public void testCompose4CloseablesWithExceptionOnThird() {
-        final int[] counter = new int[] { 0 };
-        final Closeable closeableNormal = new Closeable() {
-            @Override
-            public void close() {
-                counter[0]++;
-            }
-        };
-        final Closeable closeableExc = new Closeable() {
-            @Override
-            public void close() {
-                counter[0]++;
-                throw new IllegalArgumentException("exc " + counter[0]);
-            }
-        };
+        final int[] counter = new int[] {0};
+        final Closeable closeableNormal =
+                new Closeable() {
+                    @Override
+                    public void close() {
+                        counter[0]++;
+                    }
+                };
+        final Closeable closeableExc =
+                new Closeable() {
+                    @Override
+                    public void close() {
+                        counter[0]++;
+                        throw new IllegalArgumentException("exc " + counter[0]);
+                    }
+                };
 
-        Runnable composed = Compose.closeables(Arrays.asList(
-                closeableNormal, closeableNormal, closeableExc, closeableNormal));
+        Runnable composed =
+                Compose.closeables(
+                        Arrays.asList(
+                                closeableNormal, closeableNormal, closeableExc, closeableNormal));
         try {
             composed.run();
         } catch (IllegalArgumentException ex) {

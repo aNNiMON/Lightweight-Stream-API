@@ -9,9 +9,7 @@ public class IntMap extends PrimitiveIterator.OfInt {
     private final PrimitiveIterator.OfInt iterator;
     private final IntUnaryOperator mapper;
 
-    public IntMap(
-            @NotNull PrimitiveIterator.OfInt iterator,
-            @NotNull IntUnaryOperator mapper) {
+    public IntMap(@NotNull PrimitiveIterator.OfInt iterator, @NotNull IntUnaryOperator mapper) {
         this.iterator = iterator;
         this.mapper = mapper;
     }

@@ -11,8 +11,7 @@ public class LongTakeUntil extends PrimitiveExtIterator.OfLong {
     private final LongPredicate stopPredicate;
 
     public LongTakeUntil(
-            @NotNull PrimitiveIterator.OfLong iterator,
-            @NotNull LongPredicate stopPredicate) {
+            @NotNull PrimitiveIterator.OfLong iterator, @NotNull LongPredicate stopPredicate) {
         this.iterator = iterator;
         this.stopPredicate = stopPredicate;
     }

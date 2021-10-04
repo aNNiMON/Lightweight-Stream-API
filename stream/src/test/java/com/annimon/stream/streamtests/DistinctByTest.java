@@ -1,11 +1,12 @@
 package com.annimon.stream.streamtests;
 
+import static com.annimon.stream.test.hamcrest.StreamMatcher.assertElements;
+import static org.hamcrest.Matchers.contains;
+
 import com.annimon.stream.Stream;
 import com.annimon.stream.function.Function;
 import com.annimon.stream.test.hamcrest.StreamMatcher;
 import org.junit.Test;
-import static com.annimon.stream.test.hamcrest.StreamMatcher.assertElements;
-import static org.hamcrest.Matchers.contains;
 
 public final class DistinctByTest {
 
@@ -13,9 +14,7 @@ public final class DistinctByTest {
     public void testDistinct() {
         Stream.of("a", "bc", "d", "ef", "ghij")
                 .distinctBy(stringLengthExtractor())
-                .custom(assertElements(contains(
-                        "a", "bc", "ghij"
-                )));
+                .custom(assertElements(contains("a", "bc", "ghij")));
     }
 
     @Test

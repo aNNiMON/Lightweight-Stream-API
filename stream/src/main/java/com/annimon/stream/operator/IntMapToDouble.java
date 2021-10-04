@@ -10,8 +10,7 @@ public class IntMapToDouble extends PrimitiveIterator.OfDouble {
     private final IntToDoubleFunction mapper;
 
     public IntMapToDouble(
-            @NotNull PrimitiveIterator.OfInt iterator,
-            @NotNull IntToDoubleFunction mapper) {
+            @NotNull PrimitiveIterator.OfInt iterator, @NotNull IntToDoubleFunction mapper) {
         this.iterator = iterator;
         this.mapper = mapper;
     }

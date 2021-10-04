@@ -1,12 +1,13 @@
 package com.annimon.stream.function;
 
-import java.util.ArrayList;
-import java.util.List;
-import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertEquals;
+
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.Test;
 
 /**
  * Tests {@code IndexedIntConsumer}.
@@ -23,8 +24,8 @@ public class IndexedIntConsumerTest {
     @Test
     public void testAndThen() {
         final List<Integer> buffer = new ArrayList<Integer>();
-        IndexedIntConsumer consumer = IndexedIntConsumer.Util.andThen(
-                new Increment(buffer), new Multiplier(buffer));
+        IndexedIntConsumer consumer =
+                IndexedIntConsumer.Util.andThen(new Increment(buffer), new Multiplier(buffer));
 
         // (10+2) (10*2)
         consumer.accept(10, 2);
@@ -46,14 +47,14 @@ public class IndexedIntConsumerTest {
     public void testUtilAccept() {
         final IntHolder countHolder = new IntHolder(0);
         final IntHolder valueHolder = new IntHolder(10);
-        final IntConsumer indexConsumer = new IntConsumer() {
-            @Override
-            public void accept(int index) {
-                countHolder.accept(1);
-            }
-        };
-        IndexedIntConsumer consumer = IndexedIntConsumer.Util
-                .accept(indexConsumer, valueHolder);
+        final IntConsumer indexConsumer =
+                new IntConsumer() {
+                    @Override
+                    public void accept(int index) {
+                        countHolder.accept(1);
+                    }
+                };
+        IndexedIntConsumer consumer = IndexedIntConsumer.Util.accept(indexConsumer, valueHolder);
 
         for (int i = 1; i < 11; i++) {
             consumer.accept(i, i * 2);

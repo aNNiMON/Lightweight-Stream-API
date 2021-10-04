@@ -16,8 +16,7 @@ public class ObjSlidingWindow<T> extends LsaIterator<List<T>> {
     private final int stepWidth;
 
     public ObjSlidingWindow(
-            @NotNull Iterator<? extends T> iterator,
-            int windowSize, int stepWidth) {
+            @NotNull Iterator<? extends T> iterator, int windowSize, int stepWidth) {
         this.iterator = iterator;
         this.windowSize = windowSize;
         this.stepWidth = stepWidth;

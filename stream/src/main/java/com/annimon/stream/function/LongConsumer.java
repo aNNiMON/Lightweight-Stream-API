@@ -15,27 +15,26 @@ public interface LongConsumer {
     /**
      * Performs operation on the given argument.
      *
-     * @param value  the input argument
+     * @param value the input argument
      */
     void accept(long value);
 
     class Util {
 
-        private Util() { }
+        private Util() {}
 
         /**
          * Composes {@code LongConsumer} calls.
          *
          * <p>{@code c1.accept(value); c2.accept(value); }
          *
-         * @param c1  the first {@code LongConsumer}
-         * @param c2  the second {@code LongConsumer}
+         * @param c1 the first {@code LongConsumer}
+         * @param c2 the second {@code LongConsumer}
          * @return a composed {@code LongConsumer}
          * @throws NullPointerException if {@code c1} or {@code c2} is null
          */
         public static LongConsumer andThen(
-                @NotNull final LongConsumer c1,
-                @NotNull final LongConsumer c2) {
+                @NotNull final LongConsumer c1, @NotNull final LongConsumer c2) {
             Objects.requireNonNull(c1, "c1");
             Objects.requireNonNull(c2, "c2");
             return new LongConsumer() {
@@ -50,11 +49,12 @@ public interface LongConsumer {
         /**
          * Creates a safe {@code LongConsumer}.
          *
-         * @param throwableConsumer  the consumer that may throw an exception
+         * @param throwableConsumer the consumer that may throw an exception
          * @return a {@code LongConsumer}
          * @throws NullPointerException if {@code throwableConsumer} is null
          * @since 1.1.7
-         * @see #safe(com.annimon.stream.function.ThrowableLongConsumer, com.annimon.stream.function.LongConsumer)
+         * @see #safe(com.annimon.stream.function.ThrowableLongConsumer,
+         *     com.annimon.stream.function.LongConsumer)
          */
         public static LongConsumer safe(
                 @NotNull ThrowableLongConsumer<Throwable> throwableConsumer) {
@@ -64,8 +64,8 @@ public interface LongConsumer {
         /**
          * Creates a safe {@code LongConsumer}.
          *
-         * @param throwableConsumer  the consumer that may throw an exception
-         * @param onFailedConsumer  the consumer which applies if exception was thrown
+         * @param throwableConsumer the consumer that may throw an exception
+         * @param onFailedConsumer the consumer which applies if exception was thrown
          * @return a {@code LongConsumer}
          * @throws NullPointerException if {@code throwableConsumer} is null
          * @since 1.1.7
@@ -89,6 +89,5 @@ public interface LongConsumer {
                 }
             };
         }
-
     }
 }

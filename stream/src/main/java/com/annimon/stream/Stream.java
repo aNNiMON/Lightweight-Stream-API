@@ -43,7 +43,7 @@ public class Stream<T> implements Closeable {
      *
      * @param <K> the type of map keys
      * @param <V> the type of map values
-     * @param map  the map with elements to be passed to stream
+     * @param map the map with elements to be passed to stream
      * @return the new stream
      * @throws NullPointerException if {@code map} is null
      */
@@ -57,7 +57,7 @@ public class Stream<T> implements Closeable {
      * Creates a {@code Stream} from any class that implements {@code Iterator} interface.
      *
      * @param <T> the type of the stream elements
-     * @param iterator  the iterator with elements to be passed to stream
+     * @param iterator the iterator with elements to be passed to stream
      * @return the new stream
      * @throws NullPointerException if {@code iterator} is null
      */
@@ -71,7 +71,7 @@ public class Stream<T> implements Closeable {
      * Creates a {@code Stream} from any class that implements {@code Iterable} interface.
      *
      * @param <T> the type of the stream elements
-     * @param iterable  the {@code Iterable} with elements to be passed to stream
+     * @param iterable the {@code Iterable} with elements to be passed to stream
      * @return the new stream
      * @throws NullPointerException if {@code iterable} is null
      */
@@ -85,7 +85,7 @@ public class Stream<T> implements Closeable {
      * Creates a {@code Stream} from the specified values.
      *
      * @param <T> the type of the stream elements
-     * @param elements  the elements to be passed to stream
+     * @param elements the elements to be passed to stream
      * @return the new stream
      * @throws NullPointerException if {@code elements} is null
      */
@@ -99,11 +99,11 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * If specified element is null, returns an empty {@code Stream},
-     * otherwise returns a {@code Stream} containing a single element.
+     * If specified element is null, returns an empty {@code Stream}, otherwise returns a {@code
+     * Stream} containing a single element.
      *
      * @param <T> the type of the stream element
-     * @param element  the element to be passed to stream if it is non-null
+     * @param element the element to be passed to stream if it is non-null
      * @return the new stream
      * @since 1.1.5
      */
@@ -114,11 +114,11 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * If specified array is null, returns an empty {@code Stream},
-     * otherwise returns a {@code Stream} containing elements of this array.
+     * If specified array is null, returns an empty {@code Stream}, otherwise returns a {@code
+     * Stream} containing elements of this array.
      *
      * @param <T> the type of the stream elements
-     * @param array  the array whose elements to be passed to stream
+     * @param array the array whose elements to be passed to stream
      * @return the new stream
      * @since 1.1.9
      */
@@ -128,12 +128,12 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * If specified map is null, returns an empty {@code Stream},
-     * otherwise returns a {@code Stream} containing entries of this map.
+     * If specified map is null, returns an empty {@code Stream}, otherwise returns a {@code Stream}
+     * containing entries of this map.
      *
      * @param <K> the type of map keys
      * @param <V> the type of map values
-     * @param map  the map with elements to be passed to stream
+     * @param map the map with elements to be passed to stream
      * @return the new stream
      * @since 1.1.9
      */
@@ -143,11 +143,11 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * If specified iterator is null, returns an empty {@code Stream},
-     * otherwise returns a {@code Stream} containing entries of this iterator.
+     * If specified iterator is null, returns an empty {@code Stream}, otherwise returns a {@code
+     * Stream} containing entries of this iterator.
      *
      * @param <T> the type of the stream elements
-     * @param iterator  the iterator with elements to be passed to stream
+     * @param iterator the iterator with elements to be passed to stream
      * @return the new stream
      * @since 1.1.9
      */
@@ -157,11 +157,11 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * If specified iterable is null, returns an empty {@code Stream},
-     * otherwise returns a {@code Stream} containing elements of this iterable.
+     * If specified iterable is null, returns an empty {@code Stream}, otherwise returns a {@code
+     * Stream} containing elements of this iterable.
      *
      * @param <T> the type of the stream elements
-     * @param iterable  the {@code Iterable} with elements to be passed to stream
+     * @param iterable the {@code Iterable} with elements to be passed to stream
      * @return the new stream
      * @since 1.1.5
      */
@@ -171,11 +171,11 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Creates a {@code Stream<Integer>} from not closed range
-     * (from {@code from} inclusive to {@code to} exclusive and incremental step {@code 1}).
+     * Creates a {@code Stream<Integer>} from not closed range (from {@code from} inclusive to
+     * {@code to} exclusive and incremental step {@code 1}).
      *
-     * @param from  the initial value (inclusive)
-     * @param to  the upper bound (exclusive)
+     * @param from the initial value (inclusive)
+     * @param to the upper bound (exclusive)
      * @return the new stream
      * @see IntStream#range(int, int)
      */
@@ -185,11 +185,11 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Creates a {@code Stream<Long>} from not closed range
-     * (from {@code from} inclusive to {@code to} exclusive and incremental step {@code 1}).
+     * Creates a {@code Stream<Long>} from not closed range (from {@code from} inclusive to {@code
+     * to} exclusive and incremental step {@code 1}).
      *
-     * @param from  the initial value (inclusive)
-     * @param to  the upper bound (exclusive)
+     * @param from the initial value (inclusive)
+     * @param to the upper bound (exclusive)
      * @return the new stream
      */
     @NotNull
@@ -198,11 +198,11 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Creates a {@code Stream<Integer>} from closed range
-     * (from {@code from} inclusive to {@code to} inclusive and incremental step {@code 1}).
+     * Creates a {@code Stream<Integer>} from closed range (from {@code from} inclusive to {@code
+     * to} inclusive and incremental step {@code 1}).
      *
-     * @param from  the initial value (inclusive)
-     * @param to  the upper bound (inclusive)
+     * @param from the initial value (inclusive)
+     * @param to the upper bound (inclusive)
      * @return the new stream
      * @see IntStream#rangeClosed(int, int)
      */
@@ -212,11 +212,11 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Creates a {@code Stream<Long>} from closed range
-     * (from {@code from} inclusive to {@code to} inclusive and incremental step {@code 1}).
+     * Creates a {@code Stream<Long>} from closed range (from {@code from} inclusive to {@code to}
+     * inclusive and incremental step {@code 1}).
      *
-     * @param from  the initial value (inclusive)
-     * @param to  the upper bound (inclusive)
+     * @param from the initial value (inclusive)
+     * @param to the upper bound (inclusive)
      * @return the new stream
      */
     @NotNull
@@ -228,7 +228,7 @@ public class Stream<T> implements Closeable {
      * Creates a {@code Stream} by elements that generated by {@code Supplier}.
      *
      * @param <T> the type of the stream elements
-     * @param supplier  the {@code Supplier} of generated elements
+     * @param supplier the {@code Supplier} of generated elements
      * @return the new stream
      * @throws NullPointerException if {@code supplier} is null
      */
@@ -239,11 +239,12 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Creates a {@code Stream} by iterative application {@code UnaryOperator} function
-     * to an initial element {@code seed}. Produces {@code Stream} consisting of
-     * {@code seed}, {@code op(seed)}, {@code op(op(seed))}, etc.
+     * Creates a {@code Stream} by iterative application {@code UnaryOperator} function to an
+     * initial element {@code seed}. Produces {@code Stream} consisting of {@code seed}, {@code
+     * op(seed)}, {@code op(op(seed))}, etc.
      *
      * <p>Example:
+     *
      * <pre>
      * seed: 1
      * op: (a) -&gt; a + 5
@@ -251,24 +252,24 @@ public class Stream<T> implements Closeable {
      * </pre>
      *
      * @param <T> the type of the stream elements
-     * @param seed  the initial value
-     * @param op  operator to produce new element by previous one
+     * @param seed the initial value
+     * @param op operator to produce new element by previous one
      * @return the new stream
      * @throws NullPointerException if {@code op} is null
      */
     @NotNull
     public static <T> Stream<T> iterate(
-            @Nullable final T seed,
-            @NotNull final UnaryOperator<T> op) {
+            @Nullable final T seed, @NotNull final UnaryOperator<T> op) {
         Objects.requireNonNull(op);
         return new Stream<T>(new ObjIterate<T>(seed, op));
     }
 
     /**
-     * Creates a {@code Stream} by iterative application {@code UnaryOperator} function
-     * to an initial element {@code seed}, conditioned on satisfying the supplied predicate.
+     * Creates a {@code Stream} by iterative application {@code UnaryOperator} function to an
+     * initial element {@code seed}, conditioned on satisfying the supplied predicate.
      *
      * <p>Example:
+     *
      * <pre>
      * seed: 0
      * predicate: (a) -&gt; a &lt; 20
@@ -277,9 +278,9 @@ public class Stream<T> implements Closeable {
      * </pre>
      *
      * @param <T> the type of the stream elements
-     * @param seed  the initial value
-     * @param predicate  a predicate to determine when the stream must terminate
-     * @param op  operator to produce new element by previous one
+     * @param seed the initial value
+     * @param predicate a predicate to determine when the stream must terminate
+     * @param op operator to produce new element by previous one
      * @return the new stream
      * @throws NullPointerException if {@code op} is null
      * @since 1.1.5
@@ -297,6 +298,7 @@ public class Stream<T> implements Closeable {
      * Lazily concatenates two streams.
      *
      * <p>Example:
+     *
      * <pre>
      * stream 1: [1, 2, 3, 4]
      * stream 2: [5, 6]
@@ -304,15 +306,14 @@ public class Stream<T> implements Closeable {
      * </pre>
      *
      * @param <T> The type of stream elements
-     * @param stream1  the first stream
-     * @param stream2  the second stream
+     * @param stream1 the first stream
+     * @param stream2 the second stream
      * @return the new concatenated stream
      * @throws NullPointerException if {@code stream1} or {@code stream2} is null
      */
     @NotNull
     public static <T> Stream<T> concat(
-            @NotNull Stream<? extends T> stream1,
-            @NotNull Stream<? extends T> stream2) {
+            @NotNull Stream<? extends T> stream1, @NotNull Stream<? extends T> stream2) {
         Objects.requireNonNull(stream1);
         Objects.requireNonNull(stream2);
         Stream<T> result = new Stream<T>(new ObjConcat<T>(stream1.iterator, stream2.iterator));
@@ -323,6 +324,7 @@ public class Stream<T> implements Closeable {
      * Lazily concatenates a {@code List} of streams.
      *
      * <p>Example:
+     *
      * <pre>
      * stream 1: [1, 2, 3, 4]
      * stream 2: [5, 6]
@@ -332,21 +334,18 @@ public class Stream<T> implements Closeable {
      * </pre>
      *
      * @param <T> The type of stream elements
-     * @param streams  the list of streams
+     * @param streams the list of streams
      * @return the new concatenated stream
      * @throws NullPointerException if {@code streams} is null
      * @since 1.2.2
      */
     @NotNull
-    public static <T> Stream<T> concat(
-            @NotNull List<? extends Stream<? extends T>> streams) {
+    public static <T> Stream<T> concat(@NotNull List<? extends Stream<? extends T>> streams) {
         Objects.requireNonNull(streams);
 
         final int size = streams.size();
-        final List<Iterator<? extends T>> iterators =
-                new ArrayList<Iterator<? extends T>>(size);
-        final List<Closeable> closeables =
-                new ArrayList<Closeable>(size);
+        final List<Iterator<? extends T>> iterators = new ArrayList<Iterator<? extends T>>(size);
+        final List<Closeable> closeables = new ArrayList<Closeable>(size);
         for (final Stream<? extends T> stream : streams) {
             iterators.add(stream.iterator);
             closeables.add(stream);
@@ -360,6 +359,7 @@ public class Stream<T> implements Closeable {
      * Concatenates two iterators to a stream.
      *
      * <p>Example:
+     *
      * <pre>
      * iterator 1: [1, 2, 3, 4]
      * iterator 2: [5, 6]
@@ -367,16 +367,15 @@ public class Stream<T> implements Closeable {
      * </pre>
      *
      * @param <T> The type of iterator elements
-     * @param iterator1  the first iterator
-     * @param iterator2  the second iterator
+     * @param iterator1 the first iterator
+     * @param iterator2 the second iterator
      * @return the new stream
      * @throws NullPointerException if {@code iterator1} or {@code iterator2} is null
      * @since 1.1.9
      */
     @NotNull
     public static <T> Stream<T> concat(
-            @NotNull Iterator<? extends T> iterator1,
-            @NotNull Iterator<? extends T> iterator2) {
+            @NotNull Iterator<? extends T> iterator1, @NotNull Iterator<? extends T> iterator2) {
         Objects.requireNonNull(iterator1);
         Objects.requireNonNull(iterator2);
         return new Stream<T>(new ObjConcat<T>(iterator1, iterator2));
@@ -386,6 +385,7 @@ public class Stream<T> implements Closeable {
      * Concatenates three or more iterators to a stream.
      *
      * <p>Example:
+     *
      * <pre>
      * iterator 1: [1, 2, 3, 4]
      * iterator 2: [5, 6]
@@ -395,12 +395,12 @@ public class Stream<T> implements Closeable {
      * </pre>
      *
      * @param <T> The type of iterator elements
-     * @param iterator1  the first iterator
-     * @param iterator2  the second iterator
-     * @param rest  the rest iterators
+     * @param iterator1 the first iterator
+     * @param iterator2 the second iterator
+     * @param rest the rest iterators
      * @return the new concatenated stream
-     * @throws NullPointerException if {@code iterator1} or {@code iterator2}
-     *         or {@code rest} is null
+     * @throws NullPointerException if {@code iterator1} or {@code iterator2} or {@code rest} is
+     *     null
      * @since 1.2.2
      */
     @NotNull
@@ -422,9 +422,11 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Combines two streams by applying specified combiner function to each element at same position.
+     * Combines two streams by applying specified combiner function to each element at same
+     * position.
      *
      * <p>Example:
+     *
      * <pre>
      * combiner: (a, b) -&gt; a + b
      * stream 1: [1, 2, 3, 4]
@@ -435,9 +437,9 @@ public class Stream<T> implements Closeable {
      * @param <F> the type of first stream elements
      * @param <S> the type of second stream elements
      * @param <R> the type of elements in resulting stream
-     * @param stream1  the first stream
-     * @param stream2  the second stream
-     * @param combiner  the combiner function used to apply to each element
+     * @param stream1 the first stream
+     * @param stream2 the second stream
+     * @param combiner the combiner function used to apply to each element
      * @return the new stream
      * @throws NullPointerException if {@code stream1} or {@code stream2} is null
      */
@@ -452,9 +454,11 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Combines two iterators to a stream by applying specified combiner function to each element at same position.
+     * Combines two iterators to a stream by applying specified combiner function to each element at
+     * same position.
      *
      * <p>Example:
+     *
      * <pre>
      * combiner: (a, b) -&gt; a + b
      * stream 1: [1, 2, 3, 4]
@@ -465,9 +469,9 @@ public class Stream<T> implements Closeable {
      * @param <F> the type of first iterator elements
      * @param <S> the type of second iterator elements
      * @param <R> the type of elements in resulting stream
-     * @param iterator1  the first iterator
-     * @param iterator2  the second iterator
-     * @param combiner  the combiner function used to apply to each element
+     * @param iterator1 the first iterator
+     * @param iterator2 the second iterator
+     * @param combiner the combiner function used to apply to each element
      * @return the new stream
      * @throws NullPointerException if {@code iterator1} or {@code iterator2} is null
      * @since 1.1.2
@@ -486,6 +490,7 @@ public class Stream<T> implements Closeable {
      * Merges elements of two streams according to the supplied selector function.
      *
      * <p>Example 1 — Merge two sorted streams:
+     *
      * <pre>
      * stream1: [1, 3, 8, 10]
      * stream2: [2, 5, 6, 12]
@@ -494,6 +499,7 @@ public class Stream<T> implements Closeable {
      * </pre>
      *
      * <p>Example 2 — Concat two streams:
+     *
      * <pre>
      * stream1: [0, 3, 1]
      * stream2: [2, 5, 6, 1]
@@ -502,8 +508,8 @@ public class Stream<T> implements Closeable {
      * </pre>
      *
      * @param <T> the type of the elements
-     * @param stream1  the first stream
-     * @param stream2  the second stream
+     * @param stream1 the first stream
+     * @param stream2 the second stream
      * @param selector the selector function used to choose elements
      * @return the new stream
      * @throws NullPointerException if {@code stream1} or {@code stream2} is null
@@ -523,6 +529,7 @@ public class Stream<T> implements Closeable {
      * Merges elements of two iterators according to the supplied selector function.
      *
      * <p>Example 1 — Merge two sorted iterators:
+     *
      * <pre>
      * iterator1: [1, 3, 8, 10]
      * iterator2: [2, 5, 6, 12]
@@ -531,6 +538,7 @@ public class Stream<T> implements Closeable {
      * </pre>
      *
      * <p>Example 2 — Concat two iterators:
+     *
      * <pre>
      * iterator1: [0, 3, 1]
      * iterator2: [2, 5, 6, 1]
@@ -539,9 +547,9 @@ public class Stream<T> implements Closeable {
      * </pre>
      *
      * @param <T> the type of the elements
-     * @param iterator1  the first iterator
-     * @param iterator2  the second iterator
-     * @param selector  the selector function used to choose elements
+     * @param iterator1 the first iterator
+     * @param iterator2 the second iterator
+     * @param selector the selector function used to choose elements
      * @return the new stream
      * @throws NullPointerException if {@code iterator1} or {@code iterator2} is null
      * @since 1.1.9
@@ -555,8 +563,7 @@ public class Stream<T> implements Closeable {
         return new Stream<T>(new ObjMerge<T>(iterator1, iterator2, selector));
     }
 
-
-//<editor-fold defaultstate="collapsed" desc="Implementation">
+    // <editor-fold defaultstate="collapsed" desc="Implementation">
     private final Iterator<? extends T> iterator;
     private final Params params;
 
@@ -589,10 +596,11 @@ public class Stream<T> implements Closeable {
     /**
      * Applies custom operator on stream.
      *
-     * Transforming function can return {@code Stream} for intermediate operations,
-     * or any value for terminal operation.
+     * <p>Transforming function can return {@code Stream} for intermediate operations, or any value
+     * for terminal operation.
      *
      * <p>Operator examples:
+     *
      * <pre><code>
      *     // Intermediate operator
      *     public class Reverse&lt;T&gt; implements Function&lt;Stream&lt;T&gt;, Stream&lt;T&gt;&gt; {
@@ -638,7 +646,7 @@ public class Stream<T> implements Closeable {
      * </code></pre>
      *
      * @param <R> the type of the result
-     * @param function  a transforming function
+     * @param function a transforming function
      * @return a result of the transforming function
      * @throws NullPointerException if {@code function} is null
      */
@@ -651,16 +659,17 @@ public class Stream<T> implements Closeable {
     /**
      * Prepends given {@code Stream} to current and returns a new stream.
      *
-     * This is similar to {@code Stream.concat(stream, this)}
+     * <p>This is similar to {@code Stream.concat(stream, this)}
      *
      * <p>Example:
+     *
      * <pre>
      * current: [1, 2, 3]
      * stream:  [4, 5, 6]
      * result:  [4, 5, 6, 1, 2, 3]
      * </pre>
      *
-     * @param stream  the stream to prepend
+     * @param stream the stream to prepend
      * @return the new stream
      * @since 1.2.2
      * @see #concat(Stream, Stream)
@@ -673,16 +682,17 @@ public class Stream<T> implements Closeable {
     /**
      * Appends given {@code Stream} to current and returns a new stream.
      *
-     * This is similar to {@code Stream.concat(this, stream)}
+     * <p>This is similar to {@code Stream.concat(this, stream)}
      *
      * <p>Example:
+     *
      * <pre>
      * current: [1, 2, 3]
      * stream:  [4, 5, 6]
      * result:  [1, 2, 3, 4, 5, 6]
      * </pre>
      *
-     * @param stream  the stream to append
+     * @param stream the stream to append
      * @return the new stream
      * @since 1.2.2
      * @see #concat(Stream, Stream)
@@ -698,13 +708,14 @@ public class Stream<T> implements Closeable {
      * <p>This is an intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * predicate: (a) -&gt; a &gt; 2
      * stream: [1, 2, 3, 4, -8, 0, 11]
      * result: [3, 4, 11]
      * </pre>
      *
-     * @param predicate  the predicate used to filter elements
+     * @param predicate the predicate used to filter elements
      * @return the new stream
      */
     @NotNull
@@ -718,6 +729,7 @@ public class Stream<T> implements Closeable {
      * <p>This is an intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * predicate: (index, value) -&gt; (index + value) &gt; 6
      * stream: [1, 2, 3, 4, 0, 11]
@@ -727,7 +739,7 @@ public class Stream<T> implements Closeable {
      * result: [4, 11]
      * </pre>
      *
-     * @param predicate  the {@code IndexedPredicate} used to filter elements
+     * @param predicate the {@code IndexedPredicate} used to filter elements
      * @return the new stream
      * @since 1.1.6
      */
@@ -742,6 +754,7 @@ public class Stream<T> implements Closeable {
      * <p>This is an intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * from: 4
      * step: 3
@@ -753,18 +766,18 @@ public class Stream<T> implements Closeable {
      * result: [4, 0, 11]
      * </pre>
      *
-     * @param from  the initial value of the index (inclusive)
-     * @param step  the step of the index
-     * @param predicate  the {@code IndexedPredicate} used to filter elements
+     * @param from the initial value of the index (inclusive)
+     * @param step the step of the index
+     * @param predicate the {@code IndexedPredicate} used to filter elements
      * @return the new stream
      * @since 1.1.6
      */
     @NotNull
-    public Stream<T> filterIndexed(int from, int step,
-                                   @NotNull IndexedPredicate<? super T> predicate) {
-        return new Stream<T>(params, new ObjFilterIndexed<T>(
-                new IndexedIterator<T>(from, step, iterator),
-                predicate));
+    public Stream<T> filterIndexed(
+            int from, int step, @NotNull IndexedPredicate<? super T> predicate) {
+        return new Stream<T>(
+                params,
+                new ObjFilterIndexed<T>(new IndexedIterator<T>(from, step, iterator), predicate));
     }
 
     /**
@@ -772,7 +785,7 @@ public class Stream<T> implements Closeable {
      *
      * <p>This is an intermediate operation.
      *
-     * @param predicate  the predicate used to filter elements
+     * @param predicate the predicate used to filter elements
      * @return the new stream
      */
     @NotNull
@@ -781,8 +794,8 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Returns a stream consisting of the elements of this stream which are
-     * instances of given class.
+     * Returns a stream consisting of the elements of this stream which are instances of given
+     * class.
      *
      * <p>This is an intermediate operation.
      *
@@ -793,12 +806,14 @@ public class Stream<T> implements Closeable {
     @NotNull
     @SuppressWarnings("unchecked")
     public <TT> Stream<TT> select(@NotNull final Class<TT> clazz) {
-        return (Stream<TT>) filter(new Predicate<T>() {
-            @Override
-            public boolean test(T value) {
-                return clazz.isInstance(value);
-            }
-        });
+        return (Stream<TT>)
+                filter(
+                        new Predicate<T>() {
+                            @Override
+                            public boolean test(T value) {
+                                return clazz.isInstance(value);
+                            }
+                        });
     }
 
     /**
@@ -838,12 +853,13 @@ public class Stream<T> implements Closeable {
      */
     @NotNull
     public Stream<T> equalsOnly(@Nullable final T object) {
-        return filter(new Predicate<T>() {
-            @Override
-            public boolean test(T value) {
-                return Objects.equals(value, object);
-            }
-        });
+        return filter(
+                new Predicate<T>() {
+                    @Override
+                    public boolean test(T value) {
+                        return Objects.equals(value, object);
+                    }
+                });
     }
 
     /**
@@ -852,6 +868,7 @@ public class Stream<T> implements Closeable {
      * <p>This is an intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * mapper: (a) -&gt; a + 5
      * stream: [1, 2, 3, 4]
@@ -859,7 +876,7 @@ public class Stream<T> implements Closeable {
      * </pre>
      *
      * @param <R> the type of elements in resulting stream
-     * @param mapper  the mapper function used to apply to each element
+     * @param mapper the mapper function used to apply to each element
      * @return the new stream
      */
     @NotNull
@@ -868,11 +885,13 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Returns a {@code Stream} with elements that obtained by applying the given {@code IndexedFunction}.
+     * Returns a {@code Stream} with elements that obtained by applying the given {@code
+     * IndexedFunction}.
      *
      * <p>This is an intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * predicate: (index, value) -&gt; (index * value)
      * stream: [1, 2, 3,  4]
@@ -881,7 +900,7 @@ public class Stream<T> implements Closeable {
      * </pre>
      *
      * @param <R> the type of elements in resulting stream
-     * @param mapper  the mapper function used to apply to each element
+     * @param mapper the mapper function used to apply to each element
      * @return the new stream
      * @since 1.1.6
      */
@@ -891,11 +910,13 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Returns a {@code Stream} with elements that obtained by applying the given {@code IndexedFunction}.
+     * Returns a {@code Stream} with elements that obtained by applying the given {@code
+     * IndexedFunction}.
      *
      * <p>This is an intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * from: -2
      * step: 2
@@ -906,18 +927,18 @@ public class Stream<T> implements Closeable {
      * </pre>
      *
      * @param <R> the type of elements in resulting stream
-     * @param from  the initial value of the index (inclusive)
-     * @param step  the step of the index
-     * @param mapper  the mapper function used to apply to each element
+     * @param from the initial value of the index (inclusive)
+     * @param step the step of the index
+     * @param mapper the mapper function used to apply to each element
      * @return the new stream
      * @since 1.1.6
      */
     @NotNull
-    public <R> Stream<R> mapIndexed(int from, int step,
-                                    @NotNull IndexedFunction<? super T, ? extends R> mapper) {
-        return new Stream<R>(params, new ObjMapIndexed<T, R>(
-                new IndexedIterator<T>(from, step, iterator),
-                mapper));
+    public <R> Stream<R> mapIndexed(
+            int from, int step, @NotNull IndexedFunction<? super T, ? extends R> mapper) {
+        return new Stream<R>(
+                params,
+                new ObjMapIndexed<T, R>(new IndexedIterator<T>(from, step, iterator), mapper));
     }
 
     /**
@@ -925,7 +946,7 @@ public class Stream<T> implements Closeable {
      *
      * <p>This is an intermediate operation.
      *
-     * @param mapper  the mapper function used to apply to each element
+     * @param mapper the mapper function used to apply to each element
      * @return the new {@code IntStream}
      * @see #map(com.annimon.stream.function.Function)
      */
@@ -939,7 +960,7 @@ public class Stream<T> implements Closeable {
      *
      * <p>This is an intermediate operation.
      *
-     * @param mapper  the mapper function used to apply to each element
+     * @param mapper the mapper function used to apply to each element
      * @return the new {@code LongStream}
      * @since 1.1.4
      * @see #map(com.annimon.stream.function.Function)
@@ -954,7 +975,7 @@ public class Stream<T> implements Closeable {
      *
      * <p>This is an intermediate operation.
      *
-     * @param mapper  the mapper function used to apply to each element
+     * @param mapper the mapper function used to apply to each element
      * @return the new {@code DoubleStream}
      * @since 1.1.4
      * @see #map(com.annimon.stream.function.Function)
@@ -965,13 +986,14 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Returns a stream consisting of the results of replacing each element of
-     * this stream with the contents of a mapped stream produced by applying
-     * the provided mapping function to each element.
+     * Returns a stream consisting of the results of replacing each element of this stream with the
+     * contents of a mapped stream produced by applying the provided mapping function to each
+     * element.
      *
      * <p>This is an intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * mapper: (a) -&gt; [a, a + 5]
      * stream: [1, 2, 3, 4]
@@ -979,22 +1001,23 @@ public class Stream<T> implements Closeable {
      * </pre>
      *
      * @param <R> the type of elements in resulting stream
-     * @param mapper  the mapper function used to apply to each element
+     * @param mapper the mapper function used to apply to each element
      * @return the new stream
      */
     @NotNull
-    public <R> Stream<R> flatMap(@NotNull final Function<? super T, ? extends Stream<? extends R>> mapper) {
+    public <R> Stream<R> flatMap(
+            @NotNull final Function<? super T, ? extends Stream<? extends R>> mapper) {
         return new Stream<R>(params, new ObjFlatMap<T, R>(iterator, mapper));
     }
 
     /**
-     * Returns a stream consisting of the results of replacing each element of
-     * this stream with the contents of a mapped stream produced by applying
-     * the provided mapping function to each element.
+     * Returns a stream consisting of the results of replacing each element of this stream with the
+     * contents of a mapped stream produced by applying the provided mapping function to each
+     * element.
      *
      * <p>This is an intermediate operation.
      *
-     * @param mapper  the mapper function used to apply to each element
+     * @param mapper the mapper function used to apply to each element
      * @return the new {@code IntStream}
      * @see #flatMap(com.annimon.stream.function.Function)
      */
@@ -1004,45 +1027,47 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Returns a stream consisting of the results of replacing each element of
-     * this stream with the contents of a mapped stream produced by applying
-     * the provided mapping function to each element.
+     * Returns a stream consisting of the results of replacing each element of this stream with the
+     * contents of a mapped stream produced by applying the provided mapping function to each
+     * element.
      *
      * <p>This is an intermediate operation.
      *
-     * @param mapper  the mapper function used to apply to each element
+     * @param mapper the mapper function used to apply to each element
      * @return the new {@code LongStream}
      * @see #flatMap(com.annimon.stream.function.Function)
      */
     @NotNull
-    public LongStream flatMapToLong(@NotNull final Function<? super T, ? extends LongStream> mapper) {
+    public LongStream flatMapToLong(
+            @NotNull final Function<? super T, ? extends LongStream> mapper) {
         return new LongStream(params, new ObjFlatMapToLong<T>(iterator, mapper));
     }
 
     /**
-     * Returns a stream consisting of the results of replacing each element of
-     * this stream with the contents of a mapped stream produced by applying
-     * the provided mapping function to each element.
+     * Returns a stream consisting of the results of replacing each element of this stream with the
+     * contents of a mapped stream produced by applying the provided mapping function to each
+     * element.
      *
      * <p>This is an intermediate operation.
      *
-     * @param mapper  the mapper function used to apply to each element
+     * @param mapper the mapper function used to apply to each element
      * @return the new {@code DoubleStream}
      * @see #flatMap(com.annimon.stream.function.Function)
      */
     @NotNull
-    public DoubleStream flatMapToDouble(@NotNull final Function<? super T, ? extends DoubleStream> mapper) {
+    public DoubleStream flatMapToDouble(
+            @NotNull final Function<? super T, ? extends DoubleStream> mapper) {
         return new DoubleStream(params, new ObjFlatMapToDouble<T>(iterator, mapper));
     }
 
     /**
-     * Returns a stream consisting of the results of replacing each element of
-     * this stream with zero or more elements,
-     * that passed to the provided consumer function.
+     * Returns a stream consisting of the results of replacing each element of this stream with zero
+     * or more elements, that passed to the provided consumer function.
      *
      * <p>This is an intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * stream: [1, 2, 3, 4]
      * mapper: (a, consumer) -&gt; {
@@ -1060,105 +1085,114 @@ public class Stream<T> implements Closeable {
      * </pre>
      *
      * @param <R> the type of elements in resulting stream
-     * @param mapper  the mapper function used to apply to each element for producing replacing elements
+     * @param mapper the mapper function used to apply to each element for producing replacing
+     *     elements
      * @return the new stream
      * @since 1.2.2
      * @see #flatMap(com.annimon.stream.function.Function)
      */
     @NotNull
-    public <R> Stream<R> mapMulti(@NotNull final BiConsumer<? super T, ? super Consumer<R>> mapper) {
-        return flatMap(new Function<T, Stream<? extends R>>() {
-            @Override
-            public Stream<? extends R> apply(T t) {
-                SpinedBuffer.Of<R> buffer = new SpinedBuffer.Of<R>();
-                mapper.accept(t, buffer);
-                return of(buffer.iterator());
-            }
-        });
+    public <R> Stream<R> mapMulti(
+            @NotNull final BiConsumer<? super T, ? super Consumer<R>> mapper) {
+        return flatMap(
+                new Function<T, Stream<? extends R>>() {
+                    @Override
+                    public Stream<? extends R> apply(T t) {
+                        SpinedBuffer.Of<R> buffer = new SpinedBuffer.Of<R>();
+                        mapper.accept(t, buffer);
+                        return of(buffer.iterator());
+                    }
+                });
     }
 
     /**
-     * Returns a stream consisting of the results of replacing each element of
-     * this stream with zero or more elements,
-     * that passed to the provided consumer function.
+     * Returns a stream consisting of the results of replacing each element of this stream with zero
+     * or more elements, that passed to the provided consumer function.
      *
      * <p>This is an intermediate operation.
      *
-     * @param mapper  the mapper function used to apply to each element for producing replacing elements
+     * @param mapper the mapper function used to apply to each element for producing replacing
+     *     elements
      * @return the new stream
      * @since 1.2.2
      * @see #mapMulti(com.annimon.stream.function.BiConsumer)
      * @see #flatMapToInt(com.annimon.stream.function.Function)
      */
     @NotNull
-    public IntStream mapMultiToInt(@NotNull final BiConsumer<? super T, ? super IntConsumer> mapper) {
-        return flatMapToInt(new Function<T, IntStream>() {
-            @Override
-            public IntStream apply(T t) {
-                SpinedBuffer.OfInt buffer = new SpinedBuffer.OfInt();
-                mapper.accept(t, buffer);
-                return IntStream.of(buffer.iterator());
-            }
-        });
+    public IntStream mapMultiToInt(
+            @NotNull final BiConsumer<? super T, ? super IntConsumer> mapper) {
+        return flatMapToInt(
+                new Function<T, IntStream>() {
+                    @Override
+                    public IntStream apply(T t) {
+                        SpinedBuffer.OfInt buffer = new SpinedBuffer.OfInt();
+                        mapper.accept(t, buffer);
+                        return IntStream.of(buffer.iterator());
+                    }
+                });
     }
 
     /**
-     * Returns a stream consisting of the results of replacing each element of
-     * this stream with zero or more elements,
-     * that passed to the provided consumer function.
+     * Returns a stream consisting of the results of replacing each element of this stream with zero
+     * or more elements, that passed to the provided consumer function.
      *
      * <p>This is an intermediate operation.
      *
-     * @param mapper  the mapper function used to apply to each element for producing replacing elements
+     * @param mapper the mapper function used to apply to each element for producing replacing
+     *     elements
      * @return the new stream
      * @since 1.2.2
      * @see #mapMulti(com.annimon.stream.function.BiConsumer)
      * @see #flatMapToLong(com.annimon.stream.function.Function)
      */
     @NotNull
-    public LongStream mapMultiToLong(@NotNull final BiConsumer<? super T, ? super LongConsumer> mapper) {
-        return flatMapToLong(new Function<T, LongStream>() {
-            @Override
-            public LongStream apply(T t) {
-                SpinedBuffer.OfLong buffer = new SpinedBuffer.OfLong();
-                mapper.accept(t, buffer);
-                return LongStream.of(buffer.iterator());
-            }
-        });
+    public LongStream mapMultiToLong(
+            @NotNull final BiConsumer<? super T, ? super LongConsumer> mapper) {
+        return flatMapToLong(
+                new Function<T, LongStream>() {
+                    @Override
+                    public LongStream apply(T t) {
+                        SpinedBuffer.OfLong buffer = new SpinedBuffer.OfLong();
+                        mapper.accept(t, buffer);
+                        return LongStream.of(buffer.iterator());
+                    }
+                });
     }
 
     /**
-     * Returns a stream consisting of the results of replacing each element of
-     * this stream with zero or more elements,
-     * that passed to the provided consumer function.
+     * Returns a stream consisting of the results of replacing each element of this stream with zero
+     * or more elements, that passed to the provided consumer function.
      *
      * <p>This is an intermediate operation.
      *
-     * @param mapper  the mapper function used to apply to each element for producing replacing elements
+     * @param mapper the mapper function used to apply to each element for producing replacing
+     *     elements
      * @return the new stream
      * @since 1.2.2
      * @see #mapMulti(com.annimon.stream.function.BiConsumer)
      * @see #flatMapToDouble(com.annimon.stream.function.Function)
      */
     @NotNull
-    public DoubleStream mapMultiToDouble(@NotNull final BiConsumer<? super T, ? super DoubleConsumer> mapper) {
-        return flatMapToDouble(new Function<T, DoubleStream>() {
-            @Override
-            public DoubleStream apply(T t) {
-                SpinedBuffer.OfDouble buffer = new SpinedBuffer.OfDouble();
-                mapper.accept(t, buffer);
-                return DoubleStream.of(buffer.iterator());
-            }
-        });
+    public DoubleStream mapMultiToDouble(
+            @NotNull final BiConsumer<? super T, ? super DoubleConsumer> mapper) {
+        return flatMapToDouble(
+                new Function<T, DoubleStream>() {
+                    @Override
+                    public DoubleStream apply(T t) {
+                        SpinedBuffer.OfDouble buffer = new SpinedBuffer.OfDouble();
+                        mapper.accept(t, buffer);
+                        return DoubleStream.of(buffer.iterator());
+                    }
+                });
     }
 
     /**
-     * Returns {@code Stream} with indexed elements.
-     * Indexing starts from 0 with step 1.
+     * Returns {@code Stream} with indexed elements. Indexing starts from 0 with step 1.
      *
      * <p>This is an intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * stream: ["a", "b", "c"]
      * result: [(0, "a"), (1, "b"), (2, "c")]
@@ -1178,35 +1212,41 @@ public class Stream<T> implements Closeable {
      * <p>This is an intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * from: 5, step: 10
      * stream: ["a", "b", "c"]
      * result: [(5, "a"), (15, "b"), (25, "c")]
      * </pre>
      *
-     * @param from  the initial value (inclusive)
-     * @param step  the step
+     * @param from the initial value (inclusive)
+     * @param step the step
      * @return the new {@code IntPair} stream
      * @since 1.1.2
      */
     @NotNull
     public Stream<IntPair<T>> indexed(final int from, final int step) {
-        return mapIndexed(from, step, new IndexedFunction<T, IntPair<T>>() {
+        return mapIndexed(
+                from,
+                step,
+                new IndexedFunction<T, IntPair<T>>() {
 
-            @NotNull
-            @Override
-            public IntPair<T> apply(int index, T t) {
-                return new IntPair<T>(index, t);
-            }
-        });
+                    @NotNull
+                    @Override
+                    public IntPair<T> apply(int index, T t) {
+                        return new IntPair<T>(index, t);
+                    }
+                });
     }
 
     /**
-     * Returns {@code Stream} with distinct elements (as determined by {@code hashCode} and {@code equals} methods).
+     * Returns {@code Stream} with distinct elements (as determined by {@code hashCode} and {@code
+     * equals} methods).
      *
      * <p>This is a stateful intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * stream: [1, 4, 2, 3, 3, 4, 1]
      * result: [1, 4, 2, 3]
@@ -1220,12 +1260,13 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Returns {@code Stream} with distinct elements (as determined by {@code hashCode}
-     * and {@code equals} methods) according to the given classifier function.
+     * Returns {@code Stream} with distinct elements (as determined by {@code hashCode} and {@code
+     * equals} methods) according to the given classifier function.
      *
      * <p>This is a stateful intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * classifier: (str) -&gt; str.length()
      * stream: ["a", "bc", "d", "ef", "ghij"]
@@ -1233,7 +1274,7 @@ public class Stream<T> implements Closeable {
      * </pre>
      *
      * @param <K> the type of the result of classifier function
-     * @param classifier  the classifier function
+     * @param classifier the classifier function
      * @return the new stream
      * @since 1.1.8
      */
@@ -1243,13 +1284,16 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Returns {@code Stream} with sorted elements (as determinated by {@link Comparable} interface).
+     * Returns {@code Stream} with sorted elements (as determinated by {@link Comparable}
+     * interface).
      *
      * <p>This is a stateful intermediate operation.
-     * <p>If the elements of this stream are not {@link Comparable},
-     * a {@code java.lang.ClassCastException} may be thrown when the terminal operation is executed.
+     *
+     * <p>If the elements of this stream are not {@link Comparable}, a {@code
+     * java.lang.ClassCastException} may be thrown when the terminal operation is executed.
      *
      * <p>Example:
+     *
      * <pre>
      * stream: [3, 4, 1, 2]
      * result: [1, 2, 3, 4]
@@ -1259,16 +1303,17 @@ public class Stream<T> implements Closeable {
      */
     @NotNull
     public Stream<T> sorted() {
-        return sorted(new Comparator<T>() {
+        return sorted(
+                new Comparator<T>() {
 
-            @SuppressWarnings("unchecked")
-            @Override
-            public int compare(T o1, T o2) {
-                Comparable c1 = (Comparable) o1;
-                Comparable c2 = (Comparable) o2;
-                return c1.compareTo(c2);
-            }
-        });
+                    @SuppressWarnings("unchecked")
+                    @Override
+                    public int compare(T o1, T o2) {
+                        Comparable c1 = (Comparable) o1;
+                        Comparable c2 = (Comparable) o2;
+                        return c1.compareTo(c2);
+                    }
+                });
     }
 
     /**
@@ -1277,13 +1322,14 @@ public class Stream<T> implements Closeable {
      * <p>This is a stateful intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * comparator: (a, b) -&gt; -a.compareTo(b)
      * stream: [1, 2, 3, 4]
      * result: [4, 3, 2, 1]
      * </pre>
      *
-     * @param comparator  the {@code Comparator} to compare elements
+     * @param comparator the {@code Comparator} to compare elements
      * @return the new stream
      */
     @NotNull
@@ -1292,12 +1338,13 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Returns {@code Stream} with sorted elements (as determinated by {@code Comparable} interface).
-     * Each element transformed by given function {@code f} before comparing.
+     * Returns {@code Stream} with sorted elements (as determinated by {@code Comparable}
+     * interface). Each element transformed by given function {@code f} before comparing.
      *
      * <p>This is a stateful intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * f: (a) -&gt; -a
      * stream: [1, 2, 3, 4]
@@ -1305,7 +1352,7 @@ public class Stream<T> implements Closeable {
      * </pre>
      *
      * @param <R> the type of the result of transforming function
-     * @param f  the transformation function
+     * @param f the transformation function
      * @return the new stream
      */
     @NotNull
@@ -1315,11 +1362,13 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Partitions {@code Stream} into {@code Map} entries according to the given classifier function.
+     * Partitions {@code Stream} into {@code Map} entries according to the given classifier
+     * function.
      *
      * <p>This is a stateful intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * classifier: (str) -&gt; str.length()
      * stream: ["a", "bc", "d", "ef", "ghij"]
@@ -1327,7 +1376,7 @@ public class Stream<T> implements Closeable {
      * </pre>
      *
      * @param <K> the type of the keys, which are result of the classifier function
-     * @param classifier  the classifier function
+     * @param classifier the classifier function
      * @return the new stream
      */
     @NotNull
@@ -1338,15 +1387,16 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Partitions {@code Stream} into {@code List}s according to the given classifier function. In contrast
-     * to {@link #groupBy(Function)}, this method assumes that the elements of the stream are sorted.
-     * Because of this assumption, it does not need to first collect all elements and then partition them.
-     * Instead, it can emit a {@code List} of elements when it reaches the first element that does not
-     * belong to the same chunk as the previous elements.
+     * Partitions {@code Stream} into {@code List}s according to the given classifier function. In
+     * contrast to {@link #groupBy(Function)}, this method assumes that the elements of the stream
+     * are sorted. Because of this assumption, it does not need to first collect all elements and
+     * then partition them. Instead, it can emit a {@code List} of elements when it reaches the
+     * first element that does not belong to the same chunk as the previous elements.
      *
      * <p>This is an intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * classifier: (a) -&gt; a % 5 == 0
      * stream: [1, 2, 5, 6, 7, 9, 10, 12, 14]
@@ -1354,7 +1404,7 @@ public class Stream<T> implements Closeable {
      * </pre>
      *
      * @param <K> the type of the keys, which are the result of the classifier function
-     * @param classifier  the classifier function
+     * @param classifier the classifier function
      * @return the new stream
      */
     @NotNull
@@ -1368,43 +1418,49 @@ public class Stream<T> implements Closeable {
      * <p>This is an intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * stepWidth: 3
      * stream: [1, 2, 3, 4, 5, 6, 7, 8]
      * result: [1, 4, 7]
      * </pre>
      *
-     * @param stepWidth  step width
+     * @param stepWidth step width
      * @return the new stream
      * @throws IllegalArgumentException if {@code stepWidth} is zero or negative
      */
     @NotNull
     public Stream<T> sample(final int stepWidth) {
-        if (stepWidth <= 0) throw new IllegalArgumentException("stepWidth cannot be zero or negative");
+        if (stepWidth <= 0)
+            throw new IllegalArgumentException("stepWidth cannot be zero or negative");
         if (stepWidth == 1) return this;
-        return slidingWindow(1, stepWidth).map(new Function<List<T>, T>() {
-            @Override
-            public T apply(@NotNull List<T> list) {
-                return list.get(0);
-            }
-        });
+        return slidingWindow(1, stepWidth)
+                .map(
+                        new Function<List<T>, T>() {
+                            @Override
+                            public T apply(@NotNull List<T> list) {
+                                return list.get(0);
+                            }
+                        });
     }
 
     /**
-     * Partitions {@code Stream} into {@code List}s of fixed size by sliding over the elements of the stream.
-     * It starts with the first element and in each iteration moves by 1. This method yields the same results
-     * as calling {@link #slidingWindow(int, int)} with a {@code stepWidth} of 1.
+     * Partitions {@code Stream} into {@code List}s of fixed size by sliding over the elements of
+     * the stream. It starts with the first element and in each iteration moves by 1. This method
+     * yields the same results as calling {@link #slidingWindow(int, int)} with a {@code stepWidth}
+     * of 1.
      *
      * <p>This is an intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * windowSize: 3
      * stream: [1, 2, 3, 4, 5]
      * result: [[1, 2, 3], [2, 3, 4], [3, 4, 5]]
      * </pre>
      *
-     * @param windowSize  number of elements that will be emitted together in a list
+     * @param windowSize number of elements that will be emitted together in a list
      * @return the new stream
      * @see #slidingWindow(int, int)
      */
@@ -1414,15 +1470,16 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Partitions {@code Stream} into {@code List}s of fixed size by sliding over the elements of the stream.
-     * It starts with the first element and in each iteration moves by the given step width. This method
-     * allows, for example, to partition the elements into batches of {@code windowSize} elements (by using a
-     * step width equal to the specified window size) or to sample every n-th element (by using a window size
-     * of 1 and a step width of n).
+     * Partitions {@code Stream} into {@code List}s of fixed size by sliding over the elements of
+     * the stream. It starts with the first element and in each iteration moves by the given step
+     * width. This method allows, for example, to partition the elements into batches of {@code
+     * windowSize} elements (by using a step width equal to the specified window size) or to sample
+     * every n-th element (by using a window size of 1 and a step width of n).
      *
      * <p>This is an intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * windowSize: 3, stepWidth: 3
      * stream: [1, 1, 1, 2, 2, 2, 3, 3, 3]
@@ -1437,17 +1494,20 @@ public class Stream<T> implements Closeable {
      * result: [[1, 2, 3], [2, 3, 4], [3, 4, 5], [4, 5, 6]]
      * </pre>
      *
-     * @param windowSize  number of elements that will be emitted together in a list
-     * @param stepWidth  step width
+     * @param windowSize number of elements that will be emitted together in a list
+     * @param stepWidth step width
      * @return the new stream
      * @throws IllegalArgumentException if {@code windowSize} is zero or negative
      * @throws IllegalArgumentException if {@code stepWidth} is zero or negative
      */
     @NotNull
     public Stream<List<T>> slidingWindow(final int windowSize, final int stepWidth) {
-        if (windowSize <= 0) throw new IllegalArgumentException("windowSize cannot be zero or negative");
-        if (stepWidth <= 0) throw new IllegalArgumentException("stepWidth cannot be zero or negative");
-        return new Stream<List<T>>(params, new ObjSlidingWindow<T>(iterator, windowSize, stepWidth));
+        if (windowSize <= 0)
+            throw new IllegalArgumentException("windowSize cannot be zero or negative");
+        if (stepWidth <= 0)
+            throw new IllegalArgumentException("stepWidth cannot be zero or negative");
+        return new Stream<List<T>>(
+                params, new ObjSlidingWindow<T>(iterator, windowSize, stepWidth));
     }
 
     /**
@@ -1455,7 +1515,7 @@ public class Stream<T> implements Closeable {
      *
      * <p>This is an intermediate operation.
      *
-     * @param action  the action to be performed on each element
+     * @param action the action to be performed on each element
      * @return the new stream
      */
     @NotNull
@@ -1464,21 +1524,22 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Returns a {@code Stream} produced by iterative application of a accumulation function
-     * to reduction value and next element of the current stream.
-     * Produces a {@code Stream} consisting of {@code value1}, {@code acc(value1, value2)},
-     * {@code acc(acc(value1, value2), value3)}, etc.
+     * Returns a {@code Stream} produced by iterative application of a accumulation function to
+     * reduction value and next element of the current stream. Produces a {@code Stream} consisting
+     * of {@code value1}, {@code acc(value1, value2)}, {@code acc(acc(value1, value2), value3)},
+     * etc.
      *
      * <p>This is an intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * accumulator: (a, b) -&gt; a + b
      * stream: [1, 2, 3, 4, 5]
      * result: [1, 3, 6, 10, 15]
      * </pre>
      *
-     * @param accumulator  the accumulation function
+     * @param accumulator the accumulation function
      * @return the new stream
      * @throws NullPointerException if {@code accumulator} is null
      * @since 1.1.6
@@ -1490,14 +1551,15 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Returns a {@code Stream} produced by iterative application of a accumulation function
-     * to an initial element {@code identity} and next element of the current stream.
-     * Produces a {@code Stream} consisting of {@code identity}, {@code acc(identity, value1)},
-     * {@code acc(acc(identity, value1), value2)}, etc.
+     * Returns a {@code Stream} produced by iterative application of a accumulation function to an
+     * initial element {@code identity} and next element of the current stream. Produces a {@code
+     * Stream} consisting of {@code identity}, {@code acc(identity, value1)}, {@code
+     * acc(acc(identity, value1), value2)}, etc.
      *
      * <p>This is an intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * identity: 0
      * accumulator: (a, b) -&gt; a + b
@@ -1506,8 +1568,8 @@ public class Stream<T> implements Closeable {
      * </pre>
      *
      * @param <R> the type of the result
-     * @param identity  the initial value
-     * @param accumulator  the accumulation function
+     * @param identity the initial value
+     * @param accumulator the accumulation function
      * @return the new stream
      * @throws NullPointerException if {@code accumulator} is null
      * @since 1.1.6
@@ -1526,13 +1588,14 @@ public class Stream<T> implements Closeable {
      * <p>This is an intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * predicate: (a) -&gt; a &lt; 3
      * stream: [1, 2, 3, 4, 1, 2, 3, 4]
      * result: [1, 2]
      * </pre>
      *
-     * @param predicate  the predicate used to take elements
+     * @param predicate the predicate used to take elements
      * @return the new stream
      */
     @NotNull
@@ -1546,6 +1609,7 @@ public class Stream<T> implements Closeable {
      * <p>This is an intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * predicate: (index, value) -&gt; (index + value) &lt; 5
      * stream: [1, 2, 3,  4, -5, -6, -7]
@@ -1554,7 +1618,7 @@ public class Stream<T> implements Closeable {
      * result: [1, 2]
      * </pre>
      *
-     * @param predicate  the {@code IndexedPredicate} used to take elements
+     * @param predicate the {@code IndexedPredicate} used to take elements
      * @return the new stream
      * @since 1.1.6
      */
@@ -1569,6 +1633,7 @@ public class Stream<T> implements Closeable {
      * <p>This is an intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * from: 2
      * step: 2
@@ -1579,35 +1644,36 @@ public class Stream<T> implements Closeable {
      * result: [1, 2]
      * </pre>
      *
-     * @param from  the initial value of the index (inclusive)
-     * @param step  the step of the index
-     * @param predicate  the {@code IndexedPredicate} used to take elements
+     * @param from the initial value of the index (inclusive)
+     * @param step the step of the index
+     * @param predicate the {@code IndexedPredicate} used to take elements
      * @return the new stream
      * @since 1.1.6
      */
     @NotNull
-    public Stream<T> takeWhileIndexed(int from, int step,
-                                      @NotNull IndexedPredicate<? super T> predicate) {
-        return new Stream<T>(params, new ObjTakeWhileIndexed<T>(
-                new IndexedIterator<T>(from, step, iterator),
-                predicate));
+    public Stream<T> takeWhileIndexed(
+            int from, int step, @NotNull IndexedPredicate<? super T> predicate) {
+        return new Stream<T>(
+                params,
+                new ObjTakeWhileIndexed<T>(
+                        new IndexedIterator<T>(from, step, iterator), predicate));
     }
 
     /**
-     * Takes elements while the predicate returns {@code false}.
-     * Once predicate condition is satisfied by an element, the stream
-     * finishes with this element.
+     * Takes elements while the predicate returns {@code false}. Once predicate condition is
+     * satisfied by an element, the stream finishes with this element.
      *
      * <p>This is an intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * stopPredicate: (a) -&gt; a &gt; 2
      * stream: [1, 2, 3, 4, 1, 2, 3, 4]
      * result: [1, 2, 3]
      * </pre>
      *
-     * @param stopPredicate  the predicate used to take elements
+     * @param stopPredicate the predicate used to take elements
      * @return the new stream
      * @since 1.1.6
      */
@@ -1617,13 +1683,13 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Takes elements while the {@code IndexedPredicate} returns {@code false}.
-     * Once predicate condition is satisfied by an element, the stream
-     * finishes with this element.
+     * Takes elements while the {@code IndexedPredicate} returns {@code false}. Once predicate
+     * condition is satisfied by an element, the stream finishes with this element.
      *
      * <p>This is an intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * stopPredicate: (index, value) -&gt; (index + value) &gt; 4
      * stream: [1, 2, 3, 4, 0, 1, 2]
@@ -1632,7 +1698,7 @@ public class Stream<T> implements Closeable {
      * result: [1, 2, 3]
      * </pre>
      *
-     * @param stopPredicate  the {@code IndexedPredicate} used to take elements
+     * @param stopPredicate the {@code IndexedPredicate} used to take elements
      * @return the new stream
      * @since 1.1.6
      */
@@ -1642,13 +1708,13 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Takes elements while the {@code IndexedPredicate} returns {@code false}.
-     * Once predicate condition is satisfied by an element, the stream
-     * finishes with this element.
+     * Takes elements while the {@code IndexedPredicate} returns {@code false}. Once predicate
+     * condition is satisfied by an element, the stream finishes with this element.
      *
      * <p>This is an intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * from: 2
      * step: 2
@@ -1659,18 +1725,19 @@ public class Stream<T> implements Closeable {
      * result: [1, 2, 3]
      * </pre>
      *
-     * @param from  the initial value of the index (inclusive)
-     * @param step  the step of the index
-     * @param stopPredicate  the {@code IndexedPredicate} used to take elements
+     * @param from the initial value of the index (inclusive)
+     * @param step the step of the index
+     * @param stopPredicate the {@code IndexedPredicate} used to take elements
      * @return the new stream
      * @since 1.1.6
      */
     @NotNull
-    public Stream<T> takeUntilIndexed(int from, int step,
-                                      @NotNull IndexedPredicate<? super T> stopPredicate) {
-        return new Stream<T>(params, new ObjTakeUntilIndexed<T>(
-                new IndexedIterator<T>(from, step, iterator),
-                stopPredicate));
+    public Stream<T> takeUntilIndexed(
+            int from, int step, @NotNull IndexedPredicate<? super T> stopPredicate) {
+        return new Stream<T>(
+                params,
+                new ObjTakeUntilIndexed<T>(
+                        new IndexedIterator<T>(from, step, iterator), stopPredicate));
     }
 
     /**
@@ -1679,13 +1746,14 @@ public class Stream<T> implements Closeable {
      * <p>This is an intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * predicate: (a) -&gt; a &lt; 3
      * stream: [1, 2, 3, 4, 1, 2, 3, 4]
      * result: [3, 4, 1, 2, 3, 4]
      * </pre>
      *
-     * @param predicate  the predicate used to drop elements
+     * @param predicate the predicate used to drop elements
      * @return the new stream
      */
     @NotNull
@@ -1699,6 +1767,7 @@ public class Stream<T> implements Closeable {
      * <p>This is an intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * predicate: (index, value) -&gt; (index + value) &lt; 5
      * stream: [1, 2, 3, 4, 0, 1, 2]
@@ -1707,7 +1776,7 @@ public class Stream<T> implements Closeable {
      * result: [3, 4, 0, 1, 2]
      * </pre>
      *
-     * @param predicate  the {@code IndexedPredicate} used to drop elements
+     * @param predicate the {@code IndexedPredicate} used to drop elements
      * @return the new stream
      * @since 1.1.6
      */
@@ -1722,6 +1791,7 @@ public class Stream<T> implements Closeable {
      * <p>This is an intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * from: 2
      * step: 2
@@ -1732,18 +1802,19 @@ public class Stream<T> implements Closeable {
      * result: [4, -5, -6, -7]
      * </pre>
      *
-     * @param from  the initial value of the index (inclusive)
-     * @param step  the step of the index
-     * @param predicate  the {@code IndexedPredicate} used to drop elements
+     * @param from the initial value of the index (inclusive)
+     * @param step the step of the index
+     * @param predicate the {@code IndexedPredicate} used to drop elements
      * @return the new stream
      * @since 1.1.6
      */
     @NotNull
-    public Stream<T> dropWhileIndexed(int from, int step,
-                                      @NotNull IndexedPredicate<? super T> predicate) {
-        return new Stream<T>(params, new ObjDropWhileIndexed<T>(
-                new IndexedIterator<T>(from, step, iterator),
-                predicate));
+    public Stream<T> dropWhileIndexed(
+            int from, int step, @NotNull IndexedPredicate<? super T> predicate) {
+        return new Stream<T>(
+                params,
+                new ObjDropWhileIndexed<T>(
+                        new IndexedIterator<T>(from, step, iterator), predicate));
     }
 
     /**
@@ -1752,6 +1823,7 @@ public class Stream<T> implements Closeable {
      * <p>This is a short-circuiting stateful intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * maxSize: 3
      * stream: [1, 2, 3, 4, 5]
@@ -1762,7 +1834,7 @@ public class Stream<T> implements Closeable {
      * result: [1, 2]
      * </pre>
      *
-     * @param maxSize  the number of elements to limit
+     * @param maxSize the number of elements to limit
      * @return the new stream
      * @throws IllegalArgumentException if {@code maxSize} is negative
      */
@@ -1778,12 +1850,13 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Skips first {@code n} elements and returns {@code Stream} with remaining elements.
-     * If stream contains fewer than {@code n} elements, then an empty stream will be returned.
+     * Skips first {@code n} elements and returns {@code Stream} with remaining elements. If stream
+     * contains fewer than {@code n} elements, then an empty stream will be returned.
      *
      * <p>This is a stateful intermediate operation.
      *
      * <p>Example:
+     *
      * <pre>
      * n: 3
      * stream: [1, 2, 3, 4, 5]
@@ -1794,7 +1867,7 @@ public class Stream<T> implements Closeable {
      * result: []
      * </pre>
      *
-     * @param n  the number of elements to skip
+     * @param n the number of elements to skip
      * @return the new stream
      * @throws IllegalArgumentException if {@code n} is negative
      */
@@ -1810,7 +1883,7 @@ public class Stream<T> implements Closeable {
      *
      * <p>This is a terminal operation.
      *
-     * @param action  the action to be performed on each element
+     * @param action the action to be performed on each element
      */
     public void forEach(@NotNull final Consumer<? super T> action) {
         while (iterator.hasNext()) {
@@ -1823,7 +1896,7 @@ public class Stream<T> implements Closeable {
      *
      * <p>This is a terminal operation.
      *
-     * @param action  the action to be performed on each element
+     * @param action the action to be performed on each element
      * @since 1.1.6
      */
     public void forEachIndexed(@NotNull IndexedConsumer<? super T> action) {
@@ -1835,13 +1908,12 @@ public class Stream<T> implements Closeable {
      *
      * <p>This is a terminal operation.
      *
-     * @param from  the initial value of the index (inclusive)
-     * @param step  the step of the index
-     * @param action  the action to be performed on each element
+     * @param from the initial value of the index (inclusive)
+     * @param step the step of the index
+     * @param action the action to be performed on each element
      * @since 1.1.6
      */
-    public void forEachIndexed(int from, int step,
-                               @NotNull IndexedConsumer<? super T> action) {
+    public void forEachIndexed(int from, int step, @NotNull IndexedConsumer<? super T> action) {
         int index = from;
         while (iterator.hasNext()) {
             action.accept(index, iterator.next());
@@ -1855,6 +1927,7 @@ public class Stream<T> implements Closeable {
      * <p>This is a terminal operation.
      *
      * <p>Example:
+     *
      * <pre>
      * identity: 0
      * accumulator: (a, b) -&gt; a + b
@@ -1863,13 +1936,14 @@ public class Stream<T> implements Closeable {
      * </pre>
      *
      * @param <R> the type of the result
-     * @param identity  the initial value
-     * @param accumulator  the accumulation function
+     * @param identity the initial value
+     * @param accumulator the accumulation function
      * @return the result of the reduction
      */
     @Nullable
-    public <R> R reduce(@Nullable R identity,
-                        @NotNull BiFunction<? super R, ? super T, ? extends R> accumulator) {
+    public <R> R reduce(
+            @Nullable R identity,
+            @NotNull BiFunction<? super R, ? super T, ? extends R> accumulator) {
         R result = identity;
         while (iterator.hasNext()) {
             final T value = iterator.next();
@@ -1879,12 +1953,13 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Reduces the elements using provided identity value and
-     * the associative accumulation indexed function.
+     * Reduces the elements using provided identity value and the associative accumulation indexed
+     * function.
      *
      * <p>This is a terminal operation.
      *
      * <p>Example:
+     *
      * <pre>
      * identity: 10
      * accumulator: (index, a, b) -&gt; index + a + b
@@ -1894,24 +1969,26 @@ public class Stream<T> implements Closeable {
      * </pre>
      *
      * @param <R> the type of the result
-     * @param identity  the initial value
-     * @param accumulator  the accumulation function
+     * @param identity the initial value
+     * @param accumulator the accumulation function
      * @return the result of the reduction
      * @since 1.1.6
      */
     @Nullable
-    public <R> R reduceIndexed(@Nullable R identity,
-                               @NotNull IndexedBiFunction<? super R, ? super T, ? extends R> accumulator) {
+    public <R> R reduceIndexed(
+            @Nullable R identity,
+            @NotNull IndexedBiFunction<? super R, ? super T, ? extends R> accumulator) {
         return reduceIndexed(0, 1, identity, accumulator);
     }
 
     /**
-     * Reduces the elements using provided identity value and
-     * the associative accumulation indexed function.
+     * Reduces the elements using provided identity value and the associative accumulation indexed
+     * function.
      *
      * <p>This is a terminal operation.
      *
      * <p>Example:
+     *
      * <pre>
      * from: 1
      * step: 2
@@ -1923,17 +2000,19 @@ public class Stream<T> implements Closeable {
      * </pre>
      *
      * @param <R> the type of the result
-     * @param from  the initial value of the index (inclusive)
-     * @param step  the step of the index
-     * @param identity  the initial value
-     * @param accumulator  the accumulation function
+     * @param from the initial value of the index (inclusive)
+     * @param step the step of the index
+     * @param identity the initial value
+     * @param accumulator the accumulation function
      * @return the result of the reduction
      * @since 1.1.6
      */
     @Nullable
-    public <R> R reduceIndexed(int from, int step,
-                               @Nullable R identity,
-                               @NotNull IndexedBiFunction<? super R, ? super T, ? extends R> accumulator) {
+    public <R> R reduceIndexed(
+            int from,
+            int step,
+            @Nullable R identity,
+            @NotNull IndexedBiFunction<? super R, ? super T, ? extends R> accumulator) {
         R result = identity;
         int index = from;
         while (iterator.hasNext()) {
@@ -1949,7 +2028,7 @@ public class Stream<T> implements Closeable {
      *
      * <p>This is a terminal operation.
      *
-     * @param accumulator  the accumulation function
+     * @param accumulator the accumulation function
      * @return the result of the reduction
      * @see #reduce(java.lang.Object, com.annimon.stream.function.BiFunction)
      */
@@ -1979,14 +2058,15 @@ public class Stream<T> implements Closeable {
      */
     @NotNull
     public Object[] toArray() {
-        return toArray(new IntFunction<Object[]>() {
+        return toArray(
+                new IntFunction<Object[]>() {
 
-            @NotNull
-            @Override
-            public Object[] apply(int value) {
-                return new Object[value];
-            }
-        });
+                    @NotNull
+                    @Override
+                    public Object[] apply(int value) {
+                        return new Object[value];
+                    }
+                });
     }
 
     /**
@@ -1995,7 +2075,8 @@ public class Stream<T> implements Closeable {
      * <p>This is a terminal operation.
      *
      * @param <R> the type of the result
-     * @param generator  the array constructor reference that accommodates future array of assigned size
+     * @param generator the array constructor reference that accommodates future array of assigned
+     *     size
      * @return the result of collect elements
      */
     @NotNull
@@ -2006,8 +2087,8 @@ public class Stream<T> implements Closeable {
     /**
      * Collects elements to a new {@code List}.
      *
-     * <p>This implementation <strong>does not</strong> call {@code collect(Collectors.toList())}, so
-     * it can be faster by reducing method calls.
+     * <p>This implementation <strong>does not</strong> call {@code collect(Collectors.toList())},
+     * so it can be faster by reducing method calls.
      *
      * <p>This is a terminal operation.
      *
@@ -2025,19 +2106,20 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Collects elements to {@code supplier} provided container by applying the given accumulation function.
+     * Collects elements to {@code supplier} provided container by applying the given accumulation
+     * function.
      *
      * <p>This is a terminal operation.
      *
      * @param <R> the type of the result
-     * @param supplier  the supplier function that provides container
-     * @param accumulator  the accumulation function
+     * @param supplier the supplier function that provides container
+     * @param accumulator the accumulation function
      * @return the result of collect elements
      * @see #collect(com.annimon.stream.Collector)
      */
     @Nullable
-    public <R> R collect(@NotNull Supplier<R> supplier,
-                         @NotNull BiConsumer<R, ? super T> accumulator) {
+    public <R> R collect(
+            @NotNull Supplier<R> supplier, @NotNull BiConsumer<R, ? super T> accumulator) {
         final R result = supplier.get();
         while (iterator.hasNext()) {
             final T value = iterator.next();
@@ -2047,13 +2129,14 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Collects elements with {@code collector} that encapsulates supplier, accumulator and combiner functions.
+     * Collects elements with {@code collector} that encapsulates supplier, accumulator and combiner
+     * functions.
      *
      * <p>This is a terminal operation.
      *
      * @param <R> the type of result
      * @param <A> the intermediate used by {@code Collector}
-     * @param collector  the {@code Collector}
+     * @param collector the {@code Collector}
      * @return the result of collect elements
      * @see #collect(com.annimon.stream.function.Supplier, com.annimon.stream.function.BiConsumer)
      */
@@ -2073,13 +2156,14 @@ public class Stream<T> implements Closeable {
      * <p>This is a terminal operation.
      *
      * <p>Example:
+     *
      * <pre>
      * comparator: (a, b) -&gt; a.compareTo(b)
      * stream: [1, 2, 3, 4, 5]
      * result: 1
      * </pre>
      *
-     * @param comparator  the {@code Comparator} to compare elements
+     * @param comparator the {@code Comparator} to compare elements
      * @return the minimum element
      */
     @NotNull
@@ -2093,13 +2177,14 @@ public class Stream<T> implements Closeable {
      * <p>This is a terminal operation.
      *
      * <p>Example:
+     *
      * <pre>
      * comparator: (a, b) -&gt; a.compareTo(b)
      * stream: [1, 2, 3, 4, 5]
      * result: 5
      * </pre>
      *
-     * @param comparator  the {@code Comparator} to compare elements
+     * @param comparator the {@code Comparator} to compare elements
      * @return the maximum element
      */
     @NotNull
@@ -2129,6 +2214,7 @@ public class Stream<T> implements Closeable {
      * <p>This is a short-circuiting terminal operation.
      *
      * <p>Example:
+     *
      * <pre>
      * predicate: (a) -&gt; a == 5
      * stream: [1, 2, 3, 4, 5]
@@ -2139,7 +2225,7 @@ public class Stream<T> implements Closeable {
      * result: true
      * </pre>
      *
-     * @param predicate  the predicate used to match elements
+     * @param predicate the predicate used to match elements
      * @return {@code true} if any elements match the given predicate, otherwise {@code false}
      */
     public boolean anyMatch(@NotNull Predicate<? super T> predicate) {
@@ -2152,6 +2238,7 @@ public class Stream<T> implements Closeable {
      * <p>This is a short-circuiting terminal operation.
      *
      * <p>Example:
+     *
      * <pre>
      * predicate: (a) -&gt; a == 5
      * stream: [1, 2, 3, 4, 5]
@@ -2162,7 +2249,7 @@ public class Stream<T> implements Closeable {
      * result: true
      * </pre>
      *
-     * @param predicate  the predicate used to match elements
+     * @param predicate the predicate used to match elements
      * @return {@code true} if all elements match the given predicate, otherwise {@code false}
      */
     public boolean allMatch(@NotNull Predicate<? super T> predicate) {
@@ -2175,6 +2262,7 @@ public class Stream<T> implements Closeable {
      * <p>This is a short-circuiting terminal operation.
      *
      * <p>Example:
+     *
      * <pre>
      * predicate: (a) -&gt; a == 5
      * stream: [1, 2, 3, 4, 5]
@@ -2185,7 +2273,7 @@ public class Stream<T> implements Closeable {
      * result: true
      * </pre>
      *
-     * @param predicate  the predicate used to match elements
+     * @param predicate the predicate used to match elements
      * @return {@code true} if no elements match the given predicate, otherwise {@code false}
      */
     public boolean noneMatch(@NotNull Predicate<? super T> predicate) {
@@ -2198,6 +2286,7 @@ public class Stream<T> implements Closeable {
      * <p>This is a short-circuiting terminal operation.
      *
      * <p>Example:
+     *
      * <pre>
      * predicate: (index, value) -&gt; index + value == 7
      * stream: [1, 2, 3, 4, 5, 2, 0]
@@ -2205,9 +2294,9 @@ public class Stream<T> implements Closeable {
      * result: Optional.of(IntPair(3, 4))
      * </pre>
      *
-     * @param predicate  the predicate to find value
-     * @return an {@code Optional} with {@code IntPair}
-     *         or {@code Optional.empty()} if stream is empty or no value was found.
+     * @param predicate the predicate to find value
+     * @return an {@code Optional} with {@code IntPair} or {@code Optional.empty()} if stream is
+     *     empty or no value was found.
      * @since 1.1.8
      */
     @NotNull
@@ -2221,6 +2310,7 @@ public class Stream<T> implements Closeable {
      * <p>This is a short-circuiting terminal operation.
      *
      * <p>Example:
+     *
      * <pre>
      * from: 0
      * step: 10
@@ -2230,17 +2320,16 @@ public class Stream<T> implements Closeable {
      * result: Optional.of(IntPair(20, 22))
      * </pre>
      *
-     * @param from  the initial value of the index (inclusive)
-     * @param step  the step of the index
-     * @param predicate  the predicate to find value
-     * @return an {@code Optional} with {@code IntPair}
-     *         or {@code Optional.empty()} if stream is empty or no value was found.
+     * @param from the initial value of the index (inclusive)
+     * @param step the step of the index
+     * @param predicate the predicate to find value
+     * @return an {@code Optional} with {@code IntPair} or {@code Optional.empty()} if stream is
+     *     empty or no value was found.
      * @since 1.1.8
      */
     @NotNull
     public Optional<IntPair<T>> findIndexed(
-            int from, int step,
-            @NotNull IndexedPredicate<? super T> predicate) {
+            int from, int step, @NotNull IndexedPredicate<? super T> predicate) {
         int index = from;
         while (iterator.hasNext()) {
             final T value = iterator.next();
@@ -2253,13 +2342,13 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Returns the first element wrapped by {@code Optional} class.
-     * If stream is empty, returns {@code Optional.empty()}.
+     * Returns the first element wrapped by {@code Optional} class. If stream is empty, returns
+     * {@code Optional.empty()}.
      *
      * <p>This is a short-circuiting terminal operation.
      *
-     * @return an {@code Optional} with the first element
-     *         or {@code Optional.empty()} if stream is empty
+     * @return an {@code Optional} with the first element or {@code Optional.empty()} if stream is
+     *     empty
      */
     @NotNull
     public Optional<T> findFirst() {
@@ -2270,12 +2359,11 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Returns the first element if stream is not empty,
-     * otherwise returns {@code other}.
+     * Returns the first element if stream is not empty, otherwise returns {@code other}.
      *
      * <p>This is a short-circuiting terminal operation.
      *
-     * @param other  the value to be returned if stream is empty
+     * @param other the value to be returned if stream is empty
      * @return first element or {@code other} if stream is empty
      * @since 1.2.2
      */
@@ -2288,33 +2376,35 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Returns the last element wrapped by {@code Optional} class.
-     * If stream is empty, returns {@code Optional.empty()}.
+     * Returns the last element wrapped by {@code Optional} class. If stream is empty, returns
+     * {@code Optional.empty()}.
      *
      * <p>This is a short-circuiting terminal operation.
      *
-     * @return an {@code Optional} with the last element
-     *         or {@code Optional.empty()} if the stream is empty
+     * @return an {@code Optional} with the last element or {@code Optional.empty()} if the stream
+     *     is empty
      * @since 1.1.8
      */
     @NotNull
     public Optional<T> findLast() {
-        return reduce(new BinaryOperator<T>() {
-            @Override
-            public T apply(T left, T right) {
-                return right;
-            }
-        });
+        return reduce(
+                new BinaryOperator<T>() {
+                    @Override
+                    public T apply(T left, T right) {
+                        return right;
+                    }
+                });
     }
 
     /**
-     * Returns the single element of stream.
-     * If stream is empty, throws {@code NoSuchElementException}.
-     * If stream contains more than one element, throws {@code IllegalStateException}.
+     * Returns the single element of stream. If stream is empty, throws {@code
+     * NoSuchElementException}. If stream contains more than one element, throws {@code
+     * IllegalStateException}.
      *
      * <p>This is a short-circuiting terminal operation.
      *
      * <p>Example:
+     *
      * <pre>
      * stream: []
      * result: NoSuchElementException
@@ -2346,13 +2436,14 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Returns the single element wrapped by {@code Optional} class.
-     * If stream is empty, returns {@code Optional.empty()}.
-     * If stream contains more than one element, throws {@code IllegalStateException}.
+     * Returns the single element wrapped by {@code Optional} class. If stream is empty, returns
+     * {@code Optional.empty()}. If stream contains more than one element, throws {@code
+     * IllegalStateException}.
      *
      * <p>This is a short-circuiting terminal operation.
      *
      * <p>Example:
+     *
      * <pre>
      * stream: []
      * result: Optional.empty()
@@ -2364,7 +2455,8 @@ public class Stream<T> implements Closeable {
      * result: IllegalStateException
      * </pre>
      *
-     * @return an {@code Optional} with single element or {@code Optional.empty()} if stream is empty
+     * @return an {@code Optional} with single element or {@code Optional.empty()} if stream is
+     *     empty
      * @throws IllegalStateException if stream contains more than one element
      * @since 1.1.2
      */
@@ -2387,7 +2479,7 @@ public class Stream<T> implements Closeable {
      *
      * <p>This is an intermediate operation.
      *
-     * @param closeHandler  an action to execute when the stream is closed
+     * @param closeHandler an action to execute when the stream is closed
      * @return the new stream with the close handler
      * @since 1.1.8
      */
@@ -2399,9 +2491,8 @@ public class Stream<T> implements Closeable {
     }
 
     /**
-     * Causes close handler to be invoked if it exists.
-     * Since most of the stream providers are lists or arrays,
-     * it is not necessary to close the stream.
+     * Causes close handler to be invoked if it exists. Since most of the stream providers are lists
+     * or arrays, it is not necessary to close the stream.
      *
      * @since 1.1.8
      */
@@ -2448,5 +2539,5 @@ public class Stream<T> implements Closeable {
         // noneMatch -> true
         return !kindAny;
     }
-//</editor-fold>
+    // </editor-fold>
 }

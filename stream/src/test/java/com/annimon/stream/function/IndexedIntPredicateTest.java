@@ -1,11 +1,12 @@
 package com.annimon.stream.function;
 
-import com.annimon.stream.Functions;
-import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import com.annimon.stream.Functions;
+import org.junit.Test;
 
 /**
  * Tests {@code IndexedIntPredicate}.
@@ -28,20 +29,19 @@ public class IndexedIntPredicateTest {
 
     @Test
     public void testWrap() {
-        IndexedIntPredicate predicate = IndexedIntPredicate.Util
-                .wrap(Functions.remainderInt(2));
+        IndexedIntPredicate predicate = IndexedIntPredicate.Util.wrap(Functions.remainderInt(2));
 
         assertTrue(predicate.test(0, 50));
         assertFalse(predicate.test(2, 55));
         assertFalse(predicate.test(9, 9));
     }
 
-    private static final IndexedIntPredicate areIndexAndValueEven
-            = new IndexedIntPredicate() {
+    private static final IndexedIntPredicate areIndexAndValueEven =
+            new IndexedIntPredicate() {
 
-        @Override
-        public boolean test(int index, int value) {
-            return (index % 2 == 0) && (value % 2 == 0);
-        }
-    };
+                @Override
+                public boolean test(int index, int value) {
+                    return (index % 2 == 0) && (value % 2 == 0);
+                }
+            };
 }

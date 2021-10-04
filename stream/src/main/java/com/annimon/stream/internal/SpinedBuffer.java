@@ -10,53 +10,37 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 /**
- * Base class for a data structure for gathering elements into a buffer and then
- * iterating them. Maintains an array of increasingly sized arrays, so there is
- * no copying cost associated with growing the data structure.
+ * Base class for a data structure for gathering elements into a buffer and then iterating them.
+ * Maintains an array of increasingly sized arrays, so there is no copying cost associated with
+ * growing the data structure.
  */
 @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
 public abstract class SpinedBuffer<E, T_ARR> implements Iterable<E> {
 
-    /**
-     * Minimum power-of-two for the first chunk.
-     */
+    /** Minimum power-of-two for the first chunk. */
     static final int MIN_CHUNK_POWER = 4;
 
-    /**
-     * Minimum size for the first chunk.
-     */
+    /** Minimum size for the first chunk. */
     static final int MIN_CHUNK_SIZE = 1 << MIN_CHUNK_POWER;
 
-    /**
-     * Max power-of-two for chunks.
-     */
+    /** Max power-of-two for chunks. */
     private static final int MAX_CHUNK_POWER = 30;
 
-    /**
-     * Minimum array size for array-of-chunks.
-     */
+    /** Minimum array size for array-of-chunks. */
     private static final int MIN_SPINE_SIZE = 8;
 
-    /**
-     * log2 of the size of the first chunk.
-     */
+    /** log2 of the size of the first chunk. */
     final int initialChunkPower;
 
     /**
-     * Index of the *next* element to write; may point into, or just outside of,
-     * the current chunk.
+     * Index of the *next* element to write; may point into, or just outside of, the current chunk.
      */
     int elementIndex;
 
-    /**
-     * Index of the *current* chunk in the spine array, if the spine array is
-     * non-null.
-     */
+    /** Index of the *current* chunk in the spine array, if the spine array is non-null. */
     int spineIndex;
 
-    /**
-     * Count of elements in all prior chunks.
-     */
+    /** Count of elements in all prior chunks. */
     long[] priorElementCount;
 
     T_ARR curChunk;
@@ -75,10 +59,12 @@ public abstract class SpinedBuffer<E, T_ARR> implements Iterable<E> {
      */
     SpinedBuffer(int initialCapacity) {
         if (initialCapacity < 0)
-            throw new IllegalArgumentException("Illegal Capacity: "+ initialCapacity);
+            throw new IllegalArgumentException("Illegal Capacity: " + initialCapacity);
 
-        this.initialChunkPower = Math.max(MIN_CHUNK_POWER,
-                Integer.SIZE - Integer.numberOfLeadingZeros(initialCapacity - 1));
+        this.initialChunkPower =
+                Math.max(
+                        MIN_CHUNK_POWER,
+                        Integer.SIZE - Integer.numberOfLeadingZeros(initialCapacity - 1));
         curChunk = newArray(1 << initialChunkPower);
     }
 
@@ -93,6 +79,7 @@ public abstract class SpinedBuffer<E, T_ARR> implements Iterable<E> {
 
     /**
      * Is the buffer currently empty?
+     *
      * @return true, if buffer is empty
      */
     public boolean isEmpty() {
@@ -101,21 +88,19 @@ public abstract class SpinedBuffer<E, T_ARR> implements Iterable<E> {
 
     /**
      * How many elements are currently in the buffer?
+     *
      * @return a number of elements in buffer
      */
     public long count() {
-        return (spineIndex == 0)
-                ? elementIndex
-                : priorElementCount[spineIndex] + elementIndex;
+        return (spineIndex == 0) ? elementIndex : priorElementCount[spineIndex] + elementIndex;
     }
 
-    /**
-     * How big should the nth chunk be?
-     */
+    /** How big should the nth chunk be? */
     int chunkSize(int n) {
-        int power = (n == 0 || n == 1)
-                ? initialChunkPower
-                : Math.min(initialChunkPower + n - 1, MAX_CHUNK_POWER);
+        int power =
+                (n == 0 || n == 1)
+                        ? initialChunkPower
+                        : Math.min(initialChunkPower + n - 1, MAX_CHUNK_POWER);
         return 1 << power;
     }
 
@@ -137,7 +122,7 @@ public abstract class SpinedBuffer<E, T_ARR> implements Iterable<E> {
         long capacity = capacity();
         if (targetSize > capacity) {
             inflateSpine();
-            for (int i=spineIndex+1; targetSize > capacity; i++) {
+            for (int i = spineIndex + 1; targetSize > capacity; i++) {
                 if (i >= spine.length) {
                     int newSpineSize = spine.length * 2;
                     spine = Arrays.copyOf(spine, newSpineSize);
@@ -145,7 +130,7 @@ public abstract class SpinedBuffer<E, T_ARR> implements Iterable<E> {
                 }
                 int nextChunkSize = chunkSize(i);
                 spine[i] = newArray(nextChunkSize);
-                priorElementCount[i] = priorElementCount[i-1] + arrayLength(spine[i - 1]);
+                priorElementCount[i] = priorElementCount[i - 1] + arrayLength(spine[i - 1]);
                 capacity += nextChunkSize;
             }
         }
@@ -157,18 +142,14 @@ public abstract class SpinedBuffer<E, T_ARR> implements Iterable<E> {
 
     int chunkFor(long index) {
         if (spineIndex == 0) {
-            if (index < elementIndex)
-                return 0;
-            else
-                throw new IndexOutOfBoundsException(Long.toString(index));
+            if (index < elementIndex) return 0;
+            else throw new IndexOutOfBoundsException(Long.toString(index));
         }
 
-        if (index >= count())
-            throw new IndexOutOfBoundsException(Long.toString(index));
+        if (index >= count()) throw new IndexOutOfBoundsException(Long.toString(index));
 
-        for (int j=0; j <= spineIndex; j++)
-            if (index < priorElementCount[j] + arrayLength(spine[j]))
-                return j;
+        for (int j = 0; j <= spineIndex; j++)
+            if (index < priorElementCount[j] + arrayLength(spine[j])) return j;
 
         throw new IndexOutOfBoundsException(Long.toString(index));
     }
@@ -180,33 +161,28 @@ public abstract class SpinedBuffer<E, T_ARR> implements Iterable<E> {
             throw new IndexOutOfBoundsException("does not fit");
         }
 
-        if (spineIndex == 0)
-            System.arraycopy(curChunk, 0, array, offset, elementIndex);
+        if (spineIndex == 0) System.arraycopy(curChunk, 0, array, offset, elementIndex);
         else {
             // full chunks
-            for (int i=0; i < spineIndex; i++) {
+            for (int i = 0; i < spineIndex; i++) {
                 System.arraycopy(spine[i], 0, array, offset, arrayLength(spine[i]));
                 offset += arrayLength(spine[i]);
             }
-            if (elementIndex > 0)
-                System.arraycopy(curChunk, 0, array, offset, elementIndex);
+            if (elementIndex > 0) System.arraycopy(curChunk, 0, array, offset, elementIndex);
         }
     }
 
     void preAccept() {
         if (elementIndex == arrayLength(curChunk)) {
             inflateSpine();
-            if (spineIndex+1 >= spine.length || spine[spineIndex+1] == null)
-                increaseCapacity();
+            if (spineIndex + 1 >= spine.length || spine[spineIndex + 1] == null) increaseCapacity();
             elementIndex = 0;
             ++spineIndex;
             curChunk = spine[spineIndex];
         }
     }
 
-    /**
-     * Remove all data from the buffer
-     */
+    /** Remove all data from the buffer */
     public void clear() {
         if (spine != null) {
             curChunk = spine[0];
@@ -217,10 +193,9 @@ public abstract class SpinedBuffer<E, T_ARR> implements Iterable<E> {
         spineIndex = 0;
     }
 
-    public static class Of<E> extends SpinedBuffer<E, E[]>
-            implements Consumer<E> {
+    public static class Of<E> extends SpinedBuffer<E, E[]> implements Consumer<E> {
 
-        public Of() { }
+        public Of() {}
 
         public Of(int initialCapacity) {
             super(initialCapacity);
@@ -251,12 +226,9 @@ public abstract class SpinedBuffer<E, T_ARR> implements Iterable<E> {
 
         public E get(long index) {
             int ch = chunkFor(index);
-            if (spineIndex == 0 && ch == 0)
-                return curChunk[(int) index];
-            else
-                return spine[ch][(int) (index - priorElementCount[ch])];
+            if (spineIndex == 0 && ch == 0) return curChunk[(int) index];
+            else return spine[ch][(int) (index - priorElementCount[ch])];
         }
-
 
         @Override
         public Iterator<E> iterator() {
@@ -289,10 +261,9 @@ public abstract class SpinedBuffer<E, T_ARR> implements Iterable<E> {
         }
     }
 
-
     abstract static class OfPrimitive<E, T_ARR> extends SpinedBuffer<E, T_ARR> {
 
-        OfPrimitive() { }
+        OfPrimitive() {}
 
         OfPrimitive(int initialCapacity) {
             super(initialCapacity);
@@ -309,7 +280,7 @@ public abstract class SpinedBuffer<E, T_ARR> implements Iterable<E> {
 
     public static class OfInt extends SpinedBuffer.OfPrimitive<Integer, int[]>
             implements IntConsumer {
-        public OfInt() { }
+        public OfInt() {}
 
         public OfInt(int initialCapacity) {
             super(initialCapacity);
@@ -340,10 +311,8 @@ public abstract class SpinedBuffer<E, T_ARR> implements Iterable<E> {
             // Casts to int are safe since the spine array index is the index minus
             // the prior element count from the current spine
             int ch = chunkFor(index);
-            if (spineIndex == 0 && ch == 0)
-                return curChunk[(int) index];
-            else
-                return spine[ch][(int) (index - priorElementCount[ch])];
+            if (spineIndex == 0 && ch == 0) return curChunk[(int) index];
+            else return spine[ch][(int) (index - priorElementCount[ch])];
         }
 
         @Override
@@ -367,7 +336,7 @@ public abstract class SpinedBuffer<E, T_ARR> implements Iterable<E> {
 
     public static class OfLong extends SpinedBuffer.OfPrimitive<Long, long[]>
             implements LongConsumer {
-        public OfLong() { }
+        public OfLong() {}
 
         public OfLong(int initialCapacity) {
             super(initialCapacity);
@@ -396,10 +365,8 @@ public abstract class SpinedBuffer<E, T_ARR> implements Iterable<E> {
 
         public long get(long index) {
             int ch = chunkFor(index);
-            if (spineIndex == 0 && ch == 0)
-                return curChunk[(int) index];
-            else
-                return spine[ch][(int) (index - priorElementCount[ch])];
+            if (spineIndex == 0 && ch == 0) return curChunk[(int) index];
+            else return spine[ch][(int) (index - priorElementCount[ch])];
         }
 
         @Override
@@ -423,7 +390,7 @@ public abstract class SpinedBuffer<E, T_ARR> implements Iterable<E> {
 
     public static class OfDouble extends SpinedBuffer.OfPrimitive<Double, double[]>
             implements DoubleConsumer {
-        public OfDouble() { }
+        public OfDouble() {}
 
         public OfDouble(int initialCapacity) {
             super(initialCapacity);
@@ -452,10 +419,8 @@ public abstract class SpinedBuffer<E, T_ARR> implements Iterable<E> {
 
         public double get(long index) {
             int ch = chunkFor(index);
-            if (spineIndex == 0 && ch == 0)
-                return curChunk[(int) index];
-            else
-                return spine[ch][(int) (index - priorElementCount[ch])];
+            if (spineIndex == 0 && ch == 0) return curChunk[(int) index];
+            else return spine[ch][(int) (index - priorElementCount[ch])];
         }
 
         @Override

@@ -1,11 +1,12 @@
 package com.annimon.stream.function;
 
-import java.io.IOException;
-import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+
+import java.io.IOException;
+import org.junit.Test;
 
 /**
  * Tests {@code IntFunction}.
@@ -45,5 +46,4 @@ public class IntFunctionTest {
             return Integer.toString(value);
         }
     }
-
 }

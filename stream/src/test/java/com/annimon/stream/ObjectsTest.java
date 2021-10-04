@@ -1,11 +1,5 @@
 package com.annimon.stream;
 
-import com.annimon.stream.function.Supplier;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Random;
-import org.junit.Test;
-import org.junit.function.ThrowingRunnable;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
@@ -13,6 +7,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
+
+import com.annimon.stream.function.Supplier;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Random;
+import org.junit.Test;
+import org.junit.function.ThrowingRunnable;
 
 /**
  * Tests {@code Objects}.
@@ -40,15 +41,13 @@ public class ObjectsTest {
 
     @Test
     public void testDeepEqualsArrays() {
-        final Supplier<Object> s = new Supplier<Object>() {
-            @Override
-            public Object get() {
-                return new Object[] {
-                        this, 1, 2, 3, "test",
-                        new Integer[] {1, 2, 3}
+        final Supplier<Object> s =
+                new Supplier<Object>() {
+                    @Override
+                    public Object get() {
+                        return new Object[] {this, 1, 2, 3, "test", new Integer[] {1, 2, 3}};
+                    }
                 };
-            }
-        };
         assertTrue(Objects.deepEquals(s.get(), s.get()));
         assertFalse(Objects.deepEquals(s.get(), new Object[] {this, 1, 2, 3}));
     }
@@ -132,47 +131,52 @@ public class ObjectsTest {
 
     @Test
     public void testRequireNonNullWithExceptionAndMessage() {
-        NullPointerException exc =  assertThrows(
-                NullPointerException.class,
-                new ThrowingRunnable() {
-                    @SuppressWarnings("ConstantConditions")
-                    @Override
-                    public void run() {
-                        Objects.requireNonNull(null, "message");
-                    }
-                }
-        );
+        NullPointerException exc =
+                assertThrows(
+                        NullPointerException.class,
+                        new ThrowingRunnable() {
+                            @SuppressWarnings("ConstantConditions")
+                            @Override
+                            public void run() {
+                                Objects.requireNonNull(null, "message");
+                            }
+                        });
         assertEquals("message", exc.getMessage());
     }
 
     @Test
     public void testRequireNonNullWithMessageSupplier() {
-        Object result = Objects.requireNonNull("test", new Supplier<String>() {
-            @Override
-            public String get() {
-                return "supplied message";
-            }
-        });
-        assertEquals("test", result);
-    }
-
-    @Test
-    public void testRequireNonNullWithMessageSupplierAndException() {
-        NullPointerException exc =  assertThrows(
-                NullPointerException.class,
-                new ThrowingRunnable() {
-                    @SuppressWarnings("ConstantConditions")
-                    @Override
-                    public void run() {
-                        Objects.requireNonNull(null, new Supplier<String>() {
+        Object result =
+                Objects.requireNonNull(
+                        "test",
+                        new Supplier<String>() {
                             @Override
                             public String get() {
                                 return "supplied message";
                             }
                         });
-                    }
-                }
-        );
+        assertEquals("test", result);
+    }
+
+    @Test
+    public void testRequireNonNullWithMessageSupplierAndException() {
+        NullPointerException exc =
+                assertThrows(
+                        NullPointerException.class,
+                        new ThrowingRunnable() {
+                            @SuppressWarnings("ConstantConditions")
+                            @Override
+                            public void run() {
+                                Objects.requireNonNull(
+                                        null,
+                                        new Supplier<String>() {
+                                            @Override
+                                            public String get() {
+                                                return "supplied message";
+                                            }
+                                        });
+                            }
+                        });
         assertEquals("supplied message", exc.getMessage());
     }
 
@@ -190,72 +194,80 @@ public class ObjectsTest {
 
     @Test
     public void testRequireNonNullElseWithNullArguments() {
-        NullPointerException exc =  assertThrows(
-                NullPointerException.class,
-                new ThrowingRunnable() {
-                    @SuppressWarnings({"ConstantConditions", "ResultOfMethodCallIgnored"})
-                    @Override
-                    public void run() {
-                        Objects.requireNonNullElse(null, null);
-                    }
-                }
-        );
+        NullPointerException exc =
+                assertThrows(
+                        NullPointerException.class,
+                        new ThrowingRunnable() {
+                            @SuppressWarnings({"ConstantConditions", "ResultOfMethodCallIgnored"})
+                            @Override
+                            public void run() {
+                                Objects.requireNonNullElse(null, null);
+                            }
+                        });
         assertEquals("defaultObj", exc.getMessage());
     }
 
     @Test
     public void testRequireNonNullElseGet() {
-        Object result = Objects.requireNonNullElseGet("a", new Supplier<String>() {
-            @Override
-            public String get() {
-                return "b";
-            }
-        });
+        Object result =
+                Objects.requireNonNullElseGet(
+                        "a",
+                        new Supplier<String>() {
+                            @Override
+                            public String get() {
+                                return "b";
+                            }
+                        });
         assertEquals("a", result);
     }
 
     @Test
     public void testRequireNonNullElseGetWithNullFirstArgument() {
-        Object result = Objects.requireNonNullElseGet(null, new Supplier<String>() {
-            @Override
-            public String get() {
-                return "b";
-            }
-        });
+        Object result =
+                Objects.requireNonNullElseGet(
+                        null,
+                        new Supplier<String>() {
+                            @Override
+                            public String get() {
+                                return "b";
+                            }
+                        });
         assertEquals("b", result);
     }
 
     @Test
     public void testRequireNonNullElseGetWithNullArguments() {
-        NullPointerException exc =  assertThrows(
-                NullPointerException.class,
-                new ThrowingRunnable() {
-                    @SuppressWarnings({"ConstantConditions"})
-                    @Override
-                    public void run() {
-                        Objects.requireNonNullElseGet(null, null);
-                    }
-                }
-        );
+        NullPointerException exc =
+                assertThrows(
+                        NullPointerException.class,
+                        new ThrowingRunnable() {
+                            @SuppressWarnings({"ConstantConditions"})
+                            @Override
+                            public void run() {
+                                Objects.requireNonNullElseGet(null, null);
+                            }
+                        });
         assertEquals("supplier", exc.getMessage());
     }
 
     @Test
     public void testRequireNonNullElseGetWithNullSupplied() {
-        NullPointerException exc =  assertThrows(
-                NullPointerException.class,
-                new ThrowingRunnable() {
-                    @Override
-                    public void run() {
-                        Objects.requireNonNullElseGet(null, new Supplier<String>() {
+        NullPointerException exc =
+                assertThrows(
+                        NullPointerException.class,
+                        new ThrowingRunnable() {
                             @Override
-                            public String get() {
-                                return null;
+                            public void run() {
+                                Objects.requireNonNullElseGet(
+                                        null,
+                                        new Supplier<String>() {
+                                            @Override
+                                            public String get() {
+                                                return null;
+                                            }
+                                        });
                             }
                         });
-                    }
-                }
-        );
         assertEquals("supplier.get()", exc.getMessage());
     }
 

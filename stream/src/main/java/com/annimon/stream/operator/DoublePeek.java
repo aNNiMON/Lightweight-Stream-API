@@ -10,8 +10,7 @@ public class DoublePeek extends PrimitiveIterator.OfDouble {
     private final DoubleConsumer action;
 
     public DoublePeek(
-            @NotNull PrimitiveIterator.OfDouble iterator,
-            @NotNull DoubleConsumer action) {
+            @NotNull PrimitiveIterator.OfDouble iterator, @NotNull DoubleConsumer action) {
         this.iterator = iterator;
         this.action = action;
     }

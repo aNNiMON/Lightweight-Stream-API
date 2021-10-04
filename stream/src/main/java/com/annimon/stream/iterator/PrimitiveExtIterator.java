@@ -2,14 +2,12 @@ package com.annimon.stream.iterator;
 
 import java.util.NoSuchElementException;
 
-/**
- * Extended PrimitiveIterator for common purposes.
- */
+/** Extended PrimitiveIterator for common purposes. */
 public final class PrimitiveExtIterator {
 
-    private PrimitiveExtIterator() { }
+    private PrimitiveExtIterator() {}
 
-    public static abstract class OfInt extends PrimitiveIterator.OfInt {
+    public abstract static class OfInt extends PrimitiveIterator.OfInt {
 
         protected int next;
         protected boolean hasNext, isInit;
@@ -42,7 +40,7 @@ public final class PrimitiveExtIterator {
         protected abstract void nextIteration();
     }
 
-    public static abstract class OfLong extends PrimitiveIterator.OfLong {
+    public abstract static class OfLong extends PrimitiveIterator.OfLong {
 
         protected long next;
         protected boolean hasNext, isInit;
@@ -74,7 +72,7 @@ public final class PrimitiveExtIterator {
         protected abstract void nextIteration();
     }
 
-    public static abstract class OfDouble extends PrimitiveIterator.OfDouble {
+    public abstract static class OfDouble extends PrimitiveIterator.OfDouble {
 
         protected double next;
         protected boolean hasNext, isInit;
@@ -105,5 +103,4 @@ public final class PrimitiveExtIterator {
 
         protected abstract void nextIteration();
     }
-
 }

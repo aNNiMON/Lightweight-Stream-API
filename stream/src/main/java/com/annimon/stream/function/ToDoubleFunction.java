@@ -12,7 +12,7 @@ public interface ToDoubleFunction<T> {
     /**
      * Applies this function to the given argument.
      *
-     * @param t  an argument
+     * @param t an argument
      * @return the function result
      */
     double applyAsDouble(T t);

@@ -12,9 +12,7 @@ public class IntFilter extends PrimitiveIterator.OfInt {
     private boolean hasNext, hasNextEvaluated;
     private int next;
 
-    public IntFilter(
-            @NotNull PrimitiveIterator.OfInt iterator,
-            @NotNull IntPredicate predicate) {
+    public IntFilter(@NotNull PrimitiveIterator.OfInt iterator, @NotNull IntPredicate predicate) {
         this.iterator = iterator;
         this.predicate = predicate;
     }

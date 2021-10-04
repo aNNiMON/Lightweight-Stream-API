@@ -1,8 +1,9 @@
 package com.annimon.stream.streamtests;
 
+import static org.junit.Assert.assertEquals;
+
 import com.annimon.stream.Stream;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 
 public final class CountTest {
 

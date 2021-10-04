@@ -12,7 +12,7 @@ public interface ThrowableLongConsumer<E extends Throwable> {
     /**
      * Performs operation on the given argument.
      *
-     * @param value  the input argument
+     * @param value the input argument
      * @throws E an exception
      */
     void accept(long value) throws E;

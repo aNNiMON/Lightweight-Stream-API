@@ -1,10 +1,11 @@
 package com.annimon.stream.function;
 
-import com.annimon.stream.Functions;
-import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
+
+import com.annimon.stream.Functions;
+import org.junit.Test;
 
 /**
  * Tests {@code IndexedFunction}.
@@ -27,19 +28,19 @@ public class IndexedFunctionTest {
 
     @Test
     public void testWrap() {
-        IndexedFunction<Object, String> function = IndexedFunction.Util
-                .wrap(Functions.convertToString());
+        IndexedFunction<Object, String> function =
+                IndexedFunction.Util.wrap(Functions.convertToString());
 
         assertEquals("60", function.apply(0, 60));
-        assertEquals("A", function.apply(10, (char)65));
+        assertEquals("A", function.apply(10, (char) 65));
     }
 
-    private static final IndexedFunction<Character, String>
-            charPlusIndexToString = new IndexedFunction<Character, String>() {
+    private static final IndexedFunction<Character, String> charPlusIndexToString =
+            new IndexedFunction<Character, String>() {
 
-        @Override
-        public String apply(int index, Character t) {
-            return Character.toString((char) (t + index));
-        }
-    };
+                @Override
+                public String apply(int index, Character t) {
+                    return Character.toString((char) (t + index));
+                }
+            };
 }

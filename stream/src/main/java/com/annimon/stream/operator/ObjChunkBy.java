@@ -33,7 +33,7 @@ public class ObjChunkBy<T, K> extends LsaIterator<List<T>> {
         final List<T> list = new ArrayList<T>();
         do {
             list.add(takeNext());
-        } while ( iterator.hasNext() && key.equals(classifier.apply(peek())) );
+        } while (iterator.hasNext() && key.equals(classifier.apply(peek())));
 
         return list;
     }

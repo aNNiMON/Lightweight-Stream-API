@@ -11,8 +11,7 @@ public class ObjDropWhile<T> extends LsaExtIterator<T> {
     private final Predicate<? super T> predicate;
 
     public ObjDropWhile(
-            @NotNull Iterator<? extends T> iterator,
-            @NotNull Predicate<? super T> predicate) {
+            @NotNull Iterator<? extends T> iterator, @NotNull Predicate<? super T> predicate) {
         this.iterator = iterator;
         this.predicate = predicate;
     }

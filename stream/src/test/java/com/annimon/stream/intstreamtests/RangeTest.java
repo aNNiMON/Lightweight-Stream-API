@@ -1,10 +1,11 @@
 package com.annimon.stream.intstreamtests;
 
-import com.annimon.stream.IntStream;
-import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
+
+import com.annimon.stream.IntStream;
+import org.junit.Test;
 
 public final class RangeTest {
 
@@ -51,11 +52,15 @@ public final class RangeTest {
 
     @Test
     public void testStreamRangeClosedOnEqualValues() {
-        assertThat(IntStream.rangeClosed(Integer.MIN_VALUE, Integer.MIN_VALUE).single(), is(Integer.MIN_VALUE));
+        assertThat(
+                IntStream.rangeClosed(Integer.MIN_VALUE, Integer.MIN_VALUE).single(),
+                is(Integer.MIN_VALUE));
 
         assertThat(IntStream.rangeClosed(0, 0).single(), is(0));
 
-        assertThat(IntStream.rangeClosed(Integer.MAX_VALUE, Integer.MAX_VALUE).single(), is(Integer.MAX_VALUE));
+        assertThat(
+                IntStream.rangeClosed(Integer.MAX_VALUE, Integer.MAX_VALUE).single(),
+                is(Integer.MAX_VALUE));
     }
 
     @Test

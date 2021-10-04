@@ -10,7 +10,8 @@ import org.jetbrains.annotations.NotNull;
 public class ObjMerge<T> extends LsaIterator<T> {
 
     public enum MergeResult {
-        TAKE_FIRST, TAKE_SECOND
+        TAKE_FIRST,
+        TAKE_SECOND
     }
 
     private final Iterator<? extends T> iterator1;
@@ -32,8 +33,10 @@ public class ObjMerge<T> extends LsaIterator<T> {
 
     @Override
     public boolean hasNext() {
-        return !buffer1.isEmpty() || !buffer2.isEmpty()
-                || iterator1.hasNext() || iterator2.hasNext();
+        return !buffer1.isEmpty()
+                || !buffer2.isEmpty()
+                || iterator1.hasNext()
+                || iterator2.hasNext();
     }
 
     @Override

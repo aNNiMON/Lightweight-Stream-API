@@ -14,8 +14,7 @@ public class IntTakeWhile extends PrimitiveIterator.OfInt {
     private boolean hasNextComputed, hasNext;
 
     public IntTakeWhile(
-            @NotNull PrimitiveIterator.OfInt iterator,
-            @NotNull IntPredicate predicate) {
+            @NotNull PrimitiveIterator.OfInt iterator, @NotNull IntPredicate predicate) {
         this.iterator = iterator;
         this.predicate = predicate;
     }
@@ -59,4 +58,3 @@ public class IntTakeWhile extends PrimitiveIterator.OfInt {
         return hasNext;
     }
 }
-

@@ -13,7 +13,7 @@ public final class PrimitiveIterators {
 
         @Override
         public int nextInt() {
-           throw new NoSuchElementException();
+            throw new NoSuchElementException();
         }
     }
 
@@ -42,7 +42,7 @@ public final class PrimitiveIterators {
 
         @Override
         public long nextLong() {
-           throw new NoSuchElementException();
+            throw new NoSuchElementException();
         }
     }
 
@@ -71,7 +71,7 @@ public final class PrimitiveIterators {
 
         @Override
         public double nextDouble() {
-           throw new NoSuchElementException();
+            throw new NoSuchElementException();
         }
     }
 

@@ -11,8 +11,7 @@ public class LongMapToObj<R> extends LsaIterator<R> {
     private final LongFunction<? extends R> mapper;
 
     public LongMapToObj(
-            @NotNull PrimitiveIterator.OfLong iterator,
-            @NotNull LongFunction<? extends R> mapper) {
+            @NotNull PrimitiveIterator.OfLong iterator, @NotNull LongFunction<? extends R> mapper) {
         this.iterator = iterator;
         this.mapper = mapper;
     }

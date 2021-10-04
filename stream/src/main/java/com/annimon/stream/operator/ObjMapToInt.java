@@ -11,8 +11,7 @@ public class ObjMapToInt<T> extends PrimitiveIterator.OfInt {
     private final ToIntFunction<? super T> mapper;
 
     public ObjMapToInt(
-            @NotNull Iterator<? extends T> iterator,
-            @NotNull ToIntFunction<? super T> mapper) {
+            @NotNull Iterator<? extends T> iterator, @NotNull ToIntFunction<? super T> mapper) {
         this.iterator = iterator;
         this.mapper = mapper;
     }

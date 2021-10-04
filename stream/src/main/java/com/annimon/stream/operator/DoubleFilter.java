@@ -13,8 +13,7 @@ public class DoubleFilter extends PrimitiveIterator.OfDouble {
     private double next;
 
     public DoubleFilter(
-            @NotNull PrimitiveIterator.OfDouble iterator,
-            @NotNull DoublePredicate predicate) {
+            @NotNull PrimitiveIterator.OfDouble iterator, @NotNull DoublePredicate predicate) {
         this.iterator = iterator;
         this.predicate = predicate;
     }

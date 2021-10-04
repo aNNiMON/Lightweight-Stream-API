@@ -6,9 +6,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
 
-/**
- * Functions that used in tests.
- */
+/** Functions that used in tests. */
 public final class Functions {
 
     public static <T> IntFunction<T[]> arrayGenerator(final Class<T[]> clazz) {
@@ -101,6 +99,7 @@ public final class Functions {
             }
         };
     }
+
     public static <T> ToIntFunction<IntPair<T>> intPairIndex() {
         return new ToIntFunction<IntPair<T>>() {
 
@@ -147,7 +146,7 @@ public final class Functions {
             }
 
             @Override
-            public void remove() { }
+            public void remove() {}
         };
     }
 

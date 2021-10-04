@@ -1,19 +1,18 @@
 package com.annimon.stream.function;
 
-import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-/**
- * Tests {@link IndexedLongUnaryOperator}
- */
+import org.junit.Test;
+
+/** Tests {@link IndexedLongUnaryOperator} */
 public class IndexedLongUnaryOperatorTest {
 
     @Test
     public void testWrap() {
-        IndexedLongUnaryOperator identity = IndexedLongUnaryOperator.Util
-                .wrap(LongUnaryOperator.Util.identity());
+        IndexedLongUnaryOperator identity =
+                IndexedLongUnaryOperator.Util.wrap(LongUnaryOperator.Util.identity());
 
         assertThat(identity.applyAsLong(1, 3228), is(3228L));
     }

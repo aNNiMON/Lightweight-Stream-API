@@ -1,12 +1,13 @@
 package com.annimon.stream.streamtests;
 
+import static com.annimon.stream.test.hamcrest.OptionalMatcher.hasValue;
+import static com.annimon.stream.test.hamcrest.OptionalMatcher.isEmpty;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import com.annimon.stream.Functions;
 import com.annimon.stream.Optional;
 import com.annimon.stream.Stream;
 import org.junit.Test;
-import static com.annimon.stream.test.hamcrest.OptionalMatcher.hasValue;
-import static com.annimon.stream.test.hamcrest.OptionalMatcher.isEmpty;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public final class FindSingleTest {
 
@@ -29,26 +30,20 @@ public final class FindSingleTest {
 
     @Test
     public void testFindSingleAfterFilteringToEmptyStream() {
-        Optional<Integer> result = Stream.range(1, 5)
-                .filter(Functions.remainder(6))
-                .findSingle();
+        Optional<Integer> result = Stream.range(1, 5).filter(Functions.remainder(6)).findSingle();
 
         assertThat(result, isEmpty());
     }
 
     @Test
     public void testFindSingleAfterFilteringToOneElementStream() {
-        Optional<Integer> result = Stream.range(1, 10)
-                .filter(Functions.remainder(6))
-                .findSingle();
+        Optional<Integer> result = Stream.range(1, 10).filter(Functions.remainder(6)).findSingle();
 
         assertThat(result, hasValue(6));
     }
 
     @Test(expected = IllegalStateException.class)
     public void testFindSingleAfterFilteringToMoreElementStream() {
-        Stream.range(1, 100)
-                .filter(Functions.remainder(6))
-                .findSingle();
+        Stream.range(1, 100).filter(Functions.remainder(6)).findSingle();
     }
 }

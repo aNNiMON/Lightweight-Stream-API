@@ -1,8 +1,9 @@
 package com.annimon.stream.doublestreamtests;
 
+import static org.junit.Assert.assertEquals;
+
 import com.annimon.stream.DoubleStream;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 
 public final class FindFirstOrElseTest {
 

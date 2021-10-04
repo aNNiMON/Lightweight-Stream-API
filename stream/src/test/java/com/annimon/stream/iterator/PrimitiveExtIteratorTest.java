@@ -1,7 +1,5 @@
 package com.annimon.stream.iterator;
 
-import java.util.NoSuchElementException;
-import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.closeTo;
@@ -9,13 +7,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.NoSuchElementException;
+import org.junit.Test;
+
 public class PrimitiveExtIteratorTest {
 
     @Test
     public void testPrivateConstructor() throws Exception {
         assertThat(PrimitiveExtIterator.class, hasOnlyPrivateConstructors());
     }
-
 
     @Test
     public void testOfIntHasNext() {
@@ -34,7 +34,6 @@ public class PrimitiveExtIteratorTest {
         assertFalse(new EmptyPrimitiveExtIteratorOfDouble().hasNext());
         assertTrue(new PrimitiveExtIteratorOfDoubleImpl().hasNext());
     }
-
 
     @Test
     public void testOfIntNext() {
@@ -72,7 +71,6 @@ public class PrimitiveExtIteratorTest {
         new EmptyPrimitiveExtIteratorOfDouble().nextDouble();
     }
 
-
     @Test(expected = UnsupportedOperationException.class)
     public void testOfIntRemove() {
         new EmptyPrimitiveExtIteratorOfInt().remove();
@@ -87,7 +85,6 @@ public class PrimitiveExtIteratorTest {
     public void testOfDoubleRemove() {
         new EmptyPrimitiveExtIteratorOfDouble().remove();
     }
-
 
     @Test(expected = NoSuchElementException.class)
     public void testOfInt() {
@@ -124,7 +121,6 @@ public class PrimitiveExtIteratorTest {
         assertFalse(iterator.hasNext());
         iterator.nextDouble();
     }
-
 
     private class EmptyPrimitiveExtIteratorOfInt extends PrimitiveExtIterator.OfInt {
 

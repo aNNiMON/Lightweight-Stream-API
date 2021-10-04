@@ -13,20 +13,20 @@ public interface IndexedIntPredicate {
     /**
      * Tests the value for satisfying predicate.
      *
-     * @param index  the index
-     * @param value  the value to be tested
+     * @param index the index
+     * @param value the value to be tested
      * @return {@code true} if the value matches the predicate, otherwise {@code false}
      */
     boolean test(int index, int value);
 
     class Util {
 
-        private Util() { }
+        private Util() {}
 
         /**
          * Wraps {@link IntPredicate} and returns {@code IndexedIntPredicate}.
          *
-         * @param predicate  the predicate to wrap
+         * @param predicate the predicate to wrap
          * @return a wrapped {@code IndexedIntPredicate}
          * @throws NullPointerException if {@code predicate} is null
          */
@@ -39,6 +39,5 @@ public interface IndexedIntPredicate {
                 }
             };
         }
-
     }
 }

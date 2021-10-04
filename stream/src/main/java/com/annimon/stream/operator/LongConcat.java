@@ -27,7 +27,6 @@ public class LongConcat extends PrimitiveExtIterator.OfLong {
         iteratorIndex = 0;
     }
 
-
     @Override
     protected void nextIteration() {
         while (iteratorIndex < iteratorsCount) {

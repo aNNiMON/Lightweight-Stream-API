@@ -6,7 +6,7 @@ import java.util.List;
 
 public final class Compose {
 
-    private Compose() { }
+    private Compose() {}
 
     public static Runnable runnables(final Runnable a, final Runnable b) {
         return new Runnable() {
@@ -17,7 +17,8 @@ public final class Compose {
                 } catch (Throwable e1) {
                     try {
                         b.run();
-                    } catch (Throwable ignore) { }
+                    } catch (Throwable ignore) {
+                    }
                     handleException(e1);
                 }
                 b.run();
@@ -34,7 +35,8 @@ public final class Compose {
                 } catch (Throwable e1) {
                     try {
                         b.close();
-                    } catch (Throwable ignore) { }
+                    } catch (Throwable ignore) {
+                    }
                     handleException(e1);
                 }
                 try {
@@ -59,7 +61,8 @@ public final class Compose {
                         while (iterator.hasNext()) {
                             try {
                                 iterator.next().close();
-                            } catch (Throwable ignore) { }
+                            } catch (Throwable ignore) {
+                            }
                         }
                         handleException(currentExc);
                     }

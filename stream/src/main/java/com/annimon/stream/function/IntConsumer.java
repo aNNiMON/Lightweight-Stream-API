@@ -5,10 +5,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Represents an operation that accepts a single {@code int}-valued argument and
- * returns no result.  This is the primitive type specialization of
- * {@link com.annimon.stream.function.Consumer} for {@code int}.  Unlike most other
- * functional interfaces, {@code IntConsumer} is expected to operate via side-effects.
+ * Represents an operation that accepts a single {@code int}-valued argument and returns no result.
+ * This is the primitive type specialization of {@link com.annimon.stream.function.Consumer} for
+ * {@code int}. Unlike most other functional interfaces, {@code IntConsumer} is expected to operate
+ * via side-effects.
  *
  * <p>This is a functional interface whose functional method is {@link #accept(int)}
  *
@@ -25,21 +25,20 @@ public interface IntConsumer {
 
     class Util {
 
-        private Util() { }
+        private Util() {}
 
         /**
          * Composes {@code IntConsumer} calls.
          *
          * <p>{@code c1.accept(value); c2.accept(value); }
          *
-         * @param c1  the first {@code IntConsumer}
-         * @param c2  the second {@code IntConsumer}
+         * @param c1 the first {@code IntConsumer}
+         * @param c2 the second {@code IntConsumer}
          * @return a composed {@code IntConsumer}
          * @throws NullPointerException if {@code c1} or {@code c2} is null
          */
         public static IntConsumer andThen(
-                @NotNull final IntConsumer c1,
-                @NotNull final IntConsumer c2) {
+                @NotNull final IntConsumer c1, @NotNull final IntConsumer c2) {
             Objects.requireNonNull(c1, "c1");
             Objects.requireNonNull(c2, "c2");
             return new IntConsumer() {
@@ -54,11 +53,12 @@ public interface IntConsumer {
         /**
          * Creates a safe {@code IntConsumer}.
          *
-         * @param throwableConsumer  the consumer that may throw an exception
+         * @param throwableConsumer the consumer that may throw an exception
          * @return an {@code IntConsumer}
          * @throws NullPointerException if {@code throwableConsumer} is null
          * @since 1.1.7
-         * @see #safe(com.annimon.stream.function.ThrowableIntConsumer, com.annimon.stream.function.IntConsumer)
+         * @see #safe(com.annimon.stream.function.ThrowableIntConsumer,
+         *     com.annimon.stream.function.IntConsumer)
          */
         public static IntConsumer safe(@NotNull ThrowableIntConsumer<Throwable> throwableConsumer) {
             return safe(throwableConsumer, null);
@@ -67,8 +67,8 @@ public interface IntConsumer {
         /**
          * Creates a safe {@code IntConsumer}.
          *
-         * @param throwableConsumer  the consumer that may throw an exception
-         * @param onFailedConsumer  the consumer which applies if exception was thrown
+         * @param throwableConsumer the consumer that may throw an exception
+         * @param onFailedConsumer the consumer which applies if exception was thrown
          * @return an {@code IntConsumer}
          * @throws NullPointerException if {@code throwableConsumer} is null
          * @since 1.1.7
@@ -92,6 +92,5 @@ public interface IntConsumer {
                 }
             };
         }
-
     }
 }

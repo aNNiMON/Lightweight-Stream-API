@@ -1,8 +1,9 @@
 package com.annimon.stream.intstreamtests;
 
+import static org.junit.Assert.assertEquals;
+
 import com.annimon.stream.IntStream;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 
 public final class SumTest {
 

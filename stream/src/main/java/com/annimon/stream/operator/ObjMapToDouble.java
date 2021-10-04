@@ -11,8 +11,7 @@ public class ObjMapToDouble<T> extends PrimitiveIterator.OfDouble {
     private final ToDoubleFunction<? super T> mapper;
 
     public ObjMapToDouble(
-            @NotNull Iterator<? extends T> iterator,
-            @NotNull ToDoubleFunction<? super T> mapper) {
+            @NotNull Iterator<? extends T> iterator, @NotNull ToDoubleFunction<? super T> mapper) {
         this.iterator = iterator;
         this.mapper = mapper;
     }

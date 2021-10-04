@@ -1,11 +1,12 @@
 package com.annimon.stream.streamtests;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+
 import com.annimon.stream.Functions;
 import com.annimon.stream.Stream;
 import java.util.NoSuchElementException;
 import org.junit.Test;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 
 public final class SingleTest {
 
@@ -28,24 +29,18 @@ public final class SingleTest {
 
     @Test(expected = NoSuchElementException.class)
     public void testSingleAfterFilteringToEmptyStream() {
-        Stream.range(1, 5)
-                .filter(Functions.remainder(6))
-                .single();
+        Stream.range(1, 5).filter(Functions.remainder(6)).single();
     }
 
     @Test
     public void testSingleAfterFilteringToOneElementStream() {
-        Integer result = Stream.range(1, 10)
-                .filter(Functions.remainder(6))
-                .single();
+        Integer result = Stream.range(1, 10).filter(Functions.remainder(6)).single();
 
         assertThat(result, is(6));
     }
 
     @Test(expected = IllegalStateException.class)
     public void testSingleAfterFilteringToMoreElementStream() {
-        Stream.range(1, 100)
-                .filter(Functions.remainder(6))
-                .single();
+        Stream.range(1, 100).filter(Functions.remainder(6)).single();
     }
 }

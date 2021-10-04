@@ -1,16 +1,17 @@
 package com.annimon.stream.function;
 
+import static org.junit.Assert.assertFalse;
+
 import java.io.IOException;
 import org.junit.Test;
-import static org.junit.Assert.assertFalse;
 
 /**
  * Tests {@code ThrowablePredicate}.
- * 
+ *
  * @see com.annimon.stream.function.ThrowablePredicate
  */
 public class ThrowablePredicateTest {
-    
+
     @Test
     public void testNormal() throws IOException {
         assertFalse(throwablePredicate.test(false));
@@ -20,16 +21,15 @@ public class ThrowablePredicateTest {
     public void testThrow() throws IOException {
         throwablePredicate.test(true);
     }
-    
+
     private static final ThrowablePredicate<Boolean, IOException> throwablePredicate =
             new ThrowablePredicate<Boolean, IOException>() {
-        @Override
-        public boolean test(Boolean value) throws IOException {
-            if (value) {
-                throw new IOException();
-            }
-            return value;
-        }
-    };
-    
+                @Override
+                public boolean test(Boolean value) throws IOException {
+                    if (value) {
+                        throw new IOException();
+                    }
+                    return value;
+                }
+            };
 }

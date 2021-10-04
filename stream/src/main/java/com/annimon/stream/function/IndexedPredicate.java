@@ -14,21 +14,21 @@ public interface IndexedPredicate<T> {
     /**
      * Tests the value for satisfying predicate.
      *
-     * @param index  the index
-     * @param value  the value to be tested
+     * @param index the index
+     * @param value the value to be tested
      * @return {@code true} if the value matches the predicate, otherwise {@code false}
      */
     boolean test(int index, T value);
 
     class Util {
 
-        private Util() { }
+        private Util() {}
 
         /**
          * Wraps {@link Predicate} and returns {@code IndexedPredicate}.
          *
          * @param <T> the type of the input to the function
-         * @param predicate  the predicate to wrap
+         * @param predicate the predicate to wrap
          * @return a wrapped {@code IndexedPredicate}
          * @throws NullPointerException if {@code predicate} is null
          */
@@ -41,6 +41,5 @@ public interface IndexedPredicate<T> {
                 }
             };
         }
-
     }
 }

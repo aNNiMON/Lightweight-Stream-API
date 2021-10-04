@@ -11,7 +11,7 @@ public interface ToBooleanFunction<T> {
     /**
      * Applies this function to the given argument.
      *
-     * @param t  an argument
+     * @param t an argument
      * @return the function result
      */
     boolean applyAsBoolean(T t);

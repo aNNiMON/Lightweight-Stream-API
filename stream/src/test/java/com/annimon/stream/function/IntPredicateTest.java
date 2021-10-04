@@ -1,53 +1,57 @@
 package com.annimon.stream.function;
 
-import com.annimon.stream.IntStream;
-import java.io.IOException;
-import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Tests {@link IntPredicate}
- */
+import com.annimon.stream.IntStream;
+import java.io.IOException;
+import org.junit.Test;
+
+/** Tests {@link IntPredicate} */
 public class IntPredicateTest {
 
-    private static final IntPredicate alwaysTrue = new IntPredicate() {
-        @Override
-        public boolean test(int value) {
-            return true;
-        }
-    };
+    private static final IntPredicate alwaysTrue =
+            new IntPredicate() {
+                @Override
+                public boolean test(int value) {
+                    return true;
+                }
+            };
 
-    private static final IntPredicate alwaysFalse = new IntPredicate() {
-        @Override
-        public boolean test(int value) {
-            return false;
-        }
-    };
+    private static final IntPredicate alwaysFalse =
+            new IntPredicate() {
+                @Override
+                public boolean test(int value) {
+                    return false;
+                }
+            };
 
-    private static final IntPredicate odd = new IntPredicate() {
-        @Override
-        public boolean test(int value) {
-            return value%2 != 0;
-        }
-    };
+    private static final IntPredicate odd =
+            new IntPredicate() {
+                @Override
+                public boolean test(int value) {
+                    return value % 2 != 0;
+                }
+            };
 
-    private static final IntPredicate even = new IntPredicate() {
-        @Override
-        public boolean test(int value) {
-            return value%2 == 0;
-        }
-    };
+    private static final IntPredicate even =
+            new IntPredicate() {
+                @Override
+                public boolean test(int value) {
+                    return value % 2 == 0;
+                }
+            };
 
-    private static final IntPredicate divBy3 = new IntPredicate() {
-        @Override
-        public boolean test(int value) {
-            return value%3 == 0;
-        }
-    };
+    private static final IntPredicate divBy3 =
+            new IntPredicate() {
+                @Override
+                public boolean test(int value) {
+                    return value % 3 == 0;
+                }
+            };
 
     @Test
     public void testAnd() {
@@ -138,7 +142,7 @@ public class IntPredicateTest {
 
         IntPredicate notDivBy3 = IntPredicate.Util.negate(divBy3);
 
-        assertEquals(IntStream.of(1,2,3,4,5,6,7,8,9).filter(notDivBy3).count(), 6);
+        assertEquals(IntStream.of(1, 2, 3, 4, 5, 6, 7, 8, 9).filter(notDivBy3).count(), 6);
     }
 
     @Test

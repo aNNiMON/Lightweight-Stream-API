@@ -1,5 +1,10 @@
 package com.annimon.stream.function;
 
+import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.is;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -8,10 +13,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
-import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.is;
 
 /**
  * Tests {@code IntConsumer}.
@@ -23,8 +24,8 @@ public class IntConsumerTest {
     @Test
     public void testAndThen() {
         final List<Integer> buffer = new ArrayList<Integer>();
-        IntConsumer consumer = IntConsumer.Util.andThen(
-                new Increment(buffer), new Multiplier(buffer, 2));
+        IntConsumer consumer =
+                IntConsumer.Util.andThen(new Increment(buffer), new Multiplier(buffer, 2));
 
         // (10+1) (10*2)
         consumer.accept(10);
@@ -65,12 +66,15 @@ public class IntConsumerTest {
     public void testSafeWithOnFailedConsumer() throws IOException {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream(15);
         final DataOutputStream dos = new DataOutputStream(baos);
-        IntConsumer consumer = IntConsumer.Util.safe(new UnsafeConsumer(dos), new IntConsumer() {
-            @Override
-            public void accept(int value) {
-                baos.write(0);
-            }
-        });
+        IntConsumer consumer =
+                IntConsumer.Util.safe(
+                        new UnsafeConsumer(dos),
+                        new IntConsumer() {
+                            @Override
+                            public void accept(int value) {
+                                baos.write(0);
+                            }
+                        });
 
         consumer.accept(10);
         consumer.accept(20);

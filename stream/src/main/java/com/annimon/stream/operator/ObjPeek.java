@@ -10,9 +10,7 @@ public class ObjPeek<T> extends LsaIterator<T> {
     private final Iterator<? extends T> iterator;
     private final Consumer<? super T> action;
 
-    public ObjPeek(
-            @NotNull Iterator<? extends T> iterator,
-            @NotNull Consumer<? super T> action) {
+    public ObjPeek(@NotNull Iterator<? extends T> iterator, @NotNull Consumer<? super T> action) {
         this.iterator = iterator;
         this.action = action;
     }

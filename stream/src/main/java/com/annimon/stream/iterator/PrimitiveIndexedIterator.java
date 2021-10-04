@@ -7,14 +7,14 @@ package com.annimon.stream.iterator;
  */
 public final class PrimitiveIndexedIterator {
 
-    private PrimitiveIndexedIterator() { }
+    private PrimitiveIndexedIterator() {}
 
     public static class OfInt extends PrimitiveIterator.OfInt {
 
         private final PrimitiveIterator.OfInt iterator;
         private final int step;
         private int index;
-        
+
         public OfInt(PrimitiveIterator.OfInt iterator) {
             this(0, 1, iterator);
         }
@@ -47,7 +47,7 @@ public final class PrimitiveIndexedIterator {
         private final PrimitiveIterator.OfLong iterator;
         private final int step;
         private int index;
-        
+
         public OfLong(PrimitiveIterator.OfLong iterator) {
             this(0, 1, iterator);
         }
@@ -57,7 +57,7 @@ public final class PrimitiveIndexedIterator {
             this.step = step;
             index = start;
         }
-        
+
         public int getIndex() {
             return index;
         }
@@ -107,5 +107,4 @@ public final class PrimitiveIndexedIterator {
             return result;
         }
     }
-
 }

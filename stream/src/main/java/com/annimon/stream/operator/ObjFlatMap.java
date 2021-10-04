@@ -34,7 +34,7 @@ public class ObjFlatMap<T, R> extends LsaExtIterator<R> {
                     innerStream = null;
                 }
                 final T arg = iterator.next();
-                final Stream <? extends R> result = mapper.apply(arg);
+                final Stream<? extends R> result = mapper.apply(arg);
                 if (result != null) {
                     inner = result.iterator();
                     innerStream = result;

@@ -22,7 +22,7 @@ public class IntCodePoints extends PrimitiveIterator.OfInt {
     public boolean hasNext() {
         return current < ensureLength();
     }
-    
+
     @Override
     public int nextInt() {
         final int length = ensureLength();

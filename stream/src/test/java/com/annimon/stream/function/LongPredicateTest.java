@@ -1,16 +1,15 @@
 package com.annimon.stream.function;
 
-import com.annimon.stream.Functions;
-import java.io.IOException;
-import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Tests {@code LongPredicate}.
- */
+import com.annimon.stream.Functions;
+import java.io.IOException;
+import org.junit.Test;
+
+/** Tests {@code LongPredicate}. */
 public class LongPredicateTest {
 
     @Test
@@ -61,7 +60,7 @@ public class LongPredicateTest {
         assertTrue(isOdd.test(55));
         assertFalse(isOdd.test(56));
     }
-    
+
     @Test
     public void testSafe() {
         LongPredicate predicate = LongPredicate.Util.safe(new UnsafePredicate());
@@ -87,13 +86,14 @@ public class LongPredicateTest {
 
     private static final LongPredicate isEven = Functions.remainderLong(2);
 
-    private static final LongPredicate lessThan100 = new LongPredicate() {
+    private static final LongPredicate lessThan100 =
+            new LongPredicate() {
 
-        @Override
-        public boolean test(long value) {
-            return value < 100;
-        }
-    };
+                @Override
+                public boolean test(long value) {
+                    return value < 100;
+                }
+            };
 
     private static class UnsafePredicate implements ThrowableLongPredicate<Throwable> {
 

@@ -10,8 +10,7 @@ public class ObjLimit<T> extends LsaIterator<T> {
     private final long maxSize;
     private long index;
 
-    public ObjLimit(
-            @NotNull Iterator<? extends T> iterator, long maxSize) {
+    public ObjLimit(@NotNull Iterator<? extends T> iterator, long maxSize) {
         this.iterator = iterator;
         this.maxSize = maxSize;
         index = 0;

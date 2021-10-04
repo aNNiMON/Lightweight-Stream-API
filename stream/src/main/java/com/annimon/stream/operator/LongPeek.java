@@ -9,9 +9,7 @@ public class LongPeek extends PrimitiveIterator.OfLong {
     private final PrimitiveIterator.OfLong iterator;
     private final LongConsumer action;
 
-    public LongPeek(
-            @NotNull PrimitiveIterator.OfLong iterator,
-            @NotNull LongConsumer action) {
+    public LongPeek(@NotNull PrimitiveIterator.OfLong iterator, @NotNull LongConsumer action) {
         this.iterator = iterator;
         this.action = action;
     }

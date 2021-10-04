@@ -1,5 +1,14 @@
 package com.annimon.stream;
 
+import static com.annimon.stream.test.hamcrest.OptionalLongMatcher.hasValue;
+import static com.annimon.stream.test.hamcrest.OptionalLongMatcher.isEmpty;
+import static com.annimon.stream.test.hamcrest.OptionalLongMatcher.isPresent;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.fail;
+
 import com.annimon.stream.function.Function;
 import com.annimon.stream.function.LongConsumer;
 import com.annimon.stream.function.LongFunction;
@@ -11,18 +20,8 @@ import com.annimon.stream.test.hamcrest.OptionalIntMatcher;
 import com.annimon.stream.test.hamcrest.OptionalMatcher;
 import java.util.NoSuchElementException;
 import org.junit.Test;
-import static com.annimon.stream.test.hamcrest.OptionalLongMatcher.hasValue;
-import static com.annimon.stream.test.hamcrest.OptionalLongMatcher.isEmpty;
-import static com.annimon.stream.test.hamcrest.OptionalLongMatcher.isPresent;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.fail;
 
-/**
- * Tests for {@link OptionalLong}
- */
+/** Tests for {@link OptionalLong} */
 @SuppressWarnings("ConstantConditions")
 public class OptionalLongTest {
 
@@ -60,163 +59,194 @@ public class OptionalLongTest {
 
     @Test
     public void testIfPresent() {
-        OptionalLong.empty().ifPresent(new LongConsumer() {
-            @Override
-            public void accept(long value) {
-                fail();
-            }
-        });
+        OptionalLong.empty()
+                .ifPresent(
+                        new LongConsumer() {
+                            @Override
+                            public void accept(long value) {
+                                fail();
+                            }
+                        });
 
-        OptionalLong.of(15).ifPresent(new LongConsumer() {
-            @Override
-            public void accept(long value) {
-                assertEquals(15, value);
-            }
-        });
+        OptionalLong.of(15)
+                .ifPresent(
+                        new LongConsumer() {
+                            @Override
+                            public void accept(long value) {
+                                assertEquals(15, value);
+                            }
+                        });
     }
 
     @Test
     public void testIfPresentOrElseWhenValuePresent() {
-        OptionalLong.of(10L).ifPresentOrElse(new LongConsumer() {
-            @Override
-            public void accept(long value) {
-                assertThat(value, is(10L));
-            }
-        }, new Runnable() {
-            @Override
-            public void run() {
-                fail("Should not execute empty action when value is present.");
-            }
-        });
+        OptionalLong.of(10L)
+                .ifPresentOrElse(
+                        new LongConsumer() {
+                            @Override
+                            public void accept(long value) {
+                                assertThat(value, is(10L));
+                            }
+                        },
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                fail("Should not execute empty action when value is present.");
+                            }
+                        });
     }
 
     @Test
     public void testIfPresentOrElseWhenValueAbsent() {
-        final Integer[] data = { 0 };
-        OptionalLong.empty().ifPresentOrElse(new LongConsumer() {
-            @Override
-            public void accept(long value) {
-                fail();
-            }
-        }, new Runnable() {
-            @Override
-            public void run() {
-                data[0] = 1;
-            }
-        });
+        final Integer[] data = {0};
+        OptionalLong.empty()
+                .ifPresentOrElse(
+                        new LongConsumer() {
+                            @Override
+                            public void accept(long value) {
+                                fail();
+                            }
+                        },
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                data[0] = 1;
+                            }
+                        });
         assertThat(data[0], is(1));
     }
 
     @Test
     public void testIfPresentOrElseWhenValuePresentAndEmptyActionNull() {
-        OptionalLong.of(10).ifPresentOrElse(new LongConsumer() {
-            @Override
-            public void accept(long value) {
-                assertThat(value, is(10L));
-            }
-        }, null);
+        OptionalLong.of(10)
+                .ifPresentOrElse(
+                        new LongConsumer() {
+                            @Override
+                            public void accept(long value) {
+                                assertThat(value, is(10L));
+                            }
+                        },
+                        null);
     }
 
     @Test(expected = RuntimeException.class)
     public void testIfPresentOrElseWhenValueAbsentAndConsumerNull() {
-        OptionalLong.empty().ifPresentOrElse(null, new Runnable() {
-            @Override
-            public void run() {
-                throw new RuntimeException();
-            }
-        });
+        OptionalLong.empty()
+                .ifPresentOrElse(
+                        null,
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                throw new RuntimeException();
+                            }
+                        });
     }
 
     @Test(expected = NullPointerException.class)
     public void testIfPresentOrElseWhenValuePresentAndConsumerNull() {
-        OptionalLong.of(10).ifPresentOrElse(null, new Runnable() {
-            @Override
-            public void run() {
-                fail("Should not have been executed.");
-            }
-        });
+        OptionalLong.of(10)
+                .ifPresentOrElse(
+                        null,
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                fail("Should not have been executed.");
+                            }
+                        });
     }
 
     @Test(expected = NullPointerException.class)
     public void testIfPresentOrElseWhenValueAbsentAndEmptyActionNull() {
-        OptionalLong.empty().ifPresentOrElse(new LongConsumer() {
-            @Override
-            public void accept(long value) {
-                fail("Should not have been executed.");
-            }
-        }, null);
+        OptionalLong.empty()
+                .ifPresentOrElse(
+                        new LongConsumer() {
+                            @Override
+                            public void accept(long value) {
+                                fail("Should not have been executed.");
+                            }
+                        },
+                        null);
     }
 
     @Test
     public void testExecuteIfPresent() {
-        long value = OptionalLong.of(10)
-                .executeIfPresent(new LongConsumer() {
-                    @Override
-                    public void accept(long value) {
-                        assertEquals(10, value);
-                    }
-                })
-                .getAsLong();
+        long value =
+                OptionalLong.of(10)
+                        .executeIfPresent(
+                                new LongConsumer() {
+                                    @Override
+                                    public void accept(long value) {
+                                        assertEquals(10, value);
+                                    }
+                                })
+                        .getAsLong();
         assertEquals(10L, value);
     }
 
     @Test
     public void testExecuteIfPresentOnAbsentValue() {
         OptionalLong.empty()
-                .executeIfPresent(new LongConsumer() {
-                    @Override
-                    public void accept(long value) {
-                        fail();
-                    }
-                });
+                .executeIfPresent(
+                        new LongConsumer() {
+                            @Override
+                            public void accept(long value) {
+                                fail();
+                            }
+                        });
     }
 
     @Test
     public void testExecuteIfAbsent() {
-        final Integer[] data = { 0 };
+        final Integer[] data = {0};
         OptionalLong.empty()
-                .executeIfAbsent(new Runnable() {
-                    @Override
-                    public void run() {
-                        data[0] = 1;
-                    }
-                });
+                .executeIfAbsent(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                data[0] = 1;
+                            }
+                        });
         assertThat(data[0], is(1));
     }
 
     @Test
     public void testExecuteIfAbsentOnPresentValue() {
         OptionalLong.of(10)
-                .executeIfAbsent(new Runnable() {
-                    @Override
-                    public void run() {
-                        fail();
-                    }
-                });
+                .executeIfAbsent(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                fail();
+                            }
+                        });
     }
 
     @Test
     public void testCustomIntermediate() {
-        OptionalLong result = OptionalLong.of(10L)
-                .custom(new Function<OptionalLong, OptionalLong>() {
-                    @Override
-                    public OptionalLong apply(OptionalLong optional) {
-                        return optional.filter(Functions.remainderLong(2));
-                    }
-                });
+        OptionalLong result =
+                OptionalLong.of(10L)
+                        .custom(
+                                new Function<OptionalLong, OptionalLong>() {
+                                    @Override
+                                    public OptionalLong apply(OptionalLong optional) {
+                                        return optional.filter(Functions.remainderLong(2));
+                                    }
+                                });
 
         assertThat(result, hasValue(10L));
     }
 
     @Test
     public void testCustomTerminal() {
-        Long result = OptionalLong.empty()
-                .custom(new Function<OptionalLong, Long>() {
-                    @Override
-                    public Long apply(OptionalLong optional) {
-                        return optional.orElse(0L);
-                    }
-                });
+        Long result =
+                OptionalLong.empty()
+                        .custom(
+                                new Function<OptionalLong, Long>() {
+                                    @Override
+                                    public Long apply(OptionalLong optional) {
+                                        return optional.orElse(0L);
+                                    }
+                                });
 
         assertThat(result, is(0L));
     }
@@ -229,45 +259,39 @@ public class OptionalLongTest {
     @Test
     public void testFilter() {
         OptionalLong result;
-        result = OptionalLong.of(4)
-                .filter(Functions.remainderLong(2));
+        result = OptionalLong.of(4).filter(Functions.remainderLong(2));
         assertThat(result, hasValue(4));
 
-        result = OptionalLong.empty()
-                .filter(Functions.remainderLong(2));
+        result = OptionalLong.empty().filter(Functions.remainderLong(2));
         assertThat(result, isEmpty());
 
-        result = OptionalLong.of(9)
-                .filter(Functions.remainderLong(2));
+        result = OptionalLong.of(9).filter(Functions.remainderLong(2));
         assertThat(result, isEmpty());
     }
 
     @Test
     public void testFilterNot() {
         OptionalLong result;
-        result = OptionalLong.of(4)
-                .filterNot(Functions.remainderLong(3));
+        result = OptionalLong.of(4).filterNot(Functions.remainderLong(3));
         assertThat(result, hasValue(4));
 
-        result = OptionalLong.empty()
-                .filterNot(Functions.remainderLong(3));
+        result = OptionalLong.empty().filterNot(Functions.remainderLong(3));
         assertThat(result, isEmpty());
 
-        result = OptionalLong.of(9)
-                .filterNot(Functions.remainderLong(3));
+        result = OptionalLong.of(9).filterNot(Functions.remainderLong(3));
         assertThat(result, isEmpty());
     }
 
-
     @Test
     public void testMap() {
-        final LongUnaryOperator negatorFunction = new LongUnaryOperator() {
+        final LongUnaryOperator negatorFunction =
+                new LongUnaryOperator() {
 
-            @Override
-            public long applyAsLong(long operand) {
-                return -operand;
-            }
-        };
+                    @Override
+                    public long applyAsLong(long operand) {
+                        return -operand;
+                    }
+                };
 
         OptionalLong result;
         result = OptionalLong.empty().map(negatorFunction);
@@ -279,13 +303,14 @@ public class OptionalLongTest {
 
     @Test
     public void testMapToInt() {
-        final LongToIntFunction mapper = new LongToIntFunction() {
+        final LongToIntFunction mapper =
+                new LongToIntFunction() {
 
-            @Override
-            public int applyAsInt(long operand) {
-                return (int) (operand / 10000000000L);
-            }
-        };
+                    @Override
+                    public int applyAsInt(long operand) {
+                        return (int) (operand / 10000000000L);
+                    }
+                };
 
         OptionalInt result;
         result = OptionalLong.empty().mapToInt(mapper);
@@ -297,13 +322,14 @@ public class OptionalLongTest {
 
     @Test
     public void testMapToObj() {
-        final LongFunction<String> asciiToString = new LongFunction<String>() {
+        final LongFunction<String> asciiToString =
+                new LongFunction<String>() {
 
-            @Override
-            public String apply(long value) {
-                return String.valueOf((char) value);
-            }
-        };
+                    @Override
+                    public String apply(long value) {
+                        return String.valueOf((char) value);
+                    }
+                };
 
         Optional<String> result;
         result = OptionalLong.empty().mapToObj(asciiToString);
@@ -312,12 +338,15 @@ public class OptionalLongTest {
         result = OptionalLong.of(65).mapToObj(asciiToString);
         assertThat(result, OptionalMatcher.hasValue("A"));
 
-        result = OptionalLong.empty().mapToObj(new LongFunction<String>() {
-            @Override
-            public String apply(long value) {
-                return null;
-            }
-        });
+        result =
+                OptionalLong.empty()
+                        .mapToObj(
+                                new LongFunction<String>() {
+                                    @Override
+                                    public String apply(long value) {
+                                        return null;
+                                    }
+                                });
         assertThat(result, OptionalMatcher.isEmpty());
     }
 
@@ -335,34 +364,45 @@ public class OptionalLongTest {
 
     @Test
     public void testOr() {
-        long value = OptionalLong.of(42).or(new Supplier<OptionalLong>() {
-            @Override
-            public OptionalLong get() {
-                return OptionalLong.of(19);
-            }
-        }).getAsLong();
+        long value =
+                OptionalLong.of(42)
+                        .or(
+                                new Supplier<OptionalLong>() {
+                                    @Override
+                                    public OptionalLong get() {
+                                        return OptionalLong.of(19);
+                                    }
+                                })
+                        .getAsLong();
         assertEquals(42, value);
     }
 
     @Test
     public void testOrOnEmptyOptional() {
-        long value = OptionalLong.empty().or(new Supplier<OptionalLong>() {
-            @Override
-            public OptionalLong get() {
-                return OptionalLong.of(19);
-            }
-        }).getAsLong();
+        long value =
+                OptionalLong.empty()
+                        .or(
+                                new Supplier<OptionalLong>() {
+                                    @Override
+                                    public OptionalLong get() {
+                                        return OptionalLong.of(19);
+                                    }
+                                })
+                        .getAsLong();
         assertEquals(19, value);
     }
 
     @Test
     public void testOrOnEmptyOptionalAndEmptySupplierOptional() {
-        final OptionalLong optional = OptionalLong.empty().or(new Supplier<OptionalLong>() {
-            @Override
-            public OptionalLong get() {
-                return OptionalLong.empty();
-            }
-        });
+        final OptionalLong optional =
+                OptionalLong.empty()
+                        .or(
+                                new Supplier<OptionalLong>() {
+                                    @Override
+                                    public OptionalLong get() {
+                                        return OptionalLong.empty();
+                                    }
+                                });
         assertThat(optional, isEmpty());
     }
 
@@ -374,19 +414,27 @@ public class OptionalLongTest {
 
     @Test
     public void testOrElseGet() {
-        assertEquals(21, OptionalLong.empty().orElseGet(new LongSupplier() {
-            @Override
-            public long getAsLong() {
-                return 21;
-            }
-        }));
+        assertEquals(
+                21,
+                OptionalLong.empty()
+                        .orElseGet(
+                                new LongSupplier() {
+                                    @Override
+                                    public long getAsLong() {
+                                        return 21;
+                                    }
+                                }));
 
-        assertEquals(21, OptionalLong.of(21).orElseGet(new LongSupplier() {
-            @Override
-            public long getAsLong() {
-                throw new IllegalStateException();
-            }
-        }));
+        assertEquals(
+                21,
+                OptionalLong.of(21)
+                        .orElseGet(
+                                new LongSupplier() {
+                                    @Override
+                                    public long getAsLong() {
+                                        throw new IllegalStateException();
+                                    }
+                                }));
     }
 
     @Test
@@ -404,12 +452,16 @@ public class OptionalLongTest {
     @Test
     public void testOrElseThrow() {
         try {
-            assertEquals(25, OptionalLong.of(25).orElseThrow(new Supplier<NoSuchElementException>() {
-                @Override
-                public NoSuchElementException get() {
-                    throw new IllegalStateException();
-                }
-            }));
+            assertEquals(
+                    25,
+                    OptionalLong.of(25)
+                            .orElseThrow(
+                                    new Supplier<NoSuchElementException>() {
+                                        @Override
+                                        public NoSuchElementException get() {
+                                            throw new IllegalStateException();
+                                        }
+                                    }));
         } catch (Exception e) {
             throw new IllegalStateException();
         }
@@ -417,12 +469,16 @@ public class OptionalLongTest {
 
     @Test(expected = NoSuchElementException.class)
     public void testOrElseThrow2() {
-        assertEquals(25, OptionalLong.empty().orElseThrow(new Supplier<NoSuchElementException>() {
-            @Override
-            public NoSuchElementException get() {
-                return new NoSuchElementException();
-            }
-        }));
+        assertEquals(
+                25,
+                OptionalLong.empty()
+                        .orElseThrow(
+                                new Supplier<NoSuchElementException>() {
+                                    @Override
+                                    public NoSuchElementException get() {
+                                        return new NoSuchElementException();
+                                    }
+                                }));
     }
 
     @SuppressWarnings("AssertBetweenInconvertibleTypes")
@@ -448,5 +504,4 @@ public class OptionalLongTest {
         assertEquals(OptionalLong.empty().toString(), "OptionalLong.empty");
         assertEquals(OptionalLong.of(42).toString(), "OptionalLong[42]");
     }
-
 }

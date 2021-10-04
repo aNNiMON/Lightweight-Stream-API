@@ -11,8 +11,7 @@ public class IntScan extends PrimitiveExtIterator.OfInt {
     private final IntBinaryOperator accumulator;
 
     public IntScan(
-            @NotNull PrimitiveIterator.OfInt iterator,
-            @NotNull IntBinaryOperator accumulator) {
+            @NotNull PrimitiveIterator.OfInt iterator, @NotNull IntBinaryOperator accumulator) {
         this.iterator = iterator;
         this.accumulator = accumulator;
     }

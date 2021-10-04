@@ -14,33 +14,26 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * A container object which may or may not contain a {@code int} value.
- * If a value is present, {@code isPresent()} will return {@code true} and
- * {@code getAsInt()} will return the value.
+ * A container object which may or may not contain a {@code int} value. If a value is present,
+ * {@code isPresent()} will return {@code true} and {@code getAsInt()} will return the value.
  */
 public final class OptionalInt {
-    /**
-     * Common instance for {@code empty()}.
-     */
+    /** Common instance for {@code empty()}. */
     private static final OptionalInt EMPTY = new OptionalInt();
 
-    /**
-     * If true then the value is present, otherwise indicates no value is present
-     */
+    /** If true then the value is present, otherwise indicates no value is present */
     private final boolean isPresent;
+
     private final int value;
 
-    /**
-     * Construct an empty instance.
-     */
+    /** Construct an empty instance. */
     private OptionalInt() {
         this.isPresent = false;
         this.value = 0;
     }
 
     /**
-     * Returns an empty {@code OptionalInt} instance.  No value is present for this
-     * OptionalInt.
+     * Returns an empty {@code OptionalInt} instance. No value is present for this OptionalInt.
      *
      * @return an empty {@code OptionalInt}
      */
@@ -71,7 +64,8 @@ public final class OptionalInt {
     }
 
     /**
-     * Returns an {@code OptionalInt} with the specified value, or empty {@code OptionalInt} if value is null.
+     * Returns an {@code OptionalInt} with the specified value, or empty {@code OptionalInt} if
+     * value is null.
      *
      * @param value the value which can be null
      * @return an {@code OptionalInt}
@@ -83,10 +77,10 @@ public final class OptionalInt {
     }
 
     /**
-     * If a value is present in this {@code OptionalInt}, returns the value,
-     * otherwise throws {@code NoSuchElementException}.
+     * If a value is present in this {@code OptionalInt}, returns the value, otherwise throws {@code
+     * NoSuchElementException}.
      *
-     * Since 1.2.0 prefer {@link #orElseThrow()} method as it has readable name.
+     * <p>Since 1.2.0 prefer {@link #orElseThrow()} method as it has readable name.
      *
      * @return the value held by this {@code OptionalInt}
      * @throws NoSuchElementException if there is no value present
@@ -120,22 +114,20 @@ public final class OptionalInt {
      * Invokes consumer function with value if present, otherwise does nothing.
      *
      * @param consumer block to be executed if a value is present
-     * @throws NullPointerException if value is present and {@code consumer} is
-     *         null
+     * @throws NullPointerException if value is present and {@code consumer} is null
      */
     public void ifPresent(@NotNull IntConsumer consumer) {
-        if (isPresent)
-            consumer.accept(value);
+        if (isPresent) consumer.accept(value);
     }
 
     /**
-     * If a value is present, performs the given action with the value,
-     * otherwise performs the empty-based action.
+     * If a value is present, performs the given action with the value, otherwise performs the
+     * empty-based action.
      *
-     * @param consumer  the consumer function to be executed, if a value is present
-     * @param emptyAction  the empty-based action to be performed, if no value is present
+     * @param consumer the consumer function to be executed, if a value is present
+     * @param emptyAction the empty-based action to be performed, if no value is present
      * @throws NullPointerException if a value is present and the given consumer function is null,
-     *         or no value is present and the given empty-based action is null.
+     *     or no value is present and the given empty-based action is null.
      * @since 1.1.4
      */
     public void ifPresentOrElse(@NotNull IntConsumer consumer, @NotNull Runnable emptyAction) {
@@ -147,10 +139,10 @@ public final class OptionalInt {
     }
 
     /**
-     * Invokes consumer function with value if present.
-     * This method same as {@code ifPresent}, but does not break chaining
+     * Invokes consumer function with value if present. This method same as {@code ifPresent}, but
+     * does not break chaining
      *
-     * @param consumer  consumer function
+     * @param consumer consumer function
      * @return this {@code OptionalInt}
      * @see #ifPresent(com.annimon.stream.function.IntConsumer)
      * @since 1.1.2
@@ -164,14 +156,13 @@ public final class OptionalInt {
     /**
      * Invokes action function if value is absent.
      *
-     * @param action  action that invokes if value absent
+     * @param action action that invokes if value absent
      * @return this {@code OptionalInt}
      * @since 1.1.2
      */
     @NotNull
     public OptionalInt executeIfAbsent(@NotNull Runnable action) {
-        if (!isPresent())
-            action.run();
+        if (!isPresent()) action.run();
         return this;
     }
 
@@ -179,7 +170,7 @@ public final class OptionalInt {
      * Applies custom operator on {@code OptionalInt}.
      *
      * @param <R> the type of the result
-     * @param function  a transforming function
+     * @param function a transforming function
      * @return a result of the transforming function
      * @throws NullPointerException if {@code function} is null
      * @since 1.1.9
@@ -193,9 +184,9 @@ public final class OptionalInt {
     /**
      * Performs filtering on inner value if it is present.
      *
-     * @param predicate  a predicate function
-     * @return this {@code OptionalInt} if the value is present and matches predicate,
-     *         otherwise an empty {@code OptionalInt}
+     * @param predicate a predicate function
+     * @return this {@code OptionalInt} if the value is present and matches predicate, otherwise an
+     *     empty {@code OptionalInt}
      * @since 1.1.4
      */
     @NotNull
@@ -207,9 +198,9 @@ public final class OptionalInt {
     /**
      * Performs negated filtering on inner value if it is present.
      *
-     * @param predicate  a predicate function
+     * @param predicate a predicate function
      * @return this {@code OptionalInt} if the value is present and doesn't matches predicate,
-     *              otherwise an empty {@code OptionalInt}
+     *     otherwise an empty {@code OptionalInt}
      * @since 1.1.9
      */
     @NotNull
@@ -220,11 +211,10 @@ public final class OptionalInt {
     /**
      * Invokes mapping function on inner value if present.
      *
-     * @param mapper  mapping function
-     * @return an {@code OptionalInt} with transformed value if present,
-     *         otherwise an empty {@code OptionalInt}
-     * @throws NullPointerException if value is present and
-     *         {@code mapper} is {@code null}
+     * @param mapper mapping function
+     * @return an {@code OptionalInt} with transformed value if present, otherwise an empty {@code
+     *     OptionalInt}
+     * @throws NullPointerException if value is present and {@code mapper} is {@code null}
      * @since 1.1.3
      */
     @NotNull
@@ -237,11 +227,10 @@ public final class OptionalInt {
      * Invokes mapping function on inner value if present.
      *
      * @param <U> the type of result value
-     * @param mapper  mapping function
-     * @return an {@code Optional} with transformed value if present,
-     *         otherwise an empty {@code Optional}
-     * @throws NullPointerException if value is present and
-     *         {@code mapper} is {@code null}
+     * @param mapper mapping function
+     * @return an {@code Optional} with transformed value if present, otherwise an empty {@code
+     *     Optional}
+     * @throws NullPointerException if value is present and {@code mapper} is {@code null}
      * @since 1.1.3
      */
     @NotNull
@@ -253,11 +242,10 @@ public final class OptionalInt {
     /**
      * Invokes mapping function on inner value if present.
      *
-     * @param mapper  mapping function
-     * @return an {@code OptionalLong} with transformed value if present,
-     *         otherwise an empty {@code OptionalLong}
-     * @throws NullPointerException if value is present and
-     *         {@code mapper} is {@code null}
+     * @param mapper mapping function
+     * @return an {@code OptionalLong} with transformed value if present, otherwise an empty {@code
+     *     OptionalLong}
+     * @throws NullPointerException if value is present and {@code mapper} is {@code null}
      * @since 1.1.4
      */
     @NotNull
@@ -269,11 +257,10 @@ public final class OptionalInt {
     /**
      * Invokes mapping function on inner value if present.
      *
-     * @param mapper  mapping function
-     * @return an {@code OptionalDouble} with transformed value if present,
-     *         otherwise an empty {@code OptionalDouble}
-     * @throws NullPointerException if value is present and
-     *         {@code mapper} is {@code null}
+     * @param mapper mapping function
+     * @return an {@code OptionalDouble} with transformed value if present, otherwise an empty
+     *     {@code OptionalDouble}
+     * @throws NullPointerException if value is present and {@code mapper} is {@code null}
      * @since 1.1.4
      */
     @NotNull
@@ -283,7 +270,8 @@ public final class OptionalInt {
     }
 
     /**
-     * Wraps a value into {@code IntStream} if present, otherwise returns an empty {@code IntStream}.
+     * Wraps a value into {@code IntStream} if present, otherwise returns an empty {@code
+     * IntStream}.
      *
      * @return the optional value as an {@code IntStream}
      */
@@ -294,14 +282,14 @@ public final class OptionalInt {
     }
 
     /**
-     * Returns current {@code OptionalInt} if value is present, otherwise
-     * returns an {@code OptionalInt} produced by supplier function.
+     * Returns current {@code OptionalInt} if value is present, otherwise returns an {@code
+     * OptionalInt} produced by supplier function.
      *
-     * @param supplier  supplier function that produces an {@code OptionalInt} to be returned
-     * @return this {@code OptionalInt} if value is present, otherwise
-     *         an {@code OptionalInt} produced by supplier function
-     * @throws NullPointerException if value is not present and
-     *         {@code supplier} or value produced by it is {@code null}
+     * @param supplier supplier function that produces an {@code OptionalInt} to be returned
+     * @return this {@code OptionalInt} if value is present, otherwise an {@code OptionalInt}
+     *     produced by supplier function
+     * @throws NullPointerException if value is not present and {@code supplier} or value produced
+     *     by it is {@code null}
      */
     @NotNull
     public OptionalInt or(@NotNull Supplier<OptionalInt> supplier) {
@@ -313,7 +301,7 @@ public final class OptionalInt {
     /**
      * Returns the value if present, otherwise returns {@code other}.
      *
-     * @param other  the value to be returned if there is no value present
+     * @param other the value to be returned if there is no value present
      * @return the value, if present, otherwise {@code other}
      */
     public int orElse(int other) {
@@ -321,14 +309,12 @@ public final class OptionalInt {
     }
 
     /**
-     * Returns the value if present, otherwise invokes {@code other} and returns
-     * the result of that invocation.
+     * Returns the value if present, otherwise invokes {@code other} and returns the result of that
+     * invocation.
      *
-     * @param other a {@code IntSupplier} whose result is returned if no value
-     *              is present
+     * @param other a {@code IntSupplier} whose result is returned if no value is present
      * @return the value if present otherwise the result of {@code other.getAsInt()}
-     * @throws NullPointerException if value is not present and {@code other} is
-     *         null
+     * @throws NullPointerException if value is not present and {@code other} is null
      */
     public int orElseGet(@NotNull IntSupplier other) {
         return isPresent ? value : other.getAsInt();
@@ -352,7 +338,7 @@ public final class OptionalInt {
      * Returns the value if present, otherwise throws an exception provided by supplier function.
      *
      * @param <X> the type of exception to be thrown
-     * @param exceptionSupplier  supplier function that produces an exception to be thrown
+     * @param exceptionSupplier supplier function that produces an exception to be thrown
      * @return inner value if present
      * @throws X if inner value is not present
      */
@@ -365,37 +351,34 @@ public final class OptionalInt {
     }
 
     /**
-     * Indicates whether some other object is "equal to" this OptionalInt. The
-     * other object is considered equal if:
+     * Indicates whether some other object is "equal to" this OptionalInt. The other object is
+     * considered equal if:
+     *
      * <ul>
-     *    <li> it is also an {@code OptionalInt} and;
-     *    <li> both instances have no value present or;
-     *    <li> the present values are "equal to" each other via {@code ==}.
+     *   <li>it is also an {@code OptionalInt} and;
+     *   <li>both instances have no value present or;
+     *   <li>the present values are "equal to" each other via {@code ==}.
      * </ul>
      *
      * @param obj an object to be tested for equality
-     * @return {@code true} if the other object is "equal to" this object
-     *         otherwise {@code false}
+     * @return {@code true} if the other object is "equal to" this object otherwise {@code false}
      */
     @Override
     public boolean equals(Object obj) {
-        if(this == obj) {
+        if (this == obj) {
             return true;
         }
 
-        if(!(obj instanceof OptionalInt)) {
+        if (!(obj instanceof OptionalInt)) {
             return false;
         }
 
         OptionalInt other = (OptionalInt) obj;
-        return (isPresent && other.isPresent)
-                ? value == other.value
-                : isPresent == other.isPresent;
+        return (isPresent && other.isPresent) ? value == other.value : isPresent == other.isPresent;
     }
 
     /**
-     * Returns the hash code value of the present value, if any, or 0 (zero) if
-     * no value is present.
+     * Returns the hash code value of the present value, if any, or 0 (zero) if no value is present.
      *
      * @return hash code value of the present value or 0 if no value is present
      */
@@ -405,16 +388,13 @@ public final class OptionalInt {
     }
 
     /**
-     * Returns a non-empty string representation of this object suitable for
-     * debugging.
+     * Returns a non-empty string representation of this object suitable for debugging.
      *
      * @return the string representation of this instance
      */
     @NotNull
     @Override
     public String toString() {
-        return isPresent
-                ? String.format("OptionalInt[%s]", value)
-                : "OptionalInt.empty";
+        return isPresent ? String.format("OptionalInt[%s]", value) : "OptionalInt.empty";
     }
 }

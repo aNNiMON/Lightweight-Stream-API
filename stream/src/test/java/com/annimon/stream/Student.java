@@ -1,8 +1,6 @@
 package com.annimon.stream;
 
-/**
- * Sample data class for testing.
- */
+/** Sample data class for testing. */
 public final class Student implements Comparable<Student> {
 
     private String name;
@@ -41,8 +39,7 @@ public final class Student implements Comparable<Student> {
 
     @Override
     public int compareTo(Student o) {
-        return ComparatorCompat
-                .comparing(Students.studentName)
+        return ComparatorCompat.comparing(Students.studentName)
                 .thenComparing(Students.speciality)
                 .thenComparing(Students.course)
                 .compare(this, o);
@@ -50,6 +47,13 @@ public final class Student implements Comparable<Student> {
 
     @Override
     public String toString() {
-        return "Student{" + "name=" + name + ", speciality=" + speciality + ", course=" + course + '}';
+        return "Student{"
+                + "name="
+                + name
+                + ", speciality="
+                + speciality
+                + ", course="
+                + course
+                + '}';
     }
 }

@@ -27,7 +27,6 @@ public class IntConcat extends PrimitiveExtIterator.OfInt {
         iteratorIndex = 0;
     }
 
-
     @Override
     protected void nextIteration() {
         while (iteratorIndex < iteratorsCount) {

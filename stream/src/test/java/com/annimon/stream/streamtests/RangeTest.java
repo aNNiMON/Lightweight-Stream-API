@@ -1,19 +1,17 @@
 package com.annimon.stream.streamtests;
 
-import com.annimon.stream.Stream;
-import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.StreamMatcher.assertElements;
 import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertEquals;
+
+import com.annimon.stream.Stream;
+import org.junit.Test;
 
 public final class RangeTest {
 
     @Test
     public void testStreamRange() {
-        Stream.range(0, 5)
-                .custom(assertElements(contains(
-                      0, 1, 2, 3, 4
-                )));
+        Stream.range(0, 5).custom(assertElements(contains(0, 1, 2, 3, 4)));
     }
 
     @Test
@@ -30,10 +28,7 @@ public final class RangeTest {
 
     @Test
     public void testStreamRangeClosed() {
-        Stream.rangeClosed(0, 5)
-                .custom(assertElements(contains(
-                      0, 1, 2, 3, 4, 5
-                )));
+        Stream.rangeClosed(0, 5).custom(assertElements(contains(0, 1, 2, 3, 4, 5)));
     }
 
     @Test

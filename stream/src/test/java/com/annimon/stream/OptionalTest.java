@@ -1,5 +1,16 @@
 package com.annimon.stream;
 
+import static com.annimon.stream.test.hamcrest.OptionalMatcher.hasValue;
+import static com.annimon.stream.test.hamcrest.OptionalMatcher.isEmpty;
+import static com.annimon.stream.test.hamcrest.OptionalMatcher.isPresent;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.closeTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.fail;
+
 import com.annimon.stream.function.Consumer;
 import com.annimon.stream.function.Function;
 import com.annimon.stream.function.Predicate;
@@ -16,16 +27,6 @@ import com.annimon.stream.test.hamcrest.OptionalLongMatcher;
 import java.util.NoSuchElementException;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static com.annimon.stream.test.hamcrest.OptionalMatcher.hasValue;
-import static com.annimon.stream.test.hamcrest.OptionalMatcher.isEmpty;
-import static com.annimon.stream.test.hamcrest.OptionalMatcher.isPresent;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.closeTo;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.fail;
 
 /**
  * Tests {@code Optional}.
@@ -70,156 +71,185 @@ public final class OptionalTest {
 
     @Test
     public void testIfPresent() {
-        Optional.of(10).ifPresent(new Consumer<Integer>() {
-            @Override
-            public void accept(Integer value) {
-                assertEquals(10, (int) value);
-            }
-        });
+        Optional.of(10)
+                .ifPresent(
+                        new Consumer<Integer>() {
+                            @Override
+                            public void accept(Integer value) {
+                                assertEquals(10, (int) value);
+                            }
+                        });
     }
 
     @Test
     public void testIfPresentOrElseWhenValuePresent() {
-        Optional.of(10).ifPresentOrElse(new Consumer<Integer>() {
-            @Override
-            public void accept(Integer value) {
-                assertEquals(10, (int) value);
-            }
-        }, new Runnable() {
-            @Override
-            public void run() {
-                fail("Should not execute empty action when value is present.");
-            }
-        });
+        Optional.of(10)
+                .ifPresentOrElse(
+                        new Consumer<Integer>() {
+                            @Override
+                            public void accept(Integer value) {
+                                assertEquals(10, (int) value);
+                            }
+                        },
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                fail("Should not execute empty action when value is present.");
+                            }
+                        });
     }
 
     @Test
     public void testIfPresentOrElseWhenValueAbsent() {
-        final Integer[] data = { 0 };
-        Optional.<Integer>empty().ifPresentOrElse(new Consumer<Integer>() {
-            @Override
-            public void accept(Integer value) {
-                fail();
-            }
-        }, new Runnable() {
-            @Override
-            public void run() {
-                data[0] = 1;
-            }
-        });
+        final Integer[] data = {0};
+        Optional.<Integer>empty()
+                .ifPresentOrElse(
+                        new Consumer<Integer>() {
+                            @Override
+                            public void accept(Integer value) {
+                                fail();
+                            }
+                        },
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                data[0] = 1;
+                            }
+                        });
         assertThat(data[0], is(1));
     }
 
     @Test
     public void testIfPresentOrElseWhenValuePresentAndEmptyActionNull() {
-        Optional.of(10).ifPresentOrElse(new Consumer<Integer>() {
-            @Override
-            public void accept(Integer value) {
-                assertEquals(10, (int) value);
-            }
-        }, null);
+        Optional.of(10)
+                .ifPresentOrElse(
+                        new Consumer<Integer>() {
+                            @Override
+                            public void accept(Integer value) {
+                                assertEquals(10, (int) value);
+                            }
+                        },
+                        null);
     }
 
     @Test(expected = RuntimeException.class)
     public void testIfPresentOrElseWhenValueAbsentAndConsumerNull() {
-        Optional.<Integer>empty().ifPresentOrElse(null, new Runnable() {
-            @Override
-            public void run() {
-                throw new RuntimeException();
-            }
-        });
+        Optional.<Integer>empty()
+                .ifPresentOrElse(
+                        null,
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                throw new RuntimeException();
+                            }
+                        });
     }
 
     @Test(expected = NullPointerException.class)
     public void testIfPresentOrElseWhenValuePresentAndConsumerNull() {
-        Optional.of(10).ifPresentOrElse(null, new Runnable() {
-            @Override
-            public void run() {
-                fail("Should not have been executed.");
-            }
-        });
+        Optional.of(10)
+                .ifPresentOrElse(
+                        null,
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                fail("Should not have been executed.");
+                            }
+                        });
     }
 
     @Test(expected = NullPointerException.class)
     public void testIfPresentOrElseWhenValueAbsentAndEmptyActionNull() {
-        Optional.<Integer>empty().ifPresentOrElse(new Consumer<Integer>() {
-            @Override
-            public void accept(Integer value) {
-                fail("Should not have been executed.");
-            }
-        }, null);
+        Optional.<Integer>empty()
+                .ifPresentOrElse(
+                        new Consumer<Integer>() {
+                            @Override
+                            public void accept(Integer value) {
+                                fail("Should not have been executed.");
+                            }
+                        },
+                        null);
     }
 
     @Test
     public void testExecuteIfPresent() {
-        int value = Optional.of(10)
-                .executeIfPresent(new Consumer<Integer>() {
-                    @Override
-                    public void accept(Integer value) {
-                        assertEquals(10, (int) value);
-                    }
-                })
-                .get();
+        int value =
+                Optional.of(10)
+                        .executeIfPresent(
+                                new Consumer<Integer>() {
+                                    @Override
+                                    public void accept(Integer value) {
+                                        assertEquals(10, (int) value);
+                                    }
+                                })
+                        .get();
         assertEquals(10, value);
     }
 
     @Test
     public void testExecuteIfPresentOnAbsentValue() {
         Optional.<Integer>empty()
-                .executeIfPresent(new Consumer<Integer>() {
-                    @Override
-                    public void accept(Integer value) {
-                        fail();
-                    }
-                });
+                .executeIfPresent(
+                        new Consumer<Integer>() {
+                            @Override
+                            public void accept(Integer value) {
+                                fail();
+                            }
+                        });
     }
 
     @Test
     public void testExecuteIfAbsent() {
-        final Integer[] data = { 0 };
+        final Integer[] data = {0};
         Optional.empty()
-                .executeIfAbsent(new Runnable() {
-                    @Override
-                    public void run() {
-                        data[0] = 1;
-                    }
-                });
+                .executeIfAbsent(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                data[0] = 1;
+                            }
+                        });
         assertThat(data[0], is(1));
     }
 
     @Test
     public void testExecuteIfAbsentOnPresentValue() {
         Optional.of(10)
-                .executeIfAbsent(new Runnable() {
-                    @Override
-                    public void run() {
-                        fail();
-                    }
-                });
+                .executeIfAbsent(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                fail();
+                            }
+                        });
     }
 
     @Test
     public void testCustomIntermediate() {
-        Optional<Integer> result = Optional.of(10)
-                .custom(new Function<Optional<Integer>, Optional<Integer>>() {
-                    @Override
-                    public Optional<Integer> apply(Optional<Integer> optional) {
-                        return optional.filter(Functions.remainder(2));
-                    }
-                });
+        Optional<Integer> result =
+                Optional.of(10)
+                        .custom(
+                                new Function<Optional<Integer>, Optional<Integer>>() {
+                                    @Override
+                                    public Optional<Integer> apply(Optional<Integer> optional) {
+                                        return optional.filter(Functions.remainder(2));
+                                    }
+                                });
 
         assertThat(result, hasValue(10));
     }
 
     @Test
     public void testCustomTerminal() {
-        Integer result = Optional.<Integer>empty()
-                .custom(new Function<Optional<Integer>, Integer>() {
-                    @Override
-                    public Integer apply(Optional<Integer> optional) {
-                        return optional.orElse(0);
-                    }
-                });
+        Integer result =
+                Optional.<Integer>empty()
+                        .custom(
+                                new Function<Optional<Integer>, Integer>() {
+                                    @Override
+                                    public Integer apply(Optional<Integer> optional) {
+                                        return optional.orElse(0);
+                                    }
+                                });
 
         assertThat(result, is(0));
     }
@@ -231,24 +261,23 @@ public final class OptionalTest {
 
     @Test
     public void testFilter() {
-        Optional<Integer> result = Optional.of(10)
-                .filter(Predicate.Util.negate(Functions.remainder(2)));
+        Optional<Integer> result =
+                Optional.of(10).filter(Predicate.Util.negate(Functions.remainder(2)));
 
         assertThat(result, isEmpty());
     }
 
     @Test
     public void testFilterOnEmptyOptional() {
-        Optional<Integer> result = Optional.<Integer>empty()
-                .filter(Predicate.Util.negate(Functions.remainder(2)));
+        Optional<Integer> result =
+                Optional.<Integer>empty().filter(Predicate.Util.negate(Functions.remainder(2)));
 
         assertThat(result, isEmpty());
     }
 
     @Test
     public void testFilterNot() {
-        Optional<Integer> result = Optional.of(10)
-                .filterNot(Functions.remainder(2));
+        Optional<Integer> result = Optional.of(10).filterNot(Functions.remainder(2));
 
         assertThat(result, isEmpty());
     }
@@ -256,52 +285,52 @@ public final class OptionalTest {
     @Test
     public void testMapOnEmptyOptional() {
         assertFalse(
-                Optional.<Integer>empty()
-                        .map(UnaryOperator.Util.<Integer>identity())
-                        .isPresent());
+                Optional.<Integer>empty().map(UnaryOperator.Util.<Integer>identity()).isPresent());
     }
 
     @Test
     public void testMapAsciiToString() {
-        Optional<String> result = Optional.of(65)
-                .map(new Function<Integer, String>() {
-                    @Override
-                    public String apply(Integer value) {
-                        return String.valueOf((char) value.intValue());
-                    }
-                });
+        Optional<String> result =
+                Optional.of(65)
+                        .map(
+                                new Function<Integer, String>() {
+                                    @Override
+                                    public String apply(Integer value) {
+                                        return String.valueOf((char) value.intValue());
+                                    }
+                                });
 
         assertThat(result, hasValue("A"));
     }
 
     @Test
     public void testMapToInt() {
-        final ToIntFunction<String> firstCharToIntFunction = new ToIntFunction<String>() {
+        final ToIntFunction<String> firstCharToIntFunction =
+                new ToIntFunction<String>() {
 
-            @Override
-            public int applyAsInt(String t) {
-                return t.charAt(0);
-            }
-        };
+                    @Override
+                    public int applyAsInt(String t) {
+                        return t.charAt(0);
+                    }
+                };
 
         OptionalInt result;
-        result = Optional.<String>empty()
-                .mapToInt(firstCharToIntFunction);
+        result = Optional.<String>empty().mapToInt(firstCharToIntFunction);
         assertThat(result, OptionalIntMatcher.isEmpty());
 
-        result = Optional.of("A")
-                .mapToInt(firstCharToIntFunction);
+        result = Optional.of("A").mapToInt(firstCharToIntFunction);
         assertThat(result, OptionalIntMatcher.hasValue(65));
     }
 
     @Test
     public void testMapToLong() {
-        final ToLongFunction<String> mapper = new ToLongFunction<String>() {
-            @Override
-            public long applyAsLong(String value) {
-                return Long.parseLong(value) * 10000000000L;
-            }
-        };
+        final ToLongFunction<String> mapper =
+                new ToLongFunction<String>() {
+                    @Override
+                    public long applyAsLong(String value) {
+                        return Long.parseLong(value) * 10000000000L;
+                    }
+                };
 
         OptionalLong result;
         result = Optional.<String>empty().mapToLong(mapper);
@@ -313,12 +342,13 @@ public final class OptionalTest {
 
     @Test
     public void testMapToDouble() {
-        final ToDoubleFunction<String> mapper = new ToDoubleFunction<String>() {
-            @Override
-            public double applyAsDouble(String t) {
-                return Double.parseDouble(t) / 100d;
-            }
-        };
+        final ToDoubleFunction<String> mapper =
+                new ToDoubleFunction<String>() {
+                    @Override
+                    public double applyAsDouble(String t) {
+                        return Double.parseDouble(t) / 100d;
+                    }
+                };
 
         OptionalDouble result;
         result = Optional.<String>empty().mapToDouble(mapper);
@@ -330,12 +360,13 @@ public final class OptionalTest {
 
     @Test
     public void testMapToBoolean() {
-        final ToBooleanFunction<String> mapper = new ToBooleanFunction<String>() {
-            @Override
-            public boolean applyAsBoolean(String s) {
-                return "true".equalsIgnoreCase(s);
-            }
-        };
+        final ToBooleanFunction<String> mapper =
+                new ToBooleanFunction<String>() {
+                    @Override
+                    public boolean applyAsBoolean(String s) {
+                        return "true".equalsIgnoreCase(s);
+                    }
+                };
 
         OptionalBoolean result;
         result = Optional.<String>empty().mapToBoolean(mapper);
@@ -347,26 +378,32 @@ public final class OptionalTest {
 
     @Test
     public void testFlatMapAsciiToString() {
-        Optional<String> result = Optional.of(65)
-                .flatMap(new Function<Integer, Optional<String>>() {
-                    @Override
-                    public Optional<String> apply(Integer value) {
-                        return Optional.ofNullable(String.valueOf((char) value.intValue()));
-                    }
-                });
+        Optional<String> result =
+                Optional.of(65)
+                        .flatMap(
+                                new Function<Integer, Optional<String>>() {
+                                    @Override
+                                    public Optional<String> apply(Integer value) {
+                                        return Optional.ofNullable(
+                                                String.valueOf((char) value.intValue()));
+                                    }
+                                });
 
         assertThat(result, hasValue("A"));
     }
 
     @Test
     public void testFlatMapOnEmptyOptional() {
-        Optional<String> result = Optional.<Integer>ofNullable(null)
-                .flatMap(new Function<Integer, Optional<String>>() {
-                    @Override
-                    public Optional<String> apply(Integer value) {
-                        return Optional.ofNullable(String.valueOf((char) value.intValue()));
-                    }
-                });
+        Optional<String> result =
+                Optional.<Integer>ofNullable(null)
+                        .flatMap(
+                                new Function<Integer, Optional<String>>() {
+                                    @Override
+                                    public Optional<String> apply(Integer value) {
+                                        return Optional.ofNullable(
+                                                String.valueOf((char) value.intValue()));
+                                    }
+                                });
 
         assertThat(result, isEmpty());
     }
@@ -374,12 +411,13 @@ public final class OptionalTest {
     @Test(expected = NullPointerException.class)
     public void testFlatMapWithNullResultFunction() {
         Optional.of(10)
-                .flatMap(new Function<Integer, Optional<String>>() {
-                    @Override
-                    public Optional<String> apply(Integer value) {
-                        return null;
-                    }
-                });
+                .flatMap(
+                        new Function<Integer, Optional<String>>() {
+                            @Override
+                            public Optional<String> apply(Integer value) {
+                                return null;
+                            }
+                        });
     }
 
     @Test
@@ -396,8 +434,7 @@ public final class OptionalTest {
 
     @Test
     public void testSelectOnEmptyOptional() {
-        Optional<Integer> result = Optional.empty()
-                .select(Integer.class);
+        Optional<Integer> result = Optional.empty().select(Integer.class);
 
         assertThat(result, isEmpty());
     }
@@ -406,8 +443,7 @@ public final class OptionalTest {
     public void testSelectValidSubclassOnOptional() {
         Number number = 42;
 
-        Optional<Integer> result = Optional.of(number)
-                .select(Integer.class);
+        Optional<Integer> result = Optional.of(number).select(Integer.class);
 
         assertThat(result, isPresent());
         assertThat(result, hasValue(42));
@@ -417,8 +453,7 @@ public final class OptionalTest {
     public void testSelectInvalidSubclassOnOptional() {
         Number number = 42;
 
-        Optional<String> result = Optional.of(number)
-                .select(String.class);
+        Optional<String> result = Optional.of(number).select(String.class);
 
         assertThat(result, isEmpty());
     }
@@ -435,34 +470,45 @@ public final class OptionalTest {
 
     @Test
     public void testOr() {
-        int value = Optional.of(42).or(new Supplier<Optional<Integer>>() {
-            @Override
-            public Optional<Integer> get() {
-                return Optional.of(19);
-            }
-        }).get();
+        int value =
+                Optional.of(42)
+                        .or(
+                                new Supplier<Optional<Integer>>() {
+                                    @Override
+                                    public Optional<Integer> get() {
+                                        return Optional.of(19);
+                                    }
+                                })
+                        .get();
         assertEquals(42, value);
     }
 
     @Test
     public void testOrOnEmptyOptional() {
-        int value = Optional.<Integer>empty().or(new Supplier<Optional<Integer>>() {
-            @Override
-            public Optional<Integer> get() {
-                return Optional.of(19);
-            }
-        }).get();
+        int value =
+                Optional.<Integer>empty()
+                        .or(
+                                new Supplier<Optional<Integer>>() {
+                                    @Override
+                                    public Optional<Integer> get() {
+                                        return Optional.of(19);
+                                    }
+                                })
+                        .get();
         assertEquals(19, value);
     }
 
     @Test
     public void testOrOnEmptyOptionalAndEmptySupplierOptional() {
-        final Optional<Integer> optional = Optional.<Integer>empty().or(new Supplier<Optional<Integer>>() {
-            @Override
-            public Optional<Integer> get() {
-                return Optional.empty();
-            }
-        });
+        final Optional<Integer> optional =
+                Optional.<Integer>empty()
+                        .or(
+                                new Supplier<Optional<Integer>>() {
+                                    @Override
+                                    public Optional<Integer> get() {
+                                        return Optional.empty();
+                                    }
+                                });
         assertThat(optional, isEmpty());
     }
 
@@ -479,23 +525,29 @@ public final class OptionalTest {
 
     @Test
     public void testOrElseGet() {
-        int value = Optional.of(42).orElseGet(new Supplier<Integer>() {
-            @Override
-            public Integer get() {
-                return 32;
-            }
-        });
+        int value =
+                Optional.of(42)
+                        .orElseGet(
+                                new Supplier<Integer>() {
+                                    @Override
+                                    public Integer get() {
+                                        return 32;
+                                    }
+                                });
         assertEquals(42, value);
     }
 
     @Test
     public void testOrElseGetOnEmptyOptional() {
-        int value = Optional.<Integer>empty().orElseGet(new Supplier<Integer>() {
-            @Override
-            public Integer get() {
-                return 42;
-            }
-        });
+        int value =
+                Optional.<Integer>empty()
+                        .orElseGet(
+                                new Supplier<Integer>() {
+                                    @Override
+                                    public Integer get() {
+                                        return 42;
+                                    }
+                                });
         assertEquals(42, value);
     }
 
@@ -517,23 +569,28 @@ public final class OptionalTest {
 
     @Test
     public void testOrElseThrowWithCustomSupplier() {
-        int value = Optional.of(10).orElseThrow(new Supplier<RuntimeException>() {
-            @Override
-            public RuntimeException get() {
-                return new ArithmeticException();
-            }
-        });
+        int value =
+                Optional.of(10)
+                        .orElseThrow(
+                                new Supplier<RuntimeException>() {
+                                    @Override
+                                    public RuntimeException get() {
+                                        return new ArithmeticException();
+                                    }
+                                });
         assertEquals(10, value);
     }
 
     @Test(expected = ArithmeticException.class)
     public void testOrElseThrowWithCustomSupplierOnEmptyOptional() {
-        Optional.empty().orElseThrow(new Supplier<RuntimeException>() {
-            @Override
-            public RuntimeException get() {
-                return new ArithmeticException();
-            }
-        });
+        Optional.empty()
+                .orElseThrow(
+                        new Supplier<RuntimeException>() {
+                            @Override
+                            public RuntimeException get() {
+                                return new ArithmeticException();
+                            }
+                        });
     }
 
     @Test

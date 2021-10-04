@@ -27,7 +27,6 @@ public class DoubleConcat extends PrimitiveExtIterator.OfDouble {
         iteratorIndex = 0;
     }
 
-
     @Override
     protected void nextIteration() {
         while (iteratorIndex < iteratorsCount) {

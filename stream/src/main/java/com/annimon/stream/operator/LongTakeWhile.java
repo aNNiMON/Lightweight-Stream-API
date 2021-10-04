@@ -14,8 +14,7 @@ public class LongTakeWhile extends PrimitiveIterator.OfLong {
     private boolean hasNextComputed, hasNext;
 
     public LongTakeWhile(
-            @NotNull PrimitiveIterator.OfLong iterator,
-            @NotNull LongPredicate predicate) {
+            @NotNull PrimitiveIterator.OfLong iterator, @NotNull LongPredicate predicate) {
         this.iterator = iterator;
         this.predicate = predicate;
     }

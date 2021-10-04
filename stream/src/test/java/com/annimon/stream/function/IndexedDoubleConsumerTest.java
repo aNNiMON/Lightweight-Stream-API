@@ -1,9 +1,10 @@
 package com.annimon.stream.function;
 
-import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
 
 /**
  * Tests {@code IndexedDoubleConsumer}.
@@ -20,20 +21,22 @@ public class IndexedDoubleConsumerTest {
     @Test
     public void testAndThen() {
         final double[] buffer = new double[] {1.0, 2.5, 4.0, 2.0};
-        IndexedDoubleConsumer addConsumer = new IndexedDoubleConsumer() {
-            @Override
-            public void accept(int index, double value) {
-                buffer[index] += value;
-            }
-        };
-        IndexedDoubleConsumer multiplyConsumer = new IndexedDoubleConsumer() {
-            @Override
-            public void accept(int index, double value) {
-                buffer[index] *= value;
-            }
-        };
-        IndexedDoubleConsumer consumer = IndexedDoubleConsumer.Util.andThen(
-                addConsumer, multiplyConsumer);
+        IndexedDoubleConsumer addConsumer =
+                new IndexedDoubleConsumer() {
+                    @Override
+                    public void accept(int index, double value) {
+                        buffer[index] += value;
+                    }
+                };
+        IndexedDoubleConsumer multiplyConsumer =
+                new IndexedDoubleConsumer() {
+                    @Override
+                    public void accept(int index, double value) {
+                        buffer[index] *= value;
+                    }
+                };
+        IndexedDoubleConsumer consumer =
+                IndexedDoubleConsumer.Util.andThen(addConsumer, multiplyConsumer);
 
         // 2.5 + 2.5 = 5.0; 5.0 * 2.5 = 12.5
         consumer.accept(1, 2.5);
@@ -48,14 +51,15 @@ public class IndexedDoubleConsumerTest {
     public void testUtilAccept() {
         final IntHolder countHolder = new IntHolder();
         final DoubleHolder valueHolder = new DoubleHolder(10.0);
-        final IntConsumer indexConsumer = new IntConsumer() {
-            @Override
-            public void accept(int index) {
-                countHolder.value++;
-            }
-        };
-        IndexedDoubleConsumer consumer = IndexedDoubleConsumer.Util
-                .accept(indexConsumer, valueHolder);
+        final IntConsumer indexConsumer =
+                new IntConsumer() {
+                    @Override
+                    public void accept(int index) {
+                        countHolder.value++;
+                    }
+                };
+        IndexedDoubleConsumer consumer =
+                IndexedDoubleConsumer.Util.accept(indexConsumer, valueHolder);
 
         for (int i = 1; i < 11; i++) {
             consumer.accept(i, (double) i);
@@ -63,7 +67,6 @@ public class IndexedDoubleConsumerTest {
         }
         assertEquals(65.0, valueHolder.value, 0.0);
     }
-
 
     private static class IntHolder {
         public int value;

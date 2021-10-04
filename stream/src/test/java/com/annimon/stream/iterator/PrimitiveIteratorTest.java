@@ -1,5 +1,12 @@
 package com.annimon.stream.iterator;
 
+import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.closeTo;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import com.annimon.stream.iterator.PrimitiveIterators.OfDouble;
 import com.annimon.stream.iterator.PrimitiveIterators.OfDoubleEmpty;
 import com.annimon.stream.iterator.PrimitiveIterators.OfInt;
@@ -8,12 +15,6 @@ import com.annimon.stream.iterator.PrimitiveIterators.OfLong;
 import com.annimon.stream.iterator.PrimitiveIterators.OfLongEmpty;
 import java.util.NoSuchElementException;
 import org.junit.Test;
-import static com.annimon.stream.test.hamcrest.CommonMatcher.hasOnlyPrivateConstructors;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.closeTo;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 public class PrimitiveIteratorTest {
 
@@ -39,7 +40,6 @@ public class PrimitiveIteratorTest {
         assertFalse(new OfDoubleEmpty().hasNext());
         assertTrue(new OfDouble().hasNext());
     }
-
 
     @Test(expected = NoSuchElementException.class)
     public void testOfIntNext() {
@@ -68,7 +68,6 @@ public class PrimitiveIteratorTest {
         new OfDoubleEmpty().nextDouble();
     }
 
-
     @Test(expected = UnsupportedOperationException.class)
     public void testOfIntRemove() {
         new OfIntEmpty().remove();
@@ -83,7 +82,6 @@ public class PrimitiveIteratorTest {
     public void testOfDoubleRemove() {
         new OfDoubleEmpty().remove();
     }
-
 
     @Test(expected = NoSuchElementException.class)
     public void testOfInt() {

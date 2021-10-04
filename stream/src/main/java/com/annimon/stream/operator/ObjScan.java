@@ -11,8 +11,7 @@ public class ObjScan<T> extends LsaExtIterator<T> {
     private final BiFunction<T, T, T> accumulator;
 
     public ObjScan(
-            @NotNull Iterator<? extends T> iterator,
-            @NotNull BiFunction<T, T, T> accumulator) {
+            @NotNull Iterator<? extends T> iterator, @NotNull BiFunction<T, T, T> accumulator) {
         this.iterator = iterator;
         this.accumulator = accumulator;
     }

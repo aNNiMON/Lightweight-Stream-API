@@ -1,10 +1,11 @@
 package com.annimon.stream.intstreamtests;
 
-import com.annimon.stream.IntStream;
-import org.junit.Test;
 import static com.annimon.stream.test.hamcrest.IntStreamMatcher.assertIsEmpty;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+
+import com.annimon.stream.IntStream;
+import org.junit.Test;
 
 public final class OfArrayTest {
 
@@ -26,7 +27,6 @@ public final class OfArrayTest {
 
     @Test
     public void testStreamOfEmptyArray() {
-        IntStream.of(new int[0])
-                .custom(assertIsEmpty());
+        IntStream.of(new int[0]).custom(assertIsEmpty());
     }
 }

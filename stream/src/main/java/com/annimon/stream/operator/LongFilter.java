@@ -13,8 +13,7 @@ public class LongFilter extends PrimitiveIterator.OfLong {
     private long next;
 
     public LongFilter(
-            @NotNull PrimitiveIterator.OfLong iterator,
-            @NotNull LongPredicate predicate) {
+            @NotNull PrimitiveIterator.OfLong iterator, @NotNull LongPredicate predicate) {
         this.iterator = iterator;
         this.predicate = predicate;
     }

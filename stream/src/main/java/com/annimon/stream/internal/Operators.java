@@ -22,8 +22,8 @@ public final class Operators {
 
     @NotNull
     @SuppressWarnings("unchecked")
-    public static <T, R> R[] toArray(@NotNull Iterator<? extends T> iterator,
-                                     @NotNull IntFunction<R[]> generator) {
+    public static <T, R> R[] toArray(
+            @NotNull Iterator<? extends T> iterator, @NotNull IntFunction<R[]> generator) {
         final List<T> container = Operators.<T>toList(iterator);
         final int size = container.size();
 

@@ -11,8 +11,7 @@ public class LongScan extends PrimitiveExtIterator.OfLong {
     private final LongBinaryOperator accumulator;
 
     public LongScan(
-            @NotNull PrimitiveIterator.OfLong iterator,
-            @NotNull LongBinaryOperator accumulator) {
+            @NotNull PrimitiveIterator.OfLong iterator, @NotNull LongBinaryOperator accumulator) {
         this.iterator = iterator;
         this.accumulator = accumulator;
     }

@@ -8,7 +8,6 @@ public final class OfArrayTest {
 
     @Test
     public void testStreamOfEmptyArray() {
-        Stream.of(new String[0])
-                .custom(StreamMatcher.<String>assertIsEmpty());
+        Stream.of(new String[0]).custom(StreamMatcher.<String>assertIsEmpty());
     }
 }

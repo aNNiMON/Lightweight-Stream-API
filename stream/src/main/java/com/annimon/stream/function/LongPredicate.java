@@ -14,26 +14,25 @@ public interface LongPredicate {
     /**
      * Tests the value for satisfying predicate.
      *
-     * @param value  the value to be tested
+     * @param value the value to be tested
      * @return {@code true} if the value matches the predicate, otherwise {@code false}
      */
     boolean test(long value);
 
     class Util {
 
-        private Util() { }
+        private Util() {}
 
         /**
          * Applies logical AND to predicates.
          *
-         * @param p1  the first predicate
-         * @param p2  the second predicate
+         * @param p1 the first predicate
+         * @param p2 the second predicate
          * @return a composed {@code LongPredicate}
          * @throws NullPointerException if {@code p1} or {@code p2} is null
          */
         public static LongPredicate and(
-                @NotNull final LongPredicate p1,
-                @NotNull final LongPredicate p2) {
+                @NotNull final LongPredicate p1, @NotNull final LongPredicate p2) {
             Objects.requireNonNull(p1, "predicate1");
             Objects.requireNonNull(p2, "predicate2");
             return new LongPredicate() {
@@ -47,14 +46,13 @@ public interface LongPredicate {
         /**
          * Applies logical OR to predicates.
          *
-         * @param p1  the first predicate
-         * @param p2  the second predicate
+         * @param p1 the first predicate
+         * @param p2 the second predicate
          * @return a composed {@code LongPredicate}
          * @throws NullPointerException if {@code p1} or {@code p2} is null
          */
         public static LongPredicate or(
-                @NotNull final LongPredicate p1,
-                @NotNull final LongPredicate p2) {
+                @NotNull final LongPredicate p1, @NotNull final LongPredicate p2) {
             Objects.requireNonNull(p1, "predicate1");
             Objects.requireNonNull(p2, "predicate2");
             return new LongPredicate() {
@@ -68,14 +66,13 @@ public interface LongPredicate {
         /**
          * Applies logical XOR to predicates.
          *
-         * @param p1  the first predicate
-         * @param p2  the second predicate
+         * @param p1 the first predicate
+         * @param p2 the second predicate
          * @return a composed {@code LongPredicate}
          * @throws NullPointerException if {@code p1} or {@code p2} is null
          */
         public static LongPredicate xor(
-                @NotNull final LongPredicate p1,
-                @NotNull final LongPredicate p2) {
+                @NotNull final LongPredicate p1, @NotNull final LongPredicate p2) {
             Objects.requireNonNull(p1, "predicate1");
             Objects.requireNonNull(p2, "predicate2");
             return new LongPredicate() {
@@ -89,7 +86,7 @@ public interface LongPredicate {
         /**
          * Applies logical negation to predicate.
          *
-         * @param p1  the predicate to be negated
+         * @param p1 the predicate to be negated
          * @return a composed {@code LongPredicate}
          * @throws NullPointerException if {@code p1} is null
          */
@@ -106,20 +103,21 @@ public interface LongPredicate {
         /**
          * Creates a safe {@code LongPredicate}.
          *
-         * @param throwablePredicate  the predicate that may throw an exception
+         * @param throwablePredicate the predicate that may throw an exception
          * @return a {@code LongPredicate} or {@code false} if exception was thrown
          * @since 1.1.7
          * @see #safe(com.annimon.stream.function.ThrowableLongPredicate, boolean)
          */
-        public static LongPredicate safe(@NotNull ThrowableLongPredicate<Throwable> throwablePredicate) {
+        public static LongPredicate safe(
+                @NotNull ThrowableLongPredicate<Throwable> throwablePredicate) {
             return safe(throwablePredicate, false);
         }
 
         /**
          * Creates a safe {@code LongPredicate}.
          *
-         * @param throwablePredicate  the predicate that may throw an exception
-         * @param resultIfFailed  the result which returned if exception was thrown
+         * @param throwablePredicate the predicate that may throw an exception
+         * @param resultIfFailed the result which returned if exception was thrown
          * @return a {@code LongPredicate} or {@code resultIfFailed}
          * @throws NullPointerException if {@code throwablePredicate} is null
          * @since 1.1.7
@@ -140,6 +138,5 @@ public interface LongPredicate {
                 }
             };
         }
-
     }
 }

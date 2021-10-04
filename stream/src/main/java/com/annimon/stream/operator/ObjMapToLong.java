@@ -11,8 +11,7 @@ public class ObjMapToLong<T> extends PrimitiveIterator.OfLong {
     private final ToLongFunction<? super T> mapper;
 
     public ObjMapToLong(
-            @NotNull Iterator<? extends T> iterator,
-            @NotNull ToLongFunction<? super T> mapper) {
+            @NotNull Iterator<? extends T> iterator, @NotNull ToLongFunction<? super T> mapper) {
         this.iterator = iterator;
         this.mapper = mapper;
     }

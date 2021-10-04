@@ -13,28 +13,27 @@ public interface IndexedIntConsumer {
     /**
      * Performs operation on argument.
      *
-     * @param index  the index
-     * @param value  the input argument
+     * @param index the index
+     * @param value the input argument
      */
     void accept(int index, int value);
 
     class Util {
 
-        private Util() { }
+        private Util() {}
 
         /**
          * Composes {@code IndexedIntConsumer} calls.
          *
          * <p>{@code c1.accept(index, value); c2.accept(index, value); }
          *
-         * @param c1  the first {@code IndexedIntConsumer}
-         * @param c2  the second {@code IndexedIntConsumer}
+         * @param c1 the first {@code IndexedIntConsumer}
+         * @param c2 the second {@code IndexedIntConsumer}
          * @return a composed {@code IndexedIntConsumer}
          * @throws NullPointerException if {@code c1} or {@code c2} is null
          */
         public static IndexedIntConsumer andThen(
-                @NotNull final IndexedIntConsumer c1,
-                @NotNull final IndexedIntConsumer c2) {
+                @NotNull final IndexedIntConsumer c1, @NotNull final IndexedIntConsumer c2) {
             Objects.requireNonNull(c1, "c1");
             Objects.requireNonNull(c2, "c2");
             return new IndexedIntConsumer() {
@@ -47,8 +46,8 @@ public interface IndexedIntConsumer {
         }
 
         /**
-         * Returns an {@code IndexedIntConsumer} that accepts {@code IntConsumer}
-         * for index and {@code IntConsumer} for value.
+         * Returns an {@code IndexedIntConsumer} that accepts {@code IntConsumer} for index and
+         * {@code IntConsumer} for value.
          *
          * <pre><code>
          *  if (c1 != null)
@@ -57,12 +56,11 @@ public interface IndexedIntConsumer {
          *      c2.accept(object);
          * </code></pre>
          *
-         * @param c1  the {@code IntConsumer} for index, can be null
-         * @param c2  the {@code IntConsumer} for value, can be null
+         * @param c1 the {@code IntConsumer} for index, can be null
+         * @param c2 the {@code IntConsumer} for value, can be null
          * @return an {@code IndexedIntConsumer}
          */
-        public static IndexedIntConsumer accept(
-                final IntConsumer c1, final IntConsumer c2) {
+        public static IndexedIntConsumer accept(final IntConsumer c1, final IntConsumer c2) {
             return new IndexedIntConsumer() {
                 @Override
                 public void accept(int index, int value) {
@@ -75,6 +73,5 @@ public interface IndexedIntConsumer {
                 }
             };
         }
-
     }
 }

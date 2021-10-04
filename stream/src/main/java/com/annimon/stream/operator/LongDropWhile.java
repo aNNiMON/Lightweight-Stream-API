@@ -11,8 +11,7 @@ public class LongDropWhile extends PrimitiveExtIterator.OfLong {
     private final LongPredicate predicate;
 
     public LongDropWhile(
-            @NotNull PrimitiveIterator.OfLong iterator,
-            @NotNull LongPredicate predicate) {
+            @NotNull PrimitiveIterator.OfLong iterator, @NotNull LongPredicate predicate) {
         this.iterator = iterator;
         this.predicate = predicate;
     }

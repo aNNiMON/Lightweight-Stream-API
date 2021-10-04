@@ -14,21 +14,21 @@ public interface IndexedLongFunction<R> {
     /**
      * Applies this function to the given argument.
      *
-     * @param index  the index
-     * @param value  an argument
+     * @param index the index
+     * @param value an argument
      * @return the function result
      */
     R apply(int index, long value);
 
     class Util {
 
-        private Util() { }
+        private Util() {}
 
         /**
          * Wraps {@link LongFunction} and returns {@code IndexedLongFunction}.
          *
          * @param <R> the type of the result
-         * @param function  the function to wrap
+         * @param function the function to wrap
          * @return a wrapped {@code IndexedLongFunction}
          * @throws NullPointerException if {@code function} is null
          */
@@ -42,6 +42,5 @@ public interface IndexedLongFunction<R> {
                 }
             };
         }
-
     }
 }
